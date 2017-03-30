@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B534C44C1E8D176000AD25F6 /* menu_button.png in Resources */ = {isa = PBXBuildFile; fileRef = B534C44B1E8D176000AD25F6 /* menu_button.png */; };
 		B5EFB34C1E8CFFD80024C211 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB34B1E8CFFD80024C211 /* main.m */; };
 		B5EFB34F1E8CFFD80024C211 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB34E1E8CFFD80024C211 /* AppDelegate.m */; };
 		B5EFB3521E8CFFD80024C211 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB3511E8CFFD80024C211 /* ViewController.m */; };
@@ -35,6 +36,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B534C44B1E8D176000AD25F6 /* menu_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_button.png; sourceTree = "<group>"; };
+		B534C44D1E8D397700AD25F6 /* Defines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Defines.h; sourceTree = "<group>"; };
 		B5EFB3471E8CFFD80024C211 /* Notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5EFB34B1E8CFFD80024C211 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B5EFB34D1E8CFFD80024C211 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -78,6 +81,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B534C44A1E8D176000AD25F6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B534C44B1E8D176000AD25F6 /* menu_button.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		B5EFB33E1E8CFFD80024C211 = {
 			isa = PBXGroup;
 			children = (
@@ -101,15 +112,17 @@
 		B5EFB3491E8CFFD80024C211 /* Notes */ = {
 			isa = PBXGroup;
 			children = (
+				B534C44A1E8D176000AD25F6 /* Resources */,
 				B5EFB34D1E8CFFD80024C211 /* AppDelegate.h */,
 				B5EFB34E1E8CFFD80024C211 /* AppDelegate.m */,
+				B5EFB3561E8CFFD80024C211 /* Assets.xcassets */,
+				B5EFB35B1E8CFFD80024C211 /* Info.plist */,
+				B5EFB3581E8CFFD80024C211 /* LaunchScreen.storyboard */,
+				B5EFB34A1E8CFFD80024C211 /* Supporting Files */,
 				B5EFB3501E8CFFD80024C211 /* ViewController.h */,
 				B5EFB3511E8CFFD80024C211 /* ViewController.m */,
-				B5EFB3561E8CFFD80024C211 /* Assets.xcassets */,
-				B5EFB3581E8CFFD80024C211 /* LaunchScreen.storyboard */,
-				B5EFB35B1E8CFFD80024C211 /* Info.plist */,
-				B5EFB34A1E8CFFD80024C211 /* Supporting Files */,
 				B5EFB37D1E8D006F0024C211 /* ViewController.xib */,
+				B534C44D1E8D397700AD25F6 /* Defines.h */,
 			);
 			path = Notes;
 			sourceTree = "<group>";
@@ -248,6 +261,7 @@
 			files = (
 				B5EFB35A1E8CFFD80024C211 /* LaunchScreen.storyboard in Resources */,
 				B5EFB37E1E8D006F0024C211 /* ViewController.xib in Resources */,
+				B534C44C1E8D176000AD25F6 /* menu_button.png in Resources */,
 				B5EFB3571E8CFFD80024C211 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -499,6 +513,7 @@
 				B5EFB3761E8CFFD80024C211 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B5EFB3771E8CFFD80024C211 /* Build configuration list for PBXNativeTarget "NotesTests" */ = {
 			isa = XCConfigurationList;
@@ -507,6 +522,7 @@
 				B5EFB3791E8CFFD80024C211 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B5EFB37A1E8CFFD80024C211 /* Build configuration list for PBXNativeTarget "NotesUITests" */ = {
 			isa = XCConfigurationList;
@@ -515,6 +531,7 @@
 				B5EFB37C1E8CFFD80024C211 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

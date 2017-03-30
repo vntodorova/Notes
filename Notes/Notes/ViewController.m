@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "Defines.h"
 
 @interface ViewController ()
 
@@ -16,9 +17,25 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    [self setupNavigationBar];
+
 }
 
+- (void)setupNavigationBar
+{
+    UIButton *sideDrawerButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, NAVIGATION_BUTTONS_WIDTH, NAVIGATION_BUTTONS_HEIGHT)];
+    [sideDrawerButton addTarget:self action:@selector(btnReloadPressed) forControlEvents:UIControlEventTouchUpInside];
+    [sideDrawerButton setBackgroundImage:[UIImage imageNamed:@"menu_button.png"] forState:UIControlStateNormal];
+    UIBarButtonItem *leftNavigationButton = [[UIBarButtonItem alloc] initWithCustomView:sideDrawerButton];
+    
+    self.navigationController.topViewController.navigationItem.leftBarButtonItem = leftNavigationButton;
+    leftNavigationButton.enabled=TRUE;
+}
+
+- (void)btnReloadPressed
+{
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
