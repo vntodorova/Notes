@@ -24,15 +24,28 @@
 - (void)setupNavigationBar
 {
     UIButton *sideDrawerButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, NAVIGATION_BUTTONS_WIDTH, NAVIGATION_BUTTONS_HEIGHT)];
-    [sideDrawerButton addTarget:self action:@selector(btnReloadPressed) forControlEvents:UIControlEventTouchUpInside];
+    [sideDrawerButton addTarget:self action:@selector(drawerButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [sideDrawerButton setBackgroundImage:[UIImage imageNamed:@"menu_button.png"] forState:UIControlStateNormal];
-    UIBarButtonItem *leftNavigationButton = [[UIBarButtonItem alloc] initWithCustomView:sideDrawerButton];
+    UIBarButtonItem *leftNavigationBarButton = [[UIBarButtonItem alloc] initWithCustomView:sideDrawerButton];
     
-    self.navigationController.topViewController.navigationItem.leftBarButtonItem = leftNavigationButton;
-    leftNavigationButton.enabled=TRUE;
+    UIButton *addNoteButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, NAVIGATION_BUTTONS_WIDTH, NAVIGATION_BUTTONS_HEIGHT)];
+    [addNoteButton addTarget:self action:@selector(addButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [addNoteButton setBackgroundImage:[UIImage imageNamed:@"plus.png"] forState:UIControlStateNormal];
+    UIBarButtonItem *rightNavigationBarButton = [[UIBarButtonItem alloc] initWithCustomView:addNoteButton];
+
+    self.navigationController.topViewController.navigationItem.leftBarButtonItem = leftNavigationBarButton;
+    self.navigationController.topViewController.navigationItem.rightBarButtonItem = rightNavigationBarButton;
+    
+    leftNavigationBarButton.enabled = TRUE;
+    rightNavigationBarButton.enabled = TRUE;
 }
 
-- (void)btnReloadPressed
+- (void)drawerButtonPressed
+{
+    
+}
+
+- (void)addButtonPressed
 {
     
 }

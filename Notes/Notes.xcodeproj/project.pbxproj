@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B534C44C1E8D176000AD25F6 /* menu_button.png in Resources */ = {isa = PBXBuildFile; fileRef = B534C44B1E8D176000AD25F6 /* menu_button.png */; };
+		B534C44F1E8D3F0C00AD25F6 /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = B534C44E1E8D3F0C00AD25F6 /* plus.png */; };
 		B5EFB34C1E8CFFD80024C211 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB34B1E8CFFD80024C211 /* main.m */; };
 		B5EFB34F1E8CFFD80024C211 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB34E1E8CFFD80024C211 /* AppDelegate.m */; };
 		B5EFB3521E8CFFD80024C211 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB3511E8CFFD80024C211 /* ViewController.m */; };
@@ -38,6 +39,7 @@
 /* Begin PBXFileReference section */
 		B534C44B1E8D176000AD25F6 /* menu_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_button.png; sourceTree = "<group>"; };
 		B534C44D1E8D397700AD25F6 /* Defines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Defines.h; sourceTree = "<group>"; };
+		B534C44E1E8D3F0C00AD25F6 /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
 		B5EFB3471E8CFFD80024C211 /* Notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5EFB34B1E8CFFD80024C211 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B5EFB34D1E8CFFD80024C211 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 		B534C44A1E8D176000AD25F6 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B534C44E1E8D3F0C00AD25F6 /* plus.png */,
 				B534C44B1E8D176000AD25F6 /* menu_button.png */,
 			);
 			path = Resources;
@@ -260,6 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5EFB35A1E8CFFD80024C211 /* LaunchScreen.storyboard in Resources */,
+				B534C44F1E8D3F0C00AD25F6 /* plus.png in Resources */,
 				B5EFB37E1E8D006F0024C211 /* ViewController.xib in Resources */,
 				B534C44C1E8D176000AD25F6 /* menu_button.png in Resources */,
 				B5EFB3571E8CFFD80024C211 /* Assets.xcassets in Resources */,
