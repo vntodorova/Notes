@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 #import "Defines.h"
-
+#import "NoteCreationController.h"
 @interface ViewController ()
 
 @end
@@ -48,7 +48,9 @@
 
 - (void)addButtonPressed
 {
-    
+    NoteCreationController *noteCreationController = [[NoteCreationController alloc]init];
+    noteCreationController.note =[[Note alloc] init];
+    [self.navigationController pushViewController:noteCreationController animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {
