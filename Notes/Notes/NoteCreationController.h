@@ -10,6 +10,7 @@
 #import "Note.h"
 
 @interface NoteCreationController : UIViewController
+- (IBAction)onOptionsClick:(id)sender;
 - (IBAction)onCreateClick:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UITextField *noteTags;

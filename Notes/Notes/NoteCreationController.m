@@ -34,6 +34,9 @@
 }
 */
 
+- (IBAction)onOptionsClick:(id)sender {
+}
+
 - (IBAction)onCreateClick:(id)sender {
     self.note.name = self.noteName.text;
     self.note.tags = [self getTagsFromText:self.noteTags.text];

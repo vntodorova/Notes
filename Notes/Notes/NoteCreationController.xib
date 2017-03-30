@@ -51,9 +51,12 @@
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0hH-eE-bxj">
                     <rect key="frame" x="306" y="622" width="54" height="30"/>
                     <state key="normal" title="Options"/>
+                    <connections>
+                        <action selector="onOptionsClick:" destination="-1" eventType="touchUpInside" id="lm6-jx-b4D"/>
+                    </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" red="1" green="0.74220535912167251" blue="0.17123376607892182" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" red="0.32671187420152015" green="0.75029968584656082" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="Uf6-vY-2go" firstAttribute="top" secondItem="CnX-oi-qcZ" secondAttribute="bottom" constant="15" id="1yK-lU-xXM"/>
                 <constraint firstItem="Fme-iL-Fez" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="100" id="Bvi-Dj-Jlf"/>
