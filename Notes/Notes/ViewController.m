@@ -35,6 +35,7 @@
 
     self.navigationController.topViewController.navigationItem.leftBarButtonItem = leftNavigationBarButton;
     self.navigationController.topViewController.navigationItem.rightBarButtonItem = rightNavigationBarButton;
+    self.navigationController.topViewController.navigationItem.titleView = [[UISearchBar alloc] init];
     
     leftNavigationBarButton.enabled = TRUE;
     rightNavigationBarButton.enabled = TRUE;
