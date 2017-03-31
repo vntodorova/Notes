@@ -32,4 +32,14 @@
 
 - (IBAction)onCreateClick:(id)sender;
 
+- (IBAction)onSettingsSelected:(id)sender;
+
+- (IBAction)onUnderlineSelected:(id)sender;
+
+- (IBAction)onItalicStyleSelected:(id)sender;
+
+- (IBAction)onBoldStyleSelected:(id)sender;
+
+- (IBAction)onFontSelected:(id)sender;
+
 @end

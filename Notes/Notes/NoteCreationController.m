@@ -18,16 +18,19 @@
 
 #pragma CONTROLLER
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.hiddenButtonsList = [[NSMutableArray alloc] init];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
 }
 
--(void) viewWillDisappear:(BOOL)animated {
+-(void) viewWillDisappear:(BOOL)animated
+{
     if ([self.navigationController.viewControllers indexOfObject:self]==NSNotFound) {
         [self setNoteContent];
         [self.delegade onDraftCreated:self.note];
@@ -36,6 +39,7 @@
 }
 
 #pragma PUBLIC
+
 - (IBAction)onOptionsClick:(UIButton *)sender
 {
     if(self.hiddenButtonsList.count > 0)
@@ -114,19 +118,23 @@
      }];
 }
 
-- (void)onListClick{
+- (void)onListClick
+{
     NSLog(@"List clicked");
 }
 
-- (void)onCameraClick{
+- (void)onCameraClick
+{
     NSLog(@"Camera clicked");
 }
 
-- (void)onDrawingClick{
+- (void)onDrawingClick
+{
     NSLog(@"Drawing clicked");
 }
 
-- (IBAction)onCreateClick:(id)sender {
+- (IBAction)onCreateClick:(id)sender
+{
     [self setNoteContent];
     [self.delegade onNoteCreated:self.note];
 }
@@ -141,6 +149,31 @@
 - (NSArray *)getTagsFromText:(NSString *) tags
 {
     return nil;
+}
+
+- (IBAction)onSettingsSelected:(id)sender
+{
+    NSLog(@"Settings selected");
+}
+
+- (IBAction)onUnderlineSelected:(id)sender
+{
+     NSLog(@"Underline selected");
+}
+
+- (IBAction)onItalicStyleSelected:(id)sender
+{
+     NSLog(@"Italic selected");
+}
+
+- (IBAction)onBoldStyleSelected:(id)sender
+{
+     NSLog(@"Bold selected");
+}
+
+- (IBAction)onFontSelected:(id)sender
+{
+     NSLog(@"Font selected");
 }
 
 @end

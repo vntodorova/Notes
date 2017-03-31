@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16E192b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -30,19 +30,19 @@
                     </connections>
                 </button>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Fme-iL-Fez">
-                    <rect key="frame" x="15" y="100" width="345" height="30"/>
+                    <rect key="frame" x="15" y="139" width="345" height="30"/>
                     <nil key="textColor"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
                 </textField>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CnX-oi-qcZ">
-                    <rect key="frame" x="15" y="145" width="345" height="30"/>
+                    <rect key="frame" x="15" y="184" width="345" height="30"/>
                     <nil key="textColor"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
                 </textField>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Uf6-vY-2go">
-                    <rect key="frame" x="15" y="190" width="345" height="382"/>
+                    <rect key="frame" x="15" y="229" width="345" height="343"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -59,21 +59,122 @@
                         <action selector="onOptionsClick:" destination="-1" eventType="touchUpInside" id="lm6-jx-b4D"/>
                     </connections>
                 </button>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JM0-5u-0lL">
+                    <rect key="frame" x="0.0" y="80" width="375" height="44"/>
+                    <items>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="UHC-Vr-ITK"/>
+                        <barButtonItem style="plain" id="l05-Bt-oPs">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="HKR-NN-yVg">
+                                <rect key="frame" x="52" y="7" width="31" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Font"/>
+                                <connections>
+                                    <action selector="onFontSelected:" destination="-1" eventType="touchUpInside" id="L40-8m-Xjd"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem style="plain" id="Z32-0u-1yo">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Z03-0k-6IF">
+                                <rect key="frame" x="93" y="7" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Size"/>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem style="plain" id="2L3-o1-aYo">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" id="Mrv-oK-0Ve">
+                                <rect key="frame" x="133" y="7" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal">
+                                    <attributedString key="attributedTitle">
+                                        <fragment content="B">
+                                            <attributes>
+                                                <font key="NSFont" size="15" name=".AppleSystemUIFontEmphasized"/>
+                                                <font key="NSOriginalFont" size="15" name=".AppleSystemUIFontEmphasized"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                </state>
+                                <connections>
+                                    <action selector="onBoldStyleSelected:" destination="-1" eventType="touchUpInside" id="oxJ-rh-5bX"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem style="plain" id="n8K-9B-2d1">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" id="oKm-kI-Znm">
+                                <rect key="frame" x="173" y="7" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal">
+                                    <attributedString key="attributedTitle">
+                                        <fragment content="I">
+                                            <attributes>
+                                                <font key="NSFont" size="15" name=".AppleSystemUIFontItalic"/>
+                                                <font key="NSOriginalFont" size="15" name=".AppleSystemUIFontItalic"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                </state>
+                                <connections>
+                                    <action selector="onItalicStyleSelected:" destination="-1" eventType="touchUpInside" id="muX-Ht-x1s"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem style="plain" id="Pj4-WK-mzp">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" id="f4C-Wq-5xS">
+                                <rect key="frame" x="213" y="7" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal">
+                                    <attributedString key="attributedTitle">
+                                        <fragment content="U">
+                                            <attributes>
+                                                <font key="NSFont" metaFont="system" size="15"/>
+                                                <integer key="NSUnderline" value="1"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                </state>
+                                <connections>
+                                    <action selector="onUnderlineSelected:" destination="-1" eventType="touchUpInside" id="Z13-d6-615"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem style="plain" id="9zI-Tn-ghj">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="0UO-0p-zex">
+                                <rect key="frame" x="253" y="7" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="-"/>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem style="done" id="Ptn-ZX-18i">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="O2d-8B-KYc">
+                                <rect key="frame" x="293" y="7" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="..."/>
+                                <connections>
+                                    <action selector="onSettingsSelected:" destination="-1" eventType="touchUpInside" id="znm-pS-kBI"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="GRH-Zs-gFp"/>
+                    </items>
+                </toolbar>
             </subviews>
             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
             <constraints>
                 <constraint firstItem="Uf6-vY-2go" firstAttribute="top" secondItem="CnX-oi-qcZ" secondAttribute="bottom" constant="15" id="1yK-lU-xXM"/>
-                <constraint firstItem="Fme-iL-Fez" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="100" id="Bvi-Dj-Jlf"/>
                 <constraint firstItem="Uf6-vY-2go" firstAttribute="leading" secondItem="CnX-oi-qcZ" secondAttribute="leading" id="JQh-gM-xAp"/>
                 <constraint firstItem="Fme-iL-Fez" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="15" id="JgP-b9-Tjf"/>
+                <constraint firstItem="JM0-5u-0lL" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="width" id="Tkl-4D-Fb6"/>
                 <constraint firstAttribute="trailing" secondItem="Fme-iL-Fez" secondAttribute="trailing" constant="15" id="bu2-gT-kgO"/>
                 <constraint firstItem="CnX-oi-qcZ" firstAttribute="top" secondItem="Fme-iL-Fez" secondAttribute="bottom" constant="15" id="cNA-B2-Hg6"/>
                 <constraint firstAttribute="bottom" secondItem="5UX-3b-ySm" secondAttribute="bottom" constant="15" id="du8-Cu-NYa"/>
                 <constraint firstItem="Uf6-vY-2go" firstAttribute="width" secondItem="CnX-oi-qcZ" secondAttribute="width" id="i3H-5w-8B9"/>
                 <constraint firstItem="CnX-oi-qcZ" firstAttribute="width" secondItem="Fme-iL-Fez" secondAttribute="width" id="iTL-DB-JIi"/>
                 <constraint firstItem="5UX-3b-ySm" firstAttribute="top" secondItem="Uf6-vY-2go" secondAttribute="bottom" constant="50" id="lDH-w6-xCg"/>
+                <constraint firstItem="JM0-5u-0lL" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="lr1-Gs-QBb"/>
                 <constraint firstItem="5UX-3b-ySm" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="15" id="mZB-qb-uEw"/>
+                <constraint firstItem="Fme-iL-Fez" firstAttribute="top" secondItem="JM0-5u-0lL" secondAttribute="bottom" constant="15" id="mi2-fs-pXq"/>
                 <constraint firstItem="CnX-oi-qcZ" firstAttribute="leading" secondItem="Fme-iL-Fez" secondAttribute="leading" id="qvY-hA-Yiw"/>
+                <constraint firstItem="JM0-5u-0lL" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="80" id="r49-eu-5KL"/>
                 <constraint firstAttribute="trailing" secondItem="0hH-eE-bxj" secondAttribute="trailing" constant="15" id="tsO-xw-29H"/>
                 <constraint firstAttribute="bottom" secondItem="0hH-eE-bxj" secondAttribute="bottom" constant="15" id="yUT-Jk-nOx"/>
             </constraints>
