@@ -48,9 +48,13 @@
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0hH-eE-bxj">
-                    <rect key="frame" x="306" y="622" width="54" height="30"/>
-                    <state key="normal" title="Options"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0hH-eE-bxj">
+                    <rect key="frame" x="310" y="602" width="50" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="50" id="Tem-tT-Adh"/>
+                        <constraint firstAttribute="height" constant="50" id="ign-sI-pmg"/>
+                    </constraints>
+                    <state key="normal" title="Options" image="plus.png"/>
                     <connections>
                         <action selector="onOptionsClick:" destination="-1" eventType="touchUpInside" id="lm6-jx-b4D"/>
                     </connections>
@@ -73,6 +77,10 @@
                 <constraint firstAttribute="trailing" secondItem="0hH-eE-bxj" secondAttribute="trailing" constant="15" id="tsO-xw-29H"/>
                 <constraint firstAttribute="bottom" secondItem="0hH-eE-bxj" secondAttribute="bottom" constant="15" id="yUT-Jk-nOx"/>
             </constraints>
+            <point key="canvasLocation" x="24.5" y="51.5"/>
         </view>
     </objects>
+    <resources>
+        <image name="plus.png" width="128" height="128"/>
+    </resources>
 </document>
