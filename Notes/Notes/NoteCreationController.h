@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Note.h"
 
-@protocol NoteCreationControllerDelegade
+@protocol NoteCreationControllerDelegate
 
 - (void)onNoteCreated:(Note*)note;
 - (void)onDraftCreated:(Note*)draft;
@@ -24,7 +24,7 @@
 
 @property (weak, nonatomic) IBOutlet UITextView *noteBody;
 
-@property (weak, nonatomic) id<NoteCreationControllerDelegade> delegade;
+@property (weak, nonatomic) id<NoteCreationControllerDelegate> delegate;
 
 @property Note *note;
 

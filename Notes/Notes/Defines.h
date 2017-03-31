@@ -19,4 +19,6 @@
 #define TABLEVIEW_CELL_ID @"TableViewCell"
 #define TABLEVIEW_CELL_HEIGHT 70
 
+#define CELL_DRAG_ACTIVATION_DISTANCE 100
+
 #endif /* Defines_h */

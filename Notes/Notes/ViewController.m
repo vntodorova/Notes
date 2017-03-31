@@ -60,8 +60,25 @@
 {
     NoteCreationController *noteCreationController = [[NoteCreationController alloc]init];
     noteCreationController.note =[[Note alloc] init];
-    noteCreationController.delegade = self;
+    noteCreationController.delegate = self;
     [self.navigationController pushViewController:noteCreationController animated:YES];
+}
+
+- (void)swipedCell:(UIPanGestureRecognizer *)drag onCell:(TableViewCell *)cell
+{
+    [UIView animateWithDuration:1 animations:^
+     {
+         CGFloat screenWidth = [[UIScreen mainScreen] bounds].size.width;
+         cell.frame = CGRectMake(cell.frame.origin.x+screenWidth,cell.frame.origin.y, cell.frame.size.width , cell.frame.size.height);
+     }];
+    
+    [UIView animateWithDuration:1 animations:^{
+        CGFloat screenWidth = [[UIScreen mainScreen] bounds].size.width;
+        cell.frame = CGRectMake(cell.frame.origin.x+screenWidth,cell.frame.origin.y, cell.frame.size.width , cell.frame.size.height);
+    } completion:^(BOOL finished) {
+        [self.notesArray removeObject:cell.cellNote];
+        [self.tableView reloadData];
+    }];
 }
 
 #pragma mark TableView delegates
@@ -74,7 +91,9 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Note *note = [self.notesArray objectAtIndex:indexPath.row];
-    return [self.layoutProvider getNewCell:tableView withNote:note];
+    TableViewCell *cell = [self.layoutProvider getNewCell:tableView withNote:note];
+    cell.delegate = self;
+    return cell;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -82,16 +101,17 @@
     return TABLEVIEW_CELL_HEIGHT;
 }
 
-#pragma DELEGADE METHODS
+#pragma NoteCreationController delegates
 
 -(void)onDraftCreated:(Note *)draft
 {
-    NSLog(@"Draft created %@",draft);
+    [self.draftsArray addObject:draft];
 }
 
 -(void)onNoteCreated:(Note *)note
 {
-    NSLog(@"Note created %@",note);
+    [self.notesArray addObject:note];
+    [self.tableView reloadData];
 }
 
 @end

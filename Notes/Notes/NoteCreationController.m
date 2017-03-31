@@ -33,7 +33,7 @@
 {
     if ([self.navigationController.viewControllers indexOfObject:self]==NSNotFound) {
         [self setNoteContent];
-        [self.delegade onDraftCreated:self.note];
+        [self.delegate onDraftCreated:self.note];
     }
     [super viewWillDisappear:animated];
 }
@@ -136,7 +136,7 @@
 - (IBAction)onCreateClick:(id)sender
 {
     [self setNoteContent];
-    [self.delegade onNoteCreated:self.note];
+    [self.delegate onNoteCreated:self.note];
 }
 
 -(void) setNoteContent

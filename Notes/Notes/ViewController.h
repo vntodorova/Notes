@@ -11,11 +11,12 @@
 #import "NoteCreationController.h"
 #import "Note.h"
 
-@interface ViewController : UIViewController <NoteCreationControllerDelegade, UITableViewDataSource,UITableViewDelegate>
+@interface ViewController : UIViewController <NoteCreationControllerDelegate, UITableViewDataSource,UITableViewDelegate, TableViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property NSMutableArray<Note *> *notesArray;
+@property NSMutableArray<Note *> *draftsArray;
 @property LayoutProvider *layoutProvider;
 
 @end
