@@ -6,15 +6,15 @@
 //  Copyright © 2017 Nemetschek DreamTeam. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "LauncherViewController.h"
 #import "Defines.h"
 #import "NoteCreationController.h"
 #import "TableViewCell.h"
-@interface ViewController ()
+@interface LauncherViewController ()
 
 @end
 
-@implementation ViewController
+@implementation LauncherViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

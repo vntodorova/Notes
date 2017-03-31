@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  LauncherViewController.h
 //  Notes
 //
 //  Created by Nemetschek A-Team on 3/30/17.
@@ -11,7 +11,7 @@
 #import "NoteCreationController.h"
 #import "Note.h"
 
-@interface ViewController : UIViewController <NoteCreationControllerDelegate, UITableViewDataSource,UITableViewDelegate, TableViewCellDelegate>
+@interface LauncherViewController : UIViewController <NoteCreationControllerDelegate, UITableViewDataSource,UITableViewDelegate, TableViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 

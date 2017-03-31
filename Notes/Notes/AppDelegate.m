@@ -19,14 +19,14 @@
     // Override point for customization after application launch.
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    ViewController *controller = [[ViewController alloc] initWithNibName:@"ViewController" bundle:nil];
+    LauncherViewController *controller = [[LauncherViewController alloc] initWithNibName:@"LauncherViewController" bundle:nil];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
     
     self.window.rootViewController = navigationController;
     [self.window makeKeyAndVisible];
     
     //MY CODE
-    self.rootViewController = [[ViewController alloc] initWithNibName:nil bundle:nil];
+    self.rootViewController = [[LauncherViewController alloc] initWithNibName:nil bundle:nil];
     self.navigationController = [[UINavigationController alloc] initWithRootViewController:self.rootViewController];
     [self.window addSubview:self.navigationController.view];
     return YES;
