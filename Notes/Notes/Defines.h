@@ -17,5 +17,6 @@
 #define SMALL_BUTTON_DISTANCE 40
 
 #define TABLEVIEW_CELL_ID @"TableViewCell"
+#define TABLEVIEW_CELL_HEIGHT 70
 
 #endif /* Defines_h */

@@ -21,9 +21,9 @@
     self.layoutProvider = [[LayoutProvider alloc] init];
     self.notesArray = [[NSMutableArray alloc] init];
     [self setupNavigationBar];
-    
     [self.tableView registerNib:[UINib nibWithNibName:@"TableViewCell" bundle:nil] forCellReuseIdentifier:TABLEVIEW_CELL_ID];
     
+    //TEST CODE
     Note *note1 = [[Note alloc] init];
     note1.name = @"First note";
     note1.dateCreated = @"12:34, 4.5.2016";
@@ -35,6 +35,7 @@
     [self.notesArray addObject:note2];
     
     [self.tableView reloadData];
+    //TEST CODE
 }
 
 - (void)setupNavigationBar
@@ -78,7 +79,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70;
+    return TABLEVIEW_CELL_HEIGHT;
 }
 
 #pragma DELEGADE METHODS
