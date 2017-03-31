@@ -13,5 +13,6 @@
 @property NSString *name;
 @property NSArray  *tags;
 @property NSString *body;
+@property NSString *dateCreated;
 
 @end

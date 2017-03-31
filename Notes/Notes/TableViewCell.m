@@ -10,6 +10,18 @@
 
 @implementation TableViewCell
 
+- (void)setupWithNote:(Note *)note
+{
+    self.nameLabel.text = note.name;
+    self.infoLabel.text = note.dateCreated;
+    self.layer.cornerRadius = 5;
+    self.layer.shadowColor = [UIColor darkGrayColor].CGColor;
+    self.layer.shadowOffset = CGSizeMake(0, 2.0f);
+    self.layer.shadowRadius = 2.0f;
+    self.layer.shadowOpacity = 1.0f;
+    self.layer.masksToBounds = NO;
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code

@@ -14,7 +14,8 @@
 
 #define SMALL_BUTTONS_WIDTH 40
 #define SMALL_BUTTONS_HEIGHT 40
-
 #define SMALL_BUTTON_DISTANCE 40
+
+#define TABLEVIEW_CELL_ID @"TableViewCell"
 
 #endif /* Defines_h */
