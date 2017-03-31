@@ -59,6 +59,7 @@
 {
     NoteCreationController *noteCreationController = [[NoteCreationController alloc]init];
     noteCreationController.note =[[Note alloc] init];
+    noteCreationController.delegade = self;
     [self.navigationController pushViewController:noteCreationController animated:YES];
 }
 
@@ -78,6 +79,18 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 70;
+}
+
+#pragma DELEGADE METHODS
+
+-(void)onDraftCreated:(Note *)draft
+{
+    NSLog(@"Draft created %@",draft);
+}
+
+-(void)onNoteCreated:(Note *)note
+{
+    NSLog(@"Note created %@",note);
 }
 
 @end

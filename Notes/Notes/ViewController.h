@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "LayoutProvider.h"
+#import "NoteCreationController.h"
 #import "Note.h"
 
-@interface ViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
+@interface ViewController : UIViewController <NoteCreationControllerDelegade, UITableViewDataSource,UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 

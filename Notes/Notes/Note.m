@@ -10,4 +10,9 @@
 
 @implementation Note
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"Name: %@", self.name];
+}
+
 @end

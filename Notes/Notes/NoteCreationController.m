@@ -16,6 +16,8 @@
 
 @implementation NoteCreationController
 
+#pragma CONTROLLER
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.hiddenButtonsList = [[NSMutableArray alloc] init];
@@ -25,6 +27,15 @@
     [super didReceiveMemoryWarning];
 }
 
+-(void) viewWillDisappear:(BOOL)animated {
+    if ([self.navigationController.viewControllers indexOfObject:self]==NSNotFound) {
+        [self setNoteContent];
+        [self.delegade onDraftCreated:self.note];
+    }
+    [super viewWillDisappear:animated];
+}
+
+#pragma PUBLIC
 - (IBAction)onOptionsClick:(UIButton *)sender
 {
     if(self.hiddenButtonsList.count > 0)
@@ -59,21 +70,33 @@
 {
     long optionsButtonX = sender.frame.origin.x - SMALL_BUTTON_DISTANCE;
     long optionsButtonY = sender.frame.origin.y - SMALL_BUTTON_DISTANCE;
-    [self createButtonWithX:optionsButtonX andY:optionsButtonY andBaseButton:sender andImage:[UIImage imageNamed:@"camera.png"]];
+    [self createButtonWithX:optionsButtonX
+                       andY:optionsButtonY
+                 baseButton:sender
+                buttonImage:[UIImage imageNamed:@"camera.png"]
+                     action:@selector(onCameraClick)];
     
     optionsButtonX = sender.frame.origin.x - SMALL_BUTTON_DISTANCE;
     optionsButtonY = sender.frame.origin.y;
-    [self createButtonWithX:optionsButtonX andY:optionsButtonY andBaseButton:sender andImage:[UIImage imageNamed:@"drawing.png"]];
+    [self createButtonWithX:optionsButtonX
+                       andY:optionsButtonY
+                 baseButton:sender
+                buttonImage:[UIImage imageNamed:@"drawing.png"]
+                     action:@selector(onDrawingClick)];
     
     optionsButtonX = sender.frame.origin.x;
     optionsButtonY = sender.frame.origin.y - SMALL_BUTTON_DISTANCE;
-    [self createButtonWithX:optionsButtonX andY:optionsButtonY andBaseButton:sender andImage:[UIImage imageNamed:@"list.png"]];
+    [self createButtonWithX:optionsButtonX
+                       andY:optionsButtonY
+                 baseButton:sender
+                buttonImage:[UIImage imageNamed:@"list.png"]
+                     action:@selector(onListClick)];
 }
 
-- (void)createButtonWithX:(long) xCoordinates andY:(long) yCoordinates andBaseButton:(UIButton *)sender andImage:(UIImage*)image
+- (void)createButtonWithX:(long) xCoordinates andY:(long) yCoordinates baseButton:(UIButton *)sender buttonImage:(UIImage*)image action:(SEL)selector
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button addTarget:self action:@selector(aMethod) forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
     
     button.frame = CGRectMake(sender.frame.origin.x + SMALL_BUTTON_DISTANCE / 2,
                               sender.frame.origin.y + SMALL_BUTTON_DISTANCE / 2,
@@ -91,11 +114,25 @@
      }];
 }
 
-- (void)aMethod{
-    
+- (void)onListClick{
+    NSLog(@"List clicked");
+}
+
+- (void)onCameraClick{
+    NSLog(@"Camera clicked");
+}
+
+- (void)onDrawingClick{
+    NSLog(@"Drawing clicked");
 }
 
 - (IBAction)onCreateClick:(id)sender {
+    [self setNoteContent];
+    [self.delegade onNoteCreated:self.note];
+}
+
+-(void) setNoteContent
+{
     self.note.name = self.noteName.text;
     self.note.tags = [self getTagsFromText:self.noteTags.text];
     self.note.body = self.noteBody.text;
