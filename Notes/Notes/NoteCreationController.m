@@ -22,6 +22,9 @@
 {
     [super viewDidLoad];
     self.hiddenButtonsList = [[NSMutableArray alloc] init];
+    [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc]
+                                     initWithTarget:self
+                                             action:@selector(dismissKeyboard)]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -144,6 +147,10 @@
     self.note.name = self.noteName.text;
     self.note.tags = [self getTagsFromText:self.noteTags.text];
     self.note.body = self.noteBody.text;
+    
+    NSDateFormatter *dateFormatter=[[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@" HH:mm:ss, dd-MM-yyyy"];
+    self.note.dateCreated = [dateFormatter stringFromDate:[NSDate date]];
 }
 
 - (NSArray *)getTagsFromText:(NSString *) tags
@@ -158,22 +165,58 @@
 
 - (IBAction)onUnderlineSelected:(id)sender
 {
-     NSLog(@"Underline selected");
+    NSMutableAttributedString *strText = [[NSMutableAttributedString alloc] initWithAttributedString:self.noteBody.attributedText];
+    
+    [strText addAttribute:NSUnderlineStyleAttributeName
+                    value:[NSNumber numberWithInt:NSUnderlineStyleSingle]
+                    range:[self.noteBody selectedRange]];
+    
+    [self.noteBody setAttributedText:strText];
 }
 
 - (IBAction)onItalicStyleSelected:(id)sender
 {
-     NSLog(@"Italic selected");
+   [self setTextAtribute:UIFontDescriptorTraitItalic];
 }
 
 - (IBAction)onBoldStyleSelected:(id)sender
 {
-     NSLog(@"Bold selected");
+    [self setTextAtribute:UIFontDescriptorTraitBold];
+}
+
+-(void)setTextAtribute:(UIFontDescriptorSymbolicTraits) type
+{
+    UIFontDescriptor * fontD = [self.noteBody.font.fontDescriptor
+                                fontDescriptorWithSymbolicTraits: self.noteBody.font.fontDescriptor.symbolicTraits | type];
+    
+    NSMutableAttributedString *strText = [[NSMutableAttributedString alloc] initWithAttributedString:self.noteBody.attributedText];
+    
+    [strText addAttribute:NSFontAttributeName
+                    value:[UIFont fontWithDescriptor:fontD size:0]
+                    range:[self.noteBody selectedRange]];
+    
+    [self.noteBody setAttributedText:strText];
 }
 
 - (IBAction)onFontSelected:(id)sender
 {
      NSLog(@"Font selected");
+}
+
+- (void) dismissKeyboard
+{
+    if([self.noteName isFirstResponder])
+    {
+        [self.noteName resignFirstResponder];
+    }
+    else if([self.noteTags isFirstResponder])
+    {
+        [self.noteTags resignFirstResponder];
+    }
+    else if([self.noteBody isFirstResponder])
+    {
+        [self.noteBody resignFirstResponder];
+    }
 }
 
 @end
