@@ -51,6 +51,8 @@
     self.navigationController.topViewController.navigationItem.titleView = [[UISearchBar alloc] init];
 }
 
+#pragma mark Navigation bar buttons
+
 - (void)drawerButtonPressed
 {
     
@@ -64,7 +66,9 @@
     [self.navigationController pushViewController:noteCreationController animated:YES];
 }
 
-- (void)swipedCell:(UIPanGestureRecognizer *)drag onCell:(TableViewCell *)cell
+#pragma mark TableViewCell delegates
+
+- (void)panGestureRecognisedOnCell:(TableViewCell *)cell
 {
     [UIView animateWithDuration:1 animations:^
      {
@@ -81,6 +85,12 @@
     }];
 }
 
+- (void)exchangeObjectAtIndex:(NSInteger)firstIndex withObjectAtIndex:(NSInteger)secondIndex
+{
+     [self.notesArray exchangeObjectAtIndex:firstIndex withObjectAtIndex:secondIndex];
+}
+
+
 #pragma mark TableView delegates
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -92,6 +102,7 @@
 {
     Note *note = [self.notesArray objectAtIndex:indexPath.row];
     TableViewCell *cell = [self.layoutProvider getNewCell:tableView withNote:note];
+    cell.tableView = tableView;
     cell.delegate = self;
     return cell;
 }

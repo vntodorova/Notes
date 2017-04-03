@@ -13,7 +13,8 @@
 
 @protocol TableViewCellDelegate
 
-- (void)swipedCell:(UIPanGestureRecognizer *)drag onCell:(TableViewCell *)cell;
+- (void)panGestureRecognisedOnCell:(TableViewCell *)cell;
+- (void)exchangeObjectAtIndex:(NSInteger)firstIndex withObjectAtIndex:(NSInteger)secondIndex;
 
 @end
 

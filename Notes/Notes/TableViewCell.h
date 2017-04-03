@@ -16,10 +16,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *infoLabel;
 
 @property (nonatomic, weak) id <TableViewCellDelegate> delegate;
+@property (nonatomic, weak) UITableView *tableView;
 @property Note* cellNote;
-
-@property float pointerStartDragCoordinatesX;
-@property float cellStartDragCoordinatesX;
 
 - (void)setupWithNote:(Note *)note;
 

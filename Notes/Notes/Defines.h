@@ -21,4 +21,7 @@
 
 #define CELL_DRAG_ACTIVATION_DISTANCE 100
 
+#define MOVE_DIRECTION_UP 1
+#define MOVE_DIRECTION_DOWN 2
+
 #endif /* Defines_h */

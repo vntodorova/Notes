@@ -9,6 +9,14 @@
 #import "TableViewCell.h"
 #import "Defines.h"
 
+@interface TableViewCell()
+
+@property float pointerStartPanCoordinatesX;
+@property float cellStartPanCoordinatesX;
+@property CGPoint pointerStartHoldCoordinates;
+
+@end
+
 @implementation TableViewCell
 
 - (void)setupWithNote:(Note *)note
@@ -16,64 +24,112 @@
     self.nameLabel.text = note.name;
     self.infoLabel.text = note.dateCreated;
     self.cellNote = note;
-    self.layer.cornerRadius = 5;
-    self.layer.shadowColor = [UIColor darkGrayColor].CGColor;
-    self.layer.shadowOffset = CGSizeMake(0, 2.0f);
-    self.layer.shadowRadius = 2.0f;
-    self.layer.shadowOpacity = 1.0f;
-    self.layer.masksToBounds = NO;
 }
 
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    UIPanGestureRecognizer *recogniser = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(swiped:)];
-    [self addGestureRecognizer:recogniser];
-    recogniser.delegate = self;
+    UIPanGestureRecognizer *panRecogniser = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognised:)];
+    [self addGestureRecognizer:panRecogniser];
+    panRecogniser.delegate = self;
+    UILongPressGestureRecognizer *longPressRecogniser = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGestureRecognised:)];
+    [self addGestureRecognizer:longPressRecogniser];
+    longPressRecogniser.delegate = self;
 }
 
-- (void)swiped:(UIPanGestureRecognizer *)swipe
+- (void)panGestureRecognised:(UIPanGestureRecognizer *)pan
 {
-    if(swipe.state == UIGestureRecognizerStateBegan)
-    {
-        [self swipeBegan:swipe];
-    }
-    if(swipe.state == UIGestureRecognizerStateChanged)
-    {
-        [self swipeChanged:swipe];
-    }
-    if(swipe.state == UIGestureRecognizerStateEnded)
-    {
-        [self swipeEnded:swipe];
+    switch (pan.state) {
+        case UIGestureRecognizerStateBegan:
+            [self panBegan:pan];
+            break;
+        case UIGestureRecognizerStateChanged:
+            [self panChanged:pan];
+            break;
+        case UIGestureRecognizerStateEnded:
+            [self panEnded:pan];
+            break;
+        default:
+            break;
     }
 }
 
-- (void)swipeBegan:(UIPanGestureRecognizer *)swipe
+- (void)panBegan:(UIPanGestureRecognizer *)pan
 {
-    self.pointerStartDragCoordinatesX = [swipe locationInView:self.window].x;
-    self.cellStartDragCoordinatesX = self.frame.origin.x;
+    self.pointerStartPanCoordinatesX = [pan locationInView:self.window].x;
+    self.cellStartPanCoordinatesX = self.frame.origin.x;
 }
 
-- (void)swipeChanged:(UIPanGestureRecognizer *)swipe
+- (void)panChanged:(UIPanGestureRecognizer *)pan
 {
-    float currentPointerDistance = [swipe locationInView:self.window].x - self.pointerStartDragCoordinatesX;
-    CGFloat offSet = self.cellStartDragCoordinatesX + currentPointerDistance;
-    self.frame = CGRectMake(offSet,self.frame.origin.y, self.frame.size.width , self.frame.size.height);
+    float currentPointerDistance = [pan locationInView:self.window].x - self.pointerStartPanCoordinatesX;
+    if(currentPointerDistance >= 0)
+    {
+        CGFloat offSet = self.cellStartPanCoordinatesX + currentPointerDistance;
+        self.frame = CGRectMake(offSet,self.frame.origin.y, self.frame.size.width , self.frame.size.height);
+    }
 }
 
-- (void)swipeEnded:(UIPanGestureRecognizer *)swipe
+- (void)panEnded:(UIPanGestureRecognizer *)pan
 {
     if(self.frame.origin.x > CELL_DRAG_ACTIVATION_DISTANCE)
     {
-        [self.delegate swipedCell:swipe onCell:self];
+        [self.delegate panGestureRecognisedOnCell:self];
     }
     else
     {
         [UIView animateWithDuration:0.8 animations:^
          {
-             self.frame = CGRectMake(self.cellStartDragCoordinatesX,self.frame.origin.y, self.frame.size.width , self.frame.size.height);
+             self.frame = CGRectMake(self.cellStartPanCoordinatesX,self.frame.origin.y, self.frame.size.width , self.frame.size.height);
          }];
     }
+}
+
+- (void)longPressGestureRecognised:(UILongPressGestureRecognizer *)longPress
+{
+    switch (longPress.state) {
+        case UIGestureRecognizerStateBegan:
+            [self longPressBegan:longPress];
+            break;
+        case UIGestureRecognizerStateChanged:
+            [self longPressChanged:longPress];
+            break;
+        case UIGestureRecognizerStateEnded:
+            [self longPressEnded:longPress];
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)longPressBegan:(UILongPressGestureRecognizer *)longPress
+{
+    self.pointerStartHoldCoordinates = [longPress locationInView:self.tableView];
+}
+
+- (void)longPressChanged:(UILongPressGestureRecognizer *)longPress
+{
+    CGPoint location = [longPress locationInView:self.tableView];
+    float currentPointerDistance = location.y - self.pointerStartHoldCoordinates.y;
+    if(currentPointerDistance < ([self.tableView numberOfRowsInSection:0] * TABLEVIEW_CELL_HEIGHT))
+    {
+        CGPoint center = self.center;
+        center.y = location.y;
+        self.center = center;
+    }
+}
+
+- (void)longPressEnded:(UILongPressGestureRecognizer *)longPress
+{
+    CGPoint location = [longPress locationInView:self.tableView];
+    NSIndexPath *currentIndexPath = [self.tableView indexPathForRowAtPoint:location];
+    NSIndexPath *startingIndexPath = [self.tableView indexPathForRowAtPoint:self.pointerStartHoldCoordinates];
+    NSInteger tableViewRows = [self.tableView numberOfRowsInSection:0];
+    if (currentIndexPath && ![currentIndexPath isEqual:startingIndexPath] && currentIndexPath.row < tableViewRows) {
+        [self.delegate exchangeObjectAtIndex:currentIndexPath.row withObjectAtIndex:startingIndexPath.row];
+        [self.tableView moveRowAtIndexPath:startingIndexPath toIndexPath:currentIndexPath];
+    }
+    self.frame = CGRectMake(self.frame.origin.x,currentIndexPath.row*TABLEVIEW_CELL_HEIGHT, self.frame.size.width , self.frame.size.height);
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
