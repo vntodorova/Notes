@@ -24,4 +24,6 @@
 #define MOVE_DIRECTION_UP 1
 #define MOVE_DIRECTION_DOWN 2
 
+#define LEFT_PANEL_WIDTH 250
+
 #endif /* Defines_h */

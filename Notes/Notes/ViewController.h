@@ -11,9 +11,12 @@
 #import "NoteCreationController.h"
 #import "Note.h"
 
+@class LeftPanelViewController;
+
 @interface ViewController : UIViewController <NoteCreationControllerDelegate, UITableViewDataSource,UITableViewDelegate, TableViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) LeftPanelViewController *leftPanelViewController;
 
 @property NSMutableArray<Note *> *notesArray;
 @property NSMutableArray<Note *> *draftsArray;

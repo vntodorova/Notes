@@ -10,9 +10,7 @@
 #import "Defines.h"
 #import "NoteCreationController.h"
 #import "TableViewCell.h"
-@interface ViewController ()
-
-@end
+#import "LeftPanelViewController.h"
 
 @implementation ViewController
 
@@ -51,11 +49,41 @@
     self.navigationController.topViewController.navigationItem.titleView = [[UISearchBar alloc] init];
 }
 
+- (void)showDrawer
+{
+    self.leftPanelViewController.isHidden = NO;
+    [UIView animateWithDuration:1 animations:^{
+        self.leftPanelViewController.view.frame = CGRectMake(0, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
+    }];
+}
+
+- (void)hideDrawer
+{
+    self.leftPanelViewController.isHidden = YES;
+    [UIView animateWithDuration:1 animations:^{
+        self.leftPanelViewController.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
+    }];
+}
+
+#pragma mark -
 #pragma mark Navigation bar buttons
 
 - (void)drawerButtonPressed
 {
+    if(!self.leftPanelViewController)
+    {
+        self.leftPanelViewController = [[LeftPanelViewController alloc] initWithNibName:@"LeftPanelViewController" bundle:nil];
+        [self.view addSubview:self.leftPanelViewController.view];
+    }
     
+    if(self.leftPanelViewController.isHidden)
+    {
+        [self showDrawer];
+    }
+    else
+    {
+        [self hideDrawer];
+    }
 }
 
 - (void)addButtonPressed
@@ -66,6 +94,7 @@
     [self.navigationController pushViewController:noteCreationController animated:YES];
 }
 
+#pragma mark -
 #pragma mark TableViewCell delegates
 
 - (void)panGestureRecognisedOnCell:(TableViewCell *)cell
@@ -90,7 +119,7 @@
      [self.notesArray exchangeObjectAtIndex:firstIndex withObjectAtIndex:secondIndex];
 }
 
-
+#pragma mark -
 #pragma mark TableView delegates
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -112,7 +141,8 @@
     return TABLEVIEW_CELL_HEIGHT;
 }
 
-#pragma NoteCreationController delegates
+#pragma mark -
+#pragma mark NoteCreationController delegates
 
 -(void)onDraftCreated:(Note *)draft
 {
