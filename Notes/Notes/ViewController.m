@@ -88,10 +88,14 @@
 
 - (void)addButtonPressed
 {
-    NoteCreationController *noteCreationController = [[NoteCreationController alloc]init];
-    noteCreationController.note =[[Note alloc] init];
+    Note* note = [[Note alloc] init];
+    note.body = @"This text is here to be eddited and tested";
+    
+    NoteCreationController *noteCreationController = [[NoteCreationController alloc] init];
+    noteCreationController.note = note;
     noteCreationController.delegate = self;
     [self.navigationController pushViewController:noteCreationController animated:YES];
+    
 }
 
 #pragma mark -

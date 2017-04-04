@@ -32,6 +32,7 @@
 
 - (IBAction)onCreateClick:(id)sender;
 
+//Toolbar buttons
 - (IBAction)onSettingsSelected:(id)sender;
 
 - (IBAction)onUnderlineSelected:(id)sender;
@@ -42,4 +43,6 @@
 
 - (IBAction)onFontSelected:(id)sender;
 
+- (IBAction)onSizeSelected:(id)sender;
+//------------------
 @end
