@@ -20,6 +20,8 @@
 		1D4056051E8D1E5000E18D05 /* NoteCreationController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D4056031E8D1E5000E18D05 /* NoteCreationController.xib */; };
 		1D4056081E8D360600E18D05 /* Note.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4056071E8D360600E18D05 /* Note.m */; };
 		B506D9C91E8E3CBB00555F1D /* LayoutProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = B506D9C81E8E3CBB00555F1D /* LayoutProvider.m */; };
+		B526CB591E939E4C00FF4FA8 /* LeftPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B526CB571E939E4C00FF4FA8 /* LeftPanelViewController.m */; };
+		B526CB5A1E939E4C00FF4FA8 /* LeftPanelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B526CB581E939E4C00FF4FA8 /* LeftPanelViewController.xib */; };
 		B534C4531E8D433300AD25F6 /* TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B534C4511E8D433300AD25F6 /* TableViewCell.m */; };
 		B534C4541E8D433300AD25F6 /* TableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B534C4521E8D433300AD25F6 /* TableViewCell.xib */; };
 		B5EFB34C1E8CFFD80024C211 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB34B1E8CFFD80024C211 /* main.m */; };
@@ -69,6 +71,9 @@
 		1D4056071E8D360600E18D05 /* Note.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Note.m; sourceTree = "<group>"; };
 		B506D9C71E8E3CBB00555F1D /* LayoutProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutProvider.h; sourceTree = "<group>"; };
 		B506D9C81E8E3CBB00555F1D /* LayoutProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayoutProvider.m; sourceTree = "<group>"; };
+		B526CB561E939E4C00FF4FA8 /* LeftPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftPanelViewController.h; sourceTree = "<group>"; };
+		B526CB571E939E4C00FF4FA8 /* LeftPanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftPanelViewController.m; sourceTree = "<group>"; };
+		B526CB581E939E4C00FF4FA8 /* LeftPanelViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeftPanelViewController.xib; sourceTree = "<group>"; };
 		B534C44D1E8D397700AD25F6 /* Defines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Defines.h; sourceTree = "<group>"; };
 		B534C4501E8D433300AD25F6 /* TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewCell.h; sourceTree = "<group>"; };
 		B534C4511E8D433300AD25F6 /* TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewCell.m; sourceTree = "<group>"; };
@@ -190,6 +195,9 @@
 				B5EFB3581E8CFFD80024C211 /* LaunchScreen.storyboard */,
 				B506D9C71E8E3CBB00555F1D /* LayoutProvider.h */,
 				B506D9C81E8E3CBB00555F1D /* LayoutProvider.m */,
+				B526CB561E939E4C00FF4FA8 /* LeftPanelViewController.h */,
+				B526CB571E939E4C00FF4FA8 /* LeftPanelViewController.m */,
+				B526CB581E939E4C00FF4FA8 /* LeftPanelViewController.xib */,
 				1D4056061E8D360600E18D05 /* Note.h */,
 				1D4056071E8D360600E18D05 /* Note.m */,
 				1D4056011E8D1E5000E18D05 /* NoteCreationController.h */,
@@ -346,6 +354,7 @@
 				1D07C0DB1E9251F900E85CAF /* drawing.png in Resources */,
 				1D07C0D91E9251F900E85CAF /* Calibri.ttf in Resources */,
 				B534C4541E8D433300AD25F6 /* TableViewCell.xib in Resources */,
+				B526CB5A1E939E4C00FF4FA8 /* LeftPanelViewController.xib in Resources */,
 				B5EFB37E1E8D006F0024C211 /* ViewController.xib in Resources */,
 				1D07C0DE1E9251F900E85CAF /* plus.png in Resources */,
 				1D4056051E8D1E5000E18D05 /* NoteCreationController.xib in Resources */,
@@ -381,6 +390,7 @@
 				B534C4531E8D433300AD25F6 /* TableViewCell.m in Sources */,
 				B5EFB34F1E8CFFD80024C211 /* AppDelegate.m in Sources */,
 				1D4056041E8D1E5000E18D05 /* NoteCreationController.m in Sources */,
+				B526CB591E939E4C00FF4FA8 /* LeftPanelViewController.m in Sources */,
 				B5EFB34C1E8CFFD80024C211 /* main.m in Sources */,
 				1D09F5981E9388F9000519C8 /* BoldOperator.m in Sources */,
 				1D09F5941E938648000519C8 /* TextEditorOperator.m in Sources */,
