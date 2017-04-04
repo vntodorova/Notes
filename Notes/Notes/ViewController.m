@@ -23,14 +23,29 @@
     
     //TEST CODE
     Note *note1 = [[Note alloc] init];
-    note1.name = @"First note";
+    note1.name = @"1st note";
     note1.dateCreated = @"12:34, 4.5.2016";
     [self.notesArray addObject:note1];
     
     Note *note2 = [[Note alloc] init];
-    note2.name = @"Second note";
+    note2.name = @"2nd note";
     note2.dateCreated = @"12:35, 4.5.2016";
     [self.notesArray addObject:note2];
+    
+    Note *note3 = [[Note alloc] init];
+    note3.name = @"3rd note";
+    note2.dateCreated = @"12:35, 4.5.2016";
+    [self.notesArray addObject:note3];
+    
+    Note *note4 = [[Note alloc] init];
+    note4.name = @"4th note";
+    note4.dateCreated = @"12:35, 4.5.2016";
+    [self.notesArray addObject:note4];
+    
+    Note *note5 = [[Note alloc] init];
+    note5.name = @"5th note";
+    note5.dateCreated = @"12:35, 4.5.2016";
+    [self.notesArray addObject:note5];
     
     [self.tableView reloadData];
     //TEST CODE

@@ -10,11 +10,10 @@
 #import "Defines.h"
 
 @interface TableViewCell()
-
 @property float pointerStartPanCoordinatesX;
 @property float cellStartPanCoordinatesX;
-@property CGPoint pointerStartHoldCoordinates;
-
+@property NSIndexPath *sourceIndexPath;
+@property UIView *snapshot;
 @end
 
 @implementation TableViewCell
@@ -36,6 +35,23 @@
     [self addGestureRecognizer:longPressRecogniser];
     longPressRecogniser.delegate = self;
 }
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+{
+    [super setSelected:selected animated:animated];
+}
+
+- (void)createCellSnapshot
+{
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, NO, 0);
+    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    self.snapshot = [[UIImageView alloc] initWithImage:image];
+}
+
+#pragma mark -
+#pragma mark Pan gesture recogniser
 
 - (void)panGestureRecognised:(UIPanGestureRecognizer *)pan
 {
@@ -85,6 +101,9 @@
     }
 }
 
+#pragma mark -
+#pragma mark Long press gesture recogniser
+
 - (void)longPressGestureRecognised:(UILongPressGestureRecognizer *)longPress
 {
     switch (longPress.state) {
@@ -104,37 +123,45 @@
 
 - (void)longPressBegan:(UILongPressGestureRecognizer *)longPress
 {
-    self.pointerStartHoldCoordinates = [longPress locationInView:self.tableView];
+    CGPoint location = [longPress locationInView:self.tableView];
+    self.sourceIndexPath = [self.tableView indexPathForRowAtPoint:location];
+    [self createCellSnapshot];
+    self.snapshot.center = self.center;
+    self.snapshot.alpha = 0.0;
+    [self.tableView addSubview:self.snapshot];
+    [UIView animateWithDuration:0.25 animations:^{
+        self.snapshot.center = CGPointMake(self.center.x, location.y);
+        self.snapshot.alpha = 1;
+        self.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        self.hidden = YES;
+    }];
 }
 
 - (void)longPressChanged:(UILongPressGestureRecognizer *)longPress
 {
     CGPoint location = [longPress locationInView:self.tableView];
-    float currentPointerDistance = location.y - self.pointerStartHoldCoordinates.y;
-    if(currentPointerDistance < ([self.tableView numberOfRowsInSection:0] * TABLEVIEW_CELL_HEIGHT))
-    {
-        CGPoint center = self.center;
-        center.y = location.y;
-        self.center = center;
-    }
-}
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:location];
+    self.snapshot.center = CGPointMake(self.center.x, location.y);
+    if (indexPath && ![indexPath isEqual:self.sourceIndexPath]) {
+        [self.delegate exchangeObjectAtIndex:indexPath.row withObjectAtIndex:self.sourceIndexPath.row];
+        [self.tableView moveRowAtIndexPath:self.sourceIndexPath toIndexPath:indexPath];
+        self.sourceIndexPath = indexPath;
+    }}
 
 - (void)longPressEnded:(UILongPressGestureRecognizer *)longPress
 {
-    CGPoint location = [longPress locationInView:self.tableView];
-    NSIndexPath *currentIndexPath = [self.tableView indexPathForRowAtPoint:location];
-    NSIndexPath *startingIndexPath = [self.tableView indexPathForRowAtPoint:self.pointerStartHoldCoordinates];
-    NSInteger tableViewRows = [self.tableView numberOfRowsInSection:0];
-    if (currentIndexPath && ![currentIndexPath isEqual:startingIndexPath] && currentIndexPath.row < tableViewRows) {
-        [self.delegate exchangeObjectAtIndex:currentIndexPath.row withObjectAtIndex:startingIndexPath.row];
-        [self.tableView moveRowAtIndexPath:startingIndexPath toIndexPath:currentIndexPath];
-    }
-    self.frame = CGRectMake(self.frame.origin.x,currentIndexPath.row*TABLEVIEW_CELL_HEIGHT, self.frame.size.width , self.frame.size.height);
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
+    self.hidden = NO;
+    self.alpha = 0.0;
+    [UIView animateWithDuration:0.25 animations:^{
+        self.snapshot.center = self.center;
+        self.snapshot.alpha = 0.0;
+        self.alpha = 1.0;
+    } completion:^(BOOL finished) {
+        self.sourceIndexPath = nil;
+        [self.snapshot removeFromSuperview];
+        self.snapshot = nil;
+    }];
 }
 
 @end
