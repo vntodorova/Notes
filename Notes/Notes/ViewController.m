@@ -67,9 +67,15 @@
 
 - (void)showDrawer
 {
+    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
+    UIVisualEffectView *bluredView = [[UIVisualEffectView alloc] initWithEffect:effect];
+    bluredView.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
+    [self.view addSubview:bluredView];
+    [self.view bringSubviewToFront:self.leftPanelViewController.view];
     self.leftPanelViewController.isHidden = NO;
     [UIView animateWithDuration:1 animations:^{
         self.leftPanelViewController.view.frame = CGRectMake(0, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
+        bluredView.frame = self.view.bounds;
     }];
 }
 
