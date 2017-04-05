@@ -26,4 +26,9 @@
 
 #define LEFT_PANEL_WIDTH 250
 
+#define NOTEBOOKS_SECTION 0
+#define REMINDERS_SECTION 1
+
+#define TABLEVIEW_SECTIONS_NUMBER 2
+
 #endif /* Defines_h */

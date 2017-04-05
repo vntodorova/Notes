@@ -9,11 +9,16 @@
 #import <Foundation/Foundation.h>
 #import "TableViewCell.h"
 #import "Note.h"
+#import "Notebook.h"
+#import "Reminder.h"
 
 @interface LayoutProvider : NSObject
 
 - (TableViewCell *)getNewCell:(UITableView *)tableView withNote:(Note *)note;
 - (UIBarButtonItem *)setupLeftBarButton:(id)target withSelector:(SEL)selector;
 - (UIBarButtonItem *)setupRightBarButton:(id)target withSelector:(SEL)selector;
+
+- (UITableViewCell *)getNewCell:(UITableView *)tableView withNotebook:(Notebook *)notebook;
+- (UITableViewCell *)getNewCell:(UITableView *)tableView withReminder:(Reminder *)reminder;
 
 @end

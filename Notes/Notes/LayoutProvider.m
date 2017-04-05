@@ -8,8 +8,23 @@
 
 #import "LayoutProvider.h"
 #import "Defines.h"
+#import "DateTimeManager.h"
+
+@interface LayoutProvider()
+@property DateTimeManager *dateTimeManager;
+@end
 
 @implementation LayoutProvider
+
+-(instancetype)init
+{
+    self = [super init];
+    if(self)
+    {
+        self.dateTimeManager = [[DateTimeManager alloc] init];
+    }
+    return self;
+}
 
 - (TableViewCell *)getNewCell:(UITableView *)tableView withNote:(Note *)note
 {
@@ -32,6 +47,33 @@
     [rightBarButton setBackgroundImage:[UIImage imageNamed:@"plus.png"] forState:UIControlStateNormal];
     [rightBarButton addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
     return [[UIBarButtonItem alloc] initWithCustomView:rightBarButton];
+}
+
+- (UITableViewCell *)getNewCell:(UITableView *)tableView withNotebook:(Notebook *)notebook
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"NotebookCell"];
+    if (cell == nil)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"NotebookCell"];
+    }
+    
+    cell.imageView.image = [UIImage imageNamed:@"more.png"];
+    cell.textLabel.text = notebook.name;
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu items",(unsigned long)[notebook.notes count]];
+    return cell;
+}
+
+- (UITableViewCell *)getNewCell:(UITableView *)tableView withReminder:(Reminder *)reminder
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ReminderCell"];
+    if (cell == nil)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"ReminderCell"];
+    }
+    
+    cell.textLabel.text = reminder.name;
+    cell.detailTextLabel.text = [self.dateTimeManager convertToRelativeDate:reminder.triggerDate];
+    return cell;
 }
 
 @end

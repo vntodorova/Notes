@@ -11,6 +11,7 @@
 #import "NoteCreationController.h"
 #import "TableViewCell.h"
 #import "LeftPanelViewController.h"
+#import "LayoutProvider.h"
 
 @implementation ViewController
 
@@ -34,7 +35,7 @@
     
     Note *note3 = [[Note alloc] init];
     note3.name = @"3rd note";
-    note2.dateCreated = @"12:35, 4.5.2016";
+    note3.dateCreated = @"12:35, 4.5.2016";
     [self.notesArray addObject:note3];
     
     Note *note4 = [[Note alloc] init];
@@ -110,7 +111,6 @@
     noteCreationController.note = note;
     noteCreationController.delegate = self;
     [self.navigationController pushViewController:noteCreationController animated:YES];
-    
 }
 
 #pragma mark -
@@ -118,19 +118,9 @@
 
 - (void)panGestureRecognisedOnCell:(TableViewCell *)cell
 {
-    [UIView animateWithDuration:1 animations:^
-     {
-         CGFloat screenWidth = [[UIScreen mainScreen] bounds].size.width;
-         cell.frame = CGRectMake(cell.frame.origin.x+screenWidth,cell.frame.origin.y, cell.frame.size.width , cell.frame.size.height);
-     }];
-    
-    [UIView animateWithDuration:1 animations:^{
-        CGFloat screenWidth = [[UIScreen mainScreen] bounds].size.width;
-        cell.frame = CGRectMake(cell.frame.origin.x+screenWidth,cell.frame.origin.y, cell.frame.size.width , cell.frame.size.height);
-    } completion:^(BOOL finished) {
-        [self.notesArray removeObject:cell.cellNote];
-        [self.tableView reloadData];
-    }];
+    NSIndexPath *pathForDeleting = [self.tableView indexPathForCell:cell];
+    [self.notesArray removeObject:cell.cellNote];
+    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:pathForDeleting] withRowAnimation:UITableViewRowAnimationRight];
 }
 
 - (void)exchangeObjectAtIndex:(NSInteger)firstIndex withObjectAtIndex:(NSInteger)secondIndex

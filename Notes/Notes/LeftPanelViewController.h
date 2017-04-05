@@ -8,8 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LeftPanelViewController : UIViewController
+@class Notebook;
+@class Reminder;
 
+@interface LeftPanelViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
+
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+
+@property NSMutableArray<Notebook *> *notebooks;
+@property NSMutableArray<Reminder *> *reminders;
 @property BOOL isHidden;
 
 @end
