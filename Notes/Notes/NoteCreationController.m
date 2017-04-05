@@ -25,12 +25,13 @@
 {
     [super viewDidLoad];
     self.hiddenButtonsList = [[NSMutableArray alloc] init];
-    [self updateNoteFont:[UIFont systemFontOfSize:12]];
     
     [self inflateFontsList];
     [self inflateTextSizeList];
     
-    self.noteBody.text = self.note.body;
+       NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"myfile.html"];
+    NSURL *indexFileURL = [[NSURL alloc]initWithString:filePath];
+    [self.noteBody loadRequest:[NSURLRequest requestWithURL:indexFileURL]];
     
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc]
                                      initWithTarget:self
@@ -85,13 +86,14 @@
     [self setNoteContent];
     [self.delegate onNoteCreated:self.note];
     [self.navigationController popViewControllerAnimated:YES];
+    self.saveNote;
 }
 
 -(void) setNoteContent
 {
     self.note.name = self.noteName.text;
     self.note.tags = [self getTagsFromText:self.noteTags.text];
-    self.note.body = self.noteBody.text;
+  //  self.note.body = self.noteBody.text;
     
     NSDateFormatter *dateFormatter=[[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"HH:mm:ss, dd-MM-yyyy"];
@@ -105,29 +107,30 @@
 
 - (IBAction)onUnderlineSelected:(id)sender
 {
-    NSMutableAttributedString *strText = [[NSMutableAttributedString alloc] initWithAttributedString:self.noteBody.attributedText];
-    
-    [strText addAttribute:NSUnderlineStyleAttributeName
-                    value:[NSNumber numberWithInt:NSUnderlineStyleSingle]
-                    range:[self.noteBody selectedRange]];
-    
-    [self.noteBody setAttributedText:strText];
+    [self.noteBody stringByEvaluatingJavaScriptFromString:@"document.execCommand(\"Underline\")"];
 }
 
 - (IBAction)onItalicStyleSelected:(id)sender
 {
-   [self setTextAtribute:UIFontDescriptorTraitItalic];
+    [self.noteBody stringByEvaluatingJavaScriptFromString:@"document.execCommand(\"Italic\")"];
 }
 
 - (IBAction)onBoldStyleSelected:(id)sender
 {
-    [self setTextAtribute:UIFontDescriptorTraitBold];
+    [self.noteBody stringByEvaluatingJavaScriptFromString:@"document.execCommand(\"Bold\")"];
+    //NSLog(@"%@",);
 }
 
-- (void)updateNoteFont:(UIFont*)someFont
+- (void)updateNoteFont:(NSString*) font
 {
-    
+    [self.noteBody stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"document.execCommand('fontName', false, '%@')", font]];
 }
+
+- (void)updateNoteSize:(NSString*) size
+{
+    [self.noteBody stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"document.execCommand('fontSize', false, '%@')", size]];
+}
+
 
 - (IBAction)onFontSelected:(id)sender
 {
@@ -138,7 +141,7 @@
 - (IBAction)onSizeSelected:(UIButton *)sender
 {
     [self inflateTextSizeList];
-    [self displaySelectableMenuWithButton:sender list:self.textSizeList setter:@selector(updateNoteFont:)];
+    [self displaySelectableMenuWithButton:sender list:self.textSizeList setter:@selector(updateNoteSize:)];
 }
 
 #pragma PRIVATE
@@ -163,19 +166,6 @@
     popPresenter.sourceView = button;
     popPresenter.sourceRect = button.bounds;
     [self presentViewController:alert animated:YES completion:nil];
-}
-
--(void)setTextAtribute:(UIFontDescriptorSymbolicTraits) type
-{
-    UIFontDescriptor * fontD = [self.noteBody.font.fontDescriptor fontDescriptorWithSymbolicTraits: self.noteBody.font.fontDescriptor.symbolicTraits | type];
-    NSMutableAttributedString *strText = [[NSMutableAttributedString alloc] initWithAttributedString:self.noteBody.attributedText];
-    
-    
-    [strText addAttribute:NSFontAttributeName
-                    value:[UIFont fontWithDescriptor:fontD size:0]
-                    range:[self.noteBody selectedRange]];
-    
-    [self.noteBody setAttributedText:strText];
 }
 
 -(void) inflateTextSizeList
@@ -284,5 +274,13 @@
                          }];
     }
     [self.hiddenButtonsList removeAllObjects];
+}
+
+-(void) saveNote
+{
+    NSError *error;
+    NSString *stringToWrite = [self.noteBody stringByEvaluatingJavaScriptFromString:@"document.documentElement.outerHTML"];
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"myfile.html"];
+    [stringToWrite writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
 }
 @end

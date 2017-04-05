@@ -13,12 +13,18 @@
 		1D07C0DC1E9251F900E85CAF /* list.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D07C0D61E9251F900E85CAF /* list.png */; };
 		1D07C0DD1E9251F900E85CAF /* menu_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D07C0D71E9251F900E85CAF /* menu_button.png */; };
 		1D07C0DE1E9251F900E85CAF /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D07C0D81E9251F900E85CAF /* plus.png */; };
-		1D09F5941E938648000519C8 /* TextEditorOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D09F5931E938648000519C8 /* TextEditorOperator.m */; };
-		1D09F5981E9388F9000519C8 /* BoldOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D09F5971E9388F9000519C8 /* BoldOperator.m */; };
-		1D09F59B1E9398E7000519C8 /* UnderlineOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D09F59A1E9398E7000519C8 /* UnderlineOperator.m */; };
 		1D4056041E8D1E5000E18D05 /* NoteCreationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4056021E8D1E5000E18D05 /* NoteCreationController.m */; };
 		1D4056051E8D1E5000E18D05 /* NoteCreationController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D4056031E8D1E5000E18D05 /* NoteCreationController.xib */; };
 		1D4056081E8D360600E18D05 /* Note.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4056071E8D360600E18D05 /* Note.m */; };
+		1D9EF8731E94EF6400B35777 /* Calibri.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1D9EF8691E94EF6400B35777 /* Calibri.ttf */; };
+		1D9EF8741E94EF6400B35777 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D9EF86B1E94EF6400B35777 /* camera.png */; };
+		1D9EF8751E94EF6400B35777 /* drawing.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D9EF86C1E94EF6400B35777 /* drawing.png */; };
+		1D9EF8761E94EF6400B35777 /* list.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D9EF86D1E94EF6400B35777 /* list.png */; };
+		1D9EF8771E94EF6400B35777 /* menu_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D9EF86E1E94EF6400B35777 /* menu_button.png */; };
+		1D9EF8781E94EF6400B35777 /* more.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D9EF86F1E94EF6400B35777 /* more.png */; };
+		1D9EF8791E94EF6400B35777 /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D9EF8701E94EF6400B35777 /* plus.png */; };
+		1D9EF87A1E94EF6400B35777 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 1D9EF8721E94EF6400B35777 /* index.html */; };
+		1D9EF87D1E94EF7700B35777 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 1D9EF87C1E94EF7700B35777 /* index.html */; };
 		B506D9C91E8E3CBB00555F1D /* LayoutProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = B506D9C81E8E3CBB00555F1D /* LayoutProvider.m */; };
 		B526CB591E939E4C00FF4FA8 /* LeftPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B526CB571E939E4C00FF4FA8 /* LeftPanelViewController.m */; };
 		B526CB5A1E939E4C00FF4FA8 /* LeftPanelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B526CB581E939E4C00FF4FA8 /* LeftPanelViewController.xib */; };
@@ -62,17 +68,20 @@
 		1D07C0D61E9251F900E85CAF /* list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list.png; sourceTree = "<group>"; };
 		1D07C0D71E9251F900E85CAF /* menu_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_button.png; sourceTree = "<group>"; };
 		1D07C0D81E9251F900E85CAF /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
-		1D09F5921E938648000519C8 /* TextEditorOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextEditorOperator.h; path = Notes/TextEditorOperator.h; sourceTree = SOURCE_ROOT; };
-		1D09F5931E938648000519C8 /* TextEditorOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextEditorOperator.m; path = Notes/TextEditorOperator.m; sourceTree = SOURCE_ROOT; };
-		1D09F5961E9388F9000519C8 /* BoldOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoldOperator.h; sourceTree = "<group>"; };
-		1D09F5971E9388F9000519C8 /* BoldOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoldOperator.m; sourceTree = "<group>"; };
-		1D09F5991E9398E7000519C8 /* UnderlineOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnderlineOperator.h; sourceTree = "<group>"; };
-		1D09F59A1E9398E7000519C8 /* UnderlineOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnderlineOperator.m; sourceTree = "<group>"; };
 		1D4056011E8D1E5000E18D05 /* NoteCreationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteCreationController.h; sourceTree = "<group>"; };
 		1D4056021E8D1E5000E18D05 /* NoteCreationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteCreationController.m; sourceTree = "<group>"; };
 		1D4056031E8D1E5000E18D05 /* NoteCreationController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoteCreationController.xib; sourceTree = "<group>"; };
 		1D4056061E8D360600E18D05 /* Note.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Note.h; sourceTree = "<group>"; };
 		1D4056071E8D360600E18D05 /* Note.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Note.m; sourceTree = "<group>"; };
+		1D9EF8691E94EF6400B35777 /* Calibri.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Calibri.ttf; sourceTree = "<group>"; };
+		1D9EF86B1E94EF6400B35777 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
+		1D9EF86C1E94EF6400B35777 /* drawing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drawing.png; sourceTree = "<group>"; };
+		1D9EF86D1E94EF6400B35777 /* list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list.png; sourceTree = "<group>"; };
+		1D9EF86E1E94EF6400B35777 /* menu_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_button.png; sourceTree = "<group>"; };
+		1D9EF86F1E94EF6400B35777 /* more.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = more.png; sourceTree = "<group>"; };
+		1D9EF8701E94EF6400B35777 /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
+		1D9EF8721E94EF6400B35777 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		1D9EF87C1E94EF7700B35777 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		B506D9C71E8E3CBB00555F1D /* LayoutProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutProvider.h; sourceTree = "<group>"; };
 		B506D9C81E8E3CBB00555F1D /* LayoutProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayoutProvider.m; sourceTree = "<group>"; };
 		B526CB561E939E4C00FF4FA8 /* LeftPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftPanelViewController.h; sourceTree = "<group>"; };
@@ -135,6 +144,7 @@
 		1D07C0D01E9251F900E85CAF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1D9EF87B1E94EF7700B35777 /* Notes */,
 				1D07C0D11E9251F900E85CAF /* Fonts */,
 				1D07C0D31E9251F900E85CAF /* Images */,
 			);
@@ -162,17 +172,51 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
-		1D09F5951E9386AE000519C8 /* TextEditor */ = {
+		1D9EF8671E94EF6400B35777 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				1D09F5921E938648000519C8 /* TextEditorOperator.h */,
-				1D09F5931E938648000519C8 /* TextEditorOperator.m */,
-				1D09F5961E9388F9000519C8 /* BoldOperator.h */,
-				1D09F5971E9388F9000519C8 /* BoldOperator.m */,
-				1D09F5991E9398E7000519C8 /* UnderlineOperator.h */,
-				1D09F59A1E9398E7000519C8 /* UnderlineOperator.m */,
+				1D9EF8681E94EF6400B35777 /* Fonts */,
+				1D9EF86A1E94EF6400B35777 /* Images */,
+				1D9EF8711E94EF6400B35777 /* Notes */,
 			);
-			path = TextEditor;
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		1D9EF8681E94EF6400B35777 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				1D9EF8691E94EF6400B35777 /* Calibri.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		1D9EF86A1E94EF6400B35777 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				1D9EF86B1E94EF6400B35777 /* camera.png */,
+				1D9EF86C1E94EF6400B35777 /* drawing.png */,
+				1D9EF86D1E94EF6400B35777 /* list.png */,
+				1D9EF86E1E94EF6400B35777 /* menu_button.png */,
+				1D9EF86F1E94EF6400B35777 /* more.png */,
+				1D9EF8701E94EF6400B35777 /* plus.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		1D9EF8711E94EF6400B35777 /* Notes */ = {
+			isa = PBXGroup;
+			children = (
+				1D9EF8721E94EF6400B35777 /* index.html */,
+			);
+			path = Notes;
+			sourceTree = "<group>";
+		};
+		1D9EF87B1E94EF7700B35777 /* Notes */ = {
+			isa = PBXGroup;
+			children = (
+				1D9EF87C1E94EF7700B35777 /* index.html */,
+			);
+			path = Notes;
 			sourceTree = "<group>";
 		};
 		B5B8FB661E93E64400A82813 /* ViewControllers */ = {
@@ -194,6 +238,7 @@
 		B5B8FB671E93E64D00A82813 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				1D9EF8671E94EF6400B35777 /* Resources */,
 				B5B8FB5E1E93C35200A82813 /* Notebook.h */,
 				B5B8FB5F1E93C35200A82813 /* Notebook.m */,
 				B5B8FB611E93E46B00A82813 /* Reminder.h */,
@@ -257,7 +302,6 @@
 				B5B8FB671E93E64D00A82813 /* Models */,
 				1D07C0D01E9251F900E85CAF /* Resources */,
 				B5EFB34A1E8CFFD80024C211 /* Supporting Files */,
-				1D09F5951E9386AE000519C8 /* TextEditor */,
 				B5B8FB6E1E94DC9F00A82813 /* Utils */,
 				B5B8FB661E93E64400A82813 /* ViewControllers */,
 				B5B8FB681E93E67200A82813 /* Views */,
@@ -397,17 +441,26 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D9EF87A1E94EF6400B35777 /* index.html in Resources */,
+				1D9EF87D1E94EF7700B35777 /* index.html in Resources */,
 				B5EFB35A1E8CFFD80024C211 /* LaunchScreen.storyboard in Resources */,
 				B5B8FB6A1E94C98100A82813 /* more.png in Resources */,
+				1D9EF8761E94EF6400B35777 /* list.png in Resources */,
 				1D07C0DA1E9251F900E85CAF /* camera.png in Resources */,
 				1D07C0DD1E9251F900E85CAF /* menu_button.png in Resources */,
+				1D9EF8741E94EF6400B35777 /* camera.png in Resources */,
 				1D07C0DC1E9251F900E85CAF /* list.png in Resources */,
 				1D07C0DB1E9251F900E85CAF /* drawing.png in Resources */,
+				1D9EF8771E94EF6400B35777 /* menu_button.png in Resources */,
 				1D07C0D91E9251F900E85CAF /* Calibri.ttf in Resources */,
 				B534C4541E8D433300AD25F6 /* TableViewCell.xib in Resources */,
+				1D9EF8791E94EF6400B35777 /* plus.png in Resources */,
 				B526CB5A1E939E4C00FF4FA8 /* LeftPanelViewController.xib in Resources */,
+				1D9EF8781E94EF6400B35777 /* more.png in Resources */,
+				1D9EF8751E94EF6400B35777 /* drawing.png in Resources */,
 				B5EFB37E1E8D006F0024C211 /* ViewController.xib in Resources */,
 				1D07C0DE1E9251F900E85CAF /* plus.png in Resources */,
+				1D9EF8731E94EF6400B35777 /* Calibri.ttf in Resources */,
 				1D4056051E8D1E5000E18D05 /* NoteCreationController.xib in Resources */,
 				B5EFB3571E8CFFD80024C211 /* Assets.xcassets in Resources */,
 			);
@@ -437,7 +490,6 @@
 				B506D9C91E8E3CBB00555F1D /* LayoutProvider.m in Sources */,
 				1D4056081E8D360600E18D05 /* Note.m in Sources */,
 				B5B8FB601E93C35200A82813 /* Notebook.m in Sources */,
-				1D09F59B1E9398E7000519C8 /* UnderlineOperator.m in Sources */,
 				B5EFB3521E8CFFD80024C211 /* ViewController.m in Sources */,
 				B534C4531E8D433300AD25F6 /* TableViewCell.m in Sources */,
 				B5EFB34F1E8CFFD80024C211 /* AppDelegate.m in Sources */,
@@ -446,8 +498,6 @@
 				B526CB591E939E4C00FF4FA8 /* LeftPanelViewController.m in Sources */,
 				B5EFB34C1E8CFFD80024C211 /* main.m in Sources */,
 				B5B8FB631E93E46B00A82813 /* Reminder.m in Sources */,
-				1D09F5981E9388F9000519C8 /* BoldOperator.m in Sources */,
-				1D09F5941E938648000519C8 /* TextEditorOperator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

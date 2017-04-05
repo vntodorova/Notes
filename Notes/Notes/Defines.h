@@ -31,4 +31,6 @@
 
 #define TABLEVIEW_SECTIONS_NUMBER 2
 
+#define NOTE_SAVE_PATH "Notes/Notes/Resources/Notes"
+
 #endif /* Defines_h */

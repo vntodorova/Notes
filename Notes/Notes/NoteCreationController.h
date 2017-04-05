@@ -18,11 +18,11 @@
 
 @interface NoteCreationController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UIWebView *noteBody;
+
 @property (weak, nonatomic) IBOutlet UITextField *noteTags;
 
 @property (weak, nonatomic) IBOutlet UITextField *noteName;
-
-@property (weak, nonatomic) IBOutlet UITextView *noteBody;
 
 @property (weak, nonatomic) id<NoteCreationControllerDelegate> delegate;
 
