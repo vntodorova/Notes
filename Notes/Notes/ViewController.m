@@ -16,6 +16,7 @@
 @interface ViewController()
 
 @property (nonatomic, strong) LayoutProvider *layoutProvider;
+@property UIVisualEffectView *bluredView;
 
 @end
 
@@ -61,7 +62,20 @@
 -(void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    self.layoutProvider.bluredView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, size.width, size.height);
+    self.bluredView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, size.width, size.height);
+}
+
+- (void)setupBlurView
+{
+    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    self.bluredView = [[UIVisualEffectView alloc] initWithEffect:effect];
+    self.bluredView.frame = [UIScreen mainScreen].bounds;
+    self.bluredView.alpha = 0;
+    self.bluredView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
+    
+    UITapGestureRecognizer *tapRecogniser = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureRecognised:)];
+    [self.bluredView addGestureRecognizer:tapRecogniser];
+    tapRecogniser.delegate = self;
 }
 
 - (void)setupNavigationBar
@@ -77,28 +91,6 @@
     self.navigationController.topViewController.navigationItem.titleView = [[UISearchBar alloc] init];
 }
 
-- (void)showDrawer
-{
-    [self.view bringSubviewToFront:self.layoutProvider.bluredView];
-    [self.view bringSubviewToFront:self.leftPanelViewController.view];
-    self.leftPanelViewController.isHidden = NO;
-    [UIView animateWithDuration:0.5 animations:^{
-        self.layoutProvider.bluredView.alpha = 0.9;
-        self.leftPanelViewController.view.frame = CGRectMake(0, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
-    }];
-}
-
-- (void)hideDrawer
-{
-    self.leftPanelViewController.isHidden = YES;
-    [UIView animateWithDuration:0.5 animations:^{
-        self.layoutProvider.bluredView.alpha = 0;
-        self.leftPanelViewController.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
-    } completion:^(BOOL finished) {
-        [self.view sendSubviewToBack:self.layoutProvider.bluredView];
-    }];
-}
-
 #pragma mark -
 #pragma mark Navigation bar buttons
 
@@ -109,8 +101,9 @@
         self.leftPanelViewController = [[LeftPanelViewController alloc] initWithNibName:@"LeftPanelViewController" bundle:nil];
         self.leftPanelViewController.delegate = self;
         [self.view addSubview:self.leftPanelViewController.view];
-        [self.view addSubview:self.layoutProvider.bluredView];
-        [self.view sendSubviewToBack:self.layoutProvider.bluredView];
+        [self setupBlurView];
+        [self.view addSubview:self.bluredView];
+        [self.view sendSubviewToBack:self.bluredView];
     }
     
     if(self.leftPanelViewController.isHidden)
@@ -189,6 +182,36 @@
 #pragma mark LeftPanelViewController delegates
 
 - (void)hideLeftPanel
+{
+    [self hideDrawer];
+}
+
+- (void)showDrawer
+{
+    [self.view bringSubviewToFront:self.bluredView];
+    [self.view bringSubviewToFront:self.leftPanelViewController.view];
+    self.leftPanelViewController.isHidden = NO;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.bluredView.alpha = 0.9;
+        self.leftPanelViewController.view.frame = CGRectMake(0, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
+    }];
+}
+
+- (void)hideDrawer
+{
+    self.leftPanelViewController.isHidden = YES;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.bluredView.alpha = 0;
+        self.leftPanelViewController.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
+    } completion:^(BOOL finished) {
+        [self.view sendSubviewToBack:self.bluredView];
+    }];
+}
+
+#pragma mark -
+#pragma mark Gesture recogniser delegates
+
+- (void)tapGestureRecognised:(UITapGestureRecognizer *)tap
 {
     [self hideDrawer];
 }

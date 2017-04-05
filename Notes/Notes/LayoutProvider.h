@@ -14,8 +14,6 @@
 
 @interface LayoutProvider : NSObject
 
-@property UIVisualEffectView *bluredView;
-
 - (TableViewCell *)getNewCell:(UITableView *)tableView withNote:(Note *)note;
 - (UIBarButtonItem *)setupLeftBarButton:(id)target withSelector:(SEL)selector;
 - (UIBarButtonItem *)setupRightBarButton:(id)target withSelector:(SEL)selector;
