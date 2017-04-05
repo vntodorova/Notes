@@ -18,7 +18,6 @@
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) LeftPanelViewController *leftPanelViewController;
-@property (nonatomic, strong) LayoutProvider *layoutProvider;
 
 @property NSMutableArray<Note *> *notesArray;
 @property NSMutableArray<Note *> *draftsArray;

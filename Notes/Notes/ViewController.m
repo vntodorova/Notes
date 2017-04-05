@@ -13,6 +13,12 @@
 #import "LeftPanelViewController.h"
 #import "LayoutProvider.h"
 
+@interface ViewController()
+
+@property (nonatomic, strong) LayoutProvider *layoutProvider;
+
+@end
+
 @implementation ViewController
 
 - (void)viewDidLoad {
@@ -67,23 +73,23 @@
 
 - (void)showDrawer
 {
-    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
-    UIVisualEffectView *bluredView = [[UIVisualEffectView alloc] initWithEffect:effect];
-    bluredView.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
-    [self.view addSubview:bluredView];
+    [self.view bringSubviewToFront:self.layoutProvider.bluredView];
     [self.view bringSubviewToFront:self.leftPanelViewController.view];
     self.leftPanelViewController.isHidden = NO;
-    [UIView animateWithDuration:1 animations:^{
+    [UIView animateWithDuration:0.5 animations:^{
+        self.layoutProvider.bluredView.alpha = 1;
         self.leftPanelViewController.view.frame = CGRectMake(0, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
-        bluredView.frame = self.view.bounds;
     }];
 }
 
 - (void)hideDrawer
 {
     self.leftPanelViewController.isHidden = YES;
-    [UIView animateWithDuration:1 animations:^{
+    [UIView animateWithDuration:0.5 animations:^{
+        self.layoutProvider.bluredView.alpha = 0;
         self.leftPanelViewController.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
+    } completion:^(BOOL finished) {
+        [self.view sendSubviewToBack:self.layoutProvider.bluredView];
     }];
 }
 
@@ -96,6 +102,8 @@
     {
         self.leftPanelViewController = [[LeftPanelViewController alloc] initWithNibName:@"LeftPanelViewController" bundle:nil];
         [self.view addSubview:self.leftPanelViewController.view];
+        [self.view addSubview:self.layoutProvider.bluredView];
+        [self.view sendSubviewToBack:self.layoutProvider.bluredView];
     }
     
     if(self.leftPanelViewController.isHidden)

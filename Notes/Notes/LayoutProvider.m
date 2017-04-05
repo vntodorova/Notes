@@ -22,6 +22,10 @@
     if(self)
     {
         self.dateTimeManager = [[DateTimeManager alloc] init];
+        UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
+        self.bluredView = [[UIVisualEffectView alloc] initWithEffect:effect];
+        self.bluredView.frame = [UIScreen mainScreen].bounds;
+        self.bluredView.alpha = 0;
     }
     return self;
 }
