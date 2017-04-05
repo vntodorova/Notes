@@ -86,7 +86,7 @@
     [self setNoteContent];
     [self.delegate onNoteCreated:self.note];
     [self.navigationController popViewControllerAnimated:YES];
-    self.saveNote;
+    [self saveNote];
 }
 
 -(void) setNoteContent

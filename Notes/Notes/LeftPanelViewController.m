@@ -175,7 +175,6 @@
         CGFloat offSet = self.panelStartPanCoordinatesX + currentPointerDistance;
         self.view.frame = CGRectMake(offSet,self.view.frame.origin.y, self.view.frame.size.width , self.view.frame.size.height);
     }
-    NSLog(@"%f",self.view.frame.origin.x);
 }
 
 - (void)panEnded:(UIPanGestureRecognizer *)pan
