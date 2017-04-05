@@ -7,13 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PublicProtocols.h"
 
 @class Notebook;
 @class Reminder;
 
-@interface LeftPanelViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
+@interface LeftPanelViewController : UIViewController <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, weak) id <LeftPanelDelegate> delegate;
 
 @property NSMutableArray<Notebook *> *notebooks;
 @property NSMutableArray<Reminder *> *reminders;

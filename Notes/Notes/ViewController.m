@@ -58,6 +58,12 @@
     //TEST CODE
 }
 
+-(void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    self.layoutProvider.bluredView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, size.width, size.height);
+}
+
 - (void)setupNavigationBar
 {
     UIBarButtonItem *leftNavigationBarButton = [self.layoutProvider setupLeftBarButton:self withSelector:@selector(drawerButtonPressed)];
@@ -77,7 +83,7 @@
     [self.view bringSubviewToFront:self.leftPanelViewController.view];
     self.leftPanelViewController.isHidden = NO;
     [UIView animateWithDuration:0.5 animations:^{
-        self.layoutProvider.bluredView.alpha = 1;
+        self.layoutProvider.bluredView.alpha = 0.9;
         self.leftPanelViewController.view.frame = CGRectMake(0, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
     }];
 }
@@ -101,6 +107,7 @@
     if(!self.leftPanelViewController)
     {
         self.leftPanelViewController = [[LeftPanelViewController alloc] initWithNibName:@"LeftPanelViewController" bundle:nil];
+        self.leftPanelViewController.delegate = self;
         [self.view addSubview:self.leftPanelViewController.view];
         [self.view addSubview:self.layoutProvider.bluredView];
         [self.view sendSubviewToBack:self.layoutProvider.bluredView];
@@ -176,6 +183,14 @@
 {
     [self.notesArray addObject:note];
     [self.tableView reloadData];
+}
+
+#pragma mark -
+#pragma mark LeftPanelViewController delegates
+
+- (void)hideLeftPanel
+{
+    [self hideDrawer];
 }
 
 @end

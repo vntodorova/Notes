@@ -18,6 +18,9 @@
 @property DateTimeManager *dateTimeManager;
 @property LayoutProvider *layoutProvider;
 
+@property float pointerStartPanCoordinatesX;
+@property float panelStartPanCoordinatesX;
+
 @end
 
 @implementation LeftPanelViewController
@@ -37,44 +40,50 @@
     [super viewDidLoad];
     self.dateTimeManager = [[DateTimeManager alloc] init];
     self.layoutProvider = [[LayoutProvider alloc] init];
+    
+    UIPanGestureRecognizer *panRecogniser = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognised:)];
+    [self.view addGestureRecognizer:panRecogniser];
+    panRecogniser.delegate = self;
+
+    
+    //TEST CODE
     self.notebooks = [[NSMutableArray alloc] init];
+    self.reminders = [[NSMutableArray alloc] init];
     
     Notebook* notebook1 = [[Notebook alloc] init];
     notebook1.name = @"General";
+    [self.notebooks addObject:notebook1];
     
     Notebook* notebook2 = [[Notebook alloc] init];
     notebook2.name = @"Work";
+    [self.notebooks addObject:notebook2];
     
     Notebook* notebook3 = [[Notebook alloc] init];
     notebook3.name = @"Home";
-    
-    [self.notebooks addObject:notebook1];
-    [self.notebooks addObject:notebook2];
     [self.notebooks addObject:notebook3];
-    
-    self.reminders = [[NSMutableArray alloc] init];
-    
+
     Reminder *reminder1 = [[Reminder alloc] init];
     reminder1.name = @"Wash the car";
     reminder1.triggerDate = @"13:00:00, 06-04-2018";
-
+    [self.reminders addObject:reminder1];
+    
     Reminder *reminder2 = [[Reminder alloc] init];
     reminder2.name = @"Random reminder name";
     reminder2.triggerDate = @"13:00:00, 15-05-2017";
+    [self.reminders addObject:reminder2];
     
     Reminder *reminder3 = [[Reminder alloc] init];
     reminder3.name = @"Add Settings button";
     reminder3.triggerDate = @"13:00:00, 15-06-2017";
-    
-    [self.reminders addObject:reminder1];
-    [self.reminders addObject:reminder2];
     [self.reminders addObject:reminder3];
+
     [self.reminders sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
         Reminder *reminder1 = (Reminder *)obj1;
         Reminder *reminder2 = (Reminder *)obj2;
         return [self.dateTimeManager compareStringDate:reminder1.triggerDate andDate:reminder2.triggerDate];
     }];
     [self.tableView reloadData];
+    //TEST CODE
 }
 
 #pragma mark -
@@ -130,6 +139,48 @@
         headerTitle = @"Reminders";
     }
     return headerTitle;
+}
+
+#pragma mark -
+#pragma mark Pan gesture recogniser
+
+- (void)panGestureRecognised:(UIPanGestureRecognizer *)pan
+{
+    switch (pan.state) {
+        case UIGestureRecognizerStateBegan:
+            [self panBegan:pan];
+            break;
+        case UIGestureRecognizerStateChanged:
+            [self panChanged:pan];
+            break;
+        case UIGestureRecognizerStateEnded:
+            [self panEnded:pan];
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)panBegan:(UIPanGestureRecognizer *)pan
+{
+    self.pointerStartPanCoordinatesX = [pan locationInView:self.view.window].x;
+    self.panelStartPanCoordinatesX = self.view.frame.origin.x;
+}
+
+- (void)panChanged:(UIPanGestureRecognizer *)pan
+{
+    float currentPointerDistance = [pan locationInView:self.view.window].x - self.pointerStartPanCoordinatesX;
+    if(currentPointerDistance <= 0)
+    {
+        CGFloat offSet = self.panelStartPanCoordinatesX + currentPointerDistance;
+        self.view.frame = CGRectMake(offSet,self.view.frame.origin.y, self.view.frame.size.width , self.view.frame.size.height);
+    }
+    NSLog(@"%f",self.view.frame.origin.x);
+}
+
+- (void)panEnded:(UIPanGestureRecognizer *)pan
+{
+    [self.delegate hideLeftPanel];
 }
 
 @end

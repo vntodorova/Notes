@@ -18,4 +18,10 @@
 
 @end
 
+@protocol LeftPanelDelegate
+
+- (void)hideLeftPanel;
+
+@end
+
 #endif /* PublicProtocols_h */

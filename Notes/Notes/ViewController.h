@@ -14,7 +14,7 @@
 @class Note;
 @class LayoutProvider;
 
-@interface ViewController : UIViewController <NoteCreationControllerDelegate, UITableViewDataSource,UITableViewDelegate, TableViewCellDelegate>
+@interface ViewController : UIViewController <NoteCreationControllerDelegate, UITableViewDataSource,UITableViewDelegate, TableViewCellDelegate, LeftPanelDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) LeftPanelViewController *leftPanelViewController;
