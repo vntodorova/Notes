@@ -14,10 +14,16 @@
 
 @interface LayoutProvider : NSObject
 
-- (TableViewCell *)getNewCell:(UITableView *)tableView withNote:(Note *)note;
++ (id)sharedInstance;
+
+- (id)init NS_UNAVAILABLE;
+
 - (UIBarButtonItem *)setupLeftBarButton:(id)target withSelector:(SEL)selector;
 - (UIBarButtonItem *)setupRightBarButton:(id)target withSelector:(SEL)selector;
 
+- (TableViewCell *)getNewTableViewCell:(UITableView *)tableView withNote:(Note *)note;
+
+- (UITableViewCell *)getNewCell:(UITableView *)tableView withNote:(Note *)note;
 - (UITableViewCell *)getNewCell:(UITableView *)tableView withNotebook:(Notebook *)notebook;
 - (UITableViewCell *)getNewCell:(UITableView *)tableView withReminder:(Reminder *)reminder;
 

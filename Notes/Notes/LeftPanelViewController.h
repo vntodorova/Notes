@@ -14,11 +14,15 @@
 
 @interface LeftPanelViewController : UIViewController <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate>
 
+@property (weak, nonatomic) IBOutlet UIButton *facebookButton;
+@property (weak, nonatomic) IBOutlet UIButton *googleButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, weak) id <LeftPanelDelegate> delegate;
 
-@property NSMutableArray<Notebook *> *notebooks;
-@property NSMutableArray<Reminder *> *reminders;
+@property NSMutableDictionary *tableViewDataSource;
+
+@property NSMutableDictionary *notebooksClicked;
+
 @property BOOL isHidden;
 
 @end

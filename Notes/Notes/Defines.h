@@ -29,6 +29,9 @@
 #define NOTEBOOKS_SECTION 0
 #define REMINDERS_SECTION 1
 
+#define NOTEBOOK_KEY @"Notebook"
+#define REMINDER_KEY @"Reminder"
+
 #define TABLEVIEW_SECTIONS_NUMBER 2
 
 #define NOTE_SAVE_PATH "Notes/Notes/Resources/Notes"

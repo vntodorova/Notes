@@ -24,7 +24,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.layoutProvider = [[LayoutProvider alloc] init];
+    self.layoutProvider = [LayoutProvider sharedInstance];
     self.notesArray = [[NSMutableArray alloc] init];
     [self setupNavigationBar];
     [self.tableView registerNib:[UINib nibWithNibName:@"TableViewCell" bundle:nil] forCellReuseIdentifier:TABLEVIEW_CELL_ID];
@@ -153,7 +153,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Note *note = [self.notesArray objectAtIndex:indexPath.row];
-    TableViewCell *cell = [self.layoutProvider getNewCell:tableView withNote:note];
+    TableViewCell *cell = [self.layoutProvider getNewTableViewCell:tableView withNote:note];
     cell.tableView = tableView;
     cell.delegate = self;
     return cell;

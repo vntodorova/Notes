@@ -14,23 +14,26 @@
 @property DateTimeManager *dateTimeManager;
 @end
 
+static LayoutProvider *sharedInstance = nil;
+static dispatch_once_t predicate = 0;
+
 @implementation LayoutProvider
 
--(instancetype)init
++ (id)sharedInstance
 {
+    dispatch_once(&predicate, ^{
+        sharedInstance = [[self alloc] initFirstTime];
+    });
+    
+    return sharedInstance;
+}
+
+- (id)initFirstTime {
     self = [super init];
-    if(self)
-    {
+    if (self) {
         self.dateTimeManager = [[DateTimeManager alloc] init];
     }
     return self;
-}
-
-- (TableViewCell *)getNewCell:(UITableView *)tableView withNote:(Note *)note
-{
-    TableViewCell *cell = (TableViewCell *)[tableView dequeueReusableCellWithIdentifier:TABLEVIEW_CELL_ID];
-    [cell setupWithNote:note];
-    return cell;
 }
 
 - (UIBarButtonItem *)setupLeftBarButton:(id)target withSelector:(SEL)selector;
@@ -49,6 +52,26 @@
     return [[UIBarButtonItem alloc] initWithCustomView:rightBarButton];
 }
 
+- (TableViewCell *)getNewTableViewCell:(UITableView *)tableView withNote:(Note *)note
+{
+    TableViewCell *cell = (TableViewCell *)[tableView dequeueReusableCellWithIdentifier:TABLEVIEW_CELL_ID];
+    [cell setupWithNote:note];
+    return cell;
+}
+
+- (UITableViewCell *)getNewCell:(UITableView *)tableView withNote:(Note *)note
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"NoteCell"];
+    if (cell == nil)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"NoteCell"];
+    }
+    
+    cell.textLabel.text = note.name;
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",note.dateCreated];
+    return cell;
+}
+
 - (UITableViewCell *)getNewCell:(UITableView *)tableView withNotebook:(Notebook *)notebook
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"NotebookCell"];
@@ -57,7 +80,6 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"NotebookCell"];
     }
     
-    cell.imageView.image = [UIImage imageNamed:@"more.png"];
     cell.textLabel.text = notebook.name;
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu items",(unsigned long)[notebook.notes count]];
     return cell;

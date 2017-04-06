@@ -22,9 +22,12 @@
 		B526CB5A1E939E4C00FF4FA8 /* LeftPanelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B526CB581E939E4C00FF4FA8 /* LeftPanelViewController.xib */; };
 		B534C4531E8D433300AD25F6 /* TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B534C4511E8D433300AD25F6 /* TableViewCell.m */; };
 		B534C4541E8D433300AD25F6 /* TableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B534C4521E8D433300AD25F6 /* TableViewCell.xib */; };
+		B53CB76D1E95379B009DFF27 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = B53CB76B1E95379B009DFF27 /* facebook.png */; };
+		B53CB76E1E95379B009DFF27 /* google.png in Resources */ = {isa = PBXBuildFile; fileRef = B53CB76C1E95379B009DFF27 /* google.png */; };
 		B5B8FB601E93C35200A82813 /* Notebook.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B8FB5F1E93C35200A82813 /* Notebook.m */; };
 		B5B8FB631E93E46B00A82813 /* Reminder.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B8FB621E93E46B00A82813 /* Reminder.m */; };
 		B5B8FB6D1E94D81D00A82813 /* DateTimeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B8FB6C1E94D81D00A82813 /* DateTimeManager.m */; };
+		B5E8ABDD1E96580900964B3C /* TableViewDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E8ABDC1E96580900964B3C /* TableViewDataModel.m */; };
 		B5EFB34C1E8CFFD80024C211 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB34B1E8CFFD80024C211 /* main.m */; };
 		B5EFB34F1E8CFFD80024C211 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB34E1E8CFFD80024C211 /* AppDelegate.m */; };
 		B5EFB3521E8CFFD80024C211 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB3511E8CFFD80024C211 /* ViewController.m */; };
@@ -74,6 +77,8 @@
 		B534C4501E8D433300AD25F6 /* TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewCell.h; sourceTree = "<group>"; };
 		B534C4511E8D433300AD25F6 /* TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewCell.m; sourceTree = "<group>"; };
 		B534C4521E8D433300AD25F6 /* TableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableViewCell.xib; sourceTree = "<group>"; };
+		B53CB76B1E95379B009DFF27 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
+		B53CB76C1E95379B009DFF27 /* google.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = google.png; sourceTree = "<group>"; };
 		B5B8FB5E1E93C35200A82813 /* Notebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Notebook.h; sourceTree = "<group>"; };
 		B5B8FB5F1E93C35200A82813 /* Notebook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Notebook.m; sourceTree = "<group>"; };
 		B5B8FB611E93E46B00A82813 /* Reminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reminder.h; sourceTree = "<group>"; };
@@ -81,6 +86,8 @@
 		B5B8FB6B1E94D81D00A82813 /* DateTimeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateTimeManager.h; sourceTree = "<group>"; };
 		B5B8FB6C1E94D81D00A82813 /* DateTimeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateTimeManager.m; sourceTree = "<group>"; };
 		B5C5E5AB1E95038800E5B8E5 /* more.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = more.png; sourceTree = "<group>"; };
+		B5E8ABDB1E96580900964B3C /* TableViewDataModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewDataModel.h; sourceTree = "<group>"; };
+		B5E8ABDC1E96580900964B3C /* TableViewDataModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewDataModel.m; sourceTree = "<group>"; };
 		B5EFB3471E8CFFD80024C211 /* Notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5EFB34B1E8CFFD80024C211 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B5EFB34D1E8CFFD80024C211 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -151,6 +158,8 @@
 				1D07C0D61E9251F900E85CAF /* list.png */,
 				1D07C0D71E9251F900E85CAF /* menu_button.png */,
 				1D07C0D81E9251F900E85CAF /* plus.png */,
+				B53CB76B1E95379B009DFF27 /* facebook.png */,
+				B53CB76C1E95379B009DFF27 /* google.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -188,6 +197,8 @@
 				B5B8FB621E93E46B00A82813 /* Reminder.m */,
 				1D4056061E8D360600E18D05 /* Note.h */,
 				1D4056071E8D360600E18D05 /* Note.m */,
+				B5E8ABDB1E96580900964B3C /* TableViewDataModel.h */,
+				B5E8ABDC1E96580900964B3C /* TableViewDataModel.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -388,10 +399,12 @@
 				B5EFB35A1E8CFFD80024C211 /* LaunchScreen.storyboard in Resources */,
 				1D07C0DA1E9251F900E85CAF /* camera.png in Resources */,
 				1D07C0DD1E9251F900E85CAF /* menu_button.png in Resources */,
+				B53CB76E1E95379B009DFF27 /* google.png in Resources */,
 				1D07C0DC1E9251F900E85CAF /* list.png in Resources */,
 				1D07C0DB1E9251F900E85CAF /* drawing.png in Resources */,
 				1D07C0D91E9251F900E85CAF /* Calibri.ttf in Resources */,
 				B534C4541E8D433300AD25F6 /* TableViewCell.xib in Resources */,
+				B53CB76D1E95379B009DFF27 /* facebook.png in Resources */,
 				B526CB5A1E939E4C00FF4FA8 /* LeftPanelViewController.xib in Resources */,
 				B5EFB37E1E8D006F0024C211 /* ViewController.xib in Resources */,
 				1D07C0DE1E9251F900E85CAF /* plus.png in Resources */,
@@ -422,6 +435,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B506D9C91E8E3CBB00555F1D /* LayoutProvider.m in Sources */,
+				B5E8ABDD1E96580900964B3C /* TableViewDataModel.m in Sources */,
 				1D4056081E8D360600E18D05 /* Note.m in Sources */,
 				B5B8FB601E93C35200A82813 /* Notebook.m in Sources */,
 				B5EFB3521E8CFFD80024C211 /* ViewController.m in Sources */,
