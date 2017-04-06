@@ -35,5 +35,5 @@
 #define TABLEVIEW_SECTIONS_NUMBER 2
 
 #define NOTE_SAVE_PATH "Notes/Notes/Resources/Notes"
-
+#define NOTE_CREATED_EVENT "NoteCreatedEvent"
 #endif /* Defines_h */

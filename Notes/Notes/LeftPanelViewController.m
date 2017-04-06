@@ -51,30 +51,20 @@
     NSMutableArray *notebooks = [[NSMutableArray alloc] init];
     NSMutableArray *reminders = [[NSMutableArray alloc] init];
     
-    Notebook* notebook1 = [[Notebook alloc] init];
-    notebook1.name = @"General";
-    [notebooks addObject:notebook1];
-    [self.notebooksClicked setValue:[NSNumber numberWithBool:NO] forKey:notebook1.name];
+    Notebook* notebook1 = [[Notebook alloc] initWithName:@"General"];
+   // notebook1.name = @"General";
     
-    Note *note1 = [[Note alloc] init];
-    note1.name = @"1st note";
-    note1.dateCreated = @"12:34, 4.5.2016";
-    [notebook1.notes addObject:note1];
+    Notebook* notebook2 = [[Notebook alloc] initWithName:@"Work"];
+//notebook2.name = @"Work";
     
-    Note *note2 = [[Note alloc] init];
-    note2.name = @"2nd note";
-    note2.dateCreated = @"12:35, 4.5.2016";
-    [notebook1.notes addObject:note2];
+    Notebook* notebook3 = [[Notebook alloc] initWithName:@"Home"];
+  //  notebook3.name = @"Home";
     
-    Notebook* notebook2 = [[Notebook alloc] init];
-    notebook2.name = @"Work";
-    [notebooks addObject:notebook2];
-    [self.notebooksClicked setValue:[NSNumber numberWithBool:NO] forKey:notebook2.name];
+    [self.notebooks addObject:notebook1];
+    [self.notebooks addObject:notebook2];
+    [self.notebooks addObject:notebook3];
     
-    Notebook* notebook3 = [[Notebook alloc] init];
-    notebook3.name = @"Home";
-    [notebooks addObject:notebook3];
-    [self.notebooksClicked setValue:[NSNumber numberWithBool:NO] forKey:notebook3.name];
+    self.reminders = [[NSMutableArray alloc] init];
     
     Reminder *reminder1 = [[Reminder alloc] init];
     reminder1.name = @"Wash the car";

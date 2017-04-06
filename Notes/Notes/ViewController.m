@@ -12,12 +12,13 @@
 #import "TableViewCell.h"
 #import "LeftPanelViewController.h"
 #import "LayoutProvider.h"
+#import "LocalNoteManager.h"
 
 @interface ViewController()
 
 @property (nonatomic, strong) LayoutProvider *layoutProvider;
+@property (nonatomic, strong) LocalNoteManager *manager;
 @property UIVisualEffectView *bluredView;
-
 @end
 
 @implementation ViewController
@@ -25,35 +26,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.layoutProvider = [LayoutProvider sharedInstance];
+    self.manager = [[LocalNoteManager alloc] init];
     self.notesArray = [[NSMutableArray alloc] init];
+    
     [self setupNavigationBar];
     [self.tableView registerNib:[UINib nibWithNibName:@"TableViewCell" bundle:nil] forCellReuseIdentifier:TABLEVIEW_CELL_ID];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoteCreated) name:@NOTE_CREATED_EVENT object:nil];
+    self.notesArray = [self.manager getNoteListForNotebookWithName:@"General"];
     //TEST CODE
+    
     Note *note1 = [[Note alloc] init];
     note1.name = @"1st note";
     note1.dateCreated = @"12:34, 4.5.2016";
-    [self.notesArray addObject:note1];
     
-    Note *note2 = [[Note alloc] init];
-    note2.name = @"2nd note";
-    note2.dateCreated = @"12:35, 4.5.2016";
-    [self.notesArray addObject:note2];
+    NSArray *notebookList = [self.manager getNotebookList];
     
-    Note *note3 = [[Note alloc] init];
-    note3.name = @"3rd note";
-    note3.dateCreated = @"12:35, 4.5.2016";
-    [self.notesArray addObject:note3];
-    
-    Note *note4 = [[Note alloc] init];
-    note4.name = @"4th note";
-    note4.dateCreated = @"12:35, 4.5.2016";
-    [self.notesArray addObject:note4];
-    
-    Note *note5 = [[Note alloc] init];
-    note5.name = @"5th note";
-    note5.dateCreated = @"12:35, 4.5.2016";
-    [self.notesArray addObject:note5];
+    [self.manager addNote:note1 toNotebook:[notebookList objectAtIndex:0]];
     
     [self.tableView reloadData];
     //TEST CODE
@@ -121,9 +110,8 @@
     Note* note = [[Note alloc] init];
     note.body = @"This text is here to be eddited and tested";
     
-    NoteCreationController *noteCreationController = [[NoteCreationController alloc] init];
+    NoteCreationController *noteCreationController = [[NoteCreationController alloc] initWithManager:self.manager];
     noteCreationController.note = note;
-    noteCreationController.delegate = self;
     [self.navigationController pushViewController:noteCreationController animated:YES];
 }
 
@@ -133,13 +121,13 @@
 - (void)panGestureRecognisedOnCell:(TableViewCell *)cell
 {
     NSIndexPath *pathForDeleting = [self.tableView indexPathForCell:cell];
-    [self.notesArray removeObject:cell.cellNote];
+   // [self.notesArray removeObject:cell.cellNote];
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:pathForDeleting] withRowAnimation:UITableViewRowAnimationRight];
 }
 
 - (void)exchangeObjectAtIndex:(NSInteger)firstIndex withObjectAtIndex:(NSInteger)secondIndex
 {
-     [self.notesArray exchangeObjectAtIndex:firstIndex withObjectAtIndex:secondIndex];
+ //    [self.notesArray exchangeObjectAtIndex:firstIndex withObjectAtIndex:secondIndex];
 }
 
 #pragma mark -
@@ -167,14 +155,9 @@
 #pragma mark -
 #pragma mark NoteCreationController delegates
 
--(void)onDraftCreated:(Note *)draft
+-(void)onNoteCreated
 {
-    [self.draftsArray addObject:draft];
-}
-
--(void)onNoteCreated:(Note *)note
-{
-    [self.notesArray addObject:note];
+    self.notesArray = [self.manager getNoteListForNotebookWithName:@"General"];
     [self.tableView reloadData];
 }
 

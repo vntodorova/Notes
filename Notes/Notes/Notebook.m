@@ -10,13 +10,10 @@
 
 @implementation Notebook
 
-- (id)init
+-(instancetype)initWithName:(NSString*) name
 {
     self = [super init];
-    if(self)
-    {
-        self.notes = [[NSMutableArray alloc] init];
-    }
+    self->_name = name;
     return self;
 }
 

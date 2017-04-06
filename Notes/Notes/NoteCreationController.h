@@ -7,24 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Note.h"
-
-@protocol NoteCreationControllerDelegate
-
-- (void)onNoteCreated:(Note*)note;
-- (void)onDraftCreated:(Note*)draft;
-
-@end
+#import "Protocols.h"
+#import "LocalNoteManager.h"
 
 @interface NoteCreationController : UIViewController
+
+-(instancetype)initWithManager:(LocalNoteManager*) manager;
 
 @property (weak, nonatomic) IBOutlet UIWebView *noteBody;
 
 @property (weak, nonatomic) IBOutlet UITextField *noteTags;
 
 @property (weak, nonatomic) IBOutlet UITextField *noteName;
-
-@property (weak, nonatomic) id<NoteCreationControllerDelegate> delegate;
 
 @property Note *note;
 

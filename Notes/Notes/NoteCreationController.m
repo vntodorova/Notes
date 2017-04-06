@@ -8,29 +8,42 @@
 
 #import "NoteCreationController.h"
 #import "Defines.h"
+#import "Notebook.h"
 
 @interface NoteCreationController ()
 
 @property (nonatomic, strong) NSMutableArray *hiddenButtonsList;
 @property (nonatomic, strong) NSMutableArray *fontList;
 @property (nonatomic, strong) NSMutableArray *textSizeList;
+@property (nonatomic, strong) NSMutableArray *noteBookList;
 
+@property (nonatomic, strong) LocalNoteManager *manager;
 @end
 
 @implementation NoteCreationController
 
 #pragma CONTROLLER
+-(instancetype)initWithManager:(LocalNoteManager *)manager
+{
+    self = [super self];
+    self.manager = manager;
+    return self;
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.hiddenButtonsList = [[NSMutableArray alloc] init];
+    self.fontList = [[NSMutableArray alloc] init];
+    self.textSizeList = [[NSMutableArray alloc] init];
     
     [self inflateFontsList];
     [self inflateTextSizeList];
+
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"myfile.html"];
     
-       NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"myfile.html"];
     NSURL *indexFileURL = [[NSURL alloc]initWithString:filePath];
+    
     [self.noteBody loadRequest:[NSURLRequest requestWithURL:indexFileURL]];
     
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc]
@@ -45,9 +58,9 @@
 
 -(void) viewWillDisappear:(BOOL)animated
 {
-    if ([self.navigationController.viewControllers indexOfObject:self]==NSNotFound) {
+    if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
         [self setNoteContent];
-        [self.delegate onDraftCreated:self.note];
+       // [self.delegate onDraftCreated:self.note];
     }
     [super viewWillDisappear:animated];
 }
@@ -83,17 +96,30 @@
 
 - (IBAction)onCreateClick:(id)sender
 {
+    NSMutableArray *array  = [[NSMutableArray alloc] init];
+    for (Notebook* currentItem in [self.manager getNotebookList])
+    {
+        [array addObject:[UIAlertAction actionWithTitle:currentItem.name style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
+                          {
+                              [self performSelector:@selector(notebookSelected:) withObject:currentItem];
+                          }]];
+    }
+    
+    [self displaySelectableMenuWithButton:sender list:array];
+}
+
+- (void)notebookSelected:(Notebook*) noteBookSelected
+{
     [self setNoteContent];
-    [self.delegate onNoteCreated:self.note];
     [self.navigationController popViewControllerAnimated:YES];
     [self saveNote];
+    [self.manager addNote:self.note toNotebook:noteBookSelected];
 }
 
 -(void) setNoteContent
 {
     self.note.name = self.noteName.text;
     self.note.tags = [self getTagsFromText:self.noteTags.text];
-  //  self.note.body = self.noteBody.text;
     
     NSDateFormatter *dateFormatter=[[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"HH:mm:ss, dd-MM-yyyy"];
@@ -118,7 +144,6 @@
 - (IBAction)onBoldStyleSelected:(id)sender
 {
     [self.noteBody stringByEvaluatingJavaScriptFromString:@"document.execCommand(\"Bold\")"];
-    //NSLog(@"%@",);
 }
 
 - (void)updateNoteFont:(NSString*) font
@@ -131,36 +156,52 @@
     [self.noteBody stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"document.execCommand('fontSize', false, '%@')", size]];
 }
 
-
 - (IBAction)onFontSelected:(id)sender
 {
-    [self inflateFontsList];
-    [self displaySelectableMenuWithButton:sender list:self.fontList setter:@selector(updateNoteFont:)];
+    NSMutableArray *array  = [[NSMutableArray alloc] init];
+    
+    for (NSString* currentItem in self.fontList)
+    {
+        [array addObject:[UIAlertAction actionWithTitle:currentItem style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
+                          {
+                              [self performSelector:@selector(updateNoteFont:) withObject:currentItem];
+                          }]];
+    }
+    
+    [self displaySelectableMenuWithButton:sender list:array];
 }
 
 - (IBAction)onSizeSelected:(UIButton *)sender
 {
-    [self inflateTextSizeList];
-    [self displaySelectableMenuWithButton:sender list:self.textSizeList setter:@selector(updateNoteSize:)];
+    NSMutableArray *array  = [[NSMutableArray alloc] init];
+    
+    for (NSString* currentItem in self.textSizeList)
+    {
+        [array addObject:[UIAlertAction actionWithTitle:currentItem style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
+                          {
+                              [self performSelector:@selector(updateNoteSize:) withObject:currentItem];
+                          }]];
+    }
+    
+    [self displaySelectableMenuWithButton:sender list:array];
 }
 
 #pragma PRIVATE
 
-- (void)displaySelectableMenuWithButton:(UIButton *) button list:(NSMutableArray *)list setter:(SEL) updateSelector
+- (void)displaySelectableMenuWithButton:(UIButton *) button list:(NSMutableArray*)nameList
 {
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Categories"
                                                                    message:@"Choose category"
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
     
-    for (NSString* currentItem in list)
-    {
-                        [alert addAction:[UIAlertAction actionWithTitle:currentItem style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
-                                  {
-                                      [self performSelector:updateSelector withObject:currentItem];
-                                  }]];
-    }
+    
     
     [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    
+    for (UIAlertAction* currentItem in nameList)
+    {
+        [alert addAction:currentItem];
+    }
     
     UIPopoverPresentationController *popPresenter = [alert popoverPresentationController];
     popPresenter.sourceView = button;
@@ -170,8 +211,6 @@
 
 -(void) inflateTextSizeList
 {
-    self.textSizeList = [[NSMutableArray alloc] init];
-    
     [self.textSizeList addObject:@"10"];
     [self.textSizeList addObject:@"11"];
     [self.textSizeList addObject:@"12"];
@@ -181,8 +220,6 @@
 
 -(void) inflateFontsList
 {
-    self.fontList = [[NSMutableArray alloc] init];
-    
     [self.fontList addObject:@"Times New Roman"];
     [self.fontList addObject:@"Arial"];
     [self.fontList addObject:@"Futura"];

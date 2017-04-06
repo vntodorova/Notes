@@ -17,6 +17,7 @@
 		1D4056051E8D1E5000E18D05 /* NoteCreationController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D4056031E8D1E5000E18D05 /* NoteCreationController.xib */; };
 		1D4056081E8D360600E18D05 /* Note.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4056071E8D360600E18D05 /* Note.m */; };
 		1D9EF87D1E94EF7700B35777 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 1D9EF87C1E94EF7700B35777 /* index.html */; };
+		1D9EF8B41E96393A00B35777 /* LocalNoteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D9EF8B31E96393A00B35777 /* LocalNoteManager.m */; };
 		B506D9C91E8E3CBB00555F1D /* LayoutProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = B506D9C81E8E3CBB00555F1D /* LayoutProvider.m */; };
 		B526CB591E939E4C00FF4FA8 /* LeftPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B526CB571E939E4C00FF4FA8 /* LeftPanelViewController.m */; };
 		B526CB5A1E939E4C00FF4FA8 /* LeftPanelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B526CB581E939E4C00FF4FA8 /* LeftPanelViewController.xib */; };
@@ -68,6 +69,10 @@
 		1D4056061E8D360600E18D05 /* Note.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Note.h; sourceTree = "<group>"; };
 		1D4056071E8D360600E18D05 /* Note.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Note.m; sourceTree = "<group>"; };
 		1D9EF87C1E94EF7700B35777 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		1D9EF8B11E96322100B35777 /* Protocols.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Protocols.h; sourceTree = "<group>"; };
+		1D9EF8B21E96393A00B35777 /* LocalNoteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalNoteManager.h; sourceTree = "<group>"; };
+		1D9EF8B31E96393A00B35777 /* LocalNoteManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalNoteManager.m; sourceTree = "<group>"; };
+		1D9EF8B51E965A7100B35777 /* PublicProtocols.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PublicProtocols.h; sourceTree = "<group>"; };
 		B506D9C71E8E3CBB00555F1D /* LayoutProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutProvider.h; sourceTree = "<group>"; };
 		B506D9C81E8E3CBB00555F1D /* LayoutProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayoutProvider.m; sourceTree = "<group>"; };
 		B526CB561E939E4C00FF4FA8 /* LeftPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftPanelViewController.h; sourceTree = "<group>"; };
@@ -220,6 +225,8 @@
 				B506D9C81E8E3CBB00555F1D /* LayoutProvider.m */,
 				B5B8FB6B1E94D81D00A82813 /* DateTimeManager.h */,
 				B5B8FB6C1E94D81D00A82813 /* DateTimeManager.m */,
+				1D9EF8B21E96393A00B35777 /* LocalNoteManager.h */,
+				1D9EF8B31E96393A00B35777 /* LocalNoteManager.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -251,6 +258,8 @@
 				B5EFB34E1E8CFFD80024C211 /* AppDelegate.m */,
 				B5EFB3561E8CFFD80024C211 /* Assets.xcassets */,
 				B534C44D1E8D397700AD25F6 /* Defines.h */,
+				1D9EF8B11E96322100B35777 /* Protocols.h */,
+				1D9EF8B51E965A7100B35777 /* PublicProtocols.h */,
 				B5EFB35B1E8CFFD80024C211 /* Info.plist */,
 				B5EFB3581E8CFFD80024C211 /* LaunchScreen.storyboard */,
 				B5B8FB671E93E64D00A82813 /* Models */,
@@ -437,6 +446,7 @@
 				B506D9C91E8E3CBB00555F1D /* LayoutProvider.m in Sources */,
 				B5E8ABDD1E96580900964B3C /* TableViewDataModel.m in Sources */,
 				1D4056081E8D360600E18D05 /* Note.m in Sources */,
+				1D9EF8B41E96393A00B35777 /* LocalNoteManager.m in Sources */,
 				B5B8FB601E93C35200A82813 /* Notebook.m in Sources */,
 				B5EFB3521E8CFFD80024C211 /* ViewController.m in Sources */,
 				B534C4531E8D433300AD25F6 /* TableViewCell.m in Sources */,

@@ -81,7 +81,7 @@ static dispatch_once_t predicate = 0;
     }
     
     cell.textLabel.text = notebook.name;
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu items",(unsigned long)[notebook.notes count]];
+    //cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu items",(unsigned long)[notebook.notes count]];
     return cell;
 }
 

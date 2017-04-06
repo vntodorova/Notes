@@ -14,13 +14,13 @@
 @class Note;
 @class LayoutProvider;
 
-@interface ViewController : UIViewController <NoteCreationControllerDelegate, UITableViewDataSource,UITableViewDelegate, TableViewCellDelegate, LeftPanelDelegate, UIGestureRecognizerDelegate>
+@interface ViewController : UIViewController <UITableViewDataSource,UITableViewDelegate, TableViewCellDelegate, LeftPanelDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) LeftPanelViewController *leftPanelViewController;
 
-@property NSMutableArray<Note *> *notesArray;
-@property NSMutableArray<Note *> *draftsArray;
+@property NSArray<Note *> *notesArray;
+
 
 @end
 
