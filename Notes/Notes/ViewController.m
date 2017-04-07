@@ -33,17 +33,9 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"TableViewCell" bundle:nil] forCellReuseIdentifier:TABLEVIEW_CELL_ID];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoteCreated) name:NOTE_CREATED_EVENT object:nil];
-    self.notesArray = [self.manager getNoteListForNotebookWithName:@"General"];
     //TEST CODE
-    
-    Note *note1 = [[Note alloc] init];
-    note1.name = @"1st note";
-    note1.dateCreated = @"12:34, 4.5.2016";
-    
+    self.notesArray = [self.manager getNoteListForNotebookWithName:@"General"];
     NSArray *notebookList = [self.manager getNotebookList];
-    
-    [self.manager addNote:note1 toNotebook:[notebookList objectAtIndex:0]];
-    
     [self.tableView reloadData];
     //TEST CODE
 }
