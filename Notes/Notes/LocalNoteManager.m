@@ -62,27 +62,50 @@
 
 -(void) saveToDisk:(Note *)newNote toNotebook:(Notebook *)notebook
 {
-//    NSString *fileInnerPath = [ NSString stringWithFormat:@"%@", notebook.name, newNote.name];
-//    NSError *error;
-//    NSString *stringToWrite = newNote.body;
-//    
-//    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:fileInnerPath];
-//    
-//    NSFileManager *fm = [NSFileManager defaultManager];
-//    if(![fm fileExistsAtPath:fileInnerPath isDirectory:&isDir])
-//    {
-//        if([fm createDirectoryAtPath:dirName withIntermediateDirectories:YES attributes:nil error:nil])
-//            NSLog(@"Directory Created");
-//        else
-//            NSLog(@"Directory Creation Failed");
-//    }
-//    else
-//        NSLog(@"Directory Already Exist");
-//    
-//    
-//    
-//
-//    [stringToWrite writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+    
+    NSString *fileInnerPath = [NSString stringWithFormat:@"%@/%@", notebook.name, newNote.name];
+    NSError *error;
+
+    
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:fileInnerPath];
+    
+    BOOL isDir;
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    if(![fm fileExistsAtPath:fileInnerPath isDirectory:&isDir])
+    {
+        if([fm createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:nil])
+        {
+            NSLog(@"Directory Created");
+        }
+        else
+        {
+            NSLog(@"Directory Creation Failed");
+            return;
+        }
+    }
+    else
+    {
+        NSLog(@"Directory Already Exist");
+    }
+    
+    NSString *tags = [self extractTags:newNote.tags];
+    
+    NSString *fileTagsPath = [NSString stringWithFormat:@"%@/tags.txt", filePath];
+    [tags writeToFile:fileTagsPath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+    
+    NSString *fileBodyPath = [NSString stringWithFormat:@"%@/body.html", filePath];
+    NSString *stringToWrite = newNote.body;
+    [stringToWrite writeToFile:fileBodyPath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+}
+
+- (NSString*) extractTags:(NSArray*) tags
+{
+    NSMutableString *tagsContent = [[NSMutableString alloc] init];
+    for (NSString *tag in tags) {
+        [tagsContent appendString:tag];
+    }
+    return tagsContent;
 }
 
 - (void)removeNote:(Note *)note fromNotebook:(NSString *)notebookName
