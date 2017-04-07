@@ -32,7 +32,7 @@
     [self setupNavigationBar];
     [self.tableView registerNib:[UINib nibWithNibName:@"TableViewCell" bundle:nil] forCellReuseIdentifier:TABLEVIEW_CELL_ID];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoteCreated) name:@NOTE_CREATED_EVENT object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoteCreated) name:NOTE_CREATED_EVENT object:nil];
     self.notesArray = [self.manager getNoteListForNotebookWithName:@"General"];
     //TEST CODE
     
@@ -87,7 +87,7 @@
 {
     if(!self.leftPanelViewController)
     {
-        self.leftPanelViewController = [[LeftPanelViewController alloc] initWithNibName:@"LeftPanelViewController" bundle:nil];
+        self.leftPanelViewController = [[LeftPanelViewController alloc] initWithNibName:@"LeftPanelViewController" bundle:nil manager:self.manager];
         self.leftPanelViewController.delegate = self;
         [self.view addSubview:self.leftPanelViewController.view];
         [self setupBlurView];

@@ -37,7 +37,7 @@
     }
 }
 
-- (void) removeNotebook:(Notebook *)notebook
+- (void)removeNotebook:(Notebook *)notebook
 {
     [self.notebookList removeObjectForKey:notebook.name];
 }
@@ -48,7 +48,7 @@
     {
         NSMutableArray *array = [self.notebookList objectForKey:notebook.name];
         [array addObject:newNote];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@NOTE_CREATED_EVENT object:nil userInfo:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_CREATED_EVENT object:nil userInfo:nil];
     }
 }
 
@@ -66,7 +66,7 @@
     return self.notebookObjectList;
 }
 
--(NSArray<Note *> *)getNoteListForNotebook:(Notebook *)notebook
+- (NSArray<Note *> *)getNoteListForNotebook:(Notebook *)notebook
 {
     NSArray *array;
     if(notebook)
@@ -76,7 +76,7 @@
     return array;
 }
 
--(NSArray<Note *> *)getNoteListForNotebookWithName:(NSString *)notebookName
+- (NSArray<Note *> *)getNoteListForNotebookWithName:(NSString *)notebookName
 {
     NSArray *array;
     if(notebookName)

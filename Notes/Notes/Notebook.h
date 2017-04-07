@@ -11,7 +11,7 @@
 
 @interface Notebook : NSObject
 
--(instancetype)initWithName:(NSString*) name;
+- (instancetype)initWithName:(NSString *)name;
 
 @property (nonatomic, strong, readonly) NSString *name;
 

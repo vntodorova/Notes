@@ -13,26 +13,28 @@
 #import "DateTimeManager.h"
 #import "LayoutProvider.h"
 #import "TableViewDataModel.h"
+#import "LocalNoteManager.h"
 
 @interface LeftPanelViewController()
 
+@property (nonatomic, strong) LocalNoteManager *noteManager;
 @property DateTimeManager *dateTimeManager;
+
 @property LayoutProvider *layoutProvider;
 @property float pointerStartPanCoordinatesX;
 @property float panelStartPanCoordinatesX;
-
 @end
 
 @implementation LeftPanelViewController
 
--(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+-(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil manager:(LocalNoteManager *)noteManager
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if(self)
     {
+        self.noteManager = noteManager;
         self.isHidden = YES;
         self.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
-        
     }
     return self;
 }
@@ -48,24 +50,8 @@
     self.notebooksClicked = [[NSMutableDictionary alloc] init];
     
     //TEST CODE
-    NSMutableArray *notebooks = [[NSMutableArray alloc] init];
     NSMutableArray *reminders = [[NSMutableArray alloc] init];
-    
-    Notebook* notebook1 = [[Notebook alloc] initWithName:@"General"];
-   // notebook1.name = @"General";
-    
-    Notebook* notebook2 = [[Notebook alloc] initWithName:@"Work"];
-//notebook2.name = @"Work";
-    
-    Notebook* notebook3 = [[Notebook alloc] initWithName:@"Home"];
-  //  notebook3.name = @"Home";
-    
-    [self.notebooks addObject:notebook1];
-    [self.notebooks addObject:notebook2];
-    [self.notebooks addObject:notebook3];
-    
-    self.reminders = [[NSMutableArray alloc] init];
-    
+
     Reminder *reminder1 = [[Reminder alloc] init];
     reminder1.name = @"Wash the car";
     reminder1.triggerDate = @"13:00:00, 06-04-2018";
@@ -87,7 +73,7 @@
         return [self.dateTimeManager compareStringDate:reminder1.triggerDate andDate:reminder2.triggerDate];
     }];
     
-    [self.tableViewDataSource setObject:notebooks forKey:NOTEBOOK_KEY];
+    [self.tableViewDataSource setObject:[self.noteManager getNotebookList] forKey:NOTEBOOK_KEY];
     [self.tableViewDataSource setObject:reminders forKey:REMINDER_KEY];
     
     [self.tableView reloadData];
@@ -114,7 +100,7 @@
 
 - (void)showNotebookContents:(NSIndexPath *)indexPath
 {
-    NSMutableArray *notes = [[[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] objectAtIndex:indexPath.row] notes];
+    NSArray *notes = [self.noteManager getNoteListForNotebook:[[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] objectAtIndex:indexPath.row]];
     NSInteger indexToAdd = indexPath.row + 1;
     NSMutableArray *notebooks = [self.tableViewDataSource objectForKey:NOTEBOOK_KEY];
     
@@ -130,7 +116,7 @@
 
 - (void)hideNotebookContents:(NSIndexPath *)indexPath
 {
-    NSMutableArray *notes = [[[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] objectAtIndex:indexPath.row] notes];
+    NSArray *notes = [self.noteManager getNoteListForNotebook:[[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] objectAtIndex:indexPath.row]];
     NSInteger indexToRemove = indexPath.row + 1;
     NSMutableArray *notebooks = [self.tableViewDataSource objectForKey:NOTEBOOK_KEY];
 
