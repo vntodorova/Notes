@@ -41,7 +41,7 @@
     [self inflateFontsList];
     [self inflateTextSizeList];
 
-    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"myfile.html"];
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"emptyfile.html"];
     
     NSURL *indexFileURL = [[NSURL alloc]initWithString:filePath];
     
@@ -122,6 +122,7 @@
 {
     self.note.name = self.noteName.text;
     self.note.tags = [self getTagsFromText:self.noteTags.text];
+    self.note.body = [self.noteBody stringByEvaluatingJavaScriptFromString:@"document.documentElement.outerHTML"];
     
     NSDateFormatter *dateFormatter=[[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"HH:mm:ss, dd-MM-yyyy"];
@@ -317,9 +318,9 @@
 
 -(void) saveNote
 {
-    NSError *error;
-    NSString *stringToWrite = [self.noteBody stringByEvaluatingJavaScriptFromString:@"document.documentElement.outerHTML"];
-    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"myfile.html"];
-    [stringToWrite writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+//    NSError *error;
+//    NSString *stringToWrite = [self.noteBody stringByEvaluatingJavaScriptFromString:@"document.documentElement.outerHTML"];
+//    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"myfile.html"];
+//    [stringToWrite writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
 }
 @end

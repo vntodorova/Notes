@@ -11,13 +11,6 @@
 
 @interface LocalNoteManager : NSObject <NoteManagerDelegate, NoteBookManagerDelegate>
 
-- (void)addNotebook:(Notebook *) newNotebook;
-- (void)removeNotebook:(Notebook *)notebook;
-- (void)addNote:(Note *)newNote toNotebook:(Notebook *)notebook;
-- (void)removeNote:(Note *)note fromNotebook:(Notebook *)notebook;
-- (NSArray *)getNotebookList;
-- (NSArray<Note *> *)getNoteListForNotebook:(Notebook *)notebook;
-- (NSArray<Note *> *)getNoteListForNotebookWithName:(NSString *)notebookName;
 
 
 @end

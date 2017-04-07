@@ -52,11 +52,22 @@
     }
 }
 
-- (void)removeNote:(Note *)note fromNotebook:(Notebook *)notebook
+-(void) saveToDisk:(Note *)newNote toNotebook:(Notebook *)notebook
 {
-    if(note && notebook)
+    NSString *fileInnerPath = [ NSString stringWithFormat:@"%@/%@",notebook.name, newNote.name];
+    NSError *error;
+    NSString *stringToWrite = newNote.body;
+    
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:fileInnerPath];
+    
+    [stringToWrite writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+}
+
+- (void)removeNote:(Note *)note fromNotebook:(NSString *)notebookName
+{
+    if(note && notebookName)
     {
-        NSMutableArray *array = [self.notebookList objectForKey:notebook];
+        NSMutableArray *array = [self.notebookList objectForKey:notebookName];
         [array removeObject:note];
     }
 }
