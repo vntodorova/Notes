@@ -9,6 +9,7 @@
 #import "NoteCreationController.h"
 #import "Defines.h"
 #import "Notebook.h"
+#import "DrawingViewController.h"
 
 @interface NoteCreationController ()
 
@@ -91,7 +92,8 @@
 
 - (void)onDrawingClick
 {
-    NSLog(@"Drawing clicked");
+    DrawingViewController *drawingViewController = [[DrawingViewController alloc] init];
+    [self.navigationController pushViewController:drawingViewController animated:YES];
 }
 
 - (IBAction)onCreateClick:(id)sender

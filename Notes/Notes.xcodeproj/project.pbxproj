@@ -29,6 +29,11 @@
 		B5B8FB631E93E46B00A82813 /* Reminder.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B8FB621E93E46B00A82813 /* Reminder.m */; };
 		B5B8FB6D1E94D81D00A82813 /* DateTimeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B8FB6C1E94D81D00A82813 /* DateTimeManager.m */; };
 		B5E8ABDD1E96580900964B3C /* TableViewDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E8ABDC1E96580900964B3C /* TableViewDataModel.m */; };
+		B5E8ABE11E966BA600964B3C /* DrawingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E8ABDF1E966BA600964B3C /* DrawingViewController.m */; };
+		B5E8ABE21E966BA600964B3C /* DrawingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5E8ABE01E966BA600964B3C /* DrawingViewController.xib */; };
+		B5E8ABEA1E967F0600964B3C /* eraser.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8ABE91E967F0600964B3C /* eraser.png */; };
+		B5E8ABEC1E96814100964B3C /* pen.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8ABEB1E96814100964B3C /* pen.png */; };
+		B5E8ABEE1E96824200964B3C /* colorPicker.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8ABED1E96824200964B3C /* colorPicker.png */; };
 		B5EFB34C1E8CFFD80024C211 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB34B1E8CFFD80024C211 /* main.m */; };
 		B5EFB34F1E8CFFD80024C211 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB34E1E8CFFD80024C211 /* AppDelegate.m */; };
 		B5EFB3521E8CFFD80024C211 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB3511E8CFFD80024C211 /* ViewController.m */; };
@@ -90,9 +95,14 @@
 		B5B8FB621E93E46B00A82813 /* Reminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reminder.m; sourceTree = "<group>"; };
 		B5B8FB6B1E94D81D00A82813 /* DateTimeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateTimeManager.h; sourceTree = "<group>"; };
 		B5B8FB6C1E94D81D00A82813 /* DateTimeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateTimeManager.m; sourceTree = "<group>"; };
-		B5C5E5AB1E95038800E5B8E5 /* more.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = more.png; sourceTree = "<group>"; };
 		B5E8ABDB1E96580900964B3C /* TableViewDataModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewDataModel.h; sourceTree = "<group>"; };
 		B5E8ABDC1E96580900964B3C /* TableViewDataModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewDataModel.m; sourceTree = "<group>"; };
+		B5E8ABDE1E966BA600964B3C /* DrawingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingViewController.h; sourceTree = "<group>"; };
+		B5E8ABDF1E966BA600964B3C /* DrawingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawingViewController.m; sourceTree = "<group>"; };
+		B5E8ABE01E966BA600964B3C /* DrawingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DrawingViewController.xib; sourceTree = "<group>"; };
+		B5E8ABE91E967F0600964B3C /* eraser.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = eraser.png; sourceTree = "<group>"; };
+		B5E8ABEB1E96814100964B3C /* pen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pen.png; sourceTree = "<group>"; };
+		B5E8ABED1E96824200964B3C /* colorPicker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = colorPicker.png; sourceTree = "<group>"; };
 		B5EFB3471E8CFFD80024C211 /* Notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5EFB34B1E8CFFD80024C211 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B5EFB34D1E8CFFD80024C211 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -157,7 +167,6 @@
 		1D07C0D31E9251F900E85CAF /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				B5C5E5AB1E95038800E5B8E5 /* more.png */,
 				1D07C0D41E9251F900E85CAF /* camera.png */,
 				1D07C0D51E9251F900E85CAF /* drawing.png */,
 				1D07C0D61E9251F900E85CAF /* list.png */,
@@ -165,6 +174,9 @@
 				1D07C0D81E9251F900E85CAF /* plus.png */,
 				B53CB76B1E95379B009DFF27 /* facebook.png */,
 				B53CB76C1E95379B009DFF27 /* google.png */,
+				B5E8ABE91E967F0600964B3C /* eraser.png */,
+				B5E8ABEB1E96814100964B3C /* pen.png */,
+				B5E8ABED1E96824200964B3C /* colorPicker.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -189,6 +201,9 @@
 				1D4056011E8D1E5000E18D05 /* NoteCreationController.h */,
 				1D4056021E8D1E5000E18D05 /* NoteCreationController.m */,
 				1D4056031E8D1E5000E18D05 /* NoteCreationController.xib */,
+				B5E8ABDE1E966BA600964B3C /* DrawingViewController.h */,
+				B5E8ABDF1E966BA600964B3C /* DrawingViewController.m */,
+				B5E8ABE01E966BA600964B3C /* DrawingViewController.xib */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -408,10 +423,14 @@
 				B5EFB35A1E8CFFD80024C211 /* LaunchScreen.storyboard in Resources */,
 				1D07C0DA1E9251F900E85CAF /* camera.png in Resources */,
 				1D07C0DD1E9251F900E85CAF /* menu_button.png in Resources */,
+				B5E8ABEE1E96824200964B3C /* colorPicker.png in Resources */,
 				B53CB76E1E95379B009DFF27 /* google.png in Resources */,
+				B5E8ABE21E966BA600964B3C /* DrawingViewController.xib in Resources */,
 				1D07C0DC1E9251F900E85CAF /* list.png in Resources */,
 				1D07C0DB1E9251F900E85CAF /* drawing.png in Resources */,
 				1D07C0D91E9251F900E85CAF /* Calibri.ttf in Resources */,
+				B5E8ABEC1E96814100964B3C /* pen.png in Resources */,
+				B5E8ABEA1E967F0600964B3C /* eraser.png in Resources */,
 				B534C4541E8D433300AD25F6 /* TableViewCell.xib in Resources */,
 				B53CB76D1E95379B009DFF27 /* facebook.png in Resources */,
 				B526CB5A1E939E4C00FF4FA8 /* LeftPanelViewController.xib in Resources */,
@@ -452,6 +471,7 @@
 				B534C4531E8D433300AD25F6 /* TableViewCell.m in Sources */,
 				B5EFB34F1E8CFFD80024C211 /* AppDelegate.m in Sources */,
 				B5B8FB6D1E94D81D00A82813 /* DateTimeManager.m in Sources */,
+				B5E8ABE11E966BA600964B3C /* DrawingViewController.m in Sources */,
 				1D4056041E8D1E5000E18D05 /* NoteCreationController.m in Sources */,
 				B526CB591E939E4C00FF4FA8 /* LeftPanelViewController.m in Sources */,
 				B5EFB34C1E8CFFD80024C211 /* main.m in Sources */,
