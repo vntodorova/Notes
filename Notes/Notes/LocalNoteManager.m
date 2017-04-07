@@ -34,6 +34,7 @@
     {
         [self.notebookList setObject:[[NSMutableArray alloc] init] forKey:newNotebook.name];
         [self.notebookObjectList addObject:newNotebook];
+        
     }
 }
 

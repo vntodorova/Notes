@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PublicProtocols.h"
+#import "LocalNoteManager.h"
 
 @class Notebook;
 @class Reminder;
