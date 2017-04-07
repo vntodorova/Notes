@@ -18,6 +18,7 @@
 
 @property (nonatomic, strong) LayoutProvider *layoutProvider;
 @property (nonatomic, strong) LocalNoteManager *manager;
+@property NSString *currentNotebook;
 @property UIVisualEffectView *bluredView;
 @end
 
@@ -25,21 +26,25 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.layoutProvider = [LayoutProvider sharedInstance];
-    self.manager = [[LocalNoteManager alloc] init];
-    self.notesArray = [[NSMutableArray alloc] init];
-    
-    [self setupNavigationBar];
-    [self.tableView registerNib:[UINib nibWithNibName:@"TableViewCell" bundle:nil] forCellReuseIdentifier:TABLEVIEW_CELL_ID];
+    [self setup];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoteCreated) name:NOTE_CREATED_EVENT object:nil];
     //TEST CODE
-    self.notesArray = [self.manager getNoteListForNotebookWithName:@"General"];
     [self.tableView reloadData];
     //TEST CODE
 }
 
--(void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (void)setup
+{
+    self.layoutProvider = [LayoutProvider sharedInstance];
+    self.manager = [[LocalNoteManager alloc] init];
+    self.currentNotebook = @"General";
+    self.notesArray = [self.manager getNoteListForNotebookWithName:self.currentNotebook];
+    [self setupNavigationBar];
+    [self.tableView registerNib:[UINib nibWithNibName:TABLEVIEW_CELL_ID bundle:nil] forCellReuseIdentifier:TABLEVIEW_CELL_ID];
+}
+
+-   (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     self.bluredView.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, size.width, size.height);
@@ -78,7 +83,7 @@
 {
     if(!self.leftPanelViewController)
     {
-        self.leftPanelViewController = [[LeftPanelViewController alloc] initWithNibName:@"LeftPanelViewController" bundle:nil manager:self.manager];
+        self.leftPanelViewController = [[LeftPanelViewController alloc] initWithNibName:LEFT_PANEL_NIBNAME bundle:nil manager:self.manager];
         self.leftPanelViewController.delegate = self;
         [self.view addSubview:self.leftPanelViewController.view];
         [self setupBlurView];
@@ -112,13 +117,14 @@
 - (void)panGestureRecognisedOnCell:(TableViewCell *)cell
 {
     NSIndexPath *pathForDeleting = [self.tableView indexPathForCell:cell];
-   // [self.notesArray removeObject:cell.cellNote];
+    [self.manager removeNote:cell.cellNote fromNotebook:self.currentNotebook];
+    self.notesArray = [self.manager getNoteListForNotebookWithName:self.currentNotebook];
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:pathForDeleting] withRowAnimation:UITableViewRowAnimationRight];
 }
 
 - (void)exchangeObjectAtIndex:(NSInteger)firstIndex withObjectAtIndex:(NSInteger)secondIndex
 {
- //    [self.notesArray exchangeObjectAtIndex:firstIndex withObjectAtIndex:secondIndex];
+    [self.manager exchangeNoteAtIndex:firstIndex toIndex:secondIndex];
 }
 
 #pragma mark -
@@ -148,7 +154,7 @@
 
 -(void)onNoteCreated
 {
-    self.notesArray = [self.manager getNoteListForNotebookWithName:@"General"];
+    self.notesArray = [self.manager getNoteListForNotebookWithName:self.currentNotebook];
     [self.tableView reloadData];
 }
 

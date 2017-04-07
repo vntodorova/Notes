@@ -22,6 +22,11 @@
 #define TABLEVIEW_CELL_ID @"TableViewCell"
 #define TABLEVIEW_CELL_HEIGHT 70
 
+#define LEFT_PANEL_NIBNAME @"LeftPanelViewController"
+#define NOTE_CELL_ID @"NoteCell"
+#define NOTEBOOK_CELL_ID @"NotebookCell"
+#define REMINDER_CELL_ID @"ReminderCell"
+
 #define CELL_DRAG_ACTIVATION_DISTANCE 70
 
 #define MOVE_DIRECTION_UP 1
@@ -35,8 +40,12 @@
 #define NOTEBOOK_KEY @"Notebook"
 #define REMINDER_KEY @"Reminder"
 
+#define NOTEBOOK_SECTION_NAME @"Notebooks"
+#define REMINDERS_SECTION_NAME @"Reminders"
+
 #define TABLEVIEW_SECTIONS_NUMBER 2
 
 #define NOTE_SAVE_PATH @"Notes/Notes/Resources/Notes"
 #define NOTE_CREATED_EVENT @"NoteCreatedEvent"
+
 #endif /* Defines_h */

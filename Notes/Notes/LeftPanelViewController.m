@@ -40,8 +40,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setup];
-    
-    //TEST CODE
+    [self testCode];
+}
+
+- (void)testCode
+{
+    //TODO delete
     Reminder *reminder1 = [[Reminder alloc] init];
     reminder1.name = @"Wash the car";
     reminder1.triggerDate = @"13:00:00, 06-04-2018";
@@ -65,7 +69,6 @@
     [self.tableViewDataSource setObject:[self.noteManager getNotebookList] forKey:NOTEBOOK_KEY];
     [self.tableViewDataSource setObject:reminders forKey:REMINDER_KEY];
     [self.tableView reloadData];
-    //TEST CODE
 }
 
 - (void)setup
@@ -188,11 +191,11 @@
     NSString *headerTitle;
     if(section == NOTEBOOKS_SECTION)
     {
-        headerTitle = @"Notebooks";
+        headerTitle = NOTEBOOK_SECTION_NAME;
     }
     if(section == REMINDERS_SECTION)
     {
-        headerTitle = @"Reminders";
+        headerTitle = REMINDERS_SECTION_NAME;
     }
     return headerTitle;
 }

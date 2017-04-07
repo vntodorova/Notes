@@ -61,10 +61,10 @@ static dispatch_once_t predicate = 0;
 
 - (UITableViewCell *)getNewCell:(UITableView *)tableView withNote:(Note *)note
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"NoteCell"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NOTE_CELL_ID];
     if (cell == nil)
     {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"NoteCell"];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:NOTE_CELL_ID];
     }
     
     cell.textLabel.text = note.name;
@@ -74,10 +74,10 @@ static dispatch_once_t predicate = 0;
 
 - (UITableViewCell *)getNewCell:(UITableView *)tableView withNotebook:(Notebook *)notebook
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"NotebookCell"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NOTEBOOK_CELL_ID];
     if (cell == nil)
     {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"NotebookCell"];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:NOTEBOOK_CELL_ID];
     }
     
     cell.textLabel.text = notebook.name;
@@ -87,10 +87,10 @@ static dispatch_once_t predicate = 0;
 
 - (UITableViewCell *)getNewCell:(UITableView *)tableView withReminder:(Reminder *)reminder
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ReminderCell"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:REMINDER_CELL_ID];
     if (cell == nil)
     {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:@"ReminderCell"];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:REMINDER_CELL_ID];
     }
     
     cell.textLabel.text = reminder.name;
