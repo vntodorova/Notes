@@ -38,7 +38,7 @@ static dispatch_once_t predicate = 0;
 
 - (UIBarButtonItem *)setupLeftBarButton:(id)target withSelector:(SEL)selector;
 {
-    UIButton *leftBarButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, NAVIGATION_BUTTONS_WIDTH, NAVIGATION_BUTTONS_HEIGHT)];
+    UIButton *leftBarButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, BUTTONS_WIDTH, BUTTONS_HEIGHT)];
     [leftBarButton setBackgroundImage:[UIImage imageNamed:@"menu_button.png"] forState:UIControlStateNormal];
     [leftBarButton addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
     return [[UIBarButtonItem alloc] initWithCustomView:leftBarButton];
@@ -46,7 +46,7 @@ static dispatch_once_t predicate = 0;
 
 - (UIBarButtonItem *)setupRightBarButton:(id)target withSelector:(SEL)selector;
 {
-    UIButton *rightBarButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, NAVIGATION_BUTTONS_WIDTH, NAVIGATION_BUTTONS_HEIGHT)];
+    UIButton *rightBarButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, BUTTONS_WIDTH, BUTTONS_HEIGHT)];
     [rightBarButton setBackgroundImage:[UIImage imageNamed:@"plus.png"] forState:UIControlStateNormal];
     [rightBarButton addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
     return [[UIBarButtonItem alloc] initWithCustomView:rightBarButton];

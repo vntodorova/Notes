@@ -26,22 +26,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setup];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoteCreated) name:NOTE_CREATED_EVENT object:nil];
-    //TEST CODE
-    [self.tableView reloadData];
-    //TEST CODE
-}
-
-- (void)setup
-{
     self.layoutProvider = [LayoutProvider sharedInstance];
+    [self setupNavigationBar];
     self.manager = [[LocalNoteManager alloc] init];
     self.currentNotebook = @"General";
     self.notesArray = [self.manager getNoteListForNotebookWithName:self.currentNotebook];
-    [self setupNavigationBar];
     [self.tableView registerNib:[UINib nibWithNibName:TABLEVIEW_CELL_ID bundle:nil] forCellReuseIdentifier:TABLEVIEW_CELL_ID];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoteCreated) name:NOTE_CREATED_EVENT object:nil];
+    [self.tableView reloadData];
 }
 
 -   (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -76,19 +68,24 @@
     self.navigationController.topViewController.navigationItem.titleView = [[UISearchBar alloc] init];
 }
 
+- (void)setupLeftPanel
+{
+    self.leftPanelViewController = [[LeftPanelViewController alloc] initWithNibName:LEFT_PANEL_NIBNAME bundle:nil manager:self.manager];
+    self.leftPanelViewController.delegate = self;
+    [self.view addSubview:self.leftPanelViewController.view];
+    [self setupBlurView];
+    [self.view addSubview:self.bluredView];
+    [self.view sendSubviewToBack:self.bluredView];
+}
+
 #pragma mark -
 #pragma mark Navigation bar buttons
 
 - (void)drawerButtonPressed
 {
-    if(!self.leftPanelViewController)
+    if(self.leftPanelViewController == nil)
     {
-        self.leftPanelViewController = [[LeftPanelViewController alloc] initWithNibName:LEFT_PANEL_NIBNAME bundle:nil manager:self.manager];
-        self.leftPanelViewController.delegate = self;
-        [self.view addSubview:self.leftPanelViewController.view];
-        [self setupBlurView];
-        [self.view addSubview:self.bluredView];
-        [self.view sendSubviewToBack:self.bluredView];
+        [self setupLeftPanel];
     }
     
     if(self.leftPanelViewController.isHidden)

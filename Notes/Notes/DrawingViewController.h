@@ -9,18 +9,18 @@
 #import <UIKit/UIKit.h>
 
 @interface DrawingViewController : UIViewController
-{
-    CGPoint lastPoint;
-    CGFloat red;
-    CGFloat green;
-    CGFloat blue;
-    CGFloat brush;
-    CGFloat opacity;
-    BOOL mouseSwiped;
-}
 
 @property (weak, nonatomic) IBOutlet UIImageView *mainImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *tempImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *colorPickerImageView;
+
+@property (weak, nonatomic) IBOutlet UILabel *sizeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *opacityLabel;
+@property (weak, nonatomic) IBOutlet UISlider *sizeSlider;
+@property (weak, nonatomic) IBOutlet UISlider *opacitySlider;
+
+
+- (IBAction)sizeSliderChanged:(id)sender;
+- (IBAction)opacitySliderChanged:(id)sender;
 
 @end

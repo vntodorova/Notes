@@ -34,6 +34,7 @@
 		B5E8ABEA1E967F0600964B3C /* eraser.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8ABE91E967F0600964B3C /* eraser.png */; };
 		B5E8ABEC1E96814100964B3C /* pen.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8ABEB1E96814100964B3C /* pen.png */; };
 		B5E8ABEE1E96824200964B3C /* colorPicker.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8ABED1E96824200964B3C /* colorPicker.png */; };
+		B5E8ABF01E97B1F600964B3C /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8ABEF1E97B1F600964B3C /* settings.png */; };
 		B5EFB34C1E8CFFD80024C211 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB34B1E8CFFD80024C211 /* main.m */; };
 		B5EFB34F1E8CFFD80024C211 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB34E1E8CFFD80024C211 /* AppDelegate.m */; };
 		B5EFB3521E8CFFD80024C211 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB3511E8CFFD80024C211 /* ViewController.m */; };
@@ -103,6 +104,7 @@
 		B5E8ABE91E967F0600964B3C /* eraser.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = eraser.png; sourceTree = "<group>"; };
 		B5E8ABEB1E96814100964B3C /* pen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pen.png; sourceTree = "<group>"; };
 		B5E8ABED1E96824200964B3C /* colorPicker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = colorPicker.png; sourceTree = "<group>"; };
+		B5E8ABEF1E97B1F600964B3C /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
 		B5EFB3471E8CFFD80024C211 /* Notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5EFB34B1E8CFFD80024C211 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B5EFB34D1E8CFFD80024C211 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 				B5E8ABE91E967F0600964B3C /* eraser.png */,
 				B5E8ABEB1E96814100964B3C /* pen.png */,
 				B5E8ABED1E96824200964B3C /* colorPicker.png */,
+				B5E8ABEF1E97B1F600964B3C /* settings.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -435,6 +438,7 @@
 				B53CB76D1E95379B009DFF27 /* facebook.png in Resources */,
 				B526CB5A1E939E4C00FF4FA8 /* LeftPanelViewController.xib in Resources */,
 				B5EFB37E1E8D006F0024C211 /* ViewController.xib in Resources */,
+				B5E8ABF01E97B1F600964B3C /* settings.png in Resources */,
 				1D07C0DE1E9251F900E85CAF /* plus.png in Resources */,
 				1D4056051E8D1E5000E18D05 /* NoteCreationController.xib in Resources */,
 				B5EFB3571E8CFFD80024C211 /* Assets.xcassets in Resources */,
