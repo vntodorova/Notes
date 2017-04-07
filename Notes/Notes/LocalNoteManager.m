@@ -34,7 +34,6 @@
     {
         [self.notebookList setObject:[[NSMutableArray alloc] init] forKey:newNotebook.name];
         [self.notebookObjectList addObject:newNotebook];
-        
     }
 }
 
@@ -97,8 +96,6 @@
     
     Notebook* notebook3 = [[Notebook alloc] initWithName:@"Home"];
     
-    NSMutableArray *generalNotes = [[NSMutableArray alloc] init];
-    
     [self.notebookObjectList addObject:notebook1];
     [self.notebookObjectList addObject:notebook2];
     [self.notebookObjectList addObject:notebook3];
@@ -115,9 +112,9 @@
     note3.name = @"3rd note";
     note3.dateCreated = @"12:35, 4.5.2016";
     
-    [self.notebookList setObject:generalNotes forKey:notebook1.name];
-    [self.notebookList setObject:generalNotes forKey:notebook2.name];
-    [self.notebookList setObject:generalNotes forKey:notebook3.name];
+    [self.notebookList setObject: [[NSMutableArray alloc] init] forKey:notebook1.name];
+    [self.notebookList setObject: [[NSMutableArray alloc] init] forKey:notebook2.name];
+    [self.notebookList setObject: [[NSMutableArray alloc] init] forKey:notebook3.name];
     
     NSMutableArray *array = [self.notebookList objectForKey:notebook1];
     
