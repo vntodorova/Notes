@@ -16,7 +16,7 @@
 
 - (void)addNote:(Note *)newNote toNotebook:(Notebook *)notebook;
 - (void)removeNote:(Note *)newNote fromNotebook:(NSString *)notebookName;
-- (void)exchangeNoteAtIndex:(NSInteger)firstIndex toIndex:(NSInteger)secondIndex;
+- (void)exchangeNoteAtIndex:(NSInteger)firstIndex withNoteAtIndex:(NSInteger)secondIndex fromNotebook:(NSString *)notebookName;
 
 @end
 

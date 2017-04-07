@@ -28,7 +28,7 @@
     return self;
 }
 
-- (void) exchangeNoteAtIndex:(NSInteger*) firstIndex toIndex:(NSInteger*) secondIndex fromNotebook:(NSString*) notebookName
+- (void)exchangeNoteAtIndex:(NSInteger)firstIndex withNoteAtIndex:(NSInteger)secondIndex fromNotebook:(NSString *)notebookName
 {
     NSMutableArray *array = [self.notebookList objectForKey:notebookName];
     [array exchangeObjectAtIndex:firstIndex withObjectAtIndex:secondIndex];

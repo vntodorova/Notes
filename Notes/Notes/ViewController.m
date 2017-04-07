@@ -124,7 +124,7 @@
 
 - (void)exchangeObjectAtIndex:(NSInteger)firstIndex withObjectAtIndex:(NSInteger)secondIndex
 {
-    [self.manager exchangeNoteAtIndex:firstIndex toIndex:secondIndex];
+    [self.manager exchangeNoteAtIndex:firstIndex withNoteAtIndex:secondIndex fromNotebook:self.currentNotebook];
 }
 
 #pragma mark -
