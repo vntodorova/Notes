@@ -7,13 +7,11 @@
 //
 
 #import "LeftPanelViewController.h"
-#import "Defines.h"
-#import "Notebook.h"
-#import "Reminder.h"
+#import "ViewController.h"
 #import "DateTimeManager.h"
+#import "Defines.h"
+#import "Reminder.h"
 #import "LayoutProvider.h"
-#import "TableViewDataModel.h"
-#import "LocalNoteManager.h"
 
 @interface LeftPanelViewController()
 
@@ -41,31 +39,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.dateTimeManager = [[DateTimeManager alloc] init];
-    self.layoutProvider = [LayoutProvider sharedInstance];
-    [self.facebookButton setBackgroundImage:[UIImage imageNamed:@"facebook.png"] forState:UIControlStateNormal];
-    [self.googleButton setBackgroundImage:[UIImage imageNamed:@"google.png"] forState:UIControlStateNormal];
-    
-    self.tableViewDataSource = [[NSMutableDictionary alloc] init];
-    self.notebooksClicked = [[NSMutableDictionary alloc] init];
+    [self setup];
     
     //TEST CODE
-    NSMutableArray *reminders = [[NSMutableArray alloc] init];
-
     Reminder *reminder1 = [[Reminder alloc] init];
     reminder1.name = @"Wash the car";
     reminder1.triggerDate = @"13:00:00, 06-04-2018";
-    [reminders addObject:reminder1];
     
     Reminder *reminder2 = [[Reminder alloc] init];
     reminder2.name = @"Random reminder name";
     reminder2.triggerDate = @"13:00:00, 15-05-2017";
-    [reminders addObject:reminder2];
     
     Reminder *reminder3 = [[Reminder alloc] init];
     reminder3.name = @"Add Settings button";
     reminder3.triggerDate = @"13:00:00, 15-06-2017";
-    [reminders addObject:reminder3];
+    
+    NSMutableArray *reminders = [[NSMutableArray alloc] initWithObjects:reminder1, reminder2, reminder3, nil];
     
     [reminders sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
         Reminder *reminder1 = (Reminder *)obj1;
@@ -75,9 +64,21 @@
     
     [self.tableViewDataSource setObject:[self.noteManager getNotebookList] forKey:NOTEBOOK_KEY];
     [self.tableViewDataSource setObject:reminders forKey:REMINDER_KEY];
-    
     [self.tableView reloadData];
     //TEST CODE
+}
+
+- (void)setup
+{
+    self.dateTimeManager = [[DateTimeManager alloc] init];
+    self.layoutProvider = [LayoutProvider sharedInstance];
+    [self.facebookButton setBackgroundImage:[UIImage imageNamed:@"facebook.png"] forState:UIControlStateNormal];
+    [self.googleButton setBackgroundImage:[UIImage imageNamed:@"google.png"] forState:UIControlStateNormal];
+    UIPanGestureRecognizer *panGestureRecogniser = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognised:)];
+    [self.view addGestureRecognizer:panGestureRecogniser];
+    panGestureRecogniser.delegate = self;
+    self.tableViewDataSource = [[NSMutableDictionary alloc] init];
+    self.notebooksClicked = [[NSMutableDictionary alloc] init];
 }
 
 - (void)notebookClickedOnIndexPath:(NSIndexPath *)indexPath

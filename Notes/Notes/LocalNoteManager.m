@@ -116,7 +116,7 @@
     [self.notebookList setObject: [[NSMutableArray alloc] init] forKey:notebook2.name];
     [self.notebookList setObject: [[NSMutableArray alloc] init] forKey:notebook3.name];
     
-    NSMutableArray *array = [self.notebookList objectForKey:notebook1];
+    NSMutableArray *array = [self.notebookList objectForKey:notebook1.name];
     
     [array addObject:note1];
     [array addObject:note2];

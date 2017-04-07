@@ -35,7 +35,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoteCreated) name:NOTE_CREATED_EVENT object:nil];
     //TEST CODE
     self.notesArray = [self.manager getNoteListForNotebookWithName:@"General"];
-    NSArray *notebookList = [self.manager getNotebookList];
     [self.tableView reloadData];
     //TEST CODE
 }
