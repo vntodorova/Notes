@@ -281,21 +281,26 @@
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+    [button setImage:image forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     
     button.frame = CGRectMake(sender.frame.origin.x + SMALL_BUTTON_DISTANCE / 2,
                               sender.frame.origin.y + SMALL_BUTTON_DISTANCE / 2,
                               0,
                               0);
     
+    [self.view addSubview:button];
+    
+    
     [UIView animateWithDuration:0.5
                      animations:^
-     {
-         [button setImage:image forState:UIControlStateNormal];
+    {
          button.frame = CGRectMake(xCoordinates, yCoordinates, SMALL_BUTTONS_WIDTH, SMALL_BUTTONS_HEIGHT);
-         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-         [self.view addSubview:button];
+    }
+                     completion:^(BOOL finished)
+    {
          [self.hiddenButtonsList addObject:button];
-     }];
+    }];
 }
 
 - (void)destroyHiddenButtonsOnBaseButton:(UIButton *)sender
@@ -309,9 +314,10 @@
                                        0,
                                        0);
          }
-                         completion:^(BOOL finished) {
-                             [button removeFromSuperview];
-                         }];
+                         completion:^(BOOL finished)
+        {
+            [button removeFromSuperview];
+        }];
     }
     [self.hiddenButtonsList removeAllObjects];
 }

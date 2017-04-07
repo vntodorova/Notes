@@ -28,6 +28,13 @@
     return self;
 }
 
+- (void) exchangeNoteAtIndex:(NSInteger*) firstIndex toIndex:(NSInteger*) secondIndex fromNotebook:(NSString*) notebookName
+{
+    NSMutableArray *array = [self.notebookList objectForKey:notebookName];
+    [array exchangeObjectAtIndex:firstIndex withObjectAtIndex:secondIndex];
+    [self.notebookList setObject:array forKey:notebookName];
+}
+
 - (void)addNotebook:(Notebook *) newNotebook
 {
     if(newNotebook && [self.notebookList objectForKey:newNotebook.name] != nil)
@@ -49,18 +56,33 @@
         NSMutableArray *array = [self.notebookList objectForKey:notebook.name];
         [array addObject:newNote];
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_CREATED_EVENT object:nil userInfo:nil];
+        [self saveToDisk:newNote toNotebook:notebook];
     }
 }
 
 -(void) saveToDisk:(Note *)newNote toNotebook:(Notebook *)notebook
 {
-    NSString *fileInnerPath = [ NSString stringWithFormat:@"%@/%@",notebook.name, newNote.name];
-    NSError *error;
-    NSString *stringToWrite = newNote.body;
-    
-    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:fileInnerPath];
-    
-    [stringToWrite writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+//    NSString *fileInnerPath = [ NSString stringWithFormat:@"%@", notebook.name, newNote.name];
+//    NSError *error;
+//    NSString *stringToWrite = newNote.body;
+//    
+//    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:fileInnerPath];
+//    
+//    NSFileManager *fm = [NSFileManager defaultManager];
+//    if(![fm fileExistsAtPath:fileInnerPath isDirectory:&isDir])
+//    {
+//        if([fm createDirectoryAtPath:dirName withIntermediateDirectories:YES attributes:nil error:nil])
+//            NSLog(@"Directory Created");
+//        else
+//            NSLog(@"Directory Creation Failed");
+//    }
+//    else
+//        NSLog(@"Directory Already Exist");
+//    
+//    
+//    
+//
+//    [stringToWrite writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
 }
 
 - (void)removeNote:(Note *)note fromNotebook:(NSString *)notebookName
