@@ -26,6 +26,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
     self.layoutProvider = [LayoutProvider sharedInstance];
     [self setupNavigationBar];
     self.manager = [[LocalNoteManager alloc] init];
@@ -50,18 +53,22 @@
     self.bluredView.alpha = 0;
     self.bluredView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
     
-    UITapGestureRecognizer *tapRecogniser = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureRecognised:)];
+    UITapGestureRecognizer *tapRecogniser = [[UITapGestureRecognizer alloc]
+                                             initWithTarget:self
+                                             action:@selector(tapGestureRecognised:)];
     [self.bluredView addGestureRecognizer:tapRecogniser];
     tapRecogniser.delegate = self;
 }
 
 - (void)setupNavigationBar
 {
-    UIBarButtonItem *leftNavigationBarButton = [self.layoutProvider setupLeftBarButton:self withSelector:@selector(drawerButtonPressed)];
+    UIBarButtonItem *leftNavigationBarButton = [self.layoutProvider setupLeftBarButton:self
+                                                                          withSelector:@selector(drawerButtonPressed)];
     self.navigationController.topViewController.navigationItem.leftBarButtonItem = leftNavigationBarButton;
     leftNavigationBarButton.enabled = TRUE;
     
-    UIBarButtonItem *rightNavigationBarButton = [self.layoutProvider setupRightBarButton:self withSelector:@selector(addButtonPressed)];
+    UIBarButtonItem *rightNavigationBarButton = [self.layoutProvider setupRightBarButton:self
+                                                                            withSelector:@selector(addButtonPressed)];
     self.navigationController.topViewController.navigationItem.rightBarButtonItem = rightNavigationBarButton;
     rightNavigationBarButton.enabled = TRUE;
     

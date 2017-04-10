@@ -14,6 +14,7 @@
                 <outlet property="mainImageView" destination="u27-KD-A9u" id="5ur-3N-juT"/>
                 <outlet property="opacityLabel" destination="Twb-Z8-vqR" id="VyT-ZI-SAj"/>
                 <outlet property="opacitySlider" destination="vtV-ce-H6U" id="d0p-hz-gCm"/>
+                <outlet property="settingsPanel" destination="ADd-vx-Rv2" id="EW5-hT-a7V"/>
                 <outlet property="sizeLabel" destination="nGa-Ee-afn" id="cmd-Ms-DB2"/>
                 <outlet property="sizeSlider" destination="DPT-s4-ZXJ" id="AUp-1L-TVT"/>
                 <outlet property="tempImageView" destination="TlZ-y5-ltC" id="H0i-WE-up6"/>
@@ -31,59 +32,75 @@
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="TlZ-y5-ltC" userLabel="TempImageView">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                 </imageView>
-                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="vtV-ce-H6U">
-                    <rect key="frame" x="3" y="582" width="104" height="31"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ADd-vx-Rv2">
+                    <rect key="frame" x="15" y="482" width="119" height="120"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Opacity" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Twb-Z8-vqR">
+                            <rect key="frame" x="5" y="65" width="100" height="30"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Size" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nGa-Ee-afn">
+                            <rect key="frame" x="5" y="0.0" width="100" height="30"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="Tak-Qw-sJk"/>
+                                <constraint firstAttribute="width" constant="100" id="rnR-ve-wK3"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="DPT-s4-ZXJ">
+                            <rect key="frame" x="3" y="35" width="104" height="31"/>
+                            <connections>
+                                <action selector="sizeSliderChanged:" destination="-1" eventType="valueChanged" id="DsZ-MV-U0Y"/>
+                            </connections>
+                        </slider>
+                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="vtV-ce-H6U">
+                            <rect key="frame" x="3" y="95" width="104" height="31"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="RlQ-eZ-i0C"/>
+                                <constraint firstAttribute="width" constant="100" id="UjG-4B-Rhw"/>
+                            </constraints>
+                            <connections>
+                                <action selector="opacitySliderChanged:" destination="-1" eventType="valueChanged" id="KM1-A6-jAt"/>
+                            </connections>
+                        </slider>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="30" id="RlQ-eZ-i0C"/>
-                        <constraint firstAttribute="width" constant="100" id="UjG-4B-Rhw"/>
+                        <constraint firstItem="DPT-s4-ZXJ" firstAttribute="top" secondItem="ADd-vx-Rv2" secondAttribute="top" constant="35" id="6A4-Vx-S7B"/>
+                        <constraint firstItem="vtV-ce-H6U" firstAttribute="height" secondItem="nGa-Ee-afn" secondAttribute="height" id="6St-bk-voy"/>
+                        <constraint firstAttribute="height" constant="120" id="AW3-cc-3fv"/>
+                        <constraint firstItem="nGa-Ee-afn" firstAttribute="leading" secondItem="ADd-vx-Rv2" secondAttribute="leading" constant="5" id="I7D-eU-fYj"/>
+                        <constraint firstItem="Twb-Z8-vqR" firstAttribute="leading" secondItem="ADd-vx-Rv2" secondAttribute="leading" constant="5" id="OkT-SP-gcx"/>
+                        <constraint firstItem="Twb-Z8-vqR" firstAttribute="height" secondItem="nGa-Ee-afn" secondAttribute="height" id="P8N-eJ-bUR"/>
+                        <constraint firstAttribute="width" constant="119" id="WOa-sg-sfM"/>
+                        <constraint firstItem="DPT-s4-ZXJ" firstAttribute="height" secondItem="nGa-Ee-afn" secondAttribute="height" id="g4I-B2-CSn"/>
+                        <constraint firstItem="vtV-ce-H6U" firstAttribute="width" secondItem="nGa-Ee-afn" secondAttribute="width" id="jMA-UU-Won"/>
+                        <constraint firstItem="vtV-ce-H6U" firstAttribute="top" secondItem="ADd-vx-Rv2" secondAttribute="top" constant="95" id="otZ-vo-pW6"/>
+                        <constraint firstItem="Twb-Z8-vqR" firstAttribute="width" secondItem="nGa-Ee-afn" secondAttribute="width" id="pV2-LP-RYc"/>
+                        <constraint firstItem="Twb-Z8-vqR" firstAttribute="top" secondItem="ADd-vx-Rv2" secondAttribute="top" constant="65" id="qlh-os-wCC"/>
+                        <constraint firstItem="DPT-s4-ZXJ" firstAttribute="leading" secondItem="ADd-vx-Rv2" secondAttribute="leading" constant="5" id="ueP-Be-jwA"/>
+                        <constraint firstItem="DPT-s4-ZXJ" firstAttribute="width" secondItem="nGa-Ee-afn" secondAttribute="width" id="w5S-p6-A8P"/>
+                        <constraint firstItem="nGa-Ee-afn" firstAttribute="top" secondItem="ADd-vx-Rv2" secondAttribute="top" id="yYN-bn-TXy"/>
+                        <constraint firstItem="vtV-ce-H6U" firstAttribute="leading" secondItem="ADd-vx-Rv2" secondAttribute="leading" constant="5" id="zDW-KQ-qdI"/>
                     </constraints>
-                    <connections>
-                        <action selector="opacitySliderChanged:" destination="-1" eventType="valueChanged" id="KM1-A6-jAt"/>
-                    </connections>
-                </slider>
-                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="DPT-s4-ZXJ">
-                    <rect key="frame" x="3" y="512" width="104" height="31"/>
-                    <connections>
-                        <action selector="sizeSliderChanged:" destination="-1" eventType="valueChanged" id="DsZ-MV-U0Y"/>
-                    </connections>
-                </slider>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Size" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nGa-Ee-afn">
-                    <rect key="frame" x="5" y="477" width="100" height="30"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <nil key="textColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Opacity" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Twb-Z8-vqR">
-                    <rect key="frame" x="5" y="547" width="100" height="30"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <nil key="textColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="DPT-s4-ZXJ" firstAttribute="top" secondItem="nGa-Ee-afn" secondAttribute="bottom" constant="5" id="1TY-gt-An0"/>
-                <constraint firstItem="Twb-Z8-vqR" firstAttribute="top" secondItem="DPT-s4-ZXJ" secondAttribute="bottom" constant="5" id="1ed-yu-I7f"/>
-                <constraint firstAttribute="bottom" secondItem="vtV-ce-H6U" secondAttribute="bottom" constant="55" id="3u1-1U-hUz"/>
-                <constraint firstItem="Twb-Z8-vqR" firstAttribute="height" secondItem="vtV-ce-H6U" secondAttribute="height" id="49Z-Q2-Z27"/>
                 <constraint firstItem="TlZ-y5-ltC" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="8Zi-zd-7sO"/>
-                <constraint firstItem="nGa-Ee-afn" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="5" id="9zI-9g-IP1"/>
-                <constraint firstItem="nGa-Ee-afn" firstAttribute="height" secondItem="vtV-ce-H6U" secondAttribute="height" id="BvV-eX-WpX"/>
+                <constraint firstItem="ADd-vx-Rv2" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="15" id="Bub-5S-jOT"/>
                 <constraint firstItem="TlZ-y5-ltC" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" id="FGE-ST-5Qj"/>
-                <constraint firstItem="DPT-s4-ZXJ" firstAttribute="width" secondItem="vtV-ce-H6U" secondAttribute="width" id="FaF-PH-L6e"/>
+                <constraint firstAttribute="bottom" secondItem="ADd-vx-Rv2" secondAttribute="bottom" constant="65" id="I9d-7d-DTi"/>
                 <constraint firstItem="TlZ-y5-ltC" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Lkx-88-5mq"/>
                 <constraint firstItem="TlZ-y5-ltC" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="width" id="M5n-kk-VpO"/>
-                <constraint firstItem="Twb-Z8-vqR" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="5" id="OGs-fg-HOV"/>
                 <constraint firstItem="u27-KD-A9u" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="TTJ-G8-Kus"/>
                 <constraint firstItem="u27-KD-A9u" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Vhm-pF-fn8"/>
                 <constraint firstItem="u27-KD-A9u" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="width" id="YkD-uF-O6U"/>
                 <constraint firstItem="u27-KD-A9u" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" id="Zap-8x-W0O"/>
-                <constraint firstItem="DPT-s4-ZXJ" firstAttribute="height" secondItem="vtV-ce-H6U" secondAttribute="height" id="dsS-Ed-WbU"/>
-                <constraint firstItem="nGa-Ee-afn" firstAttribute="width" secondItem="vtV-ce-H6U" secondAttribute="width" id="lop-bT-qtu"/>
-                <constraint firstItem="Twb-Z8-vqR" firstAttribute="width" secondItem="vtV-ce-H6U" secondAttribute="width" id="q5x-py-Lt9"/>
-                <constraint firstItem="vtV-ce-H6U" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="5" id="vBJ-PR-Hjh"/>
-                <constraint firstItem="vtV-ce-H6U" firstAttribute="top" secondItem="Twb-Z8-vqR" secondAttribute="bottom" constant="5" id="wAK-JO-MFb"/>
-                <constraint firstItem="DPT-s4-ZXJ" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="5" id="z3p-e0-IB0"/>
             </constraints>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
             <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>

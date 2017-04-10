@@ -9,6 +9,10 @@
 #import "DrawingViewController.h"
 #import "Defines.h"
 
+@interface DrawingViewController()
+@property UIVisualEffectView *bluredView;
+@end
+
 @implementation DrawingViewController
 {
     CGPoint lastPoint;
@@ -26,21 +30,31 @@
     green = 0.0/255.0;
     blue = 0.0/255.0;
 
+    [self setupBlurredView];
+    [self hideSettingsPanel];
+
     [self.opacitySlider setValue:1.0];
     brushSize = self.sizeSlider.value*40;
     opacity = self.opacitySlider.value;
-    [self hideOptionsPanel];
+    [self.settingsPanel setHidden:YES];
     settingsHidden = YES;
     
-    [self.view bringSubviewToFront:self.mainImageView];
-    [self.view bringSubviewToFront:self.opacityLabel];
-    [self.view bringSubviewToFront:self.sizeLabel];
-    [self.view bringSubviewToFront:self.sizeSlider];
-    [self.view bringSubviewToFront:self.opacitySlider];
-    [self.view bringSubviewToFront:self.tempImageView];
+    [self.view bringSubviewToFront:self.bluredView];
+    [self.view bringSubviewToFront:self.settingsPanel];
     
     [self setupToolbarButtons];
     [super viewDidLoad];
+}
+
+- (void)setupBlurredView
+{
+    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
+    self.bluredView = [[UIVisualEffectView alloc] initWithEffect:effect];
+    [self.bluredView.layer setCornerRadius:30.0f];
+    self.bluredView.layer.masksToBounds = YES;
+    self.bluredView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+    [self.bluredView setHidden:YES];
+    [self.view addSubview:self.bluredView];
 }
 
 - (void)setupToolbarButtons
@@ -58,7 +72,6 @@
     [settingsButton addTarget:self action:@selector(settingsButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *settingsToolbarButton = [[UIBarButtonItem alloc] initWithCustomView:settingsButton];
 
-    
     UIButton *eraserButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, BUTTONS_WIDTH, BUTTONS_HEIGHT)];
     [eraserButton setBackgroundImage:[UIImage imageNamed:@"eraser.png"] forState:UIControlStateNormal];
     [eraserButton addTarget:self action:@selector(eraserButtonPressed) forControlEvents:UIControlEventTouchUpInside];
@@ -92,7 +105,7 @@
 {
     if(!settingsHidden)
     {
-        [self hideOptionsPanel];
+        [self hideSettingsPanel];
         settingsHidden = YES;
     }
     mouseSwiped = NO;
@@ -126,7 +139,6 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    
     if(!mouseSwiped) {
         UIGraphicsBeginImageContext(self.view.frame.size);
         [self.tempImageView.image drawInRect:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
@@ -149,20 +161,27 @@
     UIGraphicsEndImageContext();
 }
 
-- (void)showOptionsPanel
+- (void)showSettingsPanel
 {
-    [self.sizeLabel setHidden:NO];
-    [self.opacityLabel setHidden:NO];
-    [self.opacitySlider setHidden:NO];
-    [self.sizeSlider setHidden:NO];
+    
+    self.bluredView.frame = CGRectMake(self.settingsPanel.frame.origin.x, self.settingsPanel.frame.origin.y, self.settingsPanel.frame.size.width, self.settingsPanel.frame.size.height + 20);
+    [self.bluredView setHidden:NO];
+    [self.settingsPanel setHidden:NO];
+    [UIView animateWithDuration:0.5 animations:^{
+        [self.bluredView setAlpha:1];
+        [self.settingsPanel setAlpha:1];
+    }];
 }
 
-- (void)hideOptionsPanel
+- (void)hideSettingsPanel
 {
-    [self.sizeLabel setHidden:YES];
-    [self.opacityLabel setHidden:YES];
-    [self.opacitySlider setHidden:YES];
-    [self.sizeSlider setHidden:YES];
+    [UIView animateWithDuration:0.5 animations:^{
+        [self.bluredView setAlpha:0];
+        [self.settingsPanel setAlpha:0];
+    } completion:^(BOOL finished) {
+        [self.settingsPanel setHidden:YES];
+        [self.bluredView setHidden:YES];
+    }];
 }
 
 #pragma mark -
@@ -177,11 +196,11 @@
 {
     if(settingsHidden)
     {
-        [self showOptionsPanel];
+        [self showSettingsPanel];
         settingsHidden = NO;
     } else if(!settingsHidden)
     {
-        [self hideOptionsPanel];
+        [self hideSettingsPanel];
         settingsHidden = YES;
     }
 }
@@ -201,7 +220,54 @@
 
 - (void)colorPickerButtonPressed
 {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Pick a color" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
+    UIAlertAction* blackColor = [UIAlertAction actionWithTitle:@"Black" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self setBrushColor:[UIColor blackColor]];
+    }];
+    [alertController addAction:blackColor];
+        
+    UIAlertAction* redColor = [UIAlertAction actionWithTitle:@"Red" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self setBrushColor:[UIColor redColor]];
+             }];
+    [alertController addAction:redColor];
+    
+    UIAlertAction* blueColor= [UIAlertAction actionWithTitle:@"Blue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self setBrushColor:[UIColor blueColor]];
+    }];
+    [alertController addAction:blueColor];
+    
+    UIAlertAction* cyanColor= [UIAlertAction actionWithTitle:@"Cyan" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self setBrushColor:[UIColor cyanColor]];
+    }];
+    [alertController addAction:cyanColor];
+    
+    UIAlertAction* greenColor= [UIAlertAction actionWithTitle:@"Green" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self setBrushColor:[UIColor greenColor]];
+    }];
+    [alertController addAction:greenColor];
+    
+    UIAlertAction* orangeColor= [UIAlertAction actionWithTitle:@"Orange" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self setBrushColor:[UIColor orangeColor]];
+    }];
+    [alertController addAction:orangeColor];
+    
+    UIAlertAction* purpleColor= [UIAlertAction actionWithTitle:@"Purple" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self setBrushColor:[UIColor purpleColor]];
+    }];
+    [alertController addAction:purpleColor];
+    
+    UIAlertAction* magentaColor= [UIAlertAction actionWithTitle:@"Magenta" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self setBrushColor:[UIColor magentaColor]];
+    }];
+    [alertController addAction:magentaColor];
+    
+    UIAlertAction* yellowColor= [UIAlertAction actionWithTitle:@"Yellow" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self setBrushColor:[UIColor yellowColor]];
+    }];
+    [alertController addAction:yellowColor];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (IBAction)sizeSliderChanged:(id)sender

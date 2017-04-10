@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *opacityLabel;
 @property (weak, nonatomic) IBOutlet UISlider *sizeSlider;
 @property (weak, nonatomic) IBOutlet UISlider *opacitySlider;
+@property (weak, nonatomic) IBOutlet UIView *settingsPanel;
 
 
 - (IBAction)sizeSliderChanged:(id)sender;
