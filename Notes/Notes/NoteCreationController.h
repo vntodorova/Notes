@@ -10,7 +10,7 @@
 #import "Protocols.h"
 #import "LocalNoteManager.h"
 
-@interface NoteCreationController : UIViewController
+@interface NoteCreationController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 -(instancetype)initWithManager:(LocalNoteManager*) manager;
 

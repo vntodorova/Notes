@@ -70,7 +70,9 @@
 {
     [self.notebookList removeObjectForKey:notebook.name];
     NSString *path = [self.contentPath stringByAppendingPathComponent:notebook.name];
-    [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+    
+    [self deleteItemAtPath:path];
+    
 }
 
 - (void)removeNote:(Note *)note fromNotebook:(NSString *)notebookName
@@ -89,7 +91,7 @@
         NSMutableArray *array = [self.notebookList objectForKey:notebookName];
         [array removeObject:note];
         
-        [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+        [self deleteItemAtPath:path];
     }
 }
 
@@ -98,6 +100,18 @@
     return self.notebookObjectList;
 }
 
+-(void) deleteItemAtPath:(NSString*) path
+{
+    NSError *error;
+    BOOL isSuccessful = [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
+    
+    if(!isSuccessful)
+    {
+        @throw [NSException exceptionWithName:@"FileNotFoundException"
+                                       reason:error.description
+                                     userInfo:nil];;
+    }
+}
 
 - (NSArray<Note *> *)getNoteListForNotebook:(Notebook *)notebook
 {
@@ -180,9 +194,8 @@
 //LOAD DATA
 - (void) loadNotebooks
 {
-    NSError *error;
-    NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.contentPath error:&error];
-
+    NSArray *directoryContents = [self getDirectoryContentForPath:self.contentPath];
+    
     for(int i = 0; i < directoryContents.count; i++)
     {
         Notebook *loadedNotebook = [[Notebook alloc] initWithName:[directoryContents objectAtIndex:i]];
@@ -198,10 +211,9 @@
 - (NSMutableArray*) loadNotesForNotebook:(Notebook*) notebook
 {
     NSString *path = [self.contentPath stringByAppendingPathComponent:notebook.name];
-    
     NSMutableArray<Note*> *array = [[NSMutableArray alloc] init];
-    NSError *error;
-    NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&error];
+    
+    NSArray *directoryContents = [self getDirectoryContentForPath: path];
     
     for(NSString *noteName in directoryContents)
     {
@@ -213,6 +225,21 @@
         }
     }
     return array;
+}
+
+-(NSArray*) getDirectoryContentForPath:(NSString*) path
+{
+    NSError *error;
+    NSArray *content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&error];
+    
+    if(error)
+    {
+        @throw [NSException exceptionWithName:@"DirectoryNotFound"
+                                       reason:error.description
+                                     userInfo:nil];
+    }
+    
+    return content;
 }
 
 - (Note*)loadNoteWithPath:(NSString*) notePath andName:(NSString*) noteName

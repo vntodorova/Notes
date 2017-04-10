@@ -17,7 +17,6 @@
 @property (nonatomic, strong) NSMutableArray *fontList;
 @property (nonatomic, strong) NSMutableArray *textSizeList;
 @property (nonatomic, strong) NSMutableArray *noteBookList;
-
 @property (nonatomic, strong) LocalNoteManager *manager;
 @end
 
@@ -87,7 +86,26 @@
 
 - (void)onCameraClick
 {
-    NSLog(@"Camera clicked");
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.allowsEditing = YES;
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    
+    [self presentViewController:picker animated:NO completion:nil];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
+    NSLog(@"%@", chosenImage.description);
+//    self.imageView.image = chosenImage;
+    
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
 - (void)onDrawingClick
@@ -114,7 +132,6 @@
 {
     [self setNoteContent];
     [self.navigationController popViewControllerAnimated:YES];
-    [self saveNote];
     [self.manager addNote:self.note toNotebook:noteBookSelected];
 }
 
@@ -322,11 +339,4 @@
     [self.hiddenButtonsList removeAllObjects];
 }
 
--(void) saveNote
-{
-//    NSError *error;
-//    NSString *stringToWrite = [self.noteBody stringByEvaluatingJavaScriptFromString:@"document.documentElement.outerHTML"];
-//    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"myfile.html"];
-//    [stringToWrite writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
-}
 @end
