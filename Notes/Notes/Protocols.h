@@ -15,17 +15,26 @@
 @protocol NoteManagerDelegate
 
 - (void)addNote:(Note *)newNote toNotebook:(Notebook *)notebook;
+
 - (void)removeNote:(Note *)newNote fromNotebook:(NSString *)notebookName;
+
 - (void)exchangeNoteAtIndex:(NSInteger)firstIndex withNoteAtIndex:(NSInteger)secondIndex fromNotebook:(NSString *)notebookName;
+
+- (NSArray<Note *> *)getNoteListForNotebook:(Notebook *)notebook;
+
+- (NSArray<Note *> *)getNoteListForNotebookWithName:(NSString *)notebookName;
+
 
 @end
 
 @protocol NoteBookManagerDelegate
+
 - (void)addNotebook:(Notebook *)newNotebook;
+
 - (void)removeNotebook:(Notebook *)notebook;
+
 - (NSArray<Notebook *> *)getNotebookList;
-- (NSArray<Note *> *)getNoteListForNotebook:(Notebook *)notebook;
-- (NSArray<Note *> *)getNoteListForNotebookWithName:(NSString *)notebookName;
+
 @end
 
 #endif /* Protocols_h */

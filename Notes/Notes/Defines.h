@@ -42,7 +42,11 @@
 
 #define TABLEVIEW_SECTIONS_NUMBER 2
 
-#define NOTE_SAVE_PATH @"Notes/Notes/Resources/Notes"
 #define NOTE_CREATED_EVENT @"NoteCreatedEvent"
+
+#define NOTE_NOTEBOOKS_FOLDER @"Notebooks"
+#define NOTE_BODY_FILE @"body.html"
+#define NOTE_TAGS_FILE @"tags.txt"
+#define NOTE_DATE_FILE @"date.txt"
 
 #endif /* Defines_h */

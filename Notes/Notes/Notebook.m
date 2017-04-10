@@ -14,6 +14,7 @@
 {
     self = [super init];
     self->_name = name;
+    self.isLoaded = false;
     return self;
 }
 

@@ -43,7 +43,7 @@
 
     NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"emptyfile.html"];
     
-    NSURL *indexFileURL = [[NSURL alloc]initWithString:filePath];
+    NSURL *indexFileURL = [[NSURL alloc] initWithString:filePath];
     
     [self.noteBody loadRequest:[NSURLRequest requestWithURL:indexFileURL]];
     

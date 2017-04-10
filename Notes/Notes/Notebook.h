@@ -15,4 +15,6 @@
 
 @property (nonatomic, strong, readonly) NSString *name;
 
+@property BOOL isLoaded;
+
 @end

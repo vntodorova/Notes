@@ -11,8 +11,9 @@
 
 @interface LocalNoteManager()
 
-@property NSMutableDictionary *notebookList;
-@property NSMutableArray *notebookObjectList;
+@property NSMutableDictionary<NSString*, NSMutableArray<Note*>*> *notebookList;
+@property NSMutableArray<Notebook*> *notebookObjectList;
+@property NSString *contentPath;
 @end
 
 @implementation LocalNoteManager
@@ -23,7 +24,9 @@
     if (self) {
         self.notebookList = [[NSMutableDictionary alloc] init];
         self.notebookObjectList = [[NSMutableArray alloc] init];
-        [self loadSavedData];
+        self.contentPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+                              stringByAppendingPathComponent: NOTE_NOTEBOOKS_FOLDER];
+        [self loadNotebooks];
     }
     return self;
 }
@@ -37,10 +40,29 @@
 
 - (void)addNotebook:(Notebook *) newNotebook
 {
-    if(newNotebook && [self.notebookList objectForKey:newNotebook.name] != nil)
+    if(newNotebook == nil || [self.notebookList objectForKey:newNotebook.name] == nil)
+    {
+        return;
+    }
+    else
     {
         [self.notebookList setObject:[[NSMutableArray alloc] init] forKey:newNotebook.name];
         [self.notebookObjectList addObject:newNotebook];
+    }
+}
+
+- (void)addNote:(Note *)newNote toNotebook:(Notebook *)notebook
+{
+    if(newNote == nil || notebook == nil)
+    {
+        return;
+    }
+    else
+    {
+        NSMutableArray *array = [self.notebookList objectForKey:notebook.name];
+        [array addObject:newNote];
+        [self saveToDisk:newNote toNotebook:notebook];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_CREATED_EVENT object:nil userInfo:nil];
     }
 }
 
@@ -49,68 +71,13 @@
     [self.notebookList removeObjectForKey:notebook.name];
 }
 
-- (void)addNote:(Note *)newNote toNotebook:(Notebook *)notebook
-{
-    if(newNote && notebook)
-    {
-        NSMutableArray *array = [self.notebookList objectForKey:notebook.name];
-        [array addObject:newNote];
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_CREATED_EVENT object:nil userInfo:nil];
-        [self saveToDisk:newNote toNotebook:notebook];
-    }
-}
-
--(void) saveToDisk:(Note *)newNote toNotebook:(Notebook *)notebook
-{
-    
-    NSString *fileInnerPath = [NSString stringWithFormat:@"%@/%@", notebook.name, newNote.name];
-    NSError *error;
-
-    
-    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:fileInnerPath];
-    
-    BOOL isDir;
-    
-    NSFileManager *fm = [NSFileManager defaultManager];
-    if(![fm fileExistsAtPath:fileInnerPath isDirectory:&isDir])
-    {
-        if([fm createDirectoryAtPath:filePath withIntermediateDirectories:YES attributes:nil error:nil])
-        {
-            NSLog(@"Directory Created");
-        }
-        else
-        {
-            NSLog(@"Directory Creation Failed");
-            return;
-        }
-    }
-    else
-    {
-        NSLog(@"Directory Already Exist");
-    }
-    
-    NSString *tags = [self extractTags:newNote.tags];
-    
-    NSString *fileTagsPath = [NSString stringWithFormat:@"%@/tags.txt", filePath];
-    [tags writeToFile:fileTagsPath atomically:YES encoding:NSUTF8StringEncoding error:&error];
-    
-    NSString *fileBodyPath = [NSString stringWithFormat:@"%@/body.html", filePath];
-    NSString *stringToWrite = newNote.body;
-    [stringToWrite writeToFile:fileBodyPath atomically:YES encoding:NSUTF8StringEncoding error:&error];
-}
-
-- (NSString*) extractTags:(NSArray*) tags
-{
-    NSMutableString *tagsContent = [[NSMutableString alloc] init];
-    for (NSString *tag in tags) {
-        [tagsContent appendString:tag];
-    }
-    return tagsContent;
-}
-
 - (void)removeNote:(Note *)note fromNotebook:(NSString *)notebookName
 {
-    if(note && notebookName)
+    if(note == nil || notebookName == nil)
+    {
+        return;
+    }
+    else
     {
         NSMutableArray *array = [self.notebookList objectForKey:notebookName];
         [array removeObject:note];
@@ -122,11 +89,18 @@
     return self.notebookObjectList;
 }
 
+
 - (NSArray<Note *> *)getNoteListForNotebook:(Notebook *)notebook
 {
-    NSArray *array;
+    NSArray *array = nil;
     if(notebook)
     {
+        if(!notebook.isLoaded)
+        {
+            NSMutableArray *loaddedNotes = [self loadNotesForNotebook:notebook];
+            [self.notebookList setObject:loaddedNotes forKey:notebook.name];
+            notebook.isLoaded = YES;
+        }
         array = [self.notebookList objectForKey:notebook.name];
     }
     return array;
@@ -134,49 +108,127 @@
 
 - (NSArray<Note *> *)getNoteListForNotebookWithName:(NSString *)notebookName
 {
-    NSArray *array;
-    if(notebookName)
+    Notebook *notebook = [self getNotebookWithName:notebookName];
+    NSArray *noteList = [self getNoteListForNotebook:notebook];
+    return noteList;
+}
+
+- (Notebook*) getNotebookWithName:(NSString *) notebookName
+{
+    for (Notebook *currentNotebook in self.notebookObjectList) {
+        if([currentNotebook.name isEqualToString:notebookName])
+        {
+            return currentNotebook;
+        }
+    }
+    return nil;
+}
+
+#pragma mark PRIVATE
+- (void) saveToDisk:(Note *)newNote toNotebook:(Notebook *)notebook
+{
+    NSString *fileRoot = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+                            stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
+                            stringByAppendingPathComponent:notebook.name]
+                            stringByAppendingPathComponent:newNote.name];
+    
+    [self isValidDirectory:fileRoot];
+    
+    [self saveData:[self extractTags:newNote.tags]  toFile:[fileRoot stringByAppendingPathComponent:NOTE_TAGS_FILE]];
+    [self saveData:newNote.body                     toFile:[fileRoot stringByAppendingPathComponent:NOTE_BODY_FILE]];
+    [self saveData:newNote.dateCreated              toFile:[fileRoot stringByAppendingPathComponent:NOTE_DATE_FILE]];
+}
+
+-(void) saveData:(NSString*) fileContent toFile:(NSString*) path
+{
+    NSError *error;
+    [fileContent writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error];
+}
+
+-(void) isValidDirectory:(NSString*) path
+{
+    NSFileManager *fm = [NSFileManager defaultManager];
+    if([fm fileExistsAtPath:path isDirectory:nil])
     {
-        array = [self.notebookList objectForKey:notebookName];
+        return;
+    }
+    else
+    {
+        [fm createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+}
+
+- (NSString*) extractTags:(NSArray*) tags
+{
+    NSMutableString *tagsContent = [[NSMutableString alloc] init];
+    for (NSString *tag in tags)
+    {
+        [tagsContent appendString:[NSString stringWithFormat:@"%@ #", tag]];
+    }
+    return tagsContent;
+}
+
+//LOAD DATA
+- (void) loadNotebooks
+{
+    NSError *error;
+    NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.contentPath error:&error];
+
+    for(int i = 0; i < directoryContents.count; i++)
+    {
+        Notebook *loadedNotebook = [[Notebook alloc] initWithName:[directoryContents objectAtIndex:i]];
+        BOOL isHidden = [loadedNotebook.name hasPrefix:@"."];
+        if(!isHidden)
+        {
+            [self.notebookObjectList addObject:loadedNotebook];
+        }
+    }
+}
+
+//trqbva da se loadvat pri request
+- (NSMutableArray*) loadNotesForNotebook:(Notebook*) notebook
+{
+    NSString *path = [self.contentPath stringByAppendingPathComponent:notebook.name];
+    
+    NSMutableArray<Note*> *array = [[NSMutableArray alloc] init];
+    NSError *error;
+    NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&error];
+    
+    for(NSString *noteName in directoryContents)
+    {
+        BOOL isHidden = [noteName hasPrefix:@"."];
+        if(!isHidden)
+        {
+            NSString *notePath = [NSString stringWithFormat:@"%@/%@",path, noteName];
+            [array addObject:[self loadNoteWithPath:notePath andName:noteName]];
+        }
     }
     return array;
 }
 
-#pragma mark PRIVATE
-- (void)loadSavedData
+- (Note*)loadNoteWithPath:(NSString*) notePath andName:(NSString*) noteName
 {
-    //TODO if empty notebook
-    Notebook* notebook1 = [[Notebook alloc] initWithName:@"General"];
+    Note *note = [[Note alloc] init];
     
-    Notebook* notebook2 = [[Notebook alloc] initWithName:@"Work"];
+    note.name = noteName;
+    note.body = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_BODY_FILE]];
+    note.dateCreated = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_DATE_FILE]];
     
-    Notebook* notebook3 = [[Notebook alloc] initWithName:@"Home"];
-    
-    [self.notebookObjectList addObject:notebook1];
-    [self.notebookObjectList addObject:notebook2];
-    [self.notebookObjectList addObject:notebook3];
-    
-    Note *note1 = [[Note alloc] init];
-    note1.name = @"1st note";
-    note1.dateCreated = @"12:34, 4.5.2016";
-    
-    Note *note2 = [[Note alloc] init];
-    note2.name = @"2nd note";
-    note2.dateCreated = @"12:35, 4.5.2016";
-    
-    Note *note3 = [[Note alloc] init];
-    note3.name = @"3rd note";
-    note3.dateCreated = @"12:35, 4.5.2016";
-    
-    [self.notebookList setObject: [[NSMutableArray alloc] init] forKey:notebook1.name];
-    [self.notebookList setObject: [[NSMutableArray alloc] init] forKey:notebook2.name];
-    [self.notebookList setObject: [[NSMutableArray alloc] init] forKey:notebook3.name];
-    
-    NSMutableArray *array = [self.notebookList objectForKey:notebook1.name];
-    
-    [array addObject:note1];
-    [array addObject:note2];
-    [array addObject:note3];
+    NSString *tags = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_TAGS_FILE]];
+    note.tags = [tags componentsSeparatedByString:@" "];
+    return note;
+}
+
+- (NSString*) loadNoteBodyFromPath:(NSString*) path
+{
+    return nil;
+}
+
+- (NSString*)loadDataFromFilePath:(NSString*) path
+{
+    NSError *error;
+    NSString *fileContents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
+    return fileContents;
 }
 
 @end
