@@ -69,6 +69,8 @@
 - (void)removeNotebook:(Notebook *)notebook
 {
     [self.notebookList removeObjectForKey:notebook.name];
+    NSString *path = [self.contentPath stringByAppendingPathComponent:notebook.name];
+    [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
 }
 
 - (void)removeNote:(Note *)note fromNotebook:(NSString *)notebookName
@@ -79,8 +81,15 @@
     }
     else
     {
+        NSString *path = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+                                stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
+                               stringByAppendingPathComponent:notebookName]
+                              stringByAppendingPathComponent:note.name];
+        
         NSMutableArray *array = [self.notebookList objectForKey:notebookName];
         [array removeObject:note];
+        
+        [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
     }
 }
 
