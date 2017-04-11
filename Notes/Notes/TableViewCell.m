@@ -27,6 +27,9 @@
     UILongPressGestureRecognizer *longPressRecogniser = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGestureRecognised:)];
     [self addGestureRecognizer:longPressRecogniser];
     longPressRecogniser.delegate = self;
+    UITapGestureRecognizer *tapRecogniser = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureRecognised:)];
+    [self addGestureRecognizer:tapRecogniser];
+    tapRecogniser.delegate = self;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -156,5 +159,14 @@
         self.snapshot = nil;
     }];
 }
+
+#pragma mark -
+#pragma mark Tap gesture recogniser
+
+- (void)tapGestureRecognised:(UITapGestureRecognizer *)tap
+{
+    [self.delegate tapGestureRecognisedOnCell:self];
+}
+
 
 @end

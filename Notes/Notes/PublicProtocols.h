@@ -14,6 +14,7 @@
 @protocol TableViewCellDelegate
 
 - (void)panGestureRecognisedOnCell:(TableViewCell *)cell;
+- (void)tapGestureRecognisedOnCell:(TableViewCell *)cell;
 - (void)exchangeObjectAtIndex:(NSInteger)firstIndex withObjectAtIndex:(NSInteger)secondIndex;
 
 @end

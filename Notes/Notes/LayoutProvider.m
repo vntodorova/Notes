@@ -62,7 +62,7 @@ static dispatch_once_t predicate = 0;
     cell.infoLabel.text = note.dateCreated;
     cell.cellNote = note;
     cell.layer.borderWidth = 0.5;
-    cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    cell.layer.borderColor = [UIColor blackColor].CGColor;
     cell.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_CELL_COLOR];
     return cell;
 }

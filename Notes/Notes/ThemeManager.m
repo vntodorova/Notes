@@ -45,7 +45,7 @@ static ThemeManager *sharedInstance = nil;
     [self.styles setObject:[UIImage imageNamed:@"dark_theme_plus.png"] forKey:PLUS_IMAGE];
     [self.styles setObject:[UIImage imageNamed:@"dark_theme_menu.png"] forKey:MENU_IMAGE];
     [self.styles setObject:[UIColor darkGrayColor] forKey:TABLEVIEW_BACKGROUND_COLOR];
-    [self.styles setObject:[UIColor blackColor] forKey:TABLEVIEW_CELL_COLOR];
+    [self.styles setObject:[UIColor lightGrayColor] forKey:TABLEVIEW_CELL_COLOR];
 }
 
 @end
