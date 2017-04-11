@@ -11,6 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NoteCreationController">
             <connections>
+                <outlet property="createButton" destination="5UX-3b-ySm" id="MQh-4L-qFJ"/>
                 <outlet property="noteBody" destination="Udl-bA-HC1" id="b4f-jg-wr0"/>
                 <outlet property="noteName" destination="Fme-iL-Fez" id="1SD-F7-u1V"/>
                 <outlet property="noteTags" destination="CnX-oi-qcZ" id="bVo-UD-sUE"/>

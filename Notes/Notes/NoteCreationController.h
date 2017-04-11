@@ -16,6 +16,8 @@
 
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 
+@property (weak, nonatomic) IBOutlet UIButton *createButton;
+
 @property (weak, nonatomic) IBOutlet UIWebView *noteBody;
 
 @property (weak, nonatomic) IBOutlet UITextField *noteTags;

@@ -69,6 +69,9 @@
     if(self.note.name.length > 0)
     {
         [self loadSavedHtml];
+        self.noteName.text = self.note.name;
+        self.noteTags.text = @"#dummytag";
+        [self.createButton setTitle:@"Save" forState:UIControlStateNormal];
     }
     else
     {
