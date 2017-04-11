@@ -11,8 +11,6 @@
 		1D07C0DA1E9251F900E85CAF /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D07C0D41E9251F900E85CAF /* camera.png */; };
 		1D07C0DB1E9251F900E85CAF /* drawing.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D07C0D51E9251F900E85CAF /* drawing.png */; };
 		1D07C0DC1E9251F900E85CAF /* list.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D07C0D61E9251F900E85CAF /* list.png */; };
-		1D07C0DD1E9251F900E85CAF /* menu_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D07C0D71E9251F900E85CAF /* menu_button.png */; };
-		1D07C0DE1E9251F900E85CAF /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D07C0D81E9251F900E85CAF /* plus.png */; };
 		1D4056041E8D1E5000E18D05 /* NoteCreationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4056021E8D1E5000E18D05 /* NoteCreationController.m */; };
 		1D4056051E8D1E5000E18D05 /* NoteCreationController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D4056031E8D1E5000E18D05 /* NoteCreationController.xib */; };
 		1D4056081E8D360600E18D05 /* Note.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4056071E8D360600E18D05 /* Note.m */; };
@@ -35,6 +33,13 @@
 		B5E8ABEC1E96814100964B3C /* pen.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8ABEB1E96814100964B3C /* pen.png */; };
 		B5E8ABEE1E96824200964B3C /* colorPicker.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8ABED1E96824200964B3C /* colorPicker.png */; };
 		B5E8ABF01E97B1F600964B3C /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8ABEF1E97B1F600964B3C /* settings.png */; };
+		B5E8AC3E1E9B9FDE00964B3C /* ThemeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E8AC3D1E9B9FDE00964B3C /* ThemeManager.m */; };
+		B5E8AC471E9CC41700964B3C /* SettingsPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E8AC451E9CC41700964B3C /* SettingsPanelViewController.m */; };
+		B5E8AC481E9CC41700964B3C /* SettingsPanelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5E8AC461E9CC41700964B3C /* SettingsPanelViewController.xib */; };
+		B5E8AC4A1E9CE11200964B3C /* dark_theme_plus.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8AC491E9CE11200964B3C /* dark_theme_plus.png */; };
+		B5E8AC4C1E9CEFE500964B3C /* dark_theme_menu.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8AC4B1E9CEFE500964B3C /* dark_theme_menu.png */; };
+		B5E8AC4F1E9CF90E00964B3C /* light_theme_menu.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8AC4D1E9CF90E00964B3C /* light_theme_menu.png */; };
+		B5E8AC501E9CF90E00964B3C /* light_theme_plus.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8AC4E1E9CF90E00964B3C /* light_theme_plus.png */; };
 		B5EFB34C1E8CFFD80024C211 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB34B1E8CFFD80024C211 /* main.m */; };
 		B5EFB34F1E8CFFD80024C211 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB34E1E8CFFD80024C211 /* AppDelegate.m */; };
 		B5EFB3521E8CFFD80024C211 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB3511E8CFFD80024C211 /* ViewController.m */; };
@@ -67,8 +72,6 @@
 		1D07C0D41E9251F900E85CAF /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
 		1D07C0D51E9251F900E85CAF /* drawing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drawing.png; sourceTree = "<group>"; };
 		1D07C0D61E9251F900E85CAF /* list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list.png; sourceTree = "<group>"; };
-		1D07C0D71E9251F900E85CAF /* menu_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_button.png; sourceTree = "<group>"; };
-		1D07C0D81E9251F900E85CAF /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
 		1D4056011E8D1E5000E18D05 /* NoteCreationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteCreationController.h; sourceTree = "<group>"; };
 		1D4056021E8D1E5000E18D05 /* NoteCreationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteCreationController.m; sourceTree = "<group>"; };
 		1D4056031E8D1E5000E18D05 /* NoteCreationController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoteCreationController.xib; sourceTree = "<group>"; };
@@ -105,6 +108,15 @@
 		B5E8ABEB1E96814100964B3C /* pen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pen.png; sourceTree = "<group>"; };
 		B5E8ABED1E96824200964B3C /* colorPicker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = colorPicker.png; sourceTree = "<group>"; };
 		B5E8ABEF1E97B1F600964B3C /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
+		B5E8AC3C1E9B9FDE00964B3C /* ThemeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThemeManager.h; sourceTree = "<group>"; };
+		B5E8AC3D1E9B9FDE00964B3C /* ThemeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThemeManager.m; sourceTree = "<group>"; };
+		B5E8AC441E9CC41700964B3C /* SettingsPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsPanelViewController.h; sourceTree = "<group>"; };
+		B5E8AC451E9CC41700964B3C /* SettingsPanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsPanelViewController.m; sourceTree = "<group>"; };
+		B5E8AC461E9CC41700964B3C /* SettingsPanelViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsPanelViewController.xib; sourceTree = "<group>"; };
+		B5E8AC491E9CE11200964B3C /* dark_theme_plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dark_theme_plus.png; sourceTree = "<group>"; };
+		B5E8AC4B1E9CEFE500964B3C /* dark_theme_menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dark_theme_menu.png; sourceTree = "<group>"; };
+		B5E8AC4D1E9CF90E00964B3C /* light_theme_menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = light_theme_menu.png; sourceTree = "<group>"; };
+		B5E8AC4E1E9CF90E00964B3C /* light_theme_plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = light_theme_plus.png; sourceTree = "<group>"; };
 		B5EFB3471E8CFFD80024C211 /* Notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5EFB34B1E8CFFD80024C211 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B5EFB34D1E8CFFD80024C211 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -172,12 +184,14 @@
 				1D07C0D41E9251F900E85CAF /* camera.png */,
 				1D07C0D51E9251F900E85CAF /* drawing.png */,
 				1D07C0D61E9251F900E85CAF /* list.png */,
-				1D07C0D71E9251F900E85CAF /* menu_button.png */,
-				1D07C0D81E9251F900E85CAF /* plus.png */,
 				B53CB76B1E95379B009DFF27 /* facebook.png */,
 				B53CB76C1E95379B009DFF27 /* google.png */,
 				B5E8ABE91E967F0600964B3C /* eraser.png */,
 				B5E8ABEB1E96814100964B3C /* pen.png */,
+				B5E8AC491E9CE11200964B3C /* dark_theme_plus.png */,
+				B5E8AC4B1E9CEFE500964B3C /* dark_theme_menu.png */,
+				B5E8AC4D1E9CF90E00964B3C /* light_theme_menu.png */,
+				B5E8AC4E1E9CF90E00964B3C /* light_theme_plus.png */,
 				B5E8ABED1E96824200964B3C /* colorPicker.png */,
 				B5E8ABEF1E97B1F600964B3C /* settings.png */,
 			);
@@ -207,6 +221,9 @@
 				B5E8ABDE1E966BA600964B3C /* DrawingViewController.h */,
 				B5E8ABDF1E966BA600964B3C /* DrawingViewController.m */,
 				B5E8ABE01E966BA600964B3C /* DrawingViewController.xib */,
+				B5E8AC441E9CC41700964B3C /* SettingsPanelViewController.h */,
+				B5E8AC451E9CC41700964B3C /* SettingsPanelViewController.m */,
+				B5E8AC461E9CC41700964B3C /* SettingsPanelViewController.xib */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -245,6 +262,8 @@
 				B5B8FB6C1E94D81D00A82813 /* DateTimeManager.m */,
 				1D9EF8B21E96393A00B35777 /* LocalNoteManager.h */,
 				1D9EF8B31E96393A00B35777 /* LocalNoteManager.m */,
+				B5E8AC3C1E9B9FDE00964B3C /* ThemeManager.h */,
+				B5E8AC3D1E9B9FDE00964B3C /* ThemeManager.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -425,13 +444,15 @@
 				1D9EF87D1E94EF7700B35777 /* index.html in Resources */,
 				B5EFB35A1E8CFFD80024C211 /* LaunchScreen.storyboard in Resources */,
 				1D07C0DA1E9251F900E85CAF /* camera.png in Resources */,
-				1D07C0DD1E9251F900E85CAF /* menu_button.png in Resources */,
+				B5E8AC481E9CC41700964B3C /* SettingsPanelViewController.xib in Resources */,
 				B5E8ABEE1E96824200964B3C /* colorPicker.png in Resources */,
 				B53CB76E1E95379B009DFF27 /* google.png in Resources */,
 				B5E8ABE21E966BA600964B3C /* DrawingViewController.xib in Resources */,
 				1D07C0DC1E9251F900E85CAF /* list.png in Resources */,
 				1D07C0DB1E9251F900E85CAF /* drawing.png in Resources */,
+				B5E8AC4C1E9CEFE500964B3C /* dark_theme_menu.png in Resources */,
 				1D07C0D91E9251F900E85CAF /* Calibri.ttf in Resources */,
+				B5E8AC4F1E9CF90E00964B3C /* light_theme_menu.png in Resources */,
 				B5E8ABEC1E96814100964B3C /* pen.png in Resources */,
 				B5E8ABEA1E967F0600964B3C /* eraser.png in Resources */,
 				B534C4541E8D433300AD25F6 /* TableViewCell.xib in Resources */,
@@ -439,9 +460,10 @@
 				B526CB5A1E939E4C00FF4FA8 /* LeftPanelViewController.xib in Resources */,
 				B5EFB37E1E8D006F0024C211 /* ViewController.xib in Resources */,
 				B5E8ABF01E97B1F600964B3C /* settings.png in Resources */,
-				1D07C0DE1E9251F900E85CAF /* plus.png in Resources */,
+				B5E8AC501E9CF90E00964B3C /* light_theme_plus.png in Resources */,
 				1D4056051E8D1E5000E18D05 /* NoteCreationController.xib in Resources */,
 				B5EFB3571E8CFFD80024C211 /* Assets.xcassets in Resources */,
+				B5E8AC4A1E9CE11200964B3C /* dark_theme_plus.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -468,6 +490,7 @@
 			files = (
 				B506D9C91E8E3CBB00555F1D /* LayoutProvider.m in Sources */,
 				B5E8ABDD1E96580900964B3C /* TableViewDataModel.m in Sources */,
+				B5E8AC3E1E9B9FDE00964B3C /* ThemeManager.m in Sources */,
 				1D4056081E8D360600E18D05 /* Note.m in Sources */,
 				1D9EF8B41E96393A00B35777 /* LocalNoteManager.m in Sources */,
 				B5B8FB601E93C35200A82813 /* Notebook.m in Sources */,
@@ -478,6 +501,7 @@
 				B5E8ABE11E966BA600964B3C /* DrawingViewController.m in Sources */,
 				1D4056041E8D1E5000E18D05 /* NoteCreationController.m in Sources */,
 				B526CB591E939E4C00FF4FA8 /* LeftPanelViewController.m in Sources */,
+				B5E8AC471E9CC41700964B3C /* SettingsPanelViewController.m in Sources */,
 				B5EFB34C1E8CFFD80024C211 /* main.m in Sources */,
 				B5B8FB631E93E46B00A82813 /* Reminder.m in Sources */,
 			);

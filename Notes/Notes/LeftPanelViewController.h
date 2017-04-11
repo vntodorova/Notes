@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *googleButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, weak) id <LeftPanelDelegate> delegate;
+- (IBAction)settingsButtonClicked:(UIButton *)sender;
 
 @property NSMutableDictionary *tableViewDataSource;
 @property NSMutableDictionary *notebooksClicked;

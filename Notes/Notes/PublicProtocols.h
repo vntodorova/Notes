@@ -21,6 +21,8 @@
 @protocol LeftPanelDelegate
 
 - (void)hideLeftPanel;
+- (void)showSettings;
+- (void)hideSettings;
 
 @end
 

@@ -12,12 +12,15 @@
 #import "TableViewCell.h"
 #import "LeftPanelViewController.h"
 #import "LayoutProvider.h"
+#import "SettingsPanelViewController.h"
 #import "LocalNoteManager.h"
+#import "ThemeManager.h"
 
 @interface ViewController()
 
 @property (nonatomic, strong) LayoutProvider *layoutProvider;
-@property (nonatomic, strong) LocalNoteManager *manager;
+@property (nonatomic, strong) LocalNoteManager *noteManager;
+@property (nonatomic, strong) ThemeManager *themeManager;
 @property NSString *currentNotebook;
 @property UIVisualEffectView *bluredView;
 @end
@@ -31,9 +34,11 @@
     }
     self.layoutProvider = [LayoutProvider sharedInstance];
     [self setupNavigationBar];
-    self.manager = [[LocalNoteManager alloc] init];
+    self.noteManager = [[LocalNoteManager alloc] init];
+    self.themeManager = [ThemeManager sharedInstance];
+    [self setupTheme:self.themeManager.currentTheme];
     self.currentNotebook = @"General";
-    self.notesArray = [self.manager getNoteListForNotebookWithName:self.currentNotebook];
+    self.notesArray = [self.noteManager getNoteListForNotebookWithName:self.currentNotebook];
     [self.tableView registerNib:[UINib nibWithNibName:TABLEVIEW_CELL_ID bundle:nil] forCellReuseIdentifier:TABLEVIEW_CELL_ID];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoteCreated) name:NOTE_CREATED_EVENT object:nil];
     [self.tableView reloadData];
@@ -75,14 +80,26 @@
     self.navigationController.topViewController.navigationItem.titleView = [[UISearchBar alloc] init];
 }
 
+- (void)setupTheme:(NSString *)themeName
+{
+    self.tableView.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_BACKGROUND_COLOR];
+}
+
 - (void)setupLeftPanel
 {
-    self.leftPanelViewController = [[LeftPanelViewController alloc] initWithNibName:LEFT_PANEL_NIBNAME bundle:nil manager:self.manager];
+    self.leftPanelViewController = [[LeftPanelViewController alloc] initWithNibName:LEFT_PANEL_NIBNAME bundle:nil manager:self.noteManager];
     self.leftPanelViewController.delegate = self;
     [self.view addSubview:self.leftPanelViewController.view];
     [self setupBlurView];
     [self.view addSubview:self.bluredView];
     [self.view sendSubviewToBack:self.bluredView];
+}
+
+- (void)setupSettingsPanel
+{	
+    self.settingsPanelViewController = [[SettingsPanelViewController alloc] initWithNibName:SETTINGS_PANEL_NIBNAME bundle:nil manager:self.noteManager];
+    self.settingsPanelViewController.delegate = self;
+    [self.view addSubview:self.settingsPanelViewController.view];
 }
 
 #pragma mark -
@@ -97,11 +114,11 @@
     
     if(self.leftPanelViewController.isHidden)
     {
-        [self showDrawer];
+        [self showLeftPanel];
     }
     else
     {
-        [self hideDrawer];
+        [self hideLeftPanel];
     }
 }
 
@@ -110,7 +127,7 @@
     Note* note = [[Note alloc] init];
     note.body = @"This text is here to be eddited and tested";
     
-    NoteCreationController *noteCreationController = [[NoteCreationController alloc] initWithManager:self.manager];
+    NoteCreationController *noteCreationController = [[NoteCreationController alloc] initWithManager:self.noteManager];
     noteCreationController.note = note;
     [self.navigationController pushViewController:noteCreationController animated:YES];
 }
@@ -121,14 +138,14 @@
 - (void)panGestureRecognisedOnCell:(TableViewCell *)cell
 {
     NSIndexPath *pathForDeleting = [self.tableView indexPathForCell:cell];
-    [self.manager removeNote:cell.cellNote fromNotebook:self.currentNotebook];
-    self.notesArray = [self.manager getNoteListForNotebookWithName:self.currentNotebook];
+    [self.noteManager removeNote:cell.cellNote fromNotebook:self.currentNotebook];
+    self.notesArray = [self.noteManager getNoteListForNotebookWithName:self.currentNotebook];
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:pathForDeleting] withRowAnimation:UITableViewRowAnimationRight];
 }
 
 - (void)exchangeObjectAtIndex:(NSInteger)firstIndex withObjectAtIndex:(NSInteger)secondIndex
 {
-    [self.manager exchangeNoteAtIndex:firstIndex withNoteAtIndex:secondIndex fromNotebook:self.currentNotebook];
+    [self.noteManager exchangeNoteAtIndex:firstIndex withNoteAtIndex:secondIndex fromNotebook:self.currentNotebook];
 }
 
 #pragma mark -
@@ -158,7 +175,7 @@
 
 -(void)onNoteCreated
 {
-    self.notesArray = [self.manager getNoteListForNotebookWithName:self.currentNotebook];
+    self.notesArray = [self.noteManager getNoteListForNotebookWithName:self.currentNotebook];
     [self.tableView reloadData];
 }
 
@@ -166,22 +183,6 @@
 #pragma mark LeftPanelViewController delegates
 
 - (void)hideLeftPanel
-{
-    [self hideDrawer];
-}
-
-- (void)showDrawer
-{
-    [self.view bringSubviewToFront:self.bluredView];
-    [self.view bringSubviewToFront:self.leftPanelViewController.view];
-    self.leftPanelViewController.isHidden = NO;
-    [UIView animateWithDuration:0.5 animations:^{
-        self.bluredView.alpha = 0.9;
-        self.leftPanelViewController.view.frame = CGRectMake(0, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
-    }];
-}
-
-- (void)hideDrawer
 {
     self.leftPanelViewController.isHidden = YES;
     [UIView animateWithDuration:0.5 animations:^{
@@ -192,12 +193,49 @@
     }];
 }
 
+- (void)showLeftPanel
+{
+    if(!self.settingsPanelViewController.isHidden)
+    {
+        [self hideSettings];
+    }
+    [self.view bringSubviewToFront:self.bluredView];
+    [self.view bringSubviewToFront:self.leftPanelViewController.view];
+    self.leftPanelViewController.isHidden = NO;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.bluredView.alpha = 0.9;
+        self.leftPanelViewController.view.frame = CGRectMake(0, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
+    }];
+}
+
+- (void)hideSettings
+{
+    self.settingsPanelViewController.isHidden = YES;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.settingsPanelViewController.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
+    }];
+}
+
+- (void)showSettings
+{
+    [self hideLeftPanel];
+    if(self.settingsPanelViewController == nil)
+    {
+         [self setupSettingsPanel];
+    }
+    [self.view bringSubviewToFront:self.settingsPanelViewController.view];
+    self.settingsPanelViewController.isHidden = NO;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.settingsPanelViewController.view.frame = CGRectMake(0, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
+    }];
+}
+
 #pragma mark -
 #pragma mark Gesture recogniser delegates
 
 - (void)tapGestureRecognised:(UITapGestureRecognizer *)tap
 {
-    [self hideDrawer];
+    [self hideLeftPanel];
 }
 
 @end

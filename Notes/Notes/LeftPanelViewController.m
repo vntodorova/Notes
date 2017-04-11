@@ -12,6 +12,7 @@
 #import "Defines.h"
 #import "Reminder.h"
 #import "LayoutProvider.h"
+#import "SettingsPanelViewController.h"
 
 @interface LeftPanelViewController()
 
@@ -134,6 +135,11 @@
     [self.tableView endUpdates];
 }
 
+- (IBAction)settingsButtonClicked:(UIButton *)sender
+{
+    [self.delegate showSettings];
+}
+
 #pragma mark -
 #pragma mark TableView delegates
 
@@ -252,4 +258,5 @@
 {
     [self.delegate hideLeftPanel];
 }
+
 @end

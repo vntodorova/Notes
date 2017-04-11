@@ -9,9 +9,11 @@
 #import "LayoutProvider.h"
 #import "Defines.h"
 #import "DateTimeManager.h"
+#import "ThemeManager.h"
 
 @interface LayoutProvider()
 @property DateTimeManager *dateTimeManager;
+@property ThemeManager *themeManager;
 @end
 
 static LayoutProvider *sharedInstance = nil;
@@ -32,6 +34,7 @@ static dispatch_once_t predicate = 0;
     self = [super init];
     if (self) {
         self.dateTimeManager = [[DateTimeManager alloc] init];
+        self.themeManager = [ThemeManager sharedInstance];
     }
     return self;
 }
@@ -39,7 +42,7 @@ static dispatch_once_t predicate = 0;
 - (UIBarButtonItem *)setupLeftBarButton:(id)target withSelector:(SEL)selector;
 {
     UIButton *leftBarButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, BUTTONS_WIDTH, BUTTONS_HEIGHT)];
-    [leftBarButton setBackgroundImage:[UIImage imageNamed:@"menu_button.png"] forState:UIControlStateNormal];
+    [leftBarButton setBackgroundImage:[self.themeManager.styles objectForKey:MENU_IMAGE] forState:UIControlStateNormal];
     [leftBarButton addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
     return [[UIBarButtonItem alloc] initWithCustomView:leftBarButton];
 }
@@ -47,7 +50,7 @@ static dispatch_once_t predicate = 0;
 - (UIBarButtonItem *)setupRightBarButton:(id)target withSelector:(SEL)selector;
 {
     UIButton *rightBarButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, BUTTONS_WIDTH, BUTTONS_HEIGHT)];
-    [rightBarButton setBackgroundImage:[UIImage imageNamed:@"plus.png"] forState:UIControlStateNormal];
+    [rightBarButton setBackgroundImage:[self.themeManager.styles objectForKey:PLUS_IMAGE] forState:UIControlStateNormal];
     [rightBarButton addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
     return [[UIBarButtonItem alloc] initWithCustomView:rightBarButton];
 }
@@ -55,7 +58,12 @@ static dispatch_once_t predicate = 0;
 - (TableViewCell *)getNewTableViewCell:(UITableView *)tableView withNote:(Note *)note
 {
     TableViewCell *cell = (TableViewCell *)[tableView dequeueReusableCellWithIdentifier:TABLEVIEW_CELL_ID];
-    [cell setupWithNote:note];
+    cell.nameLabel.text = note.name;
+    cell.infoLabel.text = note.dateCreated;
+    cell.cellNote = note;
+    cell.layer.borderWidth = 0.5;
+    cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    cell.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_CELL_COLOR];
     return cell;
 }
 

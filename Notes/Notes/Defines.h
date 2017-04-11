@@ -9,8 +9,8 @@
 #ifndef Defines_h
 #define Defines_h
 
-#define BUTTONS_HEIGHT 30
-#define BUTTONS_WIDTH 30
+#define BUTTONS_HEIGHT 25
+#define BUTTONS_WIDTH 25
 
 #define SMALL_BUTTONS_WIDTH 40
 #define SMALL_BUTTONS_HEIGHT 40
@@ -20,6 +20,7 @@
 #define TABLEVIEW_CELL_HEIGHT 70
 
 #define LEFT_PANEL_NIBNAME @"LeftPanelViewController"
+#define SETTINGS_PANEL_NIBNAME @"SettingsPanelViewController"
 #define NOTE_CELL_ID @"NoteCell"
 #define NOTEBOOK_CELL_ID @"NotebookCell"
 #define REMINDER_CELL_ID @"ReminderCell"
@@ -51,5 +52,10 @@
 #define NOTE_BODY_FILE @"body.html"
 #define NOTE_TAGS_FILE @"tags.txt"
 #define NOTE_DATE_FILE @"date.txt"
+
+#define TABLEVIEW_BACKGROUND_COLOR @"TableViewBackgroundColor"
+#define TABLEVIEW_CELL_COLOR @"TableViewCellColor"
+#define PLUS_IMAGE @"PlusImage"
+#define MENU_IMAGE @"MenuImage"
 
 #endif /* Defines_h */

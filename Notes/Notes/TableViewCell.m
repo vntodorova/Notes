@@ -18,15 +18,6 @@
 
 @implementation TableViewCell
 
-- (void)setupWithNote:(Note *)note
-{
-    self.nameLabel.text = note.name;
-    self.infoLabel.text = note.dateCreated;
-    self.cellNote = note;
-    self.layer.borderWidth = 0.5;
-    self.layer.borderColor = [UIColor lightGrayColor].CGColor;
-}
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];

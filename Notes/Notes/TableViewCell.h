@@ -19,6 +19,4 @@
 @property (nonatomic, weak) UITableView *tableView;
 @property Note* cellNote;
 
-- (void)setupWithNote:(Note *)note;
-
 @end

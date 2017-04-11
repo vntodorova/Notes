@@ -26,6 +26,9 @@
                     <rect key="frame" x="90" y="668" width="71" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" title="Settings"/>
+                    <connections>
+                        <action selector="settingsButtonClicked:" destination="-1" eventType="touchUpInside" id="z9q-10-yat"/>
+                    </connections>
                 </button>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="a8w-5B-dWT">
                     <rect key="frame" x="5" y="136" width="240" height="472"/>

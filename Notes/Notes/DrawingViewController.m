@@ -11,6 +11,7 @@
 
 @interface DrawingViewController()
 @property UIVisualEffectView *bluredView;
+@property BOOL statusBarHidden;
 @end
 
 @implementation DrawingViewController
@@ -65,8 +66,6 @@
     saveButton.frame = CGRectMake(0, 0, 40, BUTTONS_HEIGHT);
     UIBarButtonItem *saveToolbarButton = [[UIBarButtonItem alloc] initWithCustomView:saveButton];
     
-    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    
     UIButton *settingsButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, BUTTONS_WIDTH, BUTTONS_HEIGHT)];
     [settingsButton setBackgroundImage:[UIImage imageNamed:@"settings.png"] forState:UIControlStateNormal];
     [settingsButton addTarget:self action:@selector(settingsButtonPressed) forControlEvents:UIControlEventTouchUpInside];
@@ -87,10 +86,9 @@
     [colorButton addTarget:self action:@selector(colorPickerButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *colorToolbarButton = [[UIBarButtonItem alloc] initWithCustomView:colorButton];
     
-    NSArray* buttonsArray = [NSArray arrayWithObjects: saveToolbarButton, flexibleSpace,settingsToolbarButton, eraserToolbarButton, penToolbarButton, colorToolbarButton, nil];
+    NSArray *leftButtonsArray = [NSArray arrayWithObjects:saveToolbarButton, settingsToolbarButton, eraserToolbarButton, penToolbarButton, colorToolbarButton, nil];
     
-    [self setToolbarItems:buttonsArray];
-    [self.navigationController setToolbarHidden:NO animated:YES];
+    self.navigationItem.rightBarButtonItems = leftButtonsArray;
 }
 
 - (void)setBrushColor:(UIColor *)newColor
@@ -163,7 +161,6 @@
 
 - (void)showSettingsPanel
 {
-    
     self.bluredView.frame = CGRectMake(self.settingsPanel.frame.origin.x, self.settingsPanel.frame.origin.y, self.settingsPanel.frame.size.width, self.settingsPanel.frame.size.height + 20);
     [self.bluredView setHidden:NO];
     [self.settingsPanel setHidden:NO];
@@ -186,6 +183,11 @@
 
 #pragma mark -
 #pragma mark Button methods
+
+- (void)discardButtonPressed
+{
+    
+}
 
 - (void)saveButtonPressed
 {
