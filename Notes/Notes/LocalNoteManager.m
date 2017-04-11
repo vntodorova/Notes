@@ -21,7 +21,8 @@
 - (instancetype)init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         self.notebookList = [[NSMutableDictionary alloc] init];
         self.notebookObjectList = [[NSMutableArray alloc] init];
         self.contentPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
@@ -72,7 +73,6 @@
     NSString *path = [self.contentPath stringByAppendingPathComponent:notebook.name];
     
     [self deleteItemAtPath:path];
-    
 }
 
 - (void)removeNote:(Note *)note fromNotebook:(NSString *)notebookName
@@ -81,18 +81,16 @@
     {
         return;
     }
-    else
-    {
-        NSString *path = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-                                stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
-                               stringByAppendingPathComponent:notebookName]
-                              stringByAppendingPathComponent:note.name];
+
+    NSString *path = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+                            stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
+                            stringByAppendingPathComponent:notebookName]
+                            stringByAppendingPathComponent:note.name];
         
-        NSMutableArray *array = [self.notebookList objectForKey:notebookName];
-        [array removeObject:note];
-        
-        [self deleteItemAtPath:path];
-    }
+    NSMutableArray *array = [self.notebookList objectForKey:notebookName];
+    [array removeObject:note];
+    
+    [self deleteItemAtPath:path];
 }
 
 - (NSArray *)getNotebookList
@@ -109,7 +107,7 @@
     {
         @throw [NSException exceptionWithName:@"FileNotFoundException"
                                        reason:error.description
-                                     userInfo:nil];;
+                                     userInfo:nil];
     }
 }
 
@@ -160,6 +158,26 @@
     [self saveData:[self extractTags:newNote.tags]  toFile:[fileRoot stringByAppendingPathComponent:NOTE_TAGS_FILE]];
     [self saveData:newNote.body                     toFile:[fileRoot stringByAppendingPathComponent:NOTE_BODY_FILE]];
     [self saveData:newNote.dateCreated              toFile:[fileRoot stringByAppendingPathComponent:NOTE_DATE_FILE]];
+    [self coppyFilesFromTempTo:fileRoot];
+}
+
+-(void) coppyFilesFromTempTo:(NSString*) destination
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString* tempFolderPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:TEMP_FOLDER];
+    NSArray *directoryContents = [self getDirectoryContentForPath:tempFolderPath];
+    
+    for(NSString *imageName in directoryContents)
+    {
+        BOOL isHidden = [imageName hasPrefix:@"."];
+        if(!isHidden)
+        {
+            NSString *imageSourcePath = [tempFolderPath stringByAppendingPathComponent:imageName];
+            NSString *imageDestinationPath = [destination stringByAppendingPathComponent:imageName];
+            
+            [fileManager copyItemAtPath:imageSourcePath toPath:imageDestinationPath error:nil];
+        }
+    }
 }
 
 -(void) saveData:(NSString*) fileContent toFile:(NSString*) path
@@ -170,15 +188,21 @@
 
 -(void) isValidDirectory:(NSString*) path
 {
-    NSFileManager *fm = [NSFileManager defaultManager];
-    if([fm fileExistsAtPath:path isDirectory:nil])
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if([fileManager fileExistsAtPath:path isDirectory:nil])
     {
         return;
     }
     else
     {
-        [fm createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
+        [self createFoldarAtPath:path];
     }
+}
+
+-(void) createFoldarAtPath:(NSString*) path
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
 }
 
 - (NSString*) extractTags:(NSArray*) tags
@@ -207,7 +231,6 @@
     }
 }
 
-//trqbva da se loadvat pri request
 - (NSMutableArray*) loadNotesForNotebook:(Notebook*) notebook
 {
     NSString *path = [self.contentPath stringByAppendingPathComponent:notebook.name];
@@ -253,11 +276,6 @@
     NSString *tags = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_TAGS_FILE]];
     note.tags = [tags componentsSeparatedByString:@" "];
     return note;
-}
-
-- (NSString*) loadNoteBodyFromPath:(NSString*) path
-{
-    return nil;
 }
 
 - (NSString*)loadDataFromFilePath:(NSString*) path

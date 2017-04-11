@@ -45,6 +45,9 @@
 #define NOTE_CREATED_EVENT @"NoteCreatedEvent"
 
 #define NOTE_NOTEBOOKS_FOLDER @"Notebooks"
+#define TEMP_FOLDER @"Temp"
+
+
 #define NOTE_BODY_FILE @"body.html"
 #define NOTE_TAGS_FILE @"tags.txt"
 #define NOTE_DATE_FILE @"date.txt"

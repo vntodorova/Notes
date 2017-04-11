@@ -18,7 +18,11 @@
 @property (nonatomic, strong) NSMutableArray *textSizeList;
 @property (nonatomic, strong) NSMutableArray *noteBookList;
 @property (nonatomic, strong) LocalNoteManager *manager;
+@property (nonatomic, strong) NSString *tempFolderPath;
+@property int imageIndex;
 @end
+
+
 
 @implementation NoteCreationController
 
@@ -26,29 +30,54 @@
 -(instancetype)initWithManager:(LocalNoteManager *)manager
 {
     self = [super self];
+    
     self.manager = manager;
+    
+    self.hiddenButtonsList = [[NSMutableArray alloc] init];
+    self.fontList = [[NSMutableArray alloc] init];
+    self.textSizeList = [[NSMutableArray alloc] init];
+    
+    self.imageIndex = 0;
+    
     return self;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.hiddenButtonsList = [[NSMutableArray alloc] init];
-    self.fontList = [[NSMutableArray alloc] init];
-    self.textSizeList = [[NSMutableArray alloc] init];
     
     [self inflateFontsList];
     [self inflateTextSizeList];
-
-    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"emptyfile.html"];
-    
-    NSURL *indexFileURL = [[NSURL alloc] initWithString:filePath];
-    
-    [self.noteBody loadRequest:[NSURLRequest requestWithURL:indexFileURL]];
+    [self deleteTempFolder];
+    [self loadNoteTemplateHTML];
+    [self createTempFolder];
     
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc]
                                      initWithTarget:self
                                              action:@selector(dismissKeyboard)]];
+}
+
+-(void) loadNoteTemplateHTML
+{
+    NSString *emptyFilePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+                               stringByAppendingPathComponent:@"emptyfile.html"];
+    
+    NSURL *emptyFileURL = [[NSURL alloc] initWithString:emptyFilePath];
+    [self.noteBody loadRequest:[NSURLRequest requestWithURL:emptyFileURL]];
+    
+}
+
+-(void) createTempFolder
+{
+    self.tempFolderPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:TEMP_FOLDER];
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    [fm createDirectoryAtPath:self.tempFolderPath withIntermediateDirectories:YES attributes:nil error:nil];
+}
+
+-(void) deleteTempFolder
+{
+    [[NSFileManager defaultManager] removeItemAtPath:self.tempFolderPath error:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -60,7 +89,6 @@
 {
     if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
         [self setNoteContent];
-       // [self.delegate onDraftCreated:self.note];
     }
     [super viewWillDisappear:animated];
 }
@@ -86,6 +114,11 @@
 
 - (void)onCameraClick
 {
+    [self showImagePicker];
+}
+
+-(void) showImagePicker
+{
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     picker.delegate = self;
     picker.allowsEditing = YES;
@@ -96,16 +129,48 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
-    NSLog(@"%@", chosenImage.description);
-//    self.imageView.image = chosenImage;
+    NSString *imagePath = [self.tempFolderPath stringByAppendingPathComponent:[NSString stringWithFormat:@"photo%d.png", self.imageIndex]];
+    
+    [self saveImageInTempFolder:info imagePath:imagePath];
+    [self insertImageAtEndOfWebview:imagePath];
     
     [picker dismissViewControllerAnimated:YES completion:NULL];
+}
+
+-(void) saveImageInTempFolder:(NSDictionary*) imageInfo imagePath:(NSString*) imagePath
+{
+    NSString *mediaType = [imageInfo objectForKey:UIImagePickerControllerMediaType];
+    if ([mediaType isEqualToString:@"public.image"])
+    {
+        UIImage *image = [imageInfo objectForKey:UIImagePickerControllerOriginalImage];
+        NSData *data = UIImagePNGRepresentation(image);
+        [data writeToFile:imagePath atomically:YES];
+    }
+}
+
+-(void) insertImageAtEndOfWebview:(NSString*) imagePath
+{
+    NSMutableString *noteBody = [[NSMutableString alloc]initWithString:[self getNoteBodyHTML]];
+    
+    NSString *imageHtml = [NSString stringWithFormat:@"<img src=\"%@\" alt=\"\" style=\"width:150;height:150;\">", imagePath];
+    
+    NSString *path = [[NSBundle mainBundle] bundlePath];
+    NSURL *baseURL = [NSURL fileURLWithPath:path];
+    
+    [noteBody insertString:imageHtml atIndex:noteBody.length - 27];
+   
+    [self.noteBody loadHTMLString:noteBody baseURL:baseURL];
+    self.imageIndex++;
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [picker dismissViewControllerAnimated:YES completion:NULL];
+}
+
+-(NSString*) getNoteBodyHTML
+{
+    return [self.noteBody stringByEvaluatingJavaScriptFromString:@"document.documentElement.outerHTML"];
 }
 
 - (void)onDrawingClick
@@ -139,11 +204,16 @@
 {
     self.note.name = self.noteName.text;
     self.note.tags = [self getTagsFromText:self.noteTags.text];
-    self.note.body = [self.noteBody stringByEvaluatingJavaScriptFromString:@"document.documentElement.outerHTML"];
+    self.note.body = [self changeHTMLImagePathsToLocal:[self getNoteBodyHTML]];
     
     NSDateFormatter *dateFormatter=[[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"HH:mm:ss, dd-MM-yyyy"];
     self.note.dateCreated = [dateFormatter stringFromDate:[NSDate date]];
+}
+
+-(NSString*) changeHTMLImagePathsToLocal:(NSString*) html
+{
+    return [html stringByReplacingOccurrencesOfString:self.tempFolderPath withString:@""];
 }
 
 - (IBAction)onSettingsSelected:(id)sender
