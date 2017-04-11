@@ -125,10 +125,14 @@
 - (void)addButtonPressed
 {
     Note* note = [[Note alloc] init];
-    note.body = @"This text is here to be eddited and tested";
-    
+    [self showNoteCreationControllerWithNote:note];
+}
+
+-(void) showNoteCreationControllerWithNote:(Note *) note
+{
     NoteCreationController *noteCreationController = [[NoteCreationController alloc] initWithManager:self.noteManager];
     noteCreationController.note = note;
+    noteCreationController.currentNotebook = self.currentNotebook;
     [self.navigationController pushViewController:noteCreationController animated:YES];
 }
 
@@ -145,7 +149,7 @@
 
 - (void)tapGestureRecognisedOnCell:(TableViewCell *)cell
 {
-    NSLog(@"Tap");
+    [self showNoteCreationControllerWithNote:cell.cellNote];
 }
 
 - (void)exchangeObjectAtIndex:(NSInteger)firstIndex withObjectAtIndex:(NSInteger)secondIndex

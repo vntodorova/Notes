@@ -19,6 +19,8 @@
 @property (nonatomic, strong) NSMutableArray *noteBookList;
 @property (nonatomic, strong) LocalNoteManager *manager;
 @property (nonatomic, strong) NSString *tempFolderPath;
+
+
 @property int imageIndex;
 @end
 
@@ -32,7 +34,7 @@
     self = [super self];
     
     self.manager = manager;
-    
+    self.tempFolderPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:TEMP_FOLDER];
     self.hiddenButtonsList = [[NSMutableArray alloc] init];
     self.fontList = [[NSMutableArray alloc] init];
     self.textSizeList = [[NSMutableArray alloc] init];
@@ -48,13 +50,27 @@
     
     [self inflateFontsList];
     [self inflateTextSizeList];
+    
     [self deleteTempFolder];
-    [self loadNoteTemplateHTML];
     [self createTempFolder];
+    
+    [self loadHTML];
     
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc]
                                      initWithTarget:self
                                              action:@selector(dismissKeyboard)]];
+}
+
+-(void) loadHTML
+{
+    if(self.note.name.length > 0)
+    {
+        [self loadSavedHtml];
+    }
+    else
+    {
+        [self loadNoteTemplateHTML];
+    }
 }
 
 -(void) loadNoteTemplateHTML
@@ -64,13 +80,35 @@
     
     NSURL *emptyFileURL = [[NSURL alloc] initWithString:emptyFilePath];
     [self.noteBody loadRequest:[NSURLRequest requestWithURL:emptyFileURL]];
-    
 }
+
+-(void) loadSavedHtml
+{
+    NSString *convertedHTML = [self convertLoadableStringHTML:self.note.body];
+    NSString *path = [[NSBundle mainBundle] bundlePath];
+    NSURL *baseURL = [NSURL fileURLWithPath:path];
+    [self.noteBody loadHTMLString:convertedHTML baseURL:baseURL];
+}
+
+-(NSString*) convertLoadableStringHTML:(NSString *)html
+{
+    NSString *convertedHTML = html.description;
+    
+    NSString *loadedFilePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+                                    stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
+                                    stringByAppendingPathComponent:self.currentNotebook]
+                                    stringByAppendingPathComponent:self.note.name];
+    
+    NSString *stringForReplace = @"<img src=\"";
+    NSString *stringReplaced = [NSString stringWithFormat:@"%@%@/", stringForReplace, loadedFilePath];
+
+    convertedHTML = [convertedHTML stringByReplacingOccurrencesOfString:stringForReplace withString:stringReplaced];
+    return convertedHTML;
+}
+
 
 -(void) createTempFolder
 {
-    self.tempFolderPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:TEMP_FOLDER];
-    
     NSFileManager *fm = [NSFileManager defaultManager];
     [fm createDirectoryAtPath:self.tempFolderPath withIntermediateDirectories:YES attributes:nil error:nil];
 }
@@ -88,7 +126,7 @@
 -(void) viewWillDisappear:(BOOL)animated
 {
     if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
-        [self setNoteContent];
+        
     }
     [super viewWillDisappear:animated];
 }
@@ -129,12 +167,18 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    NSString *imagePath = [self.tempFolderPath stringByAppendingPathComponent:[NSString stringWithFormat:@"photo%d.png", self.imageIndex]];
+    NSString *imagePath = [self.tempFolderPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png",[self getCurrentTime]]];
     
     [self saveImageInTempFolder:info imagePath:imagePath];
     [self insertImageAtEndOfWebview:imagePath];
     
     [picker dismissViewControllerAnimated:YES completion:NULL];
+}
+
+-(NSString*) getCurrentTime
+{
+    NSLocale* currentLocale = [NSLocale currentLocale];
+    return [[NSDate date] descriptionWithLocale:currentLocale];
 }
 
 -(void) saveImageInTempFolder:(NSDictionary*) imageInfo imagePath:(NSString*) imagePath
@@ -157,10 +201,10 @@
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSURL *baseURL = [NSURL fileURLWithPath:path];
     
-    [noteBody insertString:imageHtml atIndex:noteBody.length - 27];
-   
+    NSRange range = [noteBody rangeOfString:@"</div>"];
+    [noteBody insertString:imageHtml atIndex:range.location];
+    
     [self.noteBody loadHTMLString:noteBody baseURL:baseURL];
-    self.imageIndex++;
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
@@ -202,7 +246,15 @@
 
 -(void) setNoteContent
 {
-    self.note.name = self.noteName.text;
+    if(self.noteName.text.length > 0)
+    {
+        self.note.name = self.noteName.text;
+    }
+    else
+    {
+        self.note.name = UNNAMED_NOTE;
+    }
+    
     self.note.tags = [self getTagsFromText:self.noteTags.text];
     self.note.body = [self changeHTMLImagePathsToLocal:[self getNoteBodyHTML]];
     
@@ -213,7 +265,8 @@
 
 -(NSString*) changeHTMLImagePathsToLocal:(NSString*) html
 {
-    return [html stringByReplacingOccurrencesOfString:self.tempFolderPath withString:@""];
+    NSString *stringForReplace = [self.tempFolderPath stringByAppendingString:@"/"];
+    return [html stringByReplacingOccurrencesOfString:stringForReplace withString:@""];
 }
 
 - (IBAction)onSettingsSelected:(id)sender

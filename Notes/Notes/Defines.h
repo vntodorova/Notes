@@ -58,4 +58,6 @@
 #define PLUS_IMAGE @"PlusImage"
 #define MENU_IMAGE @"MenuImage"
 
+#define UNNAMED_NOTE @"Unnamed"
+
 #endif /* Defines_h */

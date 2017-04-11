@@ -20,6 +20,8 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *noteName;
 
+@property (nonatomic, strong) NSString *currentNotebook;
+
 @property Note *note;
 
 - (IBAction)onOptionsClick:(id)sender;
