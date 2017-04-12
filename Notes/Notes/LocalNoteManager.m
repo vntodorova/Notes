@@ -8,6 +8,8 @@
 
 #import "LocalNoteManager.h"
 #import "Defines.h"
+#import "Notebook.h"
+#import "Note.h"
 
 @interface LocalNoteManager()
 

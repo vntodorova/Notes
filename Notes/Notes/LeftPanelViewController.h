@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PublicProtocols.h"
+#import "Protocols.h"
 
 @class Notebook;
 @class Reminder;
@@ -15,15 +15,14 @@
 
 @interface LeftPanelViewController : UIViewController <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate>
 
--(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil manager:(LocalNoteManager *)noteManager;
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil manager:(LocalNoteManager *)noteManager;
+- (IBAction)settingsButtonClicked:(UIButton *)sender;
 - (void)loadTheme;
 
 @property (weak, nonatomic) IBOutlet UIButton *facebookButton;
 @property (weak, nonatomic) IBOutlet UIButton *googleButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, weak) id <LeftPanelDelegate> delegate;
-- (IBAction)settingsButtonClicked:(UIButton *)sender;
-
+@property (weak, nonatomic) id <LeftPanelDelegate> delegate;
 @property NSMutableDictionary *tableViewDataSource;
 @property NSMutableDictionary *notebooksClicked;
 @property BOOL isHidden;

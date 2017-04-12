@@ -11,9 +11,11 @@
 #import "LayoutProvider.h"
 
 @interface DrawingViewController()
+
 @property UIVisualEffectView *bluredView;
 @property BOOL statusBarHidden;
 @property LayoutProvider *layoutProvider;
+
 @end
 
 @implementation DrawingViewController

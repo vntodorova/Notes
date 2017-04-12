@@ -6,21 +6,24 @@
 //  Copyright © 2017 Nemetschek DreamTeam. All rights reserved.
 //
 
-#import "ViewController.h"
+#import <UIKit/UIKit.h>
+#import "Protocols.h"
 
+@class ViewController;
+@class ViewController;
 @class ThemeManager;
+@class LocalNoteManager;
 
-@interface SettingsPanelViewController : ViewController <UIPickerViewDelegate, UIPickerViewDataSource>
+@interface SettingsPanelViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource>
 
--(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil manager:(LocalNoteManager *)noteManager;
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil manager:(LocalNoteManager *)noteManager;
 
-@property (weak, nonatomic) IBOutlet UIPickerView *pickerView;
-@property (weak, nonatomic) IBOutlet UILabel *textLabel;
 - (IBAction)saveButtonClicked:(UIButton *)sender;
 - (IBAction)cancelButtonClicked:(UIButton *)sender;
 
+@property (weak, nonatomic) IBOutlet UIPickerView *pickerView;
+@property (weak, nonatomic) IBOutlet UILabel *textLabel;
 @property (nonatomic, weak) id <LeftPanelDelegate> delegate;
-
 @property BOOL isHidden;
 @property ThemeManager *themeManager;
 

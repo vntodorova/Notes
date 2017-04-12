@@ -7,22 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "NoteCreationController.h"
-#import "PublicProtocols.h"
+#import "Protocols.h"
 
 @class LeftPanelViewController;
 @class Note;
 @class LayoutProvider;
 @class SettingsPanelViewController;
+@class NoteCreationController;
 
 @interface ViewController : UIViewController <UITableViewDataSource,UITableViewDelegate, TableViewCellDelegate, LeftPanelDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
-@property (nonatomic, strong) LeftPanelViewController *leftPanelViewController;
-@property (nonatomic, strong) SettingsPanelViewController *settingsPanelViewController;
-
-@property NSArray<Note *> *notesArray;
-
 
 @end
 

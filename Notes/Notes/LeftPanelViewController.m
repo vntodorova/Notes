@@ -14,6 +14,7 @@
 #import "LayoutProvider.h"
 #import "SettingsPanelViewController.h"
 #import "ThemeManager.h"
+#import "LocalNoteManager.h"
 
 @interface LeftPanelViewController()
 

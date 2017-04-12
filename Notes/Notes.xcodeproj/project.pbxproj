@@ -78,7 +78,6 @@
 		1D9EF8B11E96322100B35777 /* Protocols.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Protocols.h; sourceTree = "<group>"; };
 		1D9EF8B21E96393A00B35777 /* LocalNoteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalNoteManager.h; sourceTree = "<group>"; };
 		1D9EF8B31E96393A00B35777 /* LocalNoteManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalNoteManager.m; sourceTree = "<group>"; };
-		1D9EF8B51E965A7100B35777 /* PublicProtocols.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PublicProtocols.h; sourceTree = "<group>"; };
 		B506D9C71E8E3CBB00555F1D /* LayoutProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutProvider.h; sourceTree = "<group>"; };
 		B506D9C81E8E3CBB00555F1D /* LayoutProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayoutProvider.m; sourceTree = "<group>"; };
 		B526CB561E939E4C00FF4FA8 /* LeftPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftPanelViewController.h; sourceTree = "<group>"; };
@@ -287,7 +286,6 @@
 				B5EFB3561E8CFFD80024C211 /* Assets.xcassets */,
 				B534C44D1E8D397700AD25F6 /* Defines.h */,
 				1D9EF8B11E96322100B35777 /* Protocols.h */,
-				1D9EF8B51E965A7100B35777 /* PublicProtocols.h */,
 				B5EFB35B1E8CFFD80024C211 /* Info.plist */,
 				B5EFB3581E8CFFD80024C211 /* LaunchScreen.storyboard */,
 				B5B8FB671E93E64D00A82813 /* Models */,

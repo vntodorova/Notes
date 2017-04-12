@@ -21,6 +21,9 @@
 @property (nonatomic, strong) LayoutProvider *layoutProvider;
 @property (nonatomic, strong) LocalNoteManager *noteManager;
 @property (nonatomic, strong) ThemeManager *themeManager;
+@property (nonatomic, strong) LeftPanelViewController *leftPanelViewController;
+@property (nonatomic, strong) SettingsPanelViewController *settingsPanelViewController;
+@property NSArray<Note *> *notesArray;
 @property NSString *currentNotebook;
 @property UIVisualEffectView *bluredView;
 @end

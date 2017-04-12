@@ -12,6 +12,7 @@
 #import "DrawingViewController.h"
 #import "ThemeManager.h"
 #import "LayoutProvider.h"
+#import "LocalNoteManager.h"
 
 @interface NoteCreationController ()
 

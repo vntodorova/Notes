@@ -12,14 +12,12 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *mainImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *tempImageView;
-@property (weak, nonatomic) IBOutlet UIImageView *colorPickerImageView;
 
 @property (weak, nonatomic) IBOutlet UILabel *sizeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *opacityLabel;
 @property (weak, nonatomic) IBOutlet UISlider *sizeSlider;
 @property (weak, nonatomic) IBOutlet UISlider *opacitySlider;
 @property (weak, nonatomic) IBOutlet UIView *settingsPanel;
-
 
 - (IBAction)sizeSliderChanged:(id)sender;
 - (IBAction)opacitySliderChanged:(id)sender;

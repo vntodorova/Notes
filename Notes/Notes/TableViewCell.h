@@ -7,8 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Note.h"
-#import "PublicProtocols.h"
+#import "Protocols.h"
 
 @interface TableViewCell : UITableViewCell <UIGestureRecognizerDelegate>
 
