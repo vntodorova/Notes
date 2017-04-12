@@ -100,9 +100,26 @@
 
 -(void) loadSavedHtml
 {
+    NSString *convertedHTML = [self convertLoadableStringHTML:self.note.body];
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSURL *baseURL = [NSURL fileURLWithPath:path];
-    [self.noteBody loadHTMLString:self.note.body baseURL:baseURL];
+    [self.noteBody loadHTMLString:convertedHTML baseURL:baseURL];
+}
+
+-(NSString*) convertLoadableStringHTML:(NSString *)html
+{
+    NSString *convertedHTML = html.description;
+    
+    NSString *loadedFilePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+                                    stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
+                                    stringByAppendingPathComponent:self.currentNotebook]
+                                    stringByAppendingPathComponent:self.note.name];
+    
+    NSString *stringForReplace = @"<img src=\"";
+    NSString *stringReplaced = [NSString stringWithFormat:@"%@%@/", stringForReplace, loadedFilePath];
+    
+    convertedHTML = [convertedHTML stringByReplacingOccurrencesOfString:stringForReplace withString:stringReplaced];
+    return convertedHTML;
 }
 
 -(void) createTempFolder
@@ -262,14 +279,21 @@
 
 -(NSString*) changeHTMLImagePathsToLocal:(NSString*) html
 {
-    NSString *loadedFilePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-                                  stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
-                                 stringByAppendingPathComponent:self.currentNotebook]
-                                stringByAppendingPathComponent:self.note.name];
+    NSString *notePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+                                    stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
+                                    stringByAppendingPathComponent:self.currentNotebook]
+                                    stringByAppendingPathComponent:self.note.name];
     
-    NSString *stringForReplace = self.tempFolderPath;
-    return [html stringByReplacingOccurrencesOfString:stringForReplace withString:loadedFilePath];
+    NSString *stringForReplace = [self.tempFolderPath stringByAppendingString:@"/"];
+    html = [html stringByReplacingOccurrencesOfString:stringForReplace withString:@""];
+    
+    stringForReplace = [notePath stringByAppendingString:@"/"];
+    html = [html stringByReplacingOccurrencesOfString:stringForReplace withString:@""];
+    
+    return html;
 }
+
+
 
 - (IBAction)onSettingsSelected:(id)sender
 {
