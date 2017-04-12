@@ -25,7 +25,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5UX-3b-ySm">
-                    <rect key="frame" x="15" y="622" width="46" height="30"/>
+                    <rect key="frame" x="15" y="627" width="46" height="30"/>
                     <state key="normal" title="Create"/>
                     <connections>
                         <action selector="onCreateClick:" destination="-1" eventType="touchUpInside" id="BUJ-VG-z3k"/>
@@ -44,10 +44,10 @@
                     <textInputTraits key="textInputTraits"/>
                 </textField>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0hH-eE-bxj">
-                    <rect key="frame" x="310" y="602" width="50" height="50"/>
+                    <rect key="frame" x="320" y="622" width="40" height="40"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="50" id="Tem-tT-Adh"/>
-                        <constraint firstAttribute="height" constant="50" id="ign-sI-pmg"/>
+                        <constraint firstAttribute="width" constant="40" id="Tem-tT-Adh"/>
+                        <constraint firstAttribute="height" constant="40" id="ign-sI-pmg"/>
                     </constraints>
                     <state key="normal" title="Options" image="light_theme_plus.png"/>
                     <connections>
@@ -159,7 +159,7 @@
                     </items>
                 </toolbar>
                 <webView alpha="0.40000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Udl-bA-HC1">
-                    <rect key="frame" x="15" y="149" width="345" height="458"/>
+                    <rect key="frame" x="15" y="149" width="345" height="463"/>
                     <color key="backgroundColor" red="0.36078431372549019" green="0.38823529411764707" blue="0.40392156862745099" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </webView>
             </subviews>
@@ -172,7 +172,7 @@
                 <constraint firstItem="5UX-3b-ySm" firstAttribute="top" secondItem="Udl-bA-HC1" secondAttribute="bottom" constant="15" id="arQ-RR-CrQ"/>
                 <constraint firstAttribute="trailing" secondItem="Fme-iL-Fez" secondAttribute="trailing" constant="15" id="bu2-gT-kgO"/>
                 <constraint firstItem="CnX-oi-qcZ" firstAttribute="top" secondItem="Fme-iL-Fez" secondAttribute="bottom" constant="15" id="cNA-B2-Hg6"/>
-                <constraint firstAttribute="bottom" secondItem="5UX-3b-ySm" secondAttribute="bottom" constant="15" id="du8-Cu-NYa"/>
+                <constraint firstAttribute="bottom" secondItem="5UX-3b-ySm" secondAttribute="bottom" constant="10" id="du8-Cu-NYa"/>
                 <constraint firstItem="CnX-oi-qcZ" firstAttribute="width" secondItem="Fme-iL-Fez" secondAttribute="width" id="iTL-DB-JIi"/>
                 <constraint firstItem="Udl-bA-HC1" firstAttribute="top" secondItem="CnX-oi-qcZ" secondAttribute="bottom" constant="15" id="jSI-r4-HoZ"/>
                 <constraint firstItem="JM0-5u-0lL" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="lr1-Gs-QBb"/>
@@ -181,8 +181,9 @@
                 <constraint firstItem="CnX-oi-qcZ" firstAttribute="leading" secondItem="Fme-iL-Fez" secondAttribute="leading" id="qvY-hA-Yiw"/>
                 <constraint firstItem="JM0-5u-0lL" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="r49-eu-5KL"/>
                 <constraint firstAttribute="trailing" secondItem="0hH-eE-bxj" secondAttribute="trailing" constant="15" id="tsO-xw-29H"/>
-                <constraint firstAttribute="bottom" secondItem="0hH-eE-bxj" secondAttribute="bottom" constant="15" id="yUT-Jk-nOx"/>
+                <constraint firstAttribute="bottom" secondItem="0hH-eE-bxj" secondAttribute="bottom" constant="5" id="yUT-Jk-nOx"/>
             </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="24.5" y="51.5"/>
         </view>
     </objects>

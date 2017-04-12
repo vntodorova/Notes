@@ -22,7 +22,6 @@
 @property (nonatomic, strong) LocalNoteManager *manager;
 @property (nonatomic, strong) ThemeManager *themeManager;
 @property (nonatomic, strong) NSString *tempFolderPath;
-@property (nonatomic, strong) LayoutProvider *layoutProvider;
 
 @property int imageIndex;
 @end
@@ -36,14 +35,12 @@
     self = [super self];
     
     self.manager = manager;
-    self.layoutProvider = [LayoutProvider sharedInstance];self.layoutProvider = [LayoutProvider sharedInstance];
     self.tempFolderPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:TEMP_FOLDER];
     self.hiddenButtonsList = [[NSMutableArray alloc] init];
     self.fontList = [[NSMutableArray alloc] init];
     self.textSizeList = [[NSMutableArray alloc] init];
     self.themeManager = [ThemeManager sharedInstance];
     self.imageIndex = 0;
-    self.noteName.backgroundColor = [UIColor colorWithRed:0.2f green:0.3f blue:0.4f alpha:0.50001f];
     return self;
 }
 
@@ -131,19 +128,6 @@
 -(void) deleteTempFolder
 {
     [[NSFileManager defaultManager] removeItemAtPath:self.tempFolderPath error:nil];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-}
-
--(void) viewWillDisappear:(BOOL)animated
-{
-    if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
-        
-    }
-    [super viewWillDisappear:animated];
 }
 
 #pragma mark Public
@@ -397,18 +381,7 @@
 
 - (void)dismissKeyboard
 {
-    if([self.noteName isFirstResponder])
-    {
-        [self.noteName resignFirstResponder];
-    }
-    else if([self.noteTags isFirstResponder])
-    {
-        [self.noteTags resignFirstResponder];
-    }
-    else if([self.noteBody isFirstResponder])
-    {
-        [self.noteBody resignFirstResponder];
-    }
+    [self.view endEditing:YES];
 }
 
 - (NSArray *)getTagsFromText:(NSString *) tagsText
