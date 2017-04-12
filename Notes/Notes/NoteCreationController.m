@@ -70,8 +70,8 @@
     {
         [self loadSavedHtml];
         self.noteName.text = self.note.name;
-        self.noteTags.text = @"#dummytag";
-        [self.createButton setTitle:@"Save" forState:UIControlStateNormal];
+        self.noteTags.text = [self buildTextFromTags: self.note.tags];
+        [self.createButton setTitle:REDACTATION_BUTTON_NAME forState:UIControlStateNormal];
     }
     else
     {
@@ -92,7 +92,7 @@
 -(void) loadNoteTemplateHTML
 {
     NSString *emptyFilePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-                               stringByAppendingPathComponent:@"emptyfile.html"];
+                               stringByAppendingPathComponent:EMPTY_FILE_NAME];
     
     NSURL *emptyFileURL = [[NSURL alloc] initWithString:emptyFilePath];
     [self.noteBody loadRequest:[NSURLRequest requestWithURL:emptyFileURL]];
@@ -100,28 +100,10 @@
 
 -(void) loadSavedHtml
 {
-    NSString *convertedHTML = [self convertLoadableStringHTML:self.note.body];
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSURL *baseURL = [NSURL fileURLWithPath:path];
-    [self.noteBody loadHTMLString:convertedHTML baseURL:baseURL];
+    [self.noteBody loadHTMLString:self.note.body baseURL:baseURL];
 }
-
--(NSString*) convertLoadableStringHTML:(NSString *)html
-{
-    NSString *convertedHTML = html.description;
-    
-    NSString *loadedFilePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-                                    stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
-                                    stringByAppendingPathComponent:self.currentNotebook]
-                                    stringByAppendingPathComponent:self.note.name];
-    
-    NSString *stringForReplace = @"<img src=\"";
-    NSString *stringReplaced = [NSString stringWithFormat:@"%@%@/", stringForReplace, loadedFilePath];
-
-    convertedHTML = [convertedHTML stringByReplacingOccurrencesOfString:stringForReplace withString:stringReplaced];
-    return convertedHTML;
-}
-
 
 -(void) createTempFolder
 {
@@ -193,8 +175,9 @@
 
 -(NSString*) getCurrentTime
 {
-    NSLocale* currentLocale = [NSLocale currentLocale];
-    return [[NSDate date] descriptionWithLocale:currentLocale];
+    NSDateFormatter *dateFormatter=[[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:TIME_DATE_FORMAT];
+    return [dateFormatter stringFromDate:[NSDate date]];
 }
 
 -(void) saveImageInTempFolder:(NSDictionary*) imageInfo imagePath:(NSString*) imagePath
@@ -212,7 +195,7 @@
 {
     NSMutableString *noteBody = [[NSMutableString alloc]initWithString:[self getNoteBodyHTML]];
     
-    NSString *imageHtml = [NSString stringWithFormat:@"<img src=\"%@\" alt=\"\" style=\"width:150;height:150;\">", imagePath];
+    NSString *imageHtml = [NSString stringWithFormat:DEFAULT_IMAGE_HTML, imagePath];
     
     NSString *path = [[NSBundle mainBundle] bundlePath];
     NSURL *baseURL = [NSURL fileURLWithPath:path];
@@ -230,7 +213,7 @@
 
 -(NSString*) getNoteBodyHTML
 {
-    return [self.noteBody stringByEvaluatingJavaScriptFromString:@"document.documentElement.outerHTML"];
+    return [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_GET_HTML];
 }
 
 - (void)onDrawingClick
@@ -274,15 +257,18 @@
     self.note.tags = [self getTagsFromText:self.noteTags.text];
     self.note.body = [self changeHTMLImagePathsToLocal:[self getNoteBodyHTML]];
     
-    NSDateFormatter *dateFormatter=[[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"HH:mm:ss, dd-MM-yyyy"];
-    self.note.dateCreated = [dateFormatter stringFromDate:[NSDate date]];
+    self.note.dateCreated = [self getCurrentTime];
 }
 
 -(NSString*) changeHTMLImagePathsToLocal:(NSString*) html
 {
-    NSString *stringForReplace = [self.tempFolderPath stringByAppendingString:@"/"];
-    return [html stringByReplacingOccurrencesOfString:stringForReplace withString:@""];
+    NSString *loadedFilePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+                                  stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
+                                 stringByAppendingPathComponent:self.currentNotebook]
+                                stringByAppendingPathComponent:self.note.name];
+    
+    NSString *stringForReplace = self.tempFolderPath;
+    return [html stringByReplacingOccurrencesOfString:stringForReplace withString:loadedFilePath];
 }
 
 - (IBAction)onSettingsSelected:(id)sender
@@ -292,27 +278,27 @@
 
 - (IBAction)onUnderlineSelected:(id)sender
 {
-    [self.noteBody stringByEvaluatingJavaScriptFromString:@"document.execCommand(\"Underline\")"];
+    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_UNDERLINE];
 }
 
 - (IBAction)onItalicStyleSelected:(id)sender
 {
-    [self.noteBody stringByEvaluatingJavaScriptFromString:@"document.execCommand(\"Italic\")"];
+    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_ITALIC];
 }
 
 - (IBAction)onBoldStyleSelected:(id)sender
 {
-    [self.noteBody stringByEvaluatingJavaScriptFromString:@"document.execCommand(\"Bold\")"];
+    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_BOLD];
 }
 
 - (void)updateNoteFont:(NSString*) font
 {
-    [self.noteBody stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"document.execCommand('fontName', false, '%@')", font]];
+    [self.noteBody stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:JS_COMMAND_FONT_TYPE, font]];
 }
 
 - (void)updateNoteSize:(NSString*) size
 {
-    [self.noteBody stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"document.execCommand('fontSize', false, '%@')", size]];
+    [self.noteBody stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:JS_COMMAND_FONT_SIZE, size]];
 }
 
 - (IBAction)onFontSelected:(id)sender
@@ -349,13 +335,13 @@
 
 - (void)displaySelectableMenuWithButton:(UIButton *) button list:(NSMutableArray*)nameList
 {
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Categories"
-                                                                   message:@"Choose category"
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:ALERT_DIALOG_TITLE
+                                                                   message:ALERT_DIALOG_MESSAGE
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
     
     
     
-    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:ALERT_DIALOG_CANCEL_BUTTON_NAME style:UIAlertActionStyleCancel handler:nil]];
     
     for (UIAlertAction* currentItem in nameList)
     {
@@ -401,9 +387,32 @@
     }
 }
 
-- (NSArray *)getTagsFromText:(NSString *) tags
+- (NSArray *)getTagsFromText:(NSString *) tagsText
 {
-    return nil;
+    NSArray *tagList;
+    NSCharacterSet *setOfIndicators = [NSCharacterSet characterSetWithCharactersInString:TAG_SEPARATION_INDICATORS];
+    tagList = [tagsText componentsSeparatedByCharactersInSet:setOfIndicators];
+    NSMutableArray *clearTagList = [[NSMutableArray alloc] init];
+    
+    for(NSString *tag in tagList)
+    {
+        if([tag isEqualToString:@""])
+        {
+            continue;
+        }
+        [clearTagList addObject:tag];
+    }
+    return clearTagList;
+}
+
+-(NSString *) buildTextFromTags:(NSArray *)tagsList
+{
+    NSMutableString *tagsText = [[NSMutableString alloc] init];
+    for(NSString *tag in tagsList)
+    {
+        [tagsText appendFormat:@"#%@ ",tag];
+    }
+    return tagsText;
 }
 
 - (void)createHiddenButtons:(UIButton *)sender
@@ -418,6 +427,7 @@
     
     optionsButtonX = sender.frame.origin.x - SMALL_BUTTON_DISTANCE;
     optionsButtonY = sender.frame.origin.y;
+    
     [self createButtonWithX:optionsButtonX
                        andY:optionsButtonY
                  baseButton:sender
@@ -446,7 +456,6 @@
                               0);
     
     [self.view addSubview:button];
-    
     
     [UIView animateWithDuration:0.5
                      animations:^

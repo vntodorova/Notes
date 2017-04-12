@@ -155,7 +155,7 @@
     
     [self isValidDirectory:fileRoot];
     
-    [self saveData:[self extractTags:newNote.tags]  toFile:[fileRoot stringByAppendingPathComponent:NOTE_TAGS_FILE]];
+    [self saveData:[self buildTagsForSave:newNote.tags]  toFile:[fileRoot stringByAppendingPathComponent:NOTE_TAGS_FILE]];
     [self saveData:newNote.body                     toFile:[fileRoot stringByAppendingPathComponent:NOTE_BODY_FILE]];
     [self saveData:newNote.dateCreated              toFile:[fileRoot stringByAppendingPathComponent:NOTE_DATE_FILE]];
     [self coppyFilesFromTempTo:fileRoot];
@@ -205,12 +205,12 @@
     [fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
 }
 
-- (NSString*) extractTags:(NSArray*) tags
+- (NSString*) buildTagsForSave:(NSArray*) tags
 {
     NSMutableString *tagsContent = [[NSMutableString alloc] init];
     for (NSString *tag in tags)
     {
-        [tagsContent appendString:[NSString stringWithFormat:@"%@ #", tag]];
+        [tagsContent appendString:[NSString stringWithFormat:@"#%@", tag]];
     }
     return tagsContent;
 }
@@ -274,7 +274,7 @@
     note.dateCreated = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_DATE_FILE]];
     
     NSString *tags = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_TAGS_FILE]];
-    note.tags = [tags componentsSeparatedByString:@" "];
+    note.tags = [self getTagsFromText:tags];
     return note;
 }
 
@@ -285,4 +285,21 @@
     return fileContents;
 }
 
+- (NSArray *)getTagsFromText:(NSString *) tagsText
+{
+    NSArray *tagList;
+    NSCharacterSet *setOfIndicators = [NSCharacterSet characterSetWithCharactersInString:TAG_SEPARATION_INDICATORS];
+    tagList = [tagsText componentsSeparatedByCharactersInSet:setOfIndicators];
+    NSMutableArray *clearTagList = [[NSMutableArray alloc] init];
+    
+    for(NSString *tag in tagList)
+    {
+        if([tag isEqualToString:@""])
+        {
+            continue;
+        }
+        [clearTagList addObject:tag];
+    }
+    return clearTagList;
+}
 @end

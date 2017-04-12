@@ -47,7 +47,7 @@
 
 #define NOTE_NOTEBOOKS_FOLDER @"Notebooks"
 #define TEMP_FOLDER @"Temp"
-
+#define EMPTY_FILE_NAME @"emptyfile.html"
 
 #define NOTE_BODY_FILE @"body.html"
 #define NOTE_TAGS_FILE @"tags.txt"
@@ -65,4 +65,22 @@
 
 #define UNNAMED_NOTE @"Unnamed"
 
+#define DEFAULT_IMAGE_HTML @"<img src=\"%@\" alt=\"\" style=\"width:150;height:150;\">"
+
+#define TIME_DATE_FORMAT @"HH:mm:ss, dd-MM-yyyy"
+
+#define TAG_SEPARATION_INDICATORS @"# "
+
+#define REDACTATION_BUTTON_NAME @"Save"
+
+#define JS_COMMAND_GET_HTML @"document.documentElement.outerHTML"
+#define JS_COMMAND_UNDERLINE @"document.execCommand(\"Underline\")"
+#define JS_COMMAND_ITALIC @"document.execCommand(\"Italic\")"
+#define JS_COMMAND_BOLD @"document.execCommand(\"Bold\")"
+#define JS_COMMAND_FONT_TYPE @"document.execCommand('fontName', false, '%@')"
+#define JS_COMMAND_FONT_SIZE @"document.execCommand('fontSize', false, '%@')"
+
+#define ALERT_DIALOG_TITLE @"Categories"
+#define ALERT_DIALOG_MESSAGE @"Choose category"
+#define ALERT_DIALOG_CANCEL_BUTTON_NAME @"Cancel"
 #endif /* Defines_h */
