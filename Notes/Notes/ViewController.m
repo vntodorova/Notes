@@ -68,6 +68,7 @@
 
 - (void)setupNavigationBar
 {
+    [self.navigationController.navigationBar setTintColor:[self.themeManager.styles objectForKey:TEXT_COLOR]];
     UIBarButtonItem *leftNavigationBarButton = [self.layoutProvider setupLeftBarButton:self
                                                                           withSelector:@selector(drawerButtonPressed)];
     self.navigationController.topViewController.navigationItem.leftBarButtonItem = leftNavigationBarButton;
@@ -78,7 +79,7 @@
     self.navigationController.topViewController.navigationItem.rightBarButtonItem = rightNavigationBarButton;
     rightNavigationBarButton.enabled = TRUE;
     
-    self.navigationController.topViewController.navigationItem.titleView = [[UISearchBar alloc] init];
+    self.navigationController.topViewController.navigationItem.titleView = [self.themeManager.styles objectForKey:SEARCH_BAR];
 }
 
 - (void)loadTheme
@@ -86,6 +87,7 @@
     self.tableView.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_BACKGROUND_COLOR];
     [self.navigationController.navigationBar setBarTintColor:[self.themeManager.styles objectForKey:NAVIGATION_BAR_COLOR]];
     [self.tableView reloadData];
+    [self setupNavigationBar];
 }
 
 - (void)setupLeftPanel

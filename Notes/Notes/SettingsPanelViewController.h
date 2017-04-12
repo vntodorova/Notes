@@ -15,6 +15,7 @@
 -(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil manager:(LocalNoteManager *)noteManager;
 
 @property (weak, nonatomic) IBOutlet UIPickerView *pickerView;
+@property (weak, nonatomic) IBOutlet UILabel *textLabel;
 - (IBAction)saveButtonClicked:(UIButton *)sender;
 - (IBAction)cancelButtonClicked:(UIButton *)sender;
 

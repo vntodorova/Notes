@@ -53,6 +53,7 @@
 #define NOTE_TAGS_FILE @"tags.txt"
 #define NOTE_DATE_FILE @"date.txt"
 
+#define SEARCH_BAR @"SearchBar"
 #define TABLEVIEW_BACKGROUND_COLOR @"TableViewBackgroundColor"
 #define TABLEVIEW_CELL_COLOR @"TableViewCellColor"
 #define BACKGROUND_COLOR @"BackgroundColor"

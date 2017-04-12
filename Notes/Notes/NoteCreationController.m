@@ -11,6 +11,7 @@
 #import "Notebook.h"
 #import "DrawingViewController.h"
 #import "ThemeManager.h"
+#import "LayoutProvider.h"
 
 @interface NoteCreationController ()
 
@@ -21,12 +22,10 @@
 @property (nonatomic, strong) LocalNoteManager *manager;
 @property (nonatomic, strong) ThemeManager *themeManager;
 @property (nonatomic, strong) NSString *tempFolderPath;
-
+@property (nonatomic, strong) LayoutProvider *layoutProvider;
 
 @property int imageIndex;
 @end
-
-
 
 @implementation NoteCreationController
 
@@ -37,6 +36,7 @@
     self = [super self];
     
     self.manager = manager;
+    self.layoutProvider = [LayoutProvider sharedInstance];self.layoutProvider = [LayoutProvider sharedInstance];
     self.tempFolderPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:TEMP_FOLDER];
     self.hiddenButtonsList = [[NSMutableArray alloc] init];
     self.fontList = [[NSMutableArray alloc] init];
@@ -83,6 +83,7 @@
     [self.noteBody setAlpha:[[self.themeManager.styles objectForKey:TEXTFIELDS_ALPHA] floatValue]];
     [self.noteName setAlpha:[[self.themeManager.styles objectForKey:TEXTFIELDS_ALPHA] floatValue]];
     [self.noteTags setAlpha:[[self.themeManager.styles objectForKey:TEXTFIELDS_ALPHA] floatValue]];
+    [self.view setTintColor:[self.themeManager.styles objectForKey:TEXT_COLOR]];
 }
 
 -(void) loadNoteTemplateHTML

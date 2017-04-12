@@ -8,10 +8,12 @@
 
 #import "DrawingViewController.h"
 #import "Defines.h"
+#import "LayoutProvider.h"
 
 @interface DrawingViewController()
 @property UIVisualEffectView *bluredView;
 @property BOOL statusBarHidden;
+@property LayoutProvider *layoutProvider;
 @end
 
 @implementation DrawingViewController
@@ -34,6 +36,8 @@
     [self setupBlurredView];
     [self hideSettingsPanel];
 
+    self.layoutProvider = [LayoutProvider sharedInstance];
+    
     [self.opacitySlider setValue:1.0];
     brushSize = self.sizeSlider.value*40;
     opacity = self.opacitySlider.value;

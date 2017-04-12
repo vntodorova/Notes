@@ -15,7 +15,6 @@
 @interface LayoutProvider : NSObject
 
 + (id)sharedInstance;
-
 - (id)init NS_UNAVAILABLE;
 
 - (UIBarButtonItem *)setupLeftBarButton:(id)target withSelector:(SEL)selector;

@@ -9,6 +9,13 @@
 #import "Defines.h"
 #import "SettingsPanelViewController.h"
 #import "ThemeManager.h"
+#import "LayoutProvider.h"
+
+@interface SettingsPanelViewController()
+
+@property LayoutProvider *layoutProvider;
+
+@end
 
 @implementation SettingsPanelViewController
 
@@ -29,12 +36,16 @@
     self.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
     self.pickerView.dataSource = self;
     self.pickerView.delegate = self;
+    self.layoutProvider = [LayoutProvider sharedInstance];
     [self loadTheme];
 }
 
 - (void)loadTheme
 {
     self.view.backgroundColor = [self.themeManager.styles objectForKey:BACKGROUND_COLOR];
+    [self.view setTintColor:[self.themeManager.styles objectForKey:TEXT_COLOR]];
+    [self.textLabel setTextColor:[self.themeManager.styles objectForKey:TEXT_COLOR]];
+    [self.pickerView reloadAllComponents];
 }
 
 - (IBAction)saveButtonClicked:(UIButton *)sender
@@ -76,9 +87,13 @@
     return [self.themeManager.themeNames count];
 }
 
--(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+-(NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    return [self.themeManager.themeNames objectAtIndex:row];
+    NSString *title = [self.themeManager.themeNames objectAtIndex:row];
+    NSAttributedString *attString =
+    [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[self.themeManager.styles objectForKey:TEXT_COLOR]}];
+    
+    return attString;
 }
 
 
