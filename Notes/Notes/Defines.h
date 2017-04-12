@@ -64,9 +64,9 @@
 #define TEXTFIELDS_ALPHA @"TextFieldsAlpha"
 
 #define UNNAMED_NOTE @"Unnamed"
-
+#define PUBLIC_IMAGE_IDENTIFIER @"public.image"
 #define DEFAULT_IMAGE_HTML @"<img src=\"%@\" alt=\"\" style=\"width:150;height:150;\">"
-
+#define START_OF_IMAGE_HTML @"<img src=\""
 #define TIME_DATE_FORMAT @"HH:mm:ss, dd-MM-yyyy"
 
 #define TAG_SEPARATION_INDICATORS @"# "
@@ -83,4 +83,8 @@
 #define ALERT_DIALOG_TITLE @"Categories"
 #define ALERT_DIALOG_MESSAGE @"Choose category"
 #define ALERT_DIALOG_CANCEL_BUTTON_NAME @"Cancel"
+
+#define ALERT_INPUT_DIALOG_TITLE @"New Category"
+#define ALERT_INPUT_DIALOG_MESSAGE @"Enter a name"
+#define ALERT_INPUT_DIALOG_CONFIRM_BUTTON_NAME @"OK"
 #endif /* Defines_h */

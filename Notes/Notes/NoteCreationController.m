@@ -112,7 +112,7 @@
                                     stringByAppendingPathComponent:self.currentNotebook]
                                     stringByAppendingPathComponent:self.note.name];
     
-    NSString *stringForReplace = @"<img src=\"";
+    NSString *stringForReplace = START_OF_IMAGE_HTML;
     NSString *stringReplaced = [NSString stringWithFormat:@"%@%@/", stringForReplace, loadedFilePath];
     
     convertedHTML = [convertedHTML stringByReplacingOccurrencesOfString:stringForReplace withString:stringReplaced];
@@ -184,7 +184,7 @@
 -(void) saveImageInTempFolder:(NSDictionary*) imageInfo imagePath:(NSString*) imagePath
 {
     NSString *mediaType = [imageInfo objectForKey:UIImagePickerControllerMediaType];
-    if ([mediaType isEqualToString:@"public.image"])
+    if ([mediaType isEqualToString:PUBLIC_IMAGE_IDENTIFIER])
     {
         UIImage *image = [imageInfo objectForKey:UIImagePickerControllerOriginalImage];
         NSData *data = UIImagePNGRepresentation(image);
@@ -226,6 +226,9 @@
 - (IBAction)onCreateClick:(id)sender
 {
     NSMutableArray *array  = [[NSMutableArray alloc] init];
+
+    [array addObject:[self getInputAlertAction]];
+    
     for (Notebook* currentItem in [self.manager getNotebookList])
     {
         [array addObject:[UIAlertAction actionWithTitle:currentItem.name style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
@@ -235,6 +238,46 @@
     }
     
     [self displaySelectableMenuWithButton:sender list:array];
+}
+
+-(UIAlertAction*) getInputAlertAction
+{
+    UIAlertAction *newCategoryAction = [UIAlertAction actionWithTitle:ALERT_INPUT_DIALOG_TITLE
+                                                                style:UIAlertActionStyleDestructive
+                                                              handler:^(UIAlertAction * _Nonnull action)
+    {
+        [self presentViewController:[self getInputAlertActionController] animated:YES completion:nil];
+    }];
+    
+    return newCategoryAction;
+}
+
+-(UIAlertController *) getInputAlertActionController
+{
+    UIAlertController *inputController = [UIAlertController alertControllerWithTitle:ALERT_INPUT_DIALOG_TITLE
+                                                                             message:ALERT_INPUT_DIALOG_MESSAGE
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+    
+    [inputController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField)
+    {
+        textField.placeholder = @"Name";
+        textField.textColor = [UIColor blueColor];
+        textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        textField.borderStyle = UITextBorderStyleRoundedRect;
+    }];
+    
+    [inputController addAction:[UIAlertAction actionWithTitle:ALERT_INPUT_DIALOG_CONFIRM_BUTTON_NAME
+                                                        style:UIAlertActionStyleDefault
+                                                      handler:^(UIAlertAction * _Nonnull action)
+    {
+        NSArray<UITextField*> *textFields = inputController.textFields;
+        NSString *textFromField = textFields[0].text;
+        Notebook *newNotebook = [[Notebook alloc] initWithName:textFromField];
+        [self.manager addNotebook:newNotebook];
+        [self notebookSelected:newNotebook];
+    }]];
+    
+    return inputController;
 }
 
 - (void)notebookSelected:(Notebook*) noteBookSelected
@@ -276,8 +319,6 @@
     
     return html;
 }
-
-
 
 - (IBAction)onSettingsSelected:(id)sender
 {
@@ -347,9 +388,9 @@
                                                                    message:ALERT_DIALOG_MESSAGE
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
     
-    
-    
     [alert addAction:[UIAlertAction actionWithTitle:ALERT_DIALOG_CANCEL_BUTTON_NAME style:UIAlertActionStyleCancel handler:nil]];
+    
+
     
     for (UIAlertAction* currentItem in nameList)
     {

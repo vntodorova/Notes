@@ -41,7 +41,7 @@
 
 - (void)addNotebook:(Notebook *) newNotebook
 {
-    if(newNotebook == nil || [self.notebookList objectForKey:newNotebook.name] == nil)
+    if(newNotebook == nil || [self.notebookList objectForKey:newNotebook.name] != nil)
     {
         return;
     }
@@ -49,6 +49,8 @@
     {
         [self.notebookList setObject:[[NSMutableArray alloc] init] forKey:newNotebook.name];
         [self.notebookObjectList addObject:newNotebook];
+        NSString *path = [self.contentPath stringByAppendingPathComponent:newNotebook.name];
+        [self createDirectoryAtPath:path];
     }
 }
 
@@ -148,20 +150,20 @@
 #pragma mark PRIVATE
 - (void) saveToDisk:(Note *)newNote toNotebook:(Notebook *)notebook
 {
-    NSString *fileRoot = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+    NSString *noteRoot = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
                             stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
                             stringByAppendingPathComponent:notebook.name]
                             stringByAppendingPathComponent:newNote.name];
     
-    [self isValidDirectory:fileRoot];
+    [self createDirectoryAtPath:noteRoot];
     
-    [self saveData:[self buildTagsForSave:newNote.tags]  toFile:[fileRoot stringByAppendingPathComponent:NOTE_TAGS_FILE]];
-    [self saveData:newNote.body                     toFile:[fileRoot stringByAppendingPathComponent:NOTE_BODY_FILE]];
-    [self saveData:newNote.dateCreated              toFile:[fileRoot stringByAppendingPathComponent:NOTE_DATE_FILE]];
-    [self coppyFilesFromTempTo:fileRoot];
+    [self saveData:[self buildTagsForSave:newNote.tags] toFile:[noteRoot stringByAppendingPathComponent:NOTE_TAGS_FILE]];
+    [self saveData:newNote.body                         toFile:[noteRoot stringByAppendingPathComponent:NOTE_BODY_FILE]];
+    [self saveData:newNote.dateCreated                  toFile:[noteRoot stringByAppendingPathComponent:NOTE_DATE_FILE]];
+    [self coppyFilesFromTempFolderTo:noteRoot];
 }
 
--(void) coppyFilesFromTempTo:(NSString*) destination
+-(void) coppyFilesFromTempFolderTo:(NSString*) destination
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString* tempFolderPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:TEMP_FOLDER];
@@ -186,7 +188,7 @@
     [fileContent writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error];
 }
 
--(void) isValidDirectory:(NSString*) path
+-(void) createDirectoryAtPath:(NSString*) path
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if([fileManager fileExistsAtPath:path isDirectory:nil])
