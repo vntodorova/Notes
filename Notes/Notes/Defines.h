@@ -12,9 +12,9 @@
 #define BUTTONS_HEIGHT 25
 #define BUTTONS_WIDTH 25
 
-#define SMALL_BUTTONS_WIDTH 40
-#define SMALL_BUTTONS_HEIGHT 40
-#define SMALL_BUTTON_DISTANCE 40
+#define SMALL_BUTTONS_WIDTH 45
+#define SMALL_BUTTONS_HEIGHT 45
+#define SMALL_BUTTON_DISTANCE 60
 
 #define TABLEVIEW_CELL_ID @"TableViewCell"
 #define TABLEVIEW_CELL_HEIGHT 70
@@ -57,7 +57,6 @@
 #define TABLEVIEW_BACKGROUND_COLOR @"TableViewBackgroundColor"
 #define TABLEVIEW_CELL_COLOR @"TableViewCellColor"
 #define BACKGROUND_COLOR @"BackgroundColor"
-#define MENU_IMAGE @"MenuImage"
 #define NAVIGATION_BAR_COLOR @"NavigationBarColor"
 #define TEXT_COLOR @"TextColor"
 #define TEXTFIELDS_ALPHA @"TextFieldsAlpha"

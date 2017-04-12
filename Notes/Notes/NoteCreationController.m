@@ -465,7 +465,7 @@
                      action:@selector(onCameraClick)];
     
     optionsButtonX = sender.frame.origin.x - SMALL_BUTTON_DISTANCE;
-    optionsButtonY = sender.frame.origin.y;
+    optionsButtonY = sender.frame.origin.y - 10;
     
     [self createButtonWithX:optionsButtonX
                        andY:optionsButtonY
@@ -473,7 +473,7 @@
                 buttonImage:[UIImage imageNamed:@"drawing.png"]
                      action:@selector(onDrawingClick)];
     
-    optionsButtonX = sender.frame.origin.x;
+    optionsButtonX = sender.frame.origin.x - 10;
     optionsButtonY = sender.frame.origin.y - SMALL_BUTTON_DISTANCE;
     [self createButtonWithX:optionsButtonX
                        andY:optionsButtonY
@@ -482,12 +482,16 @@
                      action:@selector(onListClick)];
 }
 
-- (void)createButtonWithX:(long) xCoordinates andY:(long) yCoordinates baseButton:(UIButton *)sender buttonImage:(UIImage*)image action:(SEL)selector
+- (void)createButtonWithX:(long)xCoordinates andY:(long)yCoordinates baseButton:(UIButton *)sender buttonImage:(UIImage *)image action:(SEL)selector
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.layer.cornerRadius = 23;
+    button.layer.borderWidth = 1;
+    button.layer.borderColor = [UIColor blackColor].CGColor;
+    button.clipsToBounds = YES;
     [button addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
     [button setImage:image forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+
     
     button.frame = CGRectMake(sender.frame.origin.x + SMALL_BUTTON_DISTANCE / 2,
                               sender.frame.origin.y + SMALL_BUTTON_DISTANCE / 2,
