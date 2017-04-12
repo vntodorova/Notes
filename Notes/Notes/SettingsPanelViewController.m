@@ -18,24 +18,49 @@
     if(self)
     {
         self.isHidden = YES;
-        self.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
         self.themeManager = [ThemeManager sharedInstance];
     }
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
+    self.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
     self.pickerView.dataSource = self;
     self.pickerView.delegate = self;
+    [self loadTheme];
+}
+
+- (void)loadTheme
+{
+    self.view.backgroundColor = [self.themeManager.styles objectForKey:BACKGROUND_COLOR];
 }
 
 - (IBAction)saveButtonClicked:(UIButton *)sender
 {
+    NSString *previousTheme = [self.themeManager currentTheme];
     NSInteger row = [self.pickerView selectedRowInComponent:0];
     NSString *chosenTheme = [self.themeManager.themeNames objectAtIndex:row];
     [self.themeManager setCurrentTheme:chosenTheme];
-    [self.delegate hideSettings];
+    [UIView animateWithDuration:0.5 animations:^{
+        self.isHidden = YES;
+        self.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
+    } completion:^(BOOL finished) {
+        if(![previousTheme isEqualToString:chosenTheme])
+        {
+            [self.delegate onThemeChanged];
+            [self loadTheme];
+        }
+    }];
+}
+
+- (IBAction)cancelButtonClicked:(UIButton *)sender
+{
+    [UIView animateWithDuration:0.5 animations:^{
+        self.isHidden = YES;
+        self.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
+    }];
 }
 
 #pragma mark -

@@ -16,6 +16,7 @@
 
 @property (weak, nonatomic) IBOutlet UIPickerView *pickerView;
 - (IBAction)saveButtonClicked:(UIButton *)sender;
+- (IBAction)cancelButtonClicked:(UIButton *)sender;
 
 @property (nonatomic, weak) id <LeftPanelDelegate> delegate;
 

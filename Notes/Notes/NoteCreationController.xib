@@ -14,6 +14,7 @@
                 <outlet property="noteBody" destination="Udl-bA-HC1" id="b4f-jg-wr0"/>
                 <outlet property="noteName" destination="Fme-iL-Fez" id="1SD-F7-u1V"/>
                 <outlet property="noteTags" destination="CnX-oi-qcZ" id="bVo-UD-sUE"/>
+                <outlet property="toolbar" destination="JM0-5u-0lL" id="Iak-95-DOr"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -29,13 +30,13 @@
                         <action selector="onCreateClick:" destination="-1" eventType="touchUpInside" id="BUJ-VG-z3k"/>
                     </connections>
                 </button>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Fme-iL-Fez">
+                <textField opaque="NO" clipsSubviews="YES" alpha="0.40000000000000002" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Fme-iL-Fez">
                     <rect key="frame" x="15" y="59" width="345" height="30"/>
                     <nil key="textColor"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
                 </textField>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CnX-oi-qcZ">
+                <textField opaque="NO" clipsSubviews="YES" alpha="0.40000000000000002" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CnX-oi-qcZ">
                     <rect key="frame" x="15" y="104" width="345" height="30"/>
                     <nil key="textColor"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -156,9 +157,9 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="GRH-Zs-gFp"/>
                     </items>
                 </toolbar>
-                <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Udl-bA-HC1">
+                <webView alpha="0.40000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Udl-bA-HC1">
                     <rect key="frame" x="15" y="149" width="345" height="458"/>
-                    <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" red="0.36078431372549019" green="0.38823529411764707" blue="0.40392156862745099" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </webView>
             </subviews>
             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>

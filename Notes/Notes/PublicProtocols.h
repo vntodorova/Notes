@@ -23,7 +23,7 @@
 
 - (void)hideLeftPanel;
 - (void)showSettings;
-- (void)hideSettings;
+- (void)onThemeChanged;
 
 @end
 

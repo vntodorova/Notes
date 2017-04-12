@@ -36,7 +36,8 @@
     [self setupNavigationBar];
     self.noteManager = [[LocalNoteManager alloc] init];
     self.themeManager = [ThemeManager sharedInstance];
-    [self setupTheme:self.themeManager.currentTheme];
+    [self.themeManager reload];
+    [self loadTheme];
     self.currentNotebook = @"General";
     self.notesArray = [self.noteManager getNoteListForNotebookWithName:self.currentNotebook];
     [self.tableView registerNib:[UINib nibWithNibName:TABLEVIEW_CELL_ID bundle:nil] forCellReuseIdentifier:TABLEVIEW_CELL_ID];
@@ -80,9 +81,11 @@
     self.navigationController.topViewController.navigationItem.titleView = [[UISearchBar alloc] init];
 }
 
-- (void)setupTheme:(NSString *)themeName
+- (void)loadTheme
 {
     self.tableView.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_BACKGROUND_COLOR];
+    [self.navigationController.navigationBar setBarTintColor:[self.themeManager.styles objectForKey:NAVIGATION_BAR_COLOR]];
+    [self.tableView reloadData];
 }
 
 - (void)setupLeftPanel
@@ -193,10 +196,12 @@
 
 - (void)hideLeftPanel
 {
+    self.settingsPanelViewController.isHidden = YES;
     self.leftPanelViewController.isHidden = YES;
     [UIView animateWithDuration:0.5 animations:^{
         self.bluredView.alpha = 0;
         self.leftPanelViewController.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
+        self.settingsPanelViewController.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
     } completion:^(BOOL finished) {
         [self.view sendSubviewToBack:self.bluredView];
     }];
@@ -204,10 +209,6 @@
 
 - (void)showLeftPanel
 {
-    if(!self.settingsPanelViewController.isHidden)
-    {
-        [self hideSettings];
-    }
     [self.view bringSubviewToFront:self.bluredView];
     [self.view bringSubviewToFront:self.leftPanelViewController.view];
     self.leftPanelViewController.isHidden = NO;
@@ -217,17 +218,8 @@
     }];
 }
 
-- (void)hideSettings
-{
-    self.settingsPanelViewController.isHidden = YES;
-    [UIView animateWithDuration:0.5 animations:^{
-        self.settingsPanelViewController.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
-    }];
-}
-
 - (void)showSettings
 {
-    [self hideLeftPanel];
     if(self.settingsPanelViewController == nil)
     {
          [self setupSettingsPanel];
@@ -237,6 +229,13 @@
     [UIView animateWithDuration:0.5 animations:^{
         self.settingsPanelViewController.view.frame = CGRectMake(0, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
     }];
+}
+
+- (void)onThemeChanged
+{
+    [self.themeManager reload];
+    [self loadTheme];
+    [self.leftPanelViewController loadTheme];
 }
 
 #pragma mark -

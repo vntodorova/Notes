@@ -13,11 +13,13 @@
 #import "Reminder.h"
 #import "LayoutProvider.h"
 #import "SettingsPanelViewController.h"
+#import "ThemeManager.h"
 
 @interface LeftPanelViewController()
 
 @property (nonatomic, strong) LocalNoteManager *noteManager;
 @property DateTimeManager *dateTimeManager;
+@property ThemeManager *themeManager;
 
 @property LayoutProvider *layoutProvider;
 @property float pointerStartPanCoordinatesX;
@@ -76,6 +78,8 @@
 {
     self.dateTimeManager = [[DateTimeManager alloc] init];
     self.layoutProvider = [LayoutProvider sharedInstance];
+    self.themeManager = [ThemeManager sharedInstance];
+    [self loadTheme];
     [self.facebookButton setBackgroundImage:[UIImage imageNamed:@"facebook.png"] forState:UIControlStateNormal];
     [self.googleButton setBackgroundImage:[UIImage imageNamed:@"google.png"] forState:UIControlStateNormal];
     UIPanGestureRecognizer *panGestureRecogniser = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognised:)];
@@ -83,6 +87,13 @@
     panGestureRecogniser.delegate = self;
     self.tableViewDataSource = [[NSMutableDictionary alloc] init];
     self.notebooksClicked = [[NSMutableDictionary alloc] init];
+}
+
+- (void)loadTheme
+{
+    self.view.backgroundColor = [self.themeManager.styles objectForKey:BACKGROUND_COLOR];
+    self.tableView.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_BACKGROUND_COLOR];
+    [self.tableView reloadData];
 }
 
 - (void)notebookClickedOnIndexPath:(NSIndexPath *)indexPath

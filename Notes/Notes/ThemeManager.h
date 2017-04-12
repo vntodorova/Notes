@@ -19,4 +19,6 @@
 
 @property NSString *currentTheme;
 
+- (void)reload;
+
 @end

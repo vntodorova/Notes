@@ -17,16 +17,15 @@
 @end
 
 static LayoutProvider *sharedInstance = nil;
-static dispatch_once_t predicate = 0;
 
 @implementation LayoutProvider
 
 + (id)sharedInstance
 {
-    dispatch_once(&predicate, ^{
+    if (sharedInstance == nil)
+    {
         sharedInstance = [[self alloc] initFirstTime];
-    });
-    
+    }
     return sharedInstance;
 }
 
@@ -38,6 +37,9 @@ static dispatch_once_t predicate = 0;
     }
     return self;
 }
+
+#pragma mark -
+#pragma mark Navigation controller
 
 - (UIBarButtonItem *)setupLeftBarButton:(id)target withSelector:(SEL)selector;
 {
@@ -55,17 +57,25 @@ static dispatch_once_t predicate = 0;
     return [[UIBarButtonItem alloc] initWithCustomView:rightBarButton];
 }
 
+#pragma mark -
+#pragma mark Main ViewController
+
 - (TableViewCell *)getNewTableViewCell:(UITableView *)tableView withNote:(Note *)note
 {
     TableViewCell *cell = (TableViewCell *)[tableView dequeueReusableCellWithIdentifier:TABLEVIEW_CELL_ID];
     cell.nameLabel.text = note.name;
     cell.infoLabel.text = note.dateCreated;
     cell.cellNote = note;
-    cell.layer.borderWidth = 0.5;
-    cell.layer.borderColor = [UIColor blackColor].CGColor;
+    cell.nameLabel.textColor = [self.themeManager.styles objectForKey:TEXT_COLOR];
+    cell.infoLabel.textColor = [self.themeManager.styles objectForKey:TEXT_COLOR];
+    cell.layer.cornerRadius = 5;
+    cell.layer.masksToBounds = YES;
     cell.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_CELL_COLOR];
     return cell;
 }
+
+#pragma mark -
+#pragma mark LeftPanelViewController
 
 - (UITableViewCell *)getNewCell:(UITableView *)tableView withNote:(Note *)note
 {
@@ -74,8 +84,9 @@ static dispatch_once_t predicate = 0;
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:NOTE_CELL_ID];
     }
-    
+    cell.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_CELL_COLOR];
     cell.textLabel.text = note.name;
+    cell.textLabel.textColor = [self.themeManager.styles objectForKey:TEXT_COLOR];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",note.dateCreated];
     return cell;
 }
@@ -87,9 +98,10 @@ static dispatch_once_t predicate = 0;
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:NOTEBOOK_CELL_ID];
     }
-    
+    cell.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_CELL_COLOR];
     cell.textLabel.text = notebook.name;
-    //cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu items",(unsigned long)[notebook.notes count]];
+    cell.textLabel.textColor = [self.themeManager.styles objectForKey:TEXT_COLOR];
+    //TODO cell.detailTextLabel.text = Notebook's notes count
     return cell;
 }
 
@@ -100,8 +112,9 @@ static dispatch_once_t predicate = 0;
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:REMINDER_CELL_ID];
     }
-    
+    cell.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_CELL_COLOR];
     cell.textLabel.text = reminder.name;
+    cell.textLabel.textColor = [self.themeManager.styles objectForKey:TEXT_COLOR];
     cell.detailTextLabel.text = [self.dateTimeManager convertToRelativeDate:reminder.triggerDate];
     return cell;
 }

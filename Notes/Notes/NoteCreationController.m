@@ -10,6 +10,7 @@
 #import "Defines.h"
 #import "Notebook.h"
 #import "DrawingViewController.h"
+#import "ThemeManager.h"
 
 @interface NoteCreationController ()
 
@@ -18,6 +19,7 @@
 @property (nonatomic, strong) NSMutableArray *textSizeList;
 @property (nonatomic, strong) NSMutableArray *noteBookList;
 @property (nonatomic, strong) LocalNoteManager *manager;
+@property (nonatomic, strong) ThemeManager *themeManager;
 @property (nonatomic, strong) NSString *tempFolderPath;
 
 
@@ -28,7 +30,8 @@
 
 @implementation NoteCreationController
 
-#pragma CONTROLLER
+#pragma mark Controller
+
 -(instancetype)initWithManager:(LocalNoteManager *)manager
 {
     self = [super self];
@@ -38,16 +41,16 @@
     self.hiddenButtonsList = [[NSMutableArray alloc] init];
     self.fontList = [[NSMutableArray alloc] init];
     self.textSizeList = [[NSMutableArray alloc] init];
-    
+    self.themeManager = [ThemeManager sharedInstance];
     self.imageIndex = 0;
-    
+    self.noteName.backgroundColor = [UIColor colorWithRed:0.2f green:0.3f blue:0.4f alpha:0.50001f];
     return self;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [self loadTheme];
     [self inflateFontsList];
     [self inflateTextSizeList];
     
@@ -71,6 +74,15 @@
     {
         [self loadNoteTemplateHTML];
     }
+}
+
+- (void)loadTheme
+{
+    self.view.backgroundColor = [self.themeManager.styles objectForKey:BACKGROUND_COLOR];
+    [self.toolbar setBarTintColor:[self.themeManager.styles objectForKey:NAVIGATION_BAR_COLOR]];
+    [self.noteBody setAlpha:[[self.themeManager.styles objectForKey:TEXTFIELDS_ALPHA] floatValue]];
+    [self.noteName setAlpha:[[self.themeManager.styles objectForKey:TEXTFIELDS_ALPHA] floatValue]];
+    [self.noteTags setAlpha:[[self.themeManager.styles objectForKey:TEXTFIELDS_ALPHA] floatValue]];
 }
 
 -(void) loadNoteTemplateHTML
@@ -131,7 +143,7 @@
     [super viewWillDisappear:animated];
 }
 
-#pragma PUBLIC
+#pragma mark Public
 
 - (IBAction)onOptionsClick:(UIButton *)sender
 {
@@ -329,7 +341,7 @@
     [self displaySelectableMenuWithButton:sender list:array];
 }
 
-#pragma PRIVATE
+#pragma mark Private
 
 - (void)displaySelectableMenuWithButton:(UIButton *) button list:(NSMutableArray*)nameList
 {
