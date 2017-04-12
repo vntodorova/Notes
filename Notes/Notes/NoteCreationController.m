@@ -84,6 +84,7 @@
     [self.noteName setAlpha:[[self.themeManager.styles objectForKey:TEXTFIELDS_ALPHA] floatValue]];
     [self.noteTags setAlpha:[[self.themeManager.styles objectForKey:TEXTFIELDS_ALPHA] floatValue]];
     [self.view setTintColor:[self.themeManager.styles objectForKey:TEXT_COLOR]];
+    [self.optionsButton setTintColor:[self.themeManager.styles objectForKey:TEXT_COLOR]];
 }
 
 -(void) loadNoteTemplateHTML

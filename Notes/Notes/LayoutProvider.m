@@ -43,18 +43,12 @@ static LayoutProvider *sharedInstance = nil;
 
 - (UIBarButtonItem *)setupLeftBarButton:(id)target withSelector:(SEL)selector;
 {
-    UIButton *leftBarButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, BUTTONS_WIDTH, BUTTONS_HEIGHT)];
-    [leftBarButton setBackgroundImage:[self.themeManager.styles objectForKey:MENU_IMAGE] forState:UIControlStateNormal];
-    [leftBarButton addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
-    return [[UIBarButtonItem alloc] initWithCustomView:leftBarButton];
+    return [[UIBarButtonItem alloc] initWithTitle:@"Menu" style:UIBarButtonItemStylePlain target:target action:selector];
 }
 
 - (UIBarButtonItem *)setupRightBarButton:(id)target withSelector:(SEL)selector;
 {
-    UIButton *rightBarButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, BUTTONS_WIDTH, BUTTONS_HEIGHT)];
-    [rightBarButton setBackgroundImage:[self.themeManager.styles objectForKey:PLUS_IMAGE] forState:UIControlStateNormal];
-    [rightBarButton addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
-    return [[UIBarButtonItem alloc] initWithCustomView:rightBarButton];
+    return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:target action:selector];
 }
 
 #pragma mark -

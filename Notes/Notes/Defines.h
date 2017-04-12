@@ -57,7 +57,6 @@
 #define TABLEVIEW_BACKGROUND_COLOR @"TableViewBackgroundColor"
 #define TABLEVIEW_CELL_COLOR @"TableViewCellColor"
 #define BACKGROUND_COLOR @"BackgroundColor"
-#define PLUS_IMAGE @"PlusImage"
 #define MENU_IMAGE @"MenuImage"
 #define NAVIGATION_BAR_COLOR @"NavigationBarColor"
 #define TEXT_COLOR @"TextColor"
