@@ -71,7 +71,7 @@
 
 - (void)setupNavigationBar
 {
-    [self.navigationController.navigationBar setTintColor:[self.themeManager.styles objectForKey:TEXT_COLOR]];
+    [self.navigationController.navigationBar setTintColor:[self.themeManager.styles objectForKey:TINT]];
     UIBarButtonItem *leftNavigationBarButton = [self.layoutProvider setupLeftBarButton:self
                                                                           withSelector:@selector(drawerButtonPressed)];
     self.navigationController.topViewController.navigationItem.leftBarButtonItem = leftNavigationBarButton;

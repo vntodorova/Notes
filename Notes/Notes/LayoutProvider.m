@@ -64,8 +64,8 @@ static LayoutProvider *sharedInstance = nil;
     cell.nameLabel.text = note.name;
     cell.infoLabel.text = note.dateCreated;
     cell.cellNote = note;
-    cell.nameLabel.textColor = [self.themeManager.styles objectForKey:TEXT_COLOR];
-    cell.infoLabel.textColor = [self.themeManager.styles objectForKey:TEXT_COLOR];
+    cell.nameLabel.textColor = [self.themeManager.styles objectForKey:TINT];
+    cell.infoLabel.textColor = [self.themeManager.styles objectForKey:TINT];
     cell.layer.cornerRadius = 5;
     cell.layer.masksToBounds = YES;
     cell.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_CELL_COLOR];
@@ -84,7 +84,7 @@ static LayoutProvider *sharedInstance = nil;
     }
     cell.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_CELL_COLOR];
     cell.textLabel.text = note.name;
-    cell.textLabel.textColor = [self.themeManager.styles objectForKey:TEXT_COLOR];
+    cell.textLabel.textColor = [self.themeManager.styles objectForKey:TINT];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",note.dateCreated];
     return cell;
 }
@@ -98,7 +98,7 @@ static LayoutProvider *sharedInstance = nil;
     }
     cell.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_CELL_COLOR];
     cell.textLabel.text = notebook.name;
-    cell.textLabel.textColor = [self.themeManager.styles objectForKey:TEXT_COLOR];
+    cell.textLabel.textColor = [self.themeManager.styles objectForKey:TINT];
     //TODO cell.detailTextLabel.text = Notebook's notes count
     return cell;
 }
@@ -112,7 +112,7 @@ static LayoutProvider *sharedInstance = nil;
     }
     cell.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_CELL_COLOR];
     cell.textLabel.text = reminder.name;
-    cell.textLabel.textColor = [self.themeManager.styles objectForKey:TEXT_COLOR];
+    cell.textLabel.textColor = [self.themeManager.styles objectForKey:TINT];
     cell.detailTextLabel.text = [self.dateTimeManager convertToRelativeDate:reminder.triggerDate];
     return cell;
 }

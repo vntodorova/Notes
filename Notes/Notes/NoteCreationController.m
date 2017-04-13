@@ -85,8 +85,8 @@
     [self.noteBody setAlpha:[[self.themeManager.styles objectForKey:TEXTFIELDS_ALPHA] floatValue]];
     [self.noteName setAlpha:[[self.themeManager.styles objectForKey:TEXTFIELDS_ALPHA] floatValue]];
     [self.noteTags setAlpha:[[self.themeManager.styles objectForKey:TEXTFIELDS_ALPHA] floatValue]];
-    [self.view setTintColor:[self.themeManager.styles objectForKey:TEXT_COLOR]];
-    [self.optionsButton setTintColor:[self.themeManager.styles objectForKey:TEXT_COLOR]];
+    [self.view setTintColor:[self.themeManager.styles objectForKey:TINT]];
+    [self.optionsButton setTintColor:[self.themeManager.styles objectForKey:TINT]];
 }
 
 -(void) loadNoteTemplateHTML
@@ -275,10 +275,16 @@
     {
         NSArray<UITextField*> *textFields = inputController.textFields;
         NSString *textFromField = textFields[0].text;
+        if([textFromField isEqualToString:@""])
+        {
+            textFromField = @"Unknown";
+        }
         Notebook *newNotebook = [[Notebook alloc] initWithName:textFromField];
         [self.manager addNotebook:newNotebook];
         [self notebookSelected:newNotebook];
     }]];
+    
+    [inputController addAction:[UIAlertAction actionWithTitle:ALERT_DIALOG_CANCEL_BUTTON_NAME style:UIAlertActionStyleCancel handler:nil]];
     
     return inputController;
 }
@@ -463,7 +469,7 @@
     [self createButtonWithX:optionsButtonX
                        andY:optionsButtonY
                  baseButton:sender
-                buttonImage:[UIImage imageNamed:@"camera.png"]
+                buttonImage:[self.themeManager.styles objectForKey:CAMERA_IMAGE]
                      action:@selector(onCameraClick)];
     
     optionsButtonX = sender.frame.origin.x - SMALL_BUTTON_DISTANCE;
@@ -472,7 +478,7 @@
     [self createButtonWithX:optionsButtonX
                        andY:optionsButtonY
                  baseButton:sender
-                buttonImage:[UIImage imageNamed:@"drawing.png"]
+                buttonImage:[self.themeManager.styles objectForKey:DRAWING_IMAGE]
                      action:@selector(onDrawingClick)];
     
     optionsButtonX = sender.frame.origin.x - 10;
@@ -480,7 +486,7 @@
     [self createButtonWithX:optionsButtonX
                        andY:optionsButtonY
                  baseButton:sender
-                buttonImage:[UIImage imageNamed:@"list.png"]
+                buttonImage:[self.themeManager.styles objectForKey:LIST_IMAGE]
                      action:@selector(onListClick)];
 }
 
@@ -489,7 +495,12 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.layer.cornerRadius = 23;
     button.layer.borderWidth = 1;
-    button.layer.borderColor = [UIColor blackColor].CGColor;
+    UIColor *color = [self.themeManager.styles objectForKey:TINT];
+    CGFloat red;
+    CGFloat green;
+    CGFloat blue;
+    [color getRed:&red green:&green blue:&blue alpha:nil];
+    button.layer.borderColor = [UIColor colorWithRed:red green:green blue:blue alpha:1].CGColor;
     button.clipsToBounds = YES;
     [button addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
     [button setImage:image forState:UIControlStateNormal];

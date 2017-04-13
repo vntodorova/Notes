@@ -37,6 +37,12 @@
 		B5E8AC471E9CC41700964B3C /* SettingsPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E8AC451E9CC41700964B3C /* SettingsPanelViewController.m */; };
 		B5E8AC481E9CC41700964B3C /* SettingsPanelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5E8AC461E9CC41700964B3C /* SettingsPanelViewController.xib */; };
 		B5E8AC5C1E9E63B000964B3C /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8AC5B1E9E63B000964B3C /* image.png */; };
+		B5E8AC621E9F73A100964B3C /* camera_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8AC5F1E9F73A100964B3C /* camera_dark.png */; };
+		B5E8AC631E9F73A100964B3C /* drawing_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8AC601E9F73A100964B3C /* drawing_dark.png */; };
+		B5E8AC641E9F73A100964B3C /* list_dark.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8AC611E9F73A100964B3C /* list_dark.png */; };
+		B5E8AC681E9F784900964B3C /* camera_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8AC651E9F784900964B3C /* camera_blue.png */; };
+		B5E8AC691E9F784900964B3C /* drawing_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8AC661E9F784900964B3C /* drawing_blue.png */; };
+		B5E8AC6A1E9F784900964B3C /* list_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = B5E8AC671E9F784900964B3C /* list_blue.png */; };
 		B5EFB34C1E8CFFD80024C211 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB34B1E8CFFD80024C211 /* main.m */; };
 		B5EFB34F1E8CFFD80024C211 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB34E1E8CFFD80024C211 /* AppDelegate.m */; };
 		B5EFB3521E8CFFD80024C211 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB3511E8CFFD80024C211 /* ViewController.m */; };
@@ -110,6 +116,12 @@
 		B5E8AC451E9CC41700964B3C /* SettingsPanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsPanelViewController.m; sourceTree = "<group>"; };
 		B5E8AC461E9CC41700964B3C /* SettingsPanelViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsPanelViewController.xib; sourceTree = "<group>"; };
 		B5E8AC5B1E9E63B000964B3C /* image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image.png; sourceTree = "<group>"; };
+		B5E8AC5F1E9F73A100964B3C /* camera_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_dark.png; sourceTree = "<group>"; };
+		B5E8AC601E9F73A100964B3C /* drawing_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drawing_dark.png; sourceTree = "<group>"; };
+		B5E8AC611E9F73A100964B3C /* list_dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list_dark.png; sourceTree = "<group>"; };
+		B5E8AC651E9F784900964B3C /* camera_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_blue.png; sourceTree = "<group>"; };
+		B5E8AC661E9F784900964B3C /* drawing_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drawing_blue.png; sourceTree = "<group>"; };
+		B5E8AC671E9F784900964B3C /* list_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list_blue.png; sourceTree = "<group>"; };
 		B5EFB3471E8CFFD80024C211 /* Notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5EFB34B1E8CFFD80024C211 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B5EFB34D1E8CFFD80024C211 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -174,11 +186,17 @@
 		1D07C0D31E9251F900E85CAF /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				B5E8AC5F1E9F73A100964B3C /* camera_dark.png */,
+				B5E8AC601E9F73A100964B3C /* drawing_dark.png */,
+				B5E8AC611E9F73A100964B3C /* list_dark.png */,
 				1D07C0D41E9251F900E85CAF /* camera.png */,
 				1D07C0D51E9251F900E85CAF /* drawing.png */,
 				1D07C0D61E9251F900E85CAF /* list.png */,
 				B53CB76B1E95379B009DFF27 /* facebook.png */,
 				B53CB76C1E95379B009DFF27 /* google.png */,
+				B5E8AC651E9F784900964B3C /* camera_blue.png */,
+				B5E8AC661E9F784900964B3C /* drawing_blue.png */,
+				B5E8AC671E9F784900964B3C /* list_blue.png */,
 				B5E8ABE91E967F0600964B3C /* eraser.png */,
 				B5E8ABEB1E96814100964B3C /* pen.png */,
 				B5E8AC5B1E9E63B000964B3C /* image.png */,
@@ -439,12 +457,18 @@
 				B53CB76E1E95379B009DFF27 /* google.png in Resources */,
 				B5E8ABE21E966BA600964B3C /* DrawingViewController.xib in Resources */,
 				1D07C0DC1E9251F900E85CAF /* list.png in Resources */,
+				B5E8AC6A1E9F784900964B3C /* list_blue.png in Resources */,
 				1D07C0DB1E9251F900E85CAF /* drawing.png in Resources */,
+				B5E8AC681E9F784900964B3C /* camera_blue.png in Resources */,
 				1D07C0D91E9251F900E85CAF /* Calibri.ttf in Resources */,
 				B5E8ABEC1E96814100964B3C /* pen.png in Resources */,
+				B5E8AC691E9F784900964B3C /* drawing_blue.png in Resources */,
+				B5E8AC621E9F73A100964B3C /* camera_dark.png in Resources */,
 				B5E8ABEA1E967F0600964B3C /* eraser.png in Resources */,
 				B534C4541E8D433300AD25F6 /* TableViewCell.xib in Resources */,
 				B53CB76D1E95379B009DFF27 /* facebook.png in Resources */,
+				B5E8AC631E9F73A100964B3C /* drawing_dark.png in Resources */,
+				B5E8AC641E9F73A100964B3C /* list_dark.png in Resources */,
 				B526CB5A1E939E4C00FF4FA8 /* LeftPanelViewController.xib in Resources */,
 				B5EFB37E1E8D006F0024C211 /* ViewController.xib in Resources */,
 				B5E8ABF01E97B1F600964B3C /* settings.png in Resources */,

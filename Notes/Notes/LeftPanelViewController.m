@@ -96,7 +96,7 @@
 {
     self.view.backgroundColor = [self.themeManager.styles objectForKey:BACKGROUND_COLOR];
     self.tableView.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_BACKGROUND_COLOR];
-    [self.view setTintColor:[self.themeManager.styles objectForKey:TEXT_COLOR]];
+    [self.view setTintColor:[self.themeManager.styles objectForKey:TINT]];
     [self.tableView reloadData];
 }
 

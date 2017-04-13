@@ -43,8 +43,8 @@
 - (void)loadTheme
 {
     self.view.backgroundColor = [self.themeManager.styles objectForKey:BACKGROUND_COLOR];
-    [self.view setTintColor:[self.themeManager.styles objectForKey:TEXT_COLOR]];
-    [self.textLabel setTextColor:[self.themeManager.styles objectForKey:TEXT_COLOR]];
+    [self.view setTintColor:[self.themeManager.styles objectForKey:TINT]];
+    [self.textLabel setTextColor:[self.themeManager.styles objectForKey:TINT]];
     [self.pickerView reloadAllComponents];
 }
 
@@ -92,7 +92,7 @@
 {
     NSString *title = [self.themeManager.themeNames objectAtIndex:row];
     NSAttributedString *attString =
-    [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[self.themeManager.styles objectForKey:TEXT_COLOR]}];
+    [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[self.themeManager.styles objectForKey:TINT]}];
     
     return attString;
 }
