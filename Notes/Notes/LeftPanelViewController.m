@@ -15,6 +15,8 @@
 #import "SettingsPanelViewController.h"
 #import "ThemeManager.h"
 #import "LocalNoteManager.h"
+#import "Notebook.h"
+#import "Note.h"
 
 @interface LeftPanelViewController()
 
@@ -95,6 +97,12 @@
     self.view.backgroundColor = [self.themeManager.styles objectForKey:BACKGROUND_COLOR];
     self.tableView.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_BACKGROUND_COLOR];
     [self.view setTintColor:[self.themeManager.styles objectForKey:TEXT_COLOR]];
+    [self.tableView reloadData];
+}
+
+- (void)reloadData
+{
+    [self.tableViewDataSource setObject:[self.noteManager getNotebookList] forKey:NOTEBOOK_KEY];
     [self.tableView reloadData];
 }
 

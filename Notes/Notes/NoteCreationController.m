@@ -13,6 +13,7 @@
 #import "ThemeManager.h"
 #import "LayoutProvider.h"
 #import "LocalNoteManager.h"
+#import "Note.h"
 
 @interface NoteCreationController ()
 
@@ -244,14 +245,14 @@
 
 -(UIAlertAction*) getInputAlertAction
 {
-    UIAlertAction *newCategoryAction = [UIAlertAction actionWithTitle:ALERT_INPUT_DIALOG_TITLE
+    UIAlertAction *newNotebookAction = [UIAlertAction actionWithTitle:ALERT_INPUT_DIALOG_TITLE
                                                                 style:UIAlertActionStyleDestructive
                                                               handler:^(UIAlertAction * _Nonnull action)
     {
         [self presentViewController:[self getInputAlertActionController] animated:YES completion:nil];
     }];
     
-    return newCategoryAction;
+    return newNotebookAction;
 }
 
 -(UIAlertController *) getInputAlertActionController
@@ -387,7 +388,7 @@
 - (void)displaySelectableMenuWithButton:(UIButton *) button list:(NSMutableArray*)nameList
 {
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:ALERT_DIALOG_TITLE
-                                                                   message:ALERT_DIALOG_MESSAGE
+                                                                   message:nil
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
     
     [alert addAction:[UIAlertAction actionWithTitle:ALERT_DIALOG_CANCEL_BUTTON_NAME style:UIAlertActionStyleCancel handler:nil]];

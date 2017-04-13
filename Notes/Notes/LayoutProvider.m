@@ -10,6 +10,10 @@
 #import "Defines.h"
 #import "DateTimeManager.h"
 #import "ThemeManager.h"
+#import "TableViewCell.h"
+#import "Note.h"
+#import "Notebook.h"
+#import "Reminder.h"
 
 @interface LayoutProvider()
 @property DateTimeManager *dateTimeManager;

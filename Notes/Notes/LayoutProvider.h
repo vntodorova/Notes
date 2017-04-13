@@ -6,11 +6,12 @@
 //  Copyright © 2017 Nemetschek DreamTeam. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "TableViewCell.h"
-#import "Note.h"
-#import "Notebook.h"
-#import "Reminder.h"
+#import <UIKit/UIKit.h>
+
+@class TableViewCell;
+@class Note;
+@class Notebook;
+@class Reminder;
 
 @interface LayoutProvider : NSObject
 

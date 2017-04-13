@@ -21,4 +21,6 @@
 
 - (void)reload;
 
+- (void)setNewTheme:(NSString *)newThemeName;
+
 @end

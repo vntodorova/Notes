@@ -53,25 +53,26 @@
     NSString *previousTheme = [self.themeManager currentTheme];
     NSInteger row = [self.pickerView selectedRowInComponent:0];
     NSString *chosenTheme = [self.themeManager.themeNames objectAtIndex:row];
-    [self.themeManager setCurrentTheme:chosenTheme];
-    [UIView animateWithDuration:0.5 animations:^{
-        self.isHidden = YES;
-        self.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
-    } completion:^(BOOL finished) {
-        if(![previousTheme isEqualToString:chosenTheme])
-        {
-            [self.delegate onThemeChanged];
-            [self loadTheme];
-        }
-    }];
+    if(![previousTheme isEqualToString:chosenTheme])
+    {
+        [self.themeManager setNewTheme:chosenTheme];
+        [self.delegate onThemeChanged];
+        [self loadTheme];
+    }
+    [self dismiss];
 }
 
-- (IBAction)cancelButtonClicked:(UIButton *)sender
+- (void)dismiss
 {
     [UIView animateWithDuration:0.5 animations:^{
         self.isHidden = YES;
         self.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
     }];
+}
+
+- (IBAction)cancelButtonClicked:(UIButton *)sender
+{
+    [self dismiss];
 }
 
 #pragma mark -

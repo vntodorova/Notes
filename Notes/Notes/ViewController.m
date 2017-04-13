@@ -15,6 +15,7 @@
 #import "SettingsPanelViewController.h"
 #import "LocalNoteManager.h"
 #import "ThemeManager.h"
+#import "Note.h"
 
 @interface ViewController()
 
@@ -39,7 +40,6 @@
     [self setupNavigationBar];
     self.noteManager = [[LocalNoteManager alloc] init];
     self.themeManager = [ThemeManager sharedInstance];
-    [self.themeManager reload];
     [self loadTheme];
     self.currentNotebook = @"General";
     self.notesArray = [self.noteManager getNoteListForNotebookWithName:self.currentNotebook];
@@ -87,6 +87,7 @@
 
 - (void)loadTheme
 {
+    [self.themeManager reload];
     self.tableView.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_BACKGROUND_COLOR];
     [self.navigationController.navigationBar setBarTintColor:[self.themeManager.styles objectForKey:NAVIGATION_BAR_COLOR]];
     [self.tableView reloadData];
@@ -214,6 +215,7 @@
 
 - (void)showLeftPanel
 {
+    [self.leftPanelViewController reloadData];
     [self.view bringSubviewToFront:self.bluredView];
     [self.view bringSubviewToFront:self.leftPanelViewController.view];
     self.leftPanelViewController.isHidden = NO;
@@ -238,7 +240,6 @@
 
 - (void)onThemeChanged
 {
-    [self.themeManager reload];
     [self loadTheme];
     [self.leftPanelViewController loadTheme];
 }

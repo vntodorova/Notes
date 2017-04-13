@@ -28,7 +28,16 @@ static ThemeManager *sharedInstance = nil;
     if (self) {
         self.styles = [[NSMutableDictionary alloc] init];
         self.themeNames = [[NSArray alloc] initWithObjects:@"Light", @"Dark", nil];
-        [self loadLightTheme];
+        self.currentTheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"Theme"];
+        if(self.currentTheme == nil)
+        {
+            self.currentTheme = @"Light";
+            [self setNewTheme:self.currentTheme];
+        }
+        else
+        {
+            [self reload];
+        }
     }
     return self;
 }
@@ -73,6 +82,13 @@ static ThemeManager *sharedInstance = nil;
     {
         [self loadDarkTheme];
     }
+}
+
+- (void)setNewTheme:(NSString *)newThemeName
+{
+    [[NSUserDefaults standardUserDefaults] setValue:newThemeName forKey:@"Theme"];
+    self.currentTheme = newThemeName;
+    [self reload];
 }
 
 @end
