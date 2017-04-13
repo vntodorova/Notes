@@ -59,7 +59,7 @@
 #define BACKGROUND_COLOR @"BackgroundColor"
 #define NAVIGATION_BAR_COLOR @"NavigationBarColor"
 #define TINT @"Tint"
-#define TEXTFIELDS_ALPHA @"TextFieldsAlpha"
+#define TEXTFIELDS_COLOR @"TextFieldsColor"
 #define CAMERA_IMAGE @"CameraImage"
 #define LIST_IMAGE @"ListImage"
 #define DRAWING_IMAGE @"DrawingImage"

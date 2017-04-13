@@ -68,13 +68,10 @@
 
 - (void)loadTheme
 {
+    self.view.tintColor = [self.themeManager.styles objectForKey:TINT];
     self.view.backgroundColor = [self.themeManager.styles objectForKey:BACKGROUND_COLOR];
-    [self.toolbar setBarTintColor:[self.themeManager.styles objectForKey:NAVIGATION_BAR_COLOR]];
-    [self.noteBody setAlpha:[[self.themeManager.styles objectForKey:TEXTFIELDS_ALPHA] floatValue]];
-    [self.noteName setAlpha:[[self.themeManager.styles objectForKey:TEXTFIELDS_ALPHA] floatValue]];
-    [self.noteTags setAlpha:[[self.themeManager.styles objectForKey:TEXTFIELDS_ALPHA] floatValue]];
-    [self.view setTintColor:[self.themeManager.styles objectForKey:TINT]];
-    [self.optionsButton setTintColor:[self.themeManager.styles objectForKey:TINT]];
+    self.toolbar.barTintColor = [self.themeManager.styles objectForKey:NAVIGATION_BAR_COLOR];
+    self.optionsButton.tintColor = [self.themeManager.styles objectForKey:TINT];
 }
 
 -(void) inflateFontsList
@@ -159,12 +156,10 @@
     if(self.optionsButtonsHidden)
     {
         [self showOptionsButtons];
-        self.optionsButtonsHidden = NO;
     }
     else
     {
         [self hideOptionsButtons];
-        self.optionsButtonsHidden = YES;
     }
 }
 
@@ -198,6 +193,7 @@
          self.addDrawingButton.frame = newDrawingButtonFrame;
          self.addListButton.frame = newListButtonFrame;
      }];
+    self.optionsButtonsHidden = NO;
 }
 
 - (void)hideOptionsButtons
@@ -216,20 +212,24 @@
          [self.addDrawingButton removeFromSuperview];
          [self.addImageButton removeFromSuperview];
      }];
+    self.optionsButtonsHidden = YES;
 }
 
 - (void)onListClick
 {
+    [self hideOptionsButtons];
     NSLog(@"List clicked");
 }
 
 - (void)onCameraClick
 {
+    [self hideOptionsButtons];
     [self showImagePicker];
 }
 
 - (void)onDrawingClick
 {
+    [self hideOptionsButtons];
     DrawingViewController *drawingViewController = [[DrawingViewController alloc] init];
     [self.navigationController pushViewController:drawingViewController animated:YES];
 }
