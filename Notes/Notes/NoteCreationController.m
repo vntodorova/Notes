@@ -18,7 +18,6 @@
 
 @interface NoteCreationController ()
 
-@property (nonatomic, strong) NSMutableArray *hiddenButtonsList;
 @property (nonatomic, strong) NSMutableArray *fontList;
 @property (nonatomic, strong) NSMutableArray *textSizeList;
 @property (nonatomic, strong) NSMutableArray *noteBookList;
@@ -26,14 +25,14 @@
 @property (nonatomic, strong) ThemeManager *themeManager;
 @property (nonatomic, strong) NSString *tempFolderPath;
 
+@property UIButton *addImageButton;
+@property UIButton *addDrawingButton;
+@property UIButton *addListButton;
+@property BOOL optionsButtonsHidden;
 @property int imageIndex;
 @end
 
 @implementation NoteCreationController
-
-#pragma mark Controller
-
-
 
 -(instancetype)initWithManager:(LocalNoteManager *)manager
 {
@@ -56,15 +55,86 @@
     [self loadTheme];
     [self inflateFontsList];
     [self inflateTextSizeList];
-    
+    [self setupOptionsButtons];
     [self deleteTempFolder];
     [self createTempFolder];
-    
     [self loadHTML];
-    
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc]
                                      initWithTarget:self
                                              action:@selector(dismissKeyboard)]];
+}
+
+#pragma mark -
+#pragma mark ViewController setup
+
+- (void)loadTheme
+{
+    self.view.backgroundColor = [self.themeManager.styles objectForKey:BACKGROUND_COLOR];
+    [self.toolbar setBarTintColor:[self.themeManager.styles objectForKey:NAVIGATION_BAR_COLOR]];
+    [self.noteBody setAlpha:[[self.themeManager.styles objectForKey:TEXTFIELDS_ALPHA] floatValue]];
+    [self.noteName setAlpha:[[self.themeManager.styles objectForKey:TEXTFIELDS_ALPHA] floatValue]];
+    [self.noteTags setAlpha:[[self.themeManager.styles objectForKey:TEXTFIELDS_ALPHA] floatValue]];
+    [self.view setTintColor:[self.themeManager.styles objectForKey:TINT]];
+    [self.optionsButton setTintColor:[self.themeManager.styles objectForKey:TINT]];
+}
+
+-(void) inflateFontsList
+{
+    [self.fontList addObject:@"Times New Roman"];
+    [self.fontList addObject:@"Arial"];
+    [self.fontList addObject:@"Futura"];
+    [self.fontList addObject:@"Verdana"];
+}
+
+-(void) inflateTextSizeList
+{
+    [self.textSizeList addObject:@"10"];
+    [self.textSizeList addObject:@"11"];
+    [self.textSizeList addObject:@"12"];
+    [self.textSizeList addObject:@"13"];
+    [self.textSizeList addObject:@"14"];
+}
+
+- (void)setupOptionsButtons
+{
+    self.optionsButtonsHidden = YES;
+    CGFloat red, green, blue;
+    [[self.themeManager.styles objectForKey:TINT] getRed:&red green:&green blue:&blue alpha:nil];
+    
+    self.addImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.addImageButton.layer.cornerRadius = 23;
+    self.addImageButton.layer.borderWidth = 1;
+    self.addImageButton.layer.borderColor = [UIColor colorWithRed:red green:green blue:blue alpha:1].CGColor;
+    self.addImageButton.clipsToBounds = YES;
+    [self.addImageButton addTarget:self action:@selector(onCameraClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.addImageButton setImage:[self.themeManager.styles objectForKey:CAMERA_IMAGE] forState:UIControlStateNormal];
+    
+    self.addListButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.addListButton.layer.cornerRadius = 23;
+    self.addListButton.layer.borderWidth = 1;
+    self.addListButton.layer.borderColor = [UIColor colorWithRed:red green:green blue:blue alpha:1].CGColor;
+    self.addListButton.clipsToBounds = YES;
+    [self.addListButton addTarget:self action:@selector(onListClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.addListButton setImage:[self.themeManager.styles objectForKey:LIST_IMAGE] forState:UIControlStateNormal];
+    
+    self.addDrawingButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.addDrawingButton.layer.cornerRadius = 23;
+    self.addDrawingButton.layer.borderWidth = 1;
+    self.addDrawingButton.layer.borderColor = [UIColor colorWithRed:red green:green blue:blue alpha:1].CGColor;
+    self.addDrawingButton.clipsToBounds = YES;
+    [self.addDrawingButton addTarget:self action:@selector(onDrawingClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.addDrawingButton setImage:[self.themeManager.styles objectForKey:DRAWING_IMAGE] forState:UIControlStateNormal];
+}
+
+-(void) deleteTempFolder
+{
+    [[NSFileManager defaultManager] removeItemAtPath:self.tempFolderPath error:nil];
+}
+
+-(void) createTempFolder
+{
+    NSFileManager *fm = [NSFileManager defaultManager];
+    [fm createDirectoryAtPath:self.tempFolderPath withIntermediateDirectories:YES attributes:nil error:nil];
 }
 
 -(void) loadHTML
@@ -82,70 +152,71 @@
     }
 }
 
-- (void)loadTheme
-{
-    self.view.backgroundColor = [self.themeManager.styles objectForKey:BACKGROUND_COLOR];
-    [self.toolbar setBarTintColor:[self.themeManager.styles objectForKey:NAVIGATION_BAR_COLOR]];
-    [self.noteBody setAlpha:[[self.themeManager.styles objectForKey:TEXTFIELDS_ALPHA] floatValue]];
-    [self.noteName setAlpha:[[self.themeManager.styles objectForKey:TEXTFIELDS_ALPHA] floatValue]];
-    [self.noteTags setAlpha:[[self.themeManager.styles objectForKey:TEXTFIELDS_ALPHA] floatValue]];
-    [self.view setTintColor:[self.themeManager.styles objectForKey:TINT]];
-    [self.optionsButton setTintColor:[self.themeManager.styles objectForKey:TINT]];
-}
-
--(void) loadNoteTemplateHTML
-{
-    NSString *emptyFilePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-                               stringByAppendingPathComponent:EMPTY_FILE_NAME];
-    
-    NSURL *emptyFileURL = [[NSURL alloc] initWithString:emptyFilePath];
-    [self.noteBody loadRequest:[NSURLRequest requestWithURL:emptyFileURL]];
-}
-
--(void) loadSavedHtml
-{
-    NSString *convertedHTML = [self convertLoadableStringHTML:self.note.body];
-    NSString *path = [[NSBundle mainBundle] bundlePath];
-    NSURL *baseURL = [NSURL fileURLWithPath:path];
-    [self.noteBody loadHTMLString:convertedHTML baseURL:baseURL];
-}
-
--(NSString*) convertLoadableStringHTML:(NSString *)html
-{
-    NSString *convertedHTML = html.description;
-    
-    NSString *loadedFilePath = [self getNoteDirectoryPathForNote:self.note inNotebookWithName:self.currentNotebook];
-    
-    NSString *stringForReplace = START_OF_IMAGE_HTML;
-    NSString *stringReplaced = [NSString stringWithFormat:@"%@%@/", stringForReplace, loadedFilePath];
-    
-    convertedHTML = [convertedHTML stringByReplacingOccurrencesOfString:stringForReplace withString:stringReplaced];
-    return convertedHTML;
-}
-
--(void) createTempFolder
-{
-    NSFileManager *fm = [NSFileManager defaultManager];
-    [fm createDirectoryAtPath:self.tempFolderPath withIntermediateDirectories:YES attributes:nil error:nil];
-}
-
--(void) deleteTempFolder
-{
-    [[NSFileManager defaultManager] removeItemAtPath:self.tempFolderPath error:nil];
-}
-
-#pragma mark Public
+#pragma mark - 
+#pragma mark Options buttons
 
 - (IBAction)onOptionsClick:(UIButton *)sender
 {
-    if(self.hiddenButtonsList.count > 0)
+    if(self.optionsButtonsHidden)
     {
-        [self destroyHiddenButtonsOnBaseButton:(UIButton *)sender];
+        [self showOptionsButtons];
+        self.optionsButtonsHidden = NO;
     }
     else
     {
-        [self createHiddenButtons:sender];
+        [self hideOptionsButtons];
+        self.optionsButtonsHidden = YES;
     }
+}
+
+- (void)showOptionsButtons
+{
+    CGFloat optionsButtonFrameX = self.optionsButton.frame.origin.x;
+    CGFloat optionsButtonFrameY = self.optionsButton.frame.origin.y;
+    long optionsButtonX = optionsButtonFrameX - SMALL_BUTTON_DISTANCE;
+    long optionsButtonY = optionsButtonFrameY - SMALL_BUTTON_DISTANCE;
+    CGRect newImageButtonFrame = CGRectMake(optionsButtonX, optionsButtonY, SMALL_BUTTONS_WIDTH, SMALL_BUTTONS_HEIGHT);
+    optionsButtonY = optionsButtonFrameY - 10;
+    CGRect newDrawingButtonFrame = CGRectMake(optionsButtonX, optionsButtonY, SMALL_BUTTONS_WIDTH, SMALL_BUTTONS_HEIGHT);
+    optionsButtonX = optionsButtonFrameX - 10;
+    optionsButtonY = optionsButtonFrameY - SMALL_BUTTON_DISTANCE;
+    CGRect newListButtonFrame = CGRectMake(optionsButtonX, optionsButtonY, SMALL_BUTTONS_WIDTH, SMALL_BUTTONS_HEIGHT);
+    
+    CGRect initialFrame = CGRectMake(optionsButtonFrameX + SMALL_BUTTON_DISTANCE / 2, optionsButtonFrameY + SMALL_BUTTON_DISTANCE / 2, 0, 0);
+    
+    self.addImageButton.frame = initialFrame;
+    self.addDrawingButton.frame = initialFrame;
+    self.addListButton.frame = initialFrame;
+    
+    [self.view addSubview:self.addImageButton];
+    [self.view addSubview:self.addDrawingButton];
+    [self.view addSubview:self.addListButton];
+    
+    [UIView animateWithDuration:0.5
+                     animations:^
+     {
+         self.addImageButton.frame = newImageButtonFrame;
+         self.addDrawingButton.frame = newDrawingButtonFrame;
+         self.addListButton.frame = newListButtonFrame;
+     }];
+}
+
+- (void)hideOptionsButtons
+{
+    CGRect newFrame = CGRectMake(self.optionsButton.frame.origin.x + SMALL_BUTTON_DISTANCE / 2, self.optionsButton.frame.origin.y + SMALL_BUTTON_DISTANCE / 2, 0, 0);
+    [UIView animateWithDuration:0.5
+                     animations:^
+     {
+         self.addListButton.frame = newFrame;
+         self.addDrawingButton.frame = newFrame;
+         self.addImageButton.frame = newFrame;
+     }
+                     completion:^(BOOL finished)
+     {
+         [self.addListButton removeFromSuperview];
+         [self.addDrawingButton removeFromSuperview];
+         [self.addImageButton removeFromSuperview];
+     }];
 }
 
 - (void)onListClick
@@ -157,6 +228,92 @@
 {
     [self showImagePicker];
 }
+
+- (void)onDrawingClick
+{
+    DrawingViewController *drawingViewController = [[DrawingViewController alloc] init];
+    [self.navigationController pushViewController:drawingViewController animated:YES];
+}
+
+#pragma mark -
+#pragma mark Public
+
+- (IBAction)onCreateClick:(id)sender
+{
+    NSMutableArray *array  = [[NSMutableArray alloc] init];
+
+    [array addObject:[self getInputAlertAction]];
+    
+    for (Notebook* currentItem in [self.manager getNotebookList])
+    {
+        [array addObject:[UIAlertAction actionWithTitle:currentItem.name style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
+                          {
+                              [self performSelector:@selector(notebookSelected:) withObject:currentItem];
+                          }]];
+    }
+    
+    [self displaySelectableMenuWithButton:sender list:array];
+}
+
+- (void)notebookSelected:(Notebook*) noteBookSelected
+{
+    [self setNoteContent];
+    [self.navigationController popViewControllerAnimated:YES];
+    [self.manager addNote:self.note toNotebook:noteBookSelected];
+}
+
+- (IBAction)onSettingsSelected:(id)sender
+{
+    NSLog(@"Settings selected");
+}
+
+- (IBAction)onUnderlineSelected:(id)sender
+{
+    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_UNDERLINE];
+}
+
+- (IBAction)onItalicStyleSelected:(id)sender
+{
+    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_ITALIC];
+}
+
+- (IBAction)onBoldStyleSelected:(id)sender
+{
+    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_BOLD];
+}
+
+- (IBAction)onFontSelected:(id)sender
+{
+    NSMutableArray *array  = [[NSMutableArray alloc] init];
+    
+    for (NSString* currentItem in self.fontList)
+    {
+        [array addObject:[UIAlertAction actionWithTitle:currentItem style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
+                          {
+                              [self performSelector:@selector(updateNoteFont:) withObject:currentItem];
+                          }]];
+    }
+    
+    [self displaySelectableMenuWithButton:sender list:array];
+}
+
+- (IBAction)onSizeSelected:(UIButton *)sender
+{
+    NSMutableArray *array  = [[NSMutableArray alloc] init];
+    
+    for (NSString* currentItem in self.textSizeList)
+    {
+        [array addObject:[UIAlertAction actionWithTitle:currentItem style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
+                          {
+                              [self performSelector:@selector(updateNoteSize:) withObject:currentItem];
+                          }]];
+    }
+    
+    [self displaySelectableMenuWithButton:sender list:array];
+}
+
+#pragma mark -
+#pragma mark Private
 
 -(void) showImagePicker
 {
@@ -221,29 +378,6 @@
     return [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_GET_HTML];
 }
 
-- (void)onDrawingClick
-{
-    DrawingViewController *drawingViewController = [[DrawingViewController alloc] init];
-    [self.navigationController pushViewController:drawingViewController animated:YES];
-}
-
-- (IBAction)onCreateClick:(id)sender
-{
-    NSMutableArray *array  = [[NSMutableArray alloc] init];
-
-    [array addObject:[self getInputAlertAction]];
-    
-    for (Notebook* currentItem in [self.manager getNotebookList])
-    {
-        [array addObject:[UIAlertAction actionWithTitle:currentItem.name style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
-                          {
-                              [self performSelector:@selector(notebookSelected:) withObject:currentItem];
-                          }]];
-    }
-    
-    [self displaySelectableMenuWithButton:sender list:array];
-}
-
 -(UIAlertAction*) getInputAlertAction
 {
     UIAlertAction *newNotebookAction = [UIAlertAction actionWithTitle:ALERT_INPUT_DIALOG_TITLE
@@ -290,13 +424,6 @@
     return inputController;
 }
 
-- (void)notebookSelected:(Notebook*) noteBookSelected
-{
-    [self setNoteContent];
-    [self.navigationController popViewControllerAnimated:YES];
-    [self.manager addNote:self.note toNotebook:noteBookSelected];
-}
-
 -(void) setNoteContent
 {
     if(self.noteName.text.length > 0)
@@ -334,50 +461,6 @@
                             stringByAppendingPathComponent:note.name];
 }
 
-- (IBAction)onSettingsSelected:(UIButton*)sender
-{
-    DatePickerViewController *contentVC = [[DatePickerViewController alloc] initWithNibName:@"DatePickerViewController" bundle:nil]; // 12
-    contentVC.modalPresentationStyle = UIModalPresentationPopover; // 13
-    contentVC.preferredContentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height / 2);
-
-    UIPopoverPresentationController *popPC = contentVC.popoverPresentationController; // 14
-    contentVC.popoverPresentationController.sourceRect = sender.frame; // 15
-    contentVC.popoverPresentationController.sourceView = self.view; // 16
-    
-    popPC.permittedArrowDirections = UIPopoverArrowDirectionAny; // 17
-    popPC.delegate = self; //18
-    [self presentViewController:contentVC animated:YES completion:nil]; // 19
-}
-
-- (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller traitCollection:(UITraitCollection *)traitCollection {
-    return UIModalPresentationNone; // 20
-}
-
-//- (UIViewController *)presentationController:(UIPresentationController *)controller viewControllerForAdaptivePresentationStyle:(UIModalPresentationStyle)style {
-//    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller.presentedViewController];
-//    return navController; // 21
-//}
-
-- (IBAction)onUnderlineSelected:(id)sender
-{
-    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_UNDERLINE];
-}
-
-- (IBAction)onItalicStyleSelected:(id)sender
-{
-    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_ITALIC];
-}
-
-- (IBAction)onBoldStyleSelected:(id)sender
-{
-    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_BOLD];
-}
-
-- (IBAction)onAlignCenterPressed:(id)sender
-{
-    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_CENTER];
-}
-
 - (void)updateNoteFont:(NSString*) font
 {
     [self.noteBody stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:JS_COMMAND_FONT_TYPE, font]];
@@ -388,37 +471,38 @@
     [self.noteBody stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:JS_COMMAND_FONT_SIZE, size]];
 }
 
-- (IBAction)onFontSelected:(id)sender
+-(void) loadNoteTemplateHTML
 {
-    NSMutableArray *array  = [[NSMutableArray alloc] init];
+    NSString *emptyFilePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+                               stringByAppendingPathComponent:EMPTY_FILE_NAME];
     
-    for (NSString* currentItem in self.fontList)
-    {
-        [array addObject:[UIAlertAction actionWithTitle:currentItem style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
-                          {
-                              [self performSelector:@selector(updateNoteFont:) withObject:currentItem];
-                          }]];
-    }
-    
-    [self displaySelectableMenuWithButton:sender list:array];
+    NSURL *emptyFileURL = [[NSURL alloc] initWithString:emptyFilePath];
+    [self.noteBody loadRequest:[NSURLRequest requestWithURL:emptyFileURL]];
 }
 
-- (IBAction)onSizeSelected:(UIButton *)sender
+-(void) loadSavedHtml
 {
-    NSMutableArray *array  = [[NSMutableArray alloc] init];
-    
-    for (NSString* currentItem in self.textSizeList)
-    {
-        [array addObject:[UIAlertAction actionWithTitle:currentItem style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
-                          {
-                              [self performSelector:@selector(updateNoteSize:) withObject:currentItem];
-                          }]];
-    }
-    
-    [self displaySelectableMenuWithButton:sender list:array];
+    NSString *convertedHTML = [self convertLoadableStringHTML:self.note.body];
+    NSString *path = [[NSBundle mainBundle] bundlePath];
+    NSURL *baseURL = [NSURL fileURLWithPath:path];
+    [self.noteBody loadHTMLString:convertedHTML baseURL:baseURL];
 }
 
-#pragma mark Private
+-(NSString*) convertLoadableStringHTML:(NSString *)html
+{
+    NSString *convertedHTML = html.description;
+    
+    NSString *loadedFilePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+                                  stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
+                                 stringByAppendingPathComponent:self.currentNotebook]
+                                stringByAppendingPathComponent:self.note.name];
+    
+    NSString *stringForReplace = START_OF_IMAGE_HTML;
+    NSString *stringReplaced = [NSString stringWithFormat:@"%@%@/", stringForReplace, loadedFilePath];
+    
+    convertedHTML = [convertedHTML stringByReplacingOccurrencesOfString:stringForReplace withString:stringReplaced];
+    return convertedHTML;
+}
 
 - (void)displaySelectableMenuWithButton:(UIButton *) button list:(NSMutableArray*)nameList
 {
@@ -441,24 +525,7 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
--(void) inflateTextSizeList
-{
-    [self.textSizeList addObject:@"10"];
-    [self.textSizeList addObject:@"11"];
-    [self.textSizeList addObject:@"12"];
-    [self.textSizeList addObject:@"13"];
-    [self.textSizeList addObject:@"14"];
-}
-
--(void) inflateFontsList
-{
-    [self.fontList addObject:@"Times New Roman"];
-    [self.fontList addObject:@"Arial"];
-    [self.fontList addObject:@"Futura"];
-    [self.fontList addObject:@"Verdana"];
-}
-
--(void) dismissKeyboard
+- (void)dismissKeyboard
 {
     [self.view endEditing:YES];
 }
@@ -490,86 +557,4 @@
     }
     return tagsText;
 }
-
-- (void)createHiddenButtons:(UIButton *)sender
-{
-    long optionsButtonX = sender.frame.origin.x - SMALL_BUTTON_DISTANCE;
-    long optionsButtonY = sender.frame.origin.y - SMALL_BUTTON_DISTANCE;
-    [self createButtonWithX:optionsButtonX
-                       andY:optionsButtonY
-                 baseButton:sender
-                buttonImage:[self.themeManager.styles objectForKey:CAMERA_IMAGE]
-                     action:@selector(onCameraClick)];
-    
-    optionsButtonX = sender.frame.origin.x - SMALL_BUTTON_DISTANCE;
-    optionsButtonY = sender.frame.origin.y - 10;
-    
-    [self createButtonWithX:optionsButtonX
-                       andY:optionsButtonY
-                 baseButton:sender
-                buttonImage:[self.themeManager.styles objectForKey:DRAWING_IMAGE]
-                     action:@selector(onDrawingClick)];
-    
-    optionsButtonX = sender.frame.origin.x - 10;
-    optionsButtonY = sender.frame.origin.y - SMALL_BUTTON_DISTANCE;
-    [self createButtonWithX:optionsButtonX
-                       andY:optionsButtonY
-                 baseButton:sender
-                buttonImage:[self.themeManager.styles objectForKey:LIST_IMAGE]
-                     action:@selector(onListClick)];
-}
-
-- (void)createButtonWithX:(long)xCoordinates andY:(long)yCoordinates baseButton:(UIButton *)sender buttonImage:(UIImage *)image action:(SEL)selector
-{
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.layer.cornerRadius = 23;
-    button.layer.borderWidth = 1;
-    UIColor *color = [self.themeManager.styles objectForKey:TINT];
-    CGFloat red;
-    CGFloat green;
-    CGFloat blue;
-    [color getRed:&red green:&green blue:&blue alpha:nil];
-    button.layer.borderColor = [UIColor colorWithRed:red green:green blue:blue alpha:1].CGColor;
-    button.clipsToBounds = YES;
-    [button addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
-    [button setImage:image forState:UIControlStateNormal];
-
-    
-    button.frame = CGRectMake(sender.frame.origin.x + SMALL_BUTTON_DISTANCE / 2,
-                              sender.frame.origin.y + SMALL_BUTTON_DISTANCE / 2,
-                              0,
-                              0);
-    
-    [self.view addSubview:button];
-    
-    [UIView animateWithDuration:0.5
-                     animations:^
-    {
-         button.frame = CGRectMake(xCoordinates, yCoordinates, SMALL_BUTTONS_WIDTH, SMALL_BUTTONS_HEIGHT);
-    }
-                     completion:^(BOOL finished)
-    {
-         [self.hiddenButtonsList addObject:button];
-    }];
-}
-
-- (void)destroyHiddenButtonsOnBaseButton:(UIButton *)sender
-{
-    for (UIButton *button in self.hiddenButtonsList) {
-        [UIView animateWithDuration:0.5
-                         animations:^
-         {
-             button.frame = CGRectMake(sender.frame.origin.x + SMALL_BUTTON_DISTANCE / 2,
-                                       sender.frame.origin.y + SMALL_BUTTON_DISTANCE / 2,
-                                       0,
-                                       0);
-         }
-                         completion:^(BOOL finished)
-        {
-            [button removeFromSuperview];
-        }];
-    }
-    [self.hiddenButtonsList removeAllObjects];
-}
-
 @end
