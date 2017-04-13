@@ -34,4 +34,15 @@
 }
 */
 
+- (IBAction)onCancelClicked:(id)sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)onSaveClicked:(id)sender
+{
+    [self.delegate  reminderDateSelected:[self.datePicker date]];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 @end

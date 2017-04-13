@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "Protocols.h"
+#import "DatePickerViewController.h"
 @class LocalNoteManager;
 
-@interface NoteCreationController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIPopoverPresentationControllerDelegate>
+@interface NoteCreationController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIPopoverPresentationControllerDelegate, DatePickerDelegate>
 
 - (instancetype)initWithManager:(LocalNoteManager*) manager;
 

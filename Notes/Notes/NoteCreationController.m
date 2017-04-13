@@ -12,7 +12,6 @@
 #import "DrawingViewController.h"
 #import "ThemeManager.h"
 #import "LayoutProvider.h"
-#import "DatePickerViewController.h"
 #import "Note.h"
 #import "LocalNoteManager.h"
 
@@ -269,6 +268,7 @@
 - (IBAction)onSettingsSelected:(UIButton*)sender
 {
     DatePickerViewController *datePicker = [[DatePickerViewController alloc] initWithNibName:@"DatePickerViewController" bundle:nil];
+    datePicker.delegate = self;
     datePicker.modalPresentationStyle = UIModalPresentationPopover;
     datePicker.preferredContentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height / 2);
     
@@ -332,6 +332,11 @@
 
 #pragma mark -
 #pragma mark Private
+
+-(void)reminderDateSelected:(NSDate *)date
+{
+    NSLog(@"%@",date);
+}
 
 -(void) showImagePicker
 {

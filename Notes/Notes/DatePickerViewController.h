@@ -8,6 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol DatePickerDelegate
+
+-(void) reminderDateSelected:(NSDate* )date;
+
+@end
+
 @interface DatePickerViewController : UIViewController
+
+@property (weak, nonatomic) IBOutlet UIDatePicker *datePicker;
+@property (weak) id<DatePickerDelegate> delegate;
+
+- (IBAction)onCancelClicked:(id)sender;
+- (IBAction)onSaveClicked:(id)sender;
 
 @end
