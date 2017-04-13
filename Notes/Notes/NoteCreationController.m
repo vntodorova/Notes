@@ -41,7 +41,6 @@
     self.manager = manager;
     self.tempFolderPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
                            stringByAppendingPathComponent:TEMP_FOLDER];
-    self.hiddenButtonsList = [[NSMutableArray alloc] init];
     self.fontList = [[NSMutableArray alloc] init];
     self.textSizeList = [[NSMutableArray alloc] init];
     self.themeManager = [ThemeManager sharedInstance];
@@ -255,6 +254,11 @@
     [self displaySelectableMenuWithButton:sender list:array];
 }
 
+- (IBAction)onAlignCenterPressed:(id)sender
+{
+    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_CENTER];
+}
+
 - (void)notebookSelected:(Notebook*) noteBookSelected
 {
     [self setNoteContent];
@@ -262,9 +266,23 @@
     [self.manager addNote:self.note toNotebook:noteBookSelected];
 }
 
-- (IBAction)onSettingsSelected:(id)sender
+- (IBAction)onSettingsSelected:(UIButton*)sender
 {
-    NSLog(@"Settings selected");
+    DatePickerViewController *datePicker = [[DatePickerViewController alloc] initWithNibName:@"DatePickerViewController" bundle:nil];
+    datePicker.modalPresentationStyle = UIModalPresentationPopover;
+    datePicker.preferredContentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height / 2);
+    
+    UIPopoverPresentationController *popPC = datePicker.popoverPresentationController;
+    datePicker.popoverPresentationController.sourceRect = sender.frame;
+    datePicker.popoverPresentationController.sourceView = self.view;
+    
+    popPC.permittedArrowDirections = UIPopoverArrowDirectionAny;
+    popPC.delegate = self;
+    [self presentViewController:datePicker animated:YES completion:nil];
+}
+
+- (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller traitCollection:(UITraitCollection *)traitCollection {
+    return UIModalPresentationNone;
 }
 
 - (IBAction)onUnderlineSelected:(id)sender
