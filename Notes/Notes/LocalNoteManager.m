@@ -27,8 +27,7 @@
     {
         self.notebookList = [[NSMutableDictionary alloc] init];
         self.notebookObjectList = [[NSMutableArray alloc] init];
-        self.contentPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-                              stringByAppendingPathComponent: NOTE_NOTEBOOKS_FOLDER];
+        self.contentPath = [self getNotebooksRootDirectoryPath];
         [self loadNotebooks];
     }
     return self;
@@ -51,8 +50,8 @@
     {
         [self.notebookList setObject:[[NSMutableArray alloc] init] forKey:newNotebook.name];
         [self.notebookObjectList addObject:newNotebook];
-        NSString *path = [self.contentPath stringByAppendingPathComponent:newNotebook.name];
-        [self createDirectoryAtPath:path];
+        NSString *notebookPath = [self getDirectoryPathForNotebookWithName:newNotebook.name];
+        [self createDirectoryAtPath:notebookPath];
     }
 }
 
@@ -74,9 +73,9 @@
 - (void)removeNotebook:(Notebook *)notebook
 {
     [self.notebookList removeObjectForKey:notebook.name];
-    NSString *path = [self.contentPath stringByAppendingPathComponent:notebook.name];
+    NSString *notebookPath = [self getDirectoryPathForNotebookWithName:notebook.name];
     
-    [self deleteItemAtPath:path];
+    [self deleteItemAtPath:notebookPath];
 }
 
 - (void)removeNote:(Note *)note fromNotebook:(NSString *)notebookName
@@ -86,10 +85,7 @@
         return;
     }
 
-    NSString *path = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-                            stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
-                            stringByAppendingPathComponent:notebookName]
-                            stringByAppendingPathComponent:note.name];
+    NSString *path = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
         
     NSMutableArray *array = [self.notebookList objectForKey:notebookName];
     [array removeObject:note];
@@ -150,12 +146,37 @@
 }
 
 #pragma mark PRIVATE
+
+-(NSString*) getTempDirectoryPath
+{
+    return [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+            stringByAppendingPathComponent:TEMP_FOLDER];
+}
+
+-(NSString*) getNotebooksRootDirectoryPath
+{
+    return [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+            stringByAppendingPathComponent: NOTE_NOTEBOOKS_FOLDER];
+}
+
+-(NSString*) getDirectoryPathForNotebookWithName: (NSString*) notebookName
+{
+    return [[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+            stringByAppendingPathComponent: NOTE_NOTEBOOKS_FOLDER]
+            stringByAppendingPathComponent:notebookName];
+}
+
+-(NSString*) getNoteDirectoryPathForNote:(Note*)note inNotebookWithName:(NSString*) notebookName
+{
+    return [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+                stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
+                stringByAppendingPathComponent:notebookName]
+                stringByAppendingPathComponent:note.name];
+}
+
 - (void) saveToDisk:(Note *)newNote toNotebook:(Notebook *)notebook
 {
-    NSString *noteRoot = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-                            stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
-                            stringByAppendingPathComponent:notebook.name]
-                            stringByAppendingPathComponent:newNote.name];
+    NSString *noteRoot = [self getNoteDirectoryPathForNote:newNote inNotebookWithName:notebook.name];
     
     [self createDirectoryAtPath:noteRoot];
     
@@ -168,7 +189,7 @@
 -(void) coppyFilesFromTempFolderTo:(NSString*) destination
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString* tempFolderPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:TEMP_FOLDER];
+    NSString *tempFolderPath = [self getTempDirectoryPath];
     NSArray *directoryContents = [self getDirectoryContentForPath:tempFolderPath];
     
     for(NSString *imageName in directoryContents)
@@ -237,7 +258,7 @@
 
 - (NSMutableArray*) loadNotesForNotebook:(Notebook*) notebook
 {
-    NSString *path = [self.contentPath stringByAppendingPathComponent:notebook.name];
+    NSString *path = [self getDirectoryPathForNotebookWithName:notebook.name];
     NSMutableArray<Note*> *array = [[NSMutableArray alloc] init];
     
     NSArray *directoryContents = [self getDirectoryContentForPath: path];

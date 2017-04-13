@@ -12,8 +12,9 @@
 #import "DrawingViewController.h"
 #import "ThemeManager.h"
 #import "LayoutProvider.h"
-#import "LocalNoteManager.h"
+#import "DatePickerViewController.h"
 #import "Note.h"
+#import "LocalNoteManager.h"
 
 @interface NoteCreationController ()
 
@@ -32,12 +33,15 @@
 
 #pragma mark Controller
 
+
+
 -(instancetype)initWithManager:(LocalNoteManager *)manager
 {
     self = [super self];
     
     self.manager = manager;
-    self.tempFolderPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:TEMP_FOLDER];
+    self.tempFolderPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+                           stringByAppendingPathComponent:TEMP_FOLDER];
     self.hiddenButtonsList = [[NSMutableArray alloc] init];
     self.fontList = [[NSMutableArray alloc] init];
     self.textSizeList = [[NSMutableArray alloc] init];
@@ -110,10 +114,7 @@
 {
     NSString *convertedHTML = html.description;
     
-    NSString *loadedFilePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-                                    stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
-                                    stringByAppendingPathComponent:self.currentNotebook]
-                                    stringByAppendingPathComponent:self.note.name];
+    NSString *loadedFilePath = [self getNoteDirectoryPathForNote:self.note inNotebookWithName:self.currentNotebook];
     
     NSString *stringForReplace = START_OF_IMAGE_HTML;
     NSString *stringReplaced = [NSString stringWithFormat:@"%@%@/", stringForReplace, loadedFilePath];
@@ -315,11 +316,7 @@
 
 -(NSString*) changeHTMLImagePathsToLocal:(NSString*) html
 {
-    NSString *notePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-                                    stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
-                                    stringByAppendingPathComponent:self.currentNotebook]
-                                    stringByAppendingPathComponent:self.note.name];
-    
+    NSString *notePath = [self getNoteDirectoryPathForNote:self.note inNotebookWithName:self.currentNotebook];
     NSString *stringForReplace = [self.tempFolderPath stringByAppendingString:@"/"];
     html = [html stringByReplacingOccurrencesOfString:stringForReplace withString:@""];
     
@@ -329,10 +326,37 @@
     return html;
 }
 
-- (IBAction)onSettingsSelected:(id)sender
+-(NSString*) getNoteDirectoryPathForNote:(Note*)note inNotebookWithName:(NSString*) notebook
 {
-    NSLog(@"Settings selected");
+    return [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+                            stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
+                            stringByAppendingPathComponent:notebook]
+                            stringByAppendingPathComponent:note.name];
 }
+
+- (IBAction)onSettingsSelected:(UIButton*)sender
+{
+    DatePickerViewController *contentVC = [[DatePickerViewController alloc] initWithNibName:@"DatePickerViewController" bundle:nil]; // 12
+    contentVC.modalPresentationStyle = UIModalPresentationPopover; // 13
+    contentVC.preferredContentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height / 2);
+
+    UIPopoverPresentationController *popPC = contentVC.popoverPresentationController; // 14
+    contentVC.popoverPresentationController.sourceRect = sender.frame; // 15
+    contentVC.popoverPresentationController.sourceView = self.view; // 16
+    
+    popPC.permittedArrowDirections = UIPopoverArrowDirectionAny; // 17
+    popPC.delegate = self; //18
+    [self presentViewController:contentVC animated:YES completion:nil]; // 19
+}
+
+- (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller traitCollection:(UITraitCollection *)traitCollection {
+    return UIModalPresentationNone; // 20
+}
+
+//- (UIViewController *)presentationController:(UIPresentationController *)controller viewControllerForAdaptivePresentationStyle:(UIModalPresentationStyle)style {
+//    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller.presentedViewController];
+//    return navController; // 21
+//}
 
 - (IBAction)onUnderlineSelected:(id)sender
 {
@@ -347,6 +371,11 @@
 - (IBAction)onBoldStyleSelected:(id)sender
 {
     [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_BOLD];
+}
+
+- (IBAction)onAlignCenterPressed:(id)sender
+{
+    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_CENTER];
 }
 
 - (void)updateNoteFont:(NSString*) font
@@ -429,7 +458,7 @@
     [self.fontList addObject:@"Verdana"];
 }
 
-- (void)dismissKeyboard
+-(void) dismissKeyboard
 {
     [self.view endEditing:YES];
 }

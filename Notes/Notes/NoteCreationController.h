@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "Protocols.h"
-
 @class LocalNoteManager;
 
-@interface NoteCreationController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
+@interface NoteCreationController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIPopoverPresentationControllerDelegate>
 
 - (instancetype)initWithManager:(LocalNoteManager*) manager;
 
+- (IBAction)onAlignCenterPressed:(id)sender;
 - (IBAction)onOptionsClick:(id)sender;
 - (IBAction)onCreateClick:(id)sender;
 

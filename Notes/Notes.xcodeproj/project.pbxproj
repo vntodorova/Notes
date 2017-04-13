@@ -11,6 +11,8 @@
 		1D07C0DA1E9251F900E85CAF /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D07C0D41E9251F900E85CAF /* camera.png */; };
 		1D07C0DB1E9251F900E85CAF /* drawing.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D07C0D51E9251F900E85CAF /* drawing.png */; };
 		1D07C0DC1E9251F900E85CAF /* list.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D07C0D61E9251F900E85CAF /* list.png */; };
+		1D352FC61E9F9FC500F0C7A0 /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D352FC41E9F9FC500F0C7A0 /* DatePickerViewController.m */; };
+		1D352FC71E9F9FC500F0C7A0 /* DatePickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D352FC51E9F9FC500F0C7A0 /* DatePickerViewController.xib */; };
 		1D4056041E8D1E5000E18D05 /* NoteCreationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4056021E8D1E5000E18D05 /* NoteCreationController.m */; };
 		1D4056051E8D1E5000E18D05 /* NoteCreationController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D4056031E8D1E5000E18D05 /* NoteCreationController.xib */; };
 		1D4056081E8D360600E18D05 /* Note.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4056071E8D360600E18D05 /* Note.m */; };
@@ -75,6 +77,9 @@
 		1D07C0D41E9251F900E85CAF /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
 		1D07C0D51E9251F900E85CAF /* drawing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drawing.png; sourceTree = "<group>"; };
 		1D07C0D61E9251F900E85CAF /* list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list.png; sourceTree = "<group>"; };
+		1D352FC31E9F9FC500F0C7A0 /* DatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
+		1D352FC41E9F9FC500F0C7A0 /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
+		1D352FC51E9F9FC500F0C7A0 /* DatePickerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DatePickerViewController.xib; sourceTree = "<group>"; };
 		1D4056011E8D1E5000E18D05 /* NoteCreationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteCreationController.h; sourceTree = "<group>"; };
 		1D4056021E8D1E5000E18D05 /* NoteCreationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteCreationController.m; sourceTree = "<group>"; };
 		1D4056031E8D1E5000E18D05 /* NoteCreationController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoteCreationController.xib; sourceTree = "<group>"; };
@@ -232,6 +237,9 @@
 				B5E8AC441E9CC41700964B3C /* SettingsPanelViewController.h */,
 				B5E8AC451E9CC41700964B3C /* SettingsPanelViewController.m */,
 				B5E8AC461E9CC41700964B3C /* SettingsPanelViewController.xib */,
+				1D352FC31E9F9FC500F0C7A0 /* DatePickerViewController.h */,
+				1D352FC41E9F9FC500F0C7A0 /* DatePickerViewController.m */,
+				1D352FC51E9F9FC500F0C7A0 /* DatePickerViewController.xib */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -472,6 +480,10 @@
 				B526CB5A1E939E4C00FF4FA8 /* LeftPanelViewController.xib in Resources */,
 				B5EFB37E1E8D006F0024C211 /* ViewController.xib in Resources */,
 				B5E8ABF01E97B1F600964B3C /* settings.png in Resources */,
+
+				B5E8AC501E9CF90E00964B3C /* light_theme_plus.png in Resources */,
+				1D352FC71E9F9FC500F0C7A0 /* DatePickerViewController.xib in Resources */,
+
 				1D4056051E8D1E5000E18D05 /* NoteCreationController.xib in Resources */,
 				B5EFB3571E8CFFD80024C211 /* Assets.xcassets in Resources */,
 			);
@@ -513,6 +525,7 @@
 				B526CB591E939E4C00FF4FA8 /* LeftPanelViewController.m in Sources */,
 				B5E8AC471E9CC41700964B3C /* SettingsPanelViewController.m in Sources */,
 				B5EFB34C1E8CFFD80024C211 /* main.m in Sources */,
+				1D352FC61E9F9FC500F0C7A0 /* DatePickerViewController.m in Sources */,
 				B5B8FB631E93E46B00A82813 /* Reminder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

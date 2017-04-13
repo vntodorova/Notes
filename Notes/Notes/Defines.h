@@ -78,6 +78,10 @@
 #define JS_COMMAND_UNDERLINE @"document.execCommand(\"Underline\")"
 #define JS_COMMAND_ITALIC @"document.execCommand(\"Italic\")"
 #define JS_COMMAND_BOLD @"document.execCommand(\"Bold\")"
+#define JS_COMMAND_CENTER @"document.execCommand(\"justifyCenter\")"
+
+#define JS_COMMAND_INSERT @"document.execCommand(\"insertText\",false,\"ASD\")"
+
 #define JS_COMMAND_FONT_TYPE @"document.execCommand('fontName', false, '%@')"
 #define JS_COMMAND_FONT_SIZE @"document.execCommand('fontSize', false, '%@')"
 
