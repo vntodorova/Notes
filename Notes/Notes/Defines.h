@@ -53,9 +53,6 @@
 #define NOTE_TAGS_FILE @"tags.txt"
 #define NOTE_DATE_FILE @"date.txt"
 
-#define THEME_KEY @"Theme"
-#define LIGHT_THEME @"LightTheme"
-#define DARK_THEME @"DarkTheme"
 #define SEARCH_BAR @"SearchBar"
 #define TABLEVIEW_BACKGROUND_COLOR @"TableViewBackgroundColor"
 #define TABLEVIEW_CELL_COLOR @"TableViewCellColor"

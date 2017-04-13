@@ -82,7 +82,9 @@
     self.navigationController.topViewController.navigationItem.rightBarButtonItem = rightNavigationBarButton;
     rightNavigationBarButton.enabled = TRUE;
     
-    self.navigationController.topViewController.navigationItem.titleView = [self.themeManager.styles objectForKey:SEARCH_BAR];
+    UISearchBar *searchBar = [[UISearchBar alloc] init];
+    [searchBar setBarStyle:[[self.themeManager.styles objectForKey:SEARCH_BAR] integerValue]];
+    self.navigationController.topViewController.navigationItem.titleView = searchBar;
 }
 
 - (void)loadTheme
