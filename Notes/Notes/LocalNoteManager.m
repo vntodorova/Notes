@@ -15,7 +15,7 @@
 
 @property NSMutableDictionary<NSString*, NSMutableArray<Note*>*> *notebookDictionary;
 @property NSMutableArray<Notebook*> *notebookList;
-@property NSString *contentPath;
+
 @end
 
 @implementation LocalNoteManager
@@ -26,8 +26,8 @@
     if (self)
     {
         self.notebookDictionary = [[NSMutableDictionary alloc] init];
+        [self createDirectoryAtPath: [self getNotebooksRootDirectoryPath]];
         self.notebookList = [[NSMutableArray alloc] init];
-        self.contentPath = [self getNotebooksRootDirectoryPath];
         [self loadNotebooks];
     }
     return self;
@@ -267,7 +267,7 @@
 //LOAD DATA
 - (void) loadNotebooks
 {
-    NSArray *directoryContents = [self getDirectoryContentForPath:self.contentPath];
+    NSArray *directoryContents = [self getDirectoryContentForPath: [self getNotebooksRootDirectoryPath]];
     
     for(int i = 0; i < directoryContents.count; i++)
     {
