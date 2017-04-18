@@ -35,6 +35,8 @@
 
 @property BOOL optionsButtonsHidden;
 @property int imageIndex;
+
+@property BOOL isNoteNew;
 @end
 
 @implementation NoteCreationController
@@ -135,6 +137,7 @@
 {
     if(self.note.name.length > 0)
     {
+        self.isNoteNew = NO;
         [self loadSavedHtml];
         self.noteName.text = self.note.name;
         self.noteTags.text = [self buildTextFromTags: self.note.tags];
@@ -142,6 +145,7 @@
     }
     else
     {
+        self.isNoteNew = YES;
         [self loadNoteTemplateHTML];
     }
 }
@@ -421,11 +425,18 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    NSString *imagePath = [self.tempFolderPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png",[self getCurrentTime]]];
-    
-    [self saveImageInTempFolder:info imagePath:imagePath];
-    [self insertImageAtEndOfWebview:imagePath];
-    
+    NSString *imageName = [NSString stringWithFormat:@"%@.png", [self getCurrentTime]];
+    NSString *imagePath;
+    if(self.isNoteNew)
+    {
+        imagePath = [self.tempFolderPath stringByAppendingPathComponent:imageName];
+    }
+    else
+    {
+        imagePath = [[self getNoteDirectoryPathForNote:self.note inNotebookWithName:self.currentNotebook] stringByAppendingPathComponent:imageName];
+    }
+    [self saveImage:info imagePath:imagePath];
+    [self insertImageAtEndOfWebview:imageName];
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
@@ -436,7 +447,7 @@
     return [dateFormatter stringFromDate:[NSDate date]];
 }
 
--(void) saveImageInTempFolder:(NSDictionary*) imageInfo imagePath:(NSString*) imagePath
+-(void) saveImage:(NSDictionary*) imageInfo imagePath:(NSString*) imagePath
 {
     NSString *mediaType = [imageInfo objectForKey:UIImagePickerControllerMediaType];
     if ([mediaType isEqualToString:PUBLIC_IMAGE_IDENTIFIER])
@@ -452,13 +463,21 @@
     NSMutableString *noteBody = [[NSMutableString alloc]initWithString:[self getNoteBodyHTML]];
     
     NSString *imageHtml = [NSString stringWithFormat:DEFAULT_IMAGE_HTML, imagePath];
-    
-    NSString *path = [[NSBundle mainBundle] bundlePath];
-    NSURL *baseURL = [NSURL fileURLWithPath:path];
-    
     NSRange range = [noteBody rangeOfString:@"</div>"];
     [noteBody insertString:imageHtml atIndex:range.location];
-    
+    if(self.isNoteNew)
+    {
+        [self refreshWebView:noteBody baseURL:[NSURL fileURLWithPath:self.tempFolderPath]];
+    }
+    else
+    {
+        [self refreshWebView:noteBody baseURL:[NSURL fileURLWithPath:[self getNoteDirectoryPathForNote:self.note
+                                                                                  inNotebookWithName:self.currentNotebook]]];
+    }
+}
+
+- (void)refreshWebView:(NSString*)noteBody baseURL:(NSURL*) baseURL
+{
     [self.noteBody loadHTMLString:noteBody baseURL:baseURL];
 }
 
@@ -572,26 +591,13 @@
 
 -(void) loadSavedHtml
 {
-    NSString *convertedHTML = [self convertLoadableStringHTML:self.note.body];
-    NSString *path = [[NSBundle mainBundle] bundlePath];
-    NSURL *baseURL = [NSURL fileURLWithPath:path];
-    [self.noteBody loadHTMLString:convertedHTML baseURL:baseURL];
-}
-
--(NSString*) convertLoadableStringHTML:(NSString *)html
-{
-    NSString *convertedHTML = html.description;
-    
     NSString *loadedFilePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-                                    stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
-                                    stringByAppendingPathComponent:self.currentNotebook]
-                                    stringByAppendingPathComponent:self.note.name];
-    
-    NSString *stringForReplace = START_OF_IMAGE_HTML;
-    NSString *stringReplaced = [NSString stringWithFormat:@"%@%@/", stringForReplace, loadedFilePath];
-    
-    convertedHTML = [convertedHTML stringByReplacingOccurrencesOfString:stringForReplace withString:stringReplaced];
-    return convertedHTML;
+                                  stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
+                                 stringByAppendingPathComponent:self.currentNotebook]
+                                stringByAppendingPathComponent:self.note.name];
+
+    NSURL *baseURL = [NSURL fileURLWithPath:loadedFilePath];
+    [self.noteBody loadHTMLString:self.note.body baseURL:baseURL];
 }
 
 - (void)displaySelectableMenuWithButton:(UIButton *) button list:(NSMutableArray*)nameList
