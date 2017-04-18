@@ -107,10 +107,10 @@
 
 -(void) setBarButtonColors
 {
-    [self setButton:self.alignCenterButton withImageName:@"alignCenter"];
-    [self setButton:self.alignLeftButton withImageName:@"alignLeft"];
-    [self setButton:self.alignRightButton withImageName:@"alignRight"];
-    [self setButton:self.calendarButton withImageName:@"calendar"];
+    [self setButton:self.alignCenterButton withImageName:TOOLBAR_ALIGN_CENTER_IMAGE];
+    [self setButton:self.alignLeftButton withImageName:TOOLBAR_ALIGN_LEFT_IMAGE];
+    [self setButton:self.alignRightButton withImageName:TOOLBAR_ALIGN_RIGHT_IMAGE];
+    [self setButton:self.calendarButton withImageName:TOOLBAR_CALENDAR_IMAGE];
 }
 
 -(void) setButton:(UIButton*) button withImageName:(NSString*) imageName
@@ -160,7 +160,6 @@
         [self hideOptionsButtons];
     }
 }
-
 
 - (void)showOptionsButtons
 {
@@ -584,9 +583,9 @@
     NSString *convertedHTML = html.description;
     
     NSString *loadedFilePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-                                  stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
-                                 stringByAppendingPathComponent:self.currentNotebook]
-                                stringByAppendingPathComponent:self.note.name];
+                                    stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
+                                    stringByAppendingPathComponent:self.currentNotebook]
+                                    stringByAppendingPathComponent:self.note.name];
     
     NSString *stringForReplace = START_OF_IMAGE_HTML;
     NSString *stringReplaced = [NSString stringWithFormat:@"%@%@/", stringForReplace, loadedFilePath];
