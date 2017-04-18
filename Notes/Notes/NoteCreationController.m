@@ -76,6 +76,7 @@
 
 - (void)loadTheme
 {
+    [self setBarButtonColors];
     self.view.tintColor = [self.themeManager.styles objectForKey:TINT];
     self.view.backgroundColor = [self.themeManager.styles objectForKey:BACKGROUND_COLOR];
     self.toolbar.barTintColor = [self.themeManager.styles objectForKey:NAVIGATION_BAR_COLOR];

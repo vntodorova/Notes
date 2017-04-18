@@ -287,7 +287,7 @@
 {
     NSIndexPath *pathForDeleting = [self.tableView indexPathForCell:cell];
     [self.noteManager removeNotebookWithName:cell.nameLabel.text];
-    [self.tableViewDataSource setObject:[self.noteManager getNotebookList] forKey:NOTEBOOK_KEY];
+    [[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] removeObjectAtIndex:pathForDeleting.row];
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:pathForDeleting] withRowAnimation:UITableViewRowAnimationFade];
 }
 
