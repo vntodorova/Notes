@@ -83,6 +83,21 @@
     self.optionsButton.tintColor = [self.themeManager.styles objectForKey:TINT];
 }
 
+-(void) setBarButtonColors
+{
+    [self setButton:self.alignCenterButton withImageName:TOOLBAR_ALIGN_CENTER_IMAGE];
+    [self setButton:self.alignLeftButton withImageName:TOOLBAR_ALIGN_LEFT_IMAGE];
+    [self setButton:self.alignRightButton withImageName:TOOLBAR_ALIGN_RIGHT_IMAGE];
+    [self setButton:self.calendarButton withImageName:TOOLBAR_CALENDAR_IMAGE];
+}
+
+-(void) setButton:(UIButton*) button withImageName:(NSString*) imageName
+{
+    UIImage* origImage = [UIImage imageNamed:imageName];
+    UIImage* tintedImage = [origImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [button setImage:tintedImage forState:UIControlStateNormal];
+}
+
 -(void) inflateFontsList
 {
     [self.fontList addObject:@"Times New Roman"];
