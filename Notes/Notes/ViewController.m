@@ -24,8 +24,8 @@
 @property (nonatomic, strong) ThemeManager *themeManager;
 @property (nonatomic, strong) LeftPanelViewController *leftPanelViewController;
 @property (nonatomic, strong) SettingsPanelViewController *settingsPanelViewController;
-@property NSArray<Note *> *notesArray;
 @property NSString *currentNotebook;
+@property NSArray<Note *> *notesArray;
 @property UIVisualEffectView *bluredView;
 @end
 
@@ -244,6 +244,13 @@
 {
     [self loadTheme];
     [self.leftPanelViewController loadTheme];
+}
+
+- (void)changeCurrentNotebook:(NSString *)newNotebookName
+{
+    self.currentNotebook = newNotebookName;
+    self.notesArray = [self.noteManager getNoteListForNotebookWithName:self.currentNotebook];
+    [self.tableView reloadData];
 }
 
 #pragma mark -

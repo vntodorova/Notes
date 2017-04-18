@@ -17,12 +17,15 @@
 #import "LocalNoteManager.h"
 #import "Notebook.h"
 #import "Note.h"
+#import "EditableNotebookCell.h"
+#import "NotebookCell.h"
 
 @interface LeftPanelViewController()
 
 @property (nonatomic, strong) LocalNoteManager *noteManager;
 @property DateTimeManager *dateTimeManager;
 @property ThemeManager *themeManager;
+@property BOOL editingMode;
 
 @property LayoutProvider *layoutProvider;
 @property float pointerStartPanCoordinatesX;
@@ -89,7 +92,8 @@
     [self.view addGestureRecognizer:panGestureRecogniser];
     panGestureRecogniser.delegate = self;
     self.tableViewDataSource = [[NSMutableDictionary alloc] init];
-    self.notebooksClicked = [[NSMutableDictionary alloc] init];
+    [self.tableView registerNib:[UINib nibWithNibName:NOTEBOOK_CELL_ID bundle:nil] forCellReuseIdentifier:NOTEBOOK_CELL_ID];
+    [self.tableView registerNib:[UINib nibWithNibName:EDITABLE_NOTEBOOK_CELL_ID bundle:nil] forCellReuseIdentifier:EDITABLE_NOTEBOOK_CELL_ID];
 }
 
 - (void)loadTheme
@@ -108,57 +112,26 @@
 
 - (void)notebookClickedOnIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *clickedNotebookName = [[[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] objectAtIndex:indexPath.row] name];
-    NSNumber *isClicked = [self.notebooksClicked valueForKey:clickedNotebookName];
-    
-    if([isClicked boolValue])
-    {
-        [self hideNotebookContents:indexPath];
-        [self.notebooksClicked setValue:[NSNumber numberWithBool:NO] forKey:clickedNotebookName];
-        
-    }
-    if(![isClicked boolValue])
-    {
-        [self showNotebookContents:indexPath];
-        [self.notebooksClicked setValue:[NSNumber numberWithBool:YES] forKey:clickedNotebookName];
-    }
-}
-
-- (void)showNotebookContents:(NSIndexPath *)indexPath
-{
-    NSArray *notes = [self.noteManager getNoteListForNotebook:[[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] objectAtIndex:indexPath.row]];
-    NSInteger indexToAdd = indexPath.row + 1;
-    NSMutableArray *notebooks = [self.tableViewDataSource objectForKey:NOTEBOOK_KEY];
-    
-    [self.tableView beginUpdates];
-    for (Note* currentNote in notes)
-    {
-        [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexToAdd inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationTop];
-        [notebooks insertObject:currentNote atIndex:indexToAdd];
-        indexToAdd ++;
-    }
-    [self.tableView endUpdates];
-}
-
-- (void)hideNotebookContents:(NSIndexPath *)indexPath
-{
-    NSArray *notes = [self.noteManager getNoteListForNotebook:[[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] objectAtIndex:indexPath.row]];
-    NSInteger indexToRemove = indexPath.row + 1;
-    NSMutableArray *notebooks = [self.tableViewDataSource objectForKey:NOTEBOOK_KEY];
-
-    [self.tableView beginUpdates];
-    for (Note* currentNote in notes)
-    {
-        [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexToRemove inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationTop];
-        [notebooks removeObject:currentNote];
-        indexToRemove ++;
-    }
-    [self.tableView endUpdates];
+    Notebook *clickedNotebook = [[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] objectAtIndex:indexPath.row];
+    [self.delegate changeCurrentNotebook:clickedNotebook.name];
+    [self.delegate hideLeftPanel];
 }
 
 - (IBAction)settingsButtonClicked:(UIButton *)sender
 {
     [self.delegate showSettings];
+}
+
+- (void)editButtonClicked
+{
+    self.editingMode = YES;
+    [self.tableView reloadData];
+}
+
+- (void)closeButtonClicked
+{
+    self.editingMode = NO;
+    [self.tableView reloadData];
 }
 
 #pragma mark -
@@ -170,17 +143,18 @@
     
     if(indexPath.section == NOTEBOOKS_SECTION)
     {
-        NSObject *object = [[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] objectAtIndex:indexPath.row];
-        
-        if([object isKindOfClass:[Notebook class]])
+        Notebook *notebook = (Notebook *)[[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] objectAtIndex:indexPath.row];
+        if(self.editingMode && ![notebook.name isEqualToString:@"General"])
         {
-            Notebook *notebook = (Notebook *)object;
-            cell = [self.layoutProvider getNewCell:tableView withNotebook:notebook];
+            cell = [self.layoutProvider getNewEditableCell:tableView withNotebook:notebook];
+            EditableNotebookCell *editableCell = (EditableNotebookCell*)cell;
+            editableCell.delegate = self;
+            cell = editableCell;
         }
-        if([object isKindOfClass:[Note class]])
+        else
         {
-            Note *note = (Note *)object;
-            cell = [self.layoutProvider getNewCell:tableView withNote:note];
+            NSInteger notebookSize = [[self.noteManager getNoteListForNotebook:notebook] count];
+            cell = [self.layoutProvider getNewCell:tableView withNotebook:notebook andNotebookSize:notebookSize];
         }
     }
     
@@ -213,20 +187,6 @@
     return [[self.tableViewDataSource allKeys] count];
 }
 
--(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    NSString *headerTitle;
-    if(section == NOTEBOOKS_SECTION)
-    {
-        headerTitle = NOTEBOOK_SECTION_NAME;
-    }
-    if(section == REMINDERS_SECTION)
-    {
-        headerTitle = REMINDERS_SECTION_NAME;
-    }
-    return headerTitle;
-}
-
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(indexPath.section == NOTEBOOKS_SECTION)
@@ -237,6 +197,44 @@
             [self notebookClickedOnIndexPath:indexPath];
         }
     }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 40.0;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 18)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, tableView.frame.size.width, 18)];
+    if(section == NOTEBOOKS_SECTION)
+    {
+        [label setText:NOTEBOOK_SECTION_NAME];
+        if(!self.editingMode)
+        {
+            UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(200, 5, 40, 25)];
+            [button setTitle:@"Edit" forState:UIControlStateNormal];
+            [button setTitleColor:[self.themeManager.styles objectForKey:TINT] forState:UIControlStateNormal];
+            [button addTarget:self action:@selector(editButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+            [view addSubview:button];
+        }
+        else
+        {
+            UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(210, 5, 25, 25)];
+            [button setImage:[UIImage imageNamed:@"close.png"] forState:UIControlStateNormal];
+            [button addTarget:self action:@selector(closeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+            [view addSubview:button];
+        }
+    }
+    if(section == REMINDERS_SECTION)
+    {
+        [label setText:REMINDERS_SECTION_NAME];
+    }
+    [label setTextColor:[self.themeManager.styles objectForKey:TINT]];
+    
+    [view addSubview:label];
+    return view;
 }
 
 #pragma mark -
@@ -277,7 +275,25 @@
 
 - (void)panEnded:(UIPanGestureRecognizer *)pan
 {
+    self.editingMode = NO;
+    [self.tableView reloadData];
     [self.delegate hideLeftPanel];
+}
+
+#pragma mark -
+#pragma mark EditableCell delegate
+
+- (void)deleteButtonClickedOnCell:(EditableNotebookCell *)cell
+{
+    NSIndexPath *pathForDeleting = [self.tableView indexPathForCell:cell];
+    [self.noteManager removeNotebookWithName:cell.nameLabel.text];
+    [[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] removeObjectAtIndex:pathForDeleting.row];
+    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:pathForDeleting] withRowAnimation:UITableViewRowAnimationFade];
+}
+
+- (void)editButtonClickedOnCell:(EditableNotebookCell *)cell
+{
+    
 }
 
 @end

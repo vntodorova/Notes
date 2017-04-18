@@ -58,7 +58,7 @@ static ThemeManager *sharedInstance = nil;
     [self.styles setObject:[UIColor colorWithRed:120.0/255.0 green:120.0/255.0 blue:120.0/255.0 alpha:1] forKey:TABLEVIEW_CELL_COLOR];
     [self.styles setObject:[UIColor colorWithRed:60.0/255.0 green:60.0/255.0 blue:60.0/255.0 alpha:1] forKey:NAVIGATION_BAR_COLOR];
     [self.styles setObject:[UIColor colorWithRed:60.0/255.0 green:60.0/255.0 blue:60.0/255.0 alpha:1] forKey:BACKGROUND_COLOR];
-    [self.styles setObject:[UIColor colorWithRed:220.0/255.0 green:220.0/255.0 blue:220.0/255.0 alpha:1] forKey:TINT];
+    [self.styles setObject:[UIColor colorWithRed:180.0/255.0 green:180.0/255.0 blue:180.0/255.0 alpha:1] forKey:TINT];
     [self.styles setObject:[UIColor colorWithRed:120.0/255.0 green:120.0/255.0 blue:120.0/255.0 alpha:1] forKey:TEXTFIELDS_COLOR];
     [self.styles setObject:[NSNumber numberWithInt:UIBarStyleBlack] forKey:SEARCH_BAR];
     [self.styles setObject:[UIImage imageNamed:@"camera_dark.png"] forKey:CAMERA_IMAGE];

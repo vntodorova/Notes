@@ -102,24 +102,27 @@
 
 - (void)setupOptionsButtons
 {
-    self.addImageButton = [self getExpandingButtonWithImage:CAMERA_IMAGE andSelector:@selector(onCameraClick)];
-    self.addListButton = [self getExpandingButtonWithImage:LIST_IMAGE andSelector:@selector(onListClick)];
-    self.addDrawingButton = [self getExpandingButtonWithImage:DRAWING_IMAGE andSelector:@selector(onDrawingClick)];
+    self.optionsButtonsHidden = YES;
+    CGFloat red, green, blue;
+    [[self.themeManager.styles objectForKey:TINT] getRed:&red green:&green blue:&blue alpha:nil];
+    self.addImageButton = [self getButtonWithAction:@selector(onCameraClick) andImage:CAMERA_IMAGE];
+    self.addListButton = [self getButtonWithAction:@selector(onListClick) andImage:LIST_IMAGE];
+    self.addDrawingButton = [self getButtonWithAction:@selector(onDrawingClick) andImage:DRAWING_IMAGE];
 }
 
--(void) setBarButtonColors
+- (UIButton *)getButtonWithAction:(SEL)selector andImage:(NSString *)imageName
 {
-    [self setButton:self.alignCenterButton withImageName:TOOLBAR_ALIGN_CENTER_IMAGE];
-    [self setButton:self.alignLeftButton withImageName:TOOLBAR_ALIGN_LEFT_IMAGE];
-    [self setButton:self.alignRightButton withImageName:TOOLBAR_ALIGN_RIGHT_IMAGE];
-    [self setButton:self.calendarButton withImageName:TOOLBAR_CALENDAR_IMAGE];
-}
-
--(void) setButton:(UIButton*) button withImageName:(NSString*) imageName
-{
-    UIImage* origImage = [UIImage imageNamed:imageName];
-    UIImage* tintedImage = [origImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [button setImage:tintedImage forState:UIControlStateNormal];
+    CGFloat red, green, blue;
+    [[self.themeManager.styles objectForKey:TINT] getRed:&red green:&green blue:&blue alpha:nil];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.layer.cornerRadius = 23;
+    button.layer.borderWidth = 1;
+    button.layer.borderColor = [UIColor colorWithRed:red green:green blue:blue alpha:1].CGColor;
+    button.clipsToBounds = YES;
+    [button addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+    [button setImage:[self.themeManager.styles objectForKey:imageName] forState:UIControlStateNormal];
+    button.layer.backgroundColor = [UIColor darkGrayColor].CGColor;
+    return button;
 }
 
 -(void) deleteTempFolder

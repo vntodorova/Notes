@@ -14,6 +14,8 @@
 #import "Note.h"
 #import "Notebook.h"
 #import "Reminder.h"
+#import "NotebookCell.h"
+#import "EditableNotebookCell.h"
 
 @interface LayoutProvider()
 @property DateTimeManager *dateTimeManager;
@@ -60,7 +62,7 @@ static LayoutProvider *sharedInstance = nil;
 
 - (TableViewCell *)getNewTableViewCell:(UITableView *)tableView withNote:(Note *)note
 {
-    TableViewCell *cell = (TableViewCell *)[tableView dequeueReusableCellWithIdentifier:TABLEVIEW_CELL_ID];
+    TableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:TABLEVIEW_CELL_ID];
     cell.nameLabel.text = note.name;
     cell.infoLabel.text = note.dateCreated;
     cell.cellNote = note;
@@ -75,31 +77,32 @@ static LayoutProvider *sharedInstance = nil;
 #pragma mark -
 #pragma mark LeftPanelViewController
 
-- (UITableViewCell *)getNewCell:(UITableView *)tableView withNote:(Note *)note
+- (EditableNotebookCell *)getNewEditableCell:(UITableView *)tableView withNotebook:(Notebook *)notebook
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NOTE_CELL_ID];
+    EditableNotebookCell *cell = [tableView dequeueReusableCellWithIdentifier:EDITABLE_NOTEBOOK_CELL_ID];
     if (cell == nil)
     {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:NOTE_CELL_ID];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:EDITABLE_NOTEBOOK_CELL_ID owner:self options:nil];
+        cell = [nib objectAtIndex:0];
     }
     cell.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_CELL_COLOR];
-    cell.textLabel.text = note.name;
-    cell.textLabel.textColor = [self.themeManager.styles objectForKey:TINT];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",note.dateCreated];
+    cell.nameLabel.text = notebook.name;
+    cell.nameLabel.textColor = [self.themeManager.styles objectForKey:TINT];
     return cell;
 }
 
-- (UITableViewCell *)getNewCell:(UITableView *)tableView withNotebook:(Notebook *)notebook
+- (UITableViewCell *)getNewCell:(UITableView *)tableView withNotebook:(Notebook *)notebook andNotebookSize:(NSInteger)size
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NOTEBOOK_CELL_ID];
+    NotebookCell *cell = [tableView dequeueReusableCellWithIdentifier:NOTEBOOK_CELL_ID];
     if (cell == nil)
     {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:NOTEBOOK_CELL_ID];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:NOTEBOOK_CELL_ID owner:self options:nil];
+        cell = [nib objectAtIndex:0];
     }
     cell.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_CELL_COLOR];
-    cell.textLabel.text = notebook.name;
-    cell.textLabel.textColor = [self.themeManager.styles objectForKey:TINT];
-    //TODO cell.detailTextLabel.text = Notebook's notes count
+    cell.nameLabel.text = notebook.name;
+    cell.nameLabel.textColor = [self.themeManager.styles objectForKey:TINT];
+    cell.detailsLabel.text = [NSString stringWithFormat:@"%ld items",size];
     return cell;
 }
 

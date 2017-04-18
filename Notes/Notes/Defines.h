@@ -23,6 +23,7 @@
 #define SETTINGS_PANEL_NIBNAME @"SettingsPanelViewController"
 #define NOTE_CELL_ID @"NoteCell"
 #define NOTEBOOK_CELL_ID @"NotebookCell"
+#define EDITABLE_NOTEBOOK_CELL_ID @"EditableNotebookCell"
 #define REMINDER_CELL_ID @"ReminderCell"
 
 #define CELL_DRAG_ACTIVATION_DISTANCE 70
@@ -64,6 +65,8 @@
 #define CAMERA_IMAGE @"CameraImage"
 #define LIST_IMAGE @"ListImage"
 #define DRAWING_IMAGE @"DrawingImage"
+#define RIGHT_ARROW_IMAGE @"RightArrowImage"
+#define DOWN_ARROW_IMAGE @"DownArrowImage"
 
 #define UNNAMED_NOTE @"Unnamed"
 #define PUBLIC_IMAGE_IDENTIFIER @"public.image"

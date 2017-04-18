@@ -13,7 +13,7 @@
 @class Reminder;
 @class LocalNoteManager;
 
-@interface LeftPanelViewController : UIViewController <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate>
+@interface LeftPanelViewController : UIViewController <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate, EditableCellDelegate>
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil manager:(LocalNoteManager *)noteManager;
 - (IBAction)settingsButtonClicked:(UIButton *)sender;
@@ -25,7 +25,6 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) id <LeftPanelDelegate> delegate;
 @property NSMutableDictionary *tableViewDataSource;
-@property NSMutableDictionary *notebooksClicked;
 @property BOOL isHidden;
 
 @end

@@ -12,6 +12,8 @@
 @class Note;
 @class Notebook;
 @class Reminder;
+@class NotebookCell;
+@class EditableNotebookCell;
 
 @interface LayoutProvider : NSObject
 
@@ -23,8 +25,8 @@
 
 - (TableViewCell *)getNewTableViewCell:(UITableView *)tableView withNote:(Note *)note;
 
-- (UITableViewCell *)getNewCell:(UITableView *)tableView withNote:(Note *)note;
-- (UITableViewCell *)getNewCell:(UITableView *)tableView withNotebook:(Notebook *)notebook;
+- (EditableNotebookCell *)getNewEditableCell:(UITableView *)tableView withNotebook:(Notebook *)notebook;
+- (NotebookCell *)getNewCell:(UITableView *)tableView withNotebook:(Notebook *)notebook andNotebookSize:(NSInteger)size;
 - (UITableViewCell *)getNewCell:(UITableView *)tableView withReminder:(Reminder *)reminder;
 
 @end

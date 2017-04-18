@@ -12,6 +12,7 @@
 @class Notebook;
 @class Note;
 @class TableViewCell;
+@class EditableNotebookCell;
 
 @protocol NoteManagerDelegate
 - (void)addNote:(Note *)newNote toNotebook:(Notebook *)notebook;
@@ -45,7 +46,15 @@
 @protocol LeftPanelDelegate
 - (void)hideLeftPanel;
 - (void)showSettings;
+- (void)changeCurrentNotebook:(NSString *)newNotebookName;
 - (void)onThemeChanged;
+@end
+
+@protocol EditableCellDelegate
+
+- (void)deleteButtonClickedOnCell:(EditableNotebookCell *)cell;
+- (void)editButtonClickedOnCell:(EditableNotebookCell *)cell;
+
 @end
 
 #endif /* Protocols_h */
