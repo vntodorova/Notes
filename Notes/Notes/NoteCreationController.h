@@ -15,7 +15,10 @@
 
 - (instancetype)initWithManager:(LocalNoteManager*) manager;
 
+- (IBAction)onAlignRightPressed:(id)sender;
+- (IBAction)onAlignLeftPressed:(id)sender;
 - (IBAction)onAlignCenterPressed:(id)sender;
+
 - (IBAction)onOptionsClick:(id)sender;
 - (IBAction)onCreateClick:(id)sender;
 

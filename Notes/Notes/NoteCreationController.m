@@ -17,6 +17,11 @@
 
 @interface NoteCreationController ()
 
+@property (nonatomic, assign) IBOutlet UIButton* alignLeftButton;
+@property (nonatomic, assign) IBOutlet UIButton* alignCenterButton;
+@property (nonatomic, assign) IBOutlet UIButton* alignRightButton;
+@property (nonatomic, assign) IBOutlet UIButton* calendarButton;
+
 @property (nonatomic, strong) NSMutableArray *fontList;
 @property (nonatomic, strong) NSMutableArray *textSizeList;
 @property (nonatomic, strong) NSMutableArray *noteBookList;
@@ -24,14 +29,16 @@
 @property (nonatomic, strong) ThemeManager *themeManager;
 @property (nonatomic, strong) NSString *tempFolderPath;
 
-@property UIButton *addImageButton;
-@property UIButton *addDrawingButton;
-@property UIButton *addListButton;
+@property (nonatomic, strong) UIButton *addImageButton;
+@property (nonatomic, strong) UIButton *addDrawingButton;
+@property (nonatomic, strong) UIButton *addListButton;
+
 @property BOOL optionsButtonsHidden;
 @property int imageIndex;
 @end
 
 @implementation NoteCreationController
+
 
 -(instancetype)initWithManager:(LocalNoteManager *)manager
 {
@@ -67,6 +74,7 @@
 
 - (void)loadTheme
 {
+    [self setBarButtonColors];
     self.view.tintColor = [self.themeManager.styles objectForKey:TINT];
     self.view.backgroundColor = [self.themeManager.styles objectForKey:BACKGROUND_COLOR];
     self.toolbar.barTintColor = [self.themeManager.styles objectForKey:NAVIGATION_BAR_COLOR];
@@ -95,6 +103,21 @@
     self.addImageButton = [self getExpandingButtonWithImage:CAMERA_IMAGE andSelector:@selector(onCameraClick)];
     self.addListButton = [self getExpandingButtonWithImage:LIST_IMAGE andSelector:@selector(onListClick)];
     self.addDrawingButton = [self getExpandingButtonWithImage:DRAWING_IMAGE andSelector:@selector(onDrawingClick)];
+}
+
+-(void) setBarButtonColors
+{
+    [self setButton:self.alignCenterButton withImageName:@"alignCenter"];
+    [self setButton:self.alignLeftButton withImageName:@"alignLeft"];
+    [self setButton:self.alignRightButton withImageName:@"alignRight"];
+    [self setButton:self.calendarButton withImageName:@"calendar"];
+}
+
+-(void) setButton:(UIButton*) button withImageName:(NSString*) imageName
+{
+    UIImage* origImage = [UIImage imageNamed:imageName];
+    UIImage* tintedImage = [origImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [button setImage:tintedImage forState:UIControlStateNormal];
 }
 
 -(void) deleteTempFolder
@@ -222,7 +245,17 @@
 
 - (IBAction)onAlignCenterPressed:(id)sender
 {
-    [self centerText];
+    [self alignSelectedTextCenter];
+}
+
+- (IBAction)onAlignRightPressed:(id)sender
+{
+    [self alignSelectedTextRight];
+}
+
+- (IBAction)onAlignLeftPressed:(id)sender
+{
+    [self alignSelectedTextLeft];
 }
 
 - (void)notebookSelected:(NSString*) noteBookSelected
@@ -347,10 +380,21 @@
     self.note.triggerDate = date.description;
 }
 
--(void) centerText
+-(void) alignSelectedTextCenter
 {
-    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_CENTER];
+    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_ALIGN_CENTER];
 }
+
+-(void) alignSelectedTextRight
+{
+    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_ALIGN_RIGHT];
+}
+
+-(void) alignSelectedTextLeft
+{
+    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_ALIGN_LEFT];
+}
+
 -(void) applyUnderlineOnSelectedText
 {
     [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_UNDERLINE];

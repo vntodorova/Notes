@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16F54b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -11,6 +11,10 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NoteCreationController">
             <connections>
+                <outlet property="alignCenterButton" destination="0UO-0p-zex" id="Kfh-Su-zL3"/>
+                <outlet property="alignLeftButton" destination="OUw-hL-dfA" id="1Lg-QM-5tQ"/>
+                <outlet property="alignRightButton" destination="P86-TT-FyK" id="MHR-g8-CFa"/>
+                <outlet property="calendarButton" destination="O2d-8B-KYc" id="tVy-Ti-EuO"/>
                 <outlet property="createButton" destination="5UX-3b-ySm" id="MQh-4L-qFJ"/>
                 <outlet property="noteBody" destination="Udl-bA-HC1" id="b4f-jg-wr0"/>
                 <outlet property="noteName" destination="Fme-iL-Fez" id="1SD-F7-u1V"/>
@@ -60,7 +64,7 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="UHC-Vr-ITK"/>
                         <barButtonItem style="plain" id="l05-Bt-oPs">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="HKR-NN-yVg">
-                                <rect key="frame" x="52" y="7" width="31" height="30"/>
+                                <rect key="frame" x="22" y="7" width="31" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Font"/>
                                 <connections>
@@ -70,7 +74,7 @@
                         </barButtonItem>
                         <barButtonItem style="plain" id="Z32-0u-1yo">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Z03-0k-6IF">
-                                <rect key="frame" x="93" y="7" width="30" height="30"/>
+                                <rect key="frame" x="63" y="7" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Size"/>
                                 <connections>
@@ -83,7 +87,7 @@
                         </barButtonItem>
                         <barButtonItem style="plain" id="2L3-o1-aYo">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" id="Mrv-oK-0Ve">
-                                <rect key="frame" x="133" y="7" width="30" height="30"/>
+                                <rect key="frame" x="103" y="7" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal">
                                     <attributedString key="attributedTitle">
@@ -102,7 +106,7 @@
                         </barButtonItem>
                         <barButtonItem style="plain" id="n8K-9B-2d1">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" id="oKm-kI-Znm">
-                                <rect key="frame" x="173" y="7" width="30" height="30"/>
+                                <rect key="frame" x="143" y="7" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal">
                                     <attributedString key="attributedTitle">
@@ -121,7 +125,7 @@
                         </barButtonItem>
                         <barButtonItem style="plain" id="Pj4-WK-mzp">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" id="f4C-Wq-5xS">
-                                <rect key="frame" x="213" y="7" width="30" height="30"/>
+                                <rect key="frame" x="183" y="7" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal">
                                     <attributedString key="attributedTitle">
@@ -138,21 +142,41 @@
                                 </connections>
                             </button>
                         </barButtonItem>
-                        <barButtonItem style="plain" id="9zI-Tn-ghj">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="0UO-0p-zex">
-                                <rect key="frame" x="253" y="7" width="30" height="30"/>
+                        <barButtonItem style="plain" id="Zlc-p5-3HN">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="OUw-hL-dfA">
+                                <rect key="frame" x="223" y="10" width="25" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="-"/>
+                                <state key="normal" title="Button" image="alignLeft.png"/>
+                                <connections>
+                                    <action selector="onAlignLeftPressed:" destination="-1" eventType="touchUpInside" id="mvt-YI-uZV"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem image="alignCenter.png" style="plain" id="9zI-Tn-ghj">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="0UO-0p-zex">
+                                <rect key="frame" x="258" y="10" width="25" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="alignCenter.png"/>
                                 <connections>
                                     <action selector="onAlignCenterPressed:" destination="-1" eventType="touchUpInside" id="kyS-vd-V01"/>
                                 </connections>
                             </button>
                         </barButtonItem>
-                        <barButtonItem style="done" id="Ptn-ZX-18i">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="O2d-8B-KYc">
-                                <rect key="frame" x="293" y="7" width="30" height="30"/>
+                        <barButtonItem style="plain" id="W56-eP-uUq">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="P86-TT-FyK">
+                                <rect key="frame" x="293" y="10" width="25" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="..."/>
+                                <state key="normal" title="Button" image="alignRight.png"/>
+                                <connections>
+                                    <action selector="onAlignRightPressed:" destination="-1" eventType="touchUpInside" id="Tdp-Md-d5R"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem style="done" id="Ptn-ZX-18i">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="O2d-8B-KYc">
+                                <rect key="frame" x="328" y="10" width="25" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="calendar.png"/>
                                 <connections>
                                     <action selector="onSettingsSelected:" destination="-1" eventType="touchUpInside" id="znm-pS-kBI"/>
                                 </connections>
@@ -190,4 +214,10 @@
             <point key="canvasLocation" x="24.5" y="51.5"/>
         </view>
     </objects>
+    <resources>
+        <image name="alignCenter.png" width="128" height="128"/>
+        <image name="alignLeft.png" width="128" height="128"/>
+        <image name="alignRight.png" width="128" height="128"/>
+        <image name="calendar.png" width="128" height="128"/>
+    </resources>
 </document>

@@ -79,7 +79,10 @@
 #define JS_COMMAND_UNDERLINE @"document.execCommand(\"Underline\")"
 #define JS_COMMAND_ITALIC @"document.execCommand(\"Italic\")"
 #define JS_COMMAND_BOLD @"document.execCommand(\"Bold\")"
-#define JS_COMMAND_CENTER @"document.execCommand(\"justifyCenter\")"
+
+#define JS_COMMAND_ALIGN_CENTER @"document.execCommand(\"justifyCenter\")"
+#define JS_COMMAND_ALIGN_RIGHT @"document.execCommand(\"justifyRight\")"
+#define JS_COMMAND_ALIGN_LEFT @"document.execCommand(\"justifyLeft\")"
 
 #define JS_COMMAND_INSERT @"document.execCommand(\"insertText\",false,\"ASD\")"
 

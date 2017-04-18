@@ -11,6 +11,10 @@
 		1D07C0DA1E9251F900E85CAF /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D07C0D41E9251F900E85CAF /* camera.png */; };
 		1D07C0DB1E9251F900E85CAF /* drawing.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D07C0D51E9251F900E85CAF /* drawing.png */; };
 		1D07C0DC1E9251F900E85CAF /* list.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D07C0D61E9251F900E85CAF /* list.png */; };
+		1D24062D1EA63787002CE71B /* alignCenter.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D24062C1EA63787002CE71B /* alignCenter.png */; };
+		1D24062F1EA63D15002CE71B /* alignLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D24062E1EA63D15002CE71B /* alignLeft.png */; };
+		1D2406311EA63DDB002CE71B /* calendar.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D2406301EA63DDB002CE71B /* calendar.png */; };
+		1D2406331EA63DFE002CE71B /* alignRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D2406321EA63DFE002CE71B /* alignRight.png */; };
 		1D352FC61E9F9FC500F0C7A0 /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D352FC41E9F9FC500F0C7A0 /* DatePickerViewController.m */; };
 		1D352FC71E9F9FC500F0C7A0 /* DatePickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D352FC51E9F9FC500F0C7A0 /* DatePickerViewController.xib */; };
 		1D4056041E8D1E5000E18D05 /* NoteCreationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4056021E8D1E5000E18D05 /* NoteCreationController.m */; };
@@ -77,6 +81,10 @@
 		1D07C0D41E9251F900E85CAF /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
 		1D07C0D51E9251F900E85CAF /* drawing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drawing.png; sourceTree = "<group>"; };
 		1D07C0D61E9251F900E85CAF /* list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list.png; sourceTree = "<group>"; };
+		1D24062C1EA63787002CE71B /* alignCenter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alignCenter.png; sourceTree = "<group>"; };
+		1D24062E1EA63D15002CE71B /* alignLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = alignLeft.png; path = ../../../../../../Downloads/alignLeft.png; sourceTree = "<group>"; };
+		1D2406301EA63DDB002CE71B /* calendar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = calendar.png; path = ../../../../../../Downloads/calendar.png; sourceTree = "<group>"; };
+		1D2406321EA63DFE002CE71B /* alignRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = alignRight.png; path = ../../../../../../Downloads/alignRight.png; sourceTree = "<group>"; };
 		1D352FC31E9F9FC500F0C7A0 /* DatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
 		1D352FC41E9F9FC500F0C7A0 /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
 		1D352FC51E9F9FC500F0C7A0 /* DatePickerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DatePickerViewController.xib; sourceTree = "<group>"; };
@@ -191,21 +199,25 @@
 		1D07C0D31E9251F900E85CAF /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				1D24062C1EA63787002CE71B /* alignCenter.png */,
+				1D24062E1EA63D15002CE71B /* alignLeft.png */,
+				1D2406321EA63DFE002CE71B /* alignRight.png */,
+				1D2406301EA63DDB002CE71B /* calendar.png */,
+				B5E8AC651E9F784900964B3C /* camera_blue.png */,
 				B5E8AC5F1E9F73A100964B3C /* camera_dark.png */,
-				B5E8AC601E9F73A100964B3C /* drawing_dark.png */,
-				B5E8AC611E9F73A100964B3C /* list_dark.png */,
 				1D07C0D41E9251F900E85CAF /* camera.png */,
+				B5E8ABED1E96824200964B3C /* colorPicker.png */,
+				B5E8AC661E9F784900964B3C /* drawing_blue.png */,
+				B5E8AC601E9F73A100964B3C /* drawing_dark.png */,
 				1D07C0D51E9251F900E85CAF /* drawing.png */,
-				1D07C0D61E9251F900E85CAF /* list.png */,
+				B5E8ABE91E967F0600964B3C /* eraser.png */,
 				B53CB76B1E95379B009DFF27 /* facebook.png */,
 				B53CB76C1E95379B009DFF27 /* google.png */,
-				B5E8AC651E9F784900964B3C /* camera_blue.png */,
-				B5E8AC661E9F784900964B3C /* drawing_blue.png */,
-				B5E8AC671E9F784900964B3C /* list_blue.png */,
-				B5E8ABE91E967F0600964B3C /* eraser.png */,
-				B5E8ABEB1E96814100964B3C /* pen.png */,
 				B5E8AC5B1E9E63B000964B3C /* image.png */,
-				B5E8ABED1E96824200964B3C /* colorPicker.png */,
+				B5E8AC671E9F784900964B3C /* list_blue.png */,
+				B5E8AC611E9F73A100964B3C /* list_dark.png */,
+				1D07C0D61E9251F900E85CAF /* list.png */,
+				B5E8ABEB1E96814100964B3C /* pen.png */,
 				B5E8ABEF1E97B1F600964B3C /* settings.png */,
 			);
 			path = Images;
@@ -463,6 +475,7 @@
 				B5E8AC481E9CC41700964B3C /* SettingsPanelViewController.xib in Resources */,
 				B5E8ABEE1E96824200964B3C /* colorPicker.png in Resources */,
 				B53CB76E1E95379B009DFF27 /* google.png in Resources */,
+				1D2406311EA63DDB002CE71B /* calendar.png in Resources */,
 				B5E8ABE21E966BA600964B3C /* DrawingViewController.xib in Resources */,
 				1D07C0DC1E9251F900E85CAF /* list.png in Resources */,
 				B5E8AC6A1E9F784900964B3C /* list_blue.png in Resources */,
@@ -480,12 +493,12 @@
 				B526CB5A1E939E4C00FF4FA8 /* LeftPanelViewController.xib in Resources */,
 				B5EFB37E1E8D006F0024C211 /* ViewController.xib in Resources */,
 				B5E8ABF01E97B1F600964B3C /* settings.png in Resources */,
-
-				B5E8AC501E9CF90E00964B3C /* light_theme_plus.png in Resources */,
+				1D2406331EA63DFE002CE71B /* alignRight.png in Resources */,
 				1D352FC71E9F9FC500F0C7A0 /* DatePickerViewController.xib in Resources */,
-
 				1D4056051E8D1E5000E18D05 /* NoteCreationController.xib in Resources */,
+				1D24062D1EA63787002CE71B /* alignCenter.png in Resources */,
 				B5EFB3571E8CFFD80024C211 /* Assets.xcassets in Resources */,
+				1D24062F1EA63D15002CE71B /* alignLeft.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
