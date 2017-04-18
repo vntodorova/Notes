@@ -14,5 +14,6 @@
 @property NSArray  *tags;
 @property NSString *body;
 @property NSString *dateCreated;
+@property NSString *triggerDate;
 
 @end

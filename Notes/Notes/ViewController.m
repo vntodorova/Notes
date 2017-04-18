@@ -153,7 +153,7 @@
 - (void)panGestureRecognisedOnCell:(TableViewCell *)cell
 {
     NSIndexPath *pathForDeleting = [self.tableView indexPathForCell:cell];
-    [self.noteManager removeNote:cell.cellNote fromNotebook:self.currentNotebook];
+    [self.noteManager removeNote:cell.cellNote fromNotebookWithName:self.currentNotebook];
     self.notesArray = [self.noteManager getNoteListForNotebookWithName:self.currentNotebook];
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:pathForDeleting] withRowAnimation:UITableViewRowAnimationRight];
 }

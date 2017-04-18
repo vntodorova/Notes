@@ -59,7 +59,7 @@
     [self loadHTML];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc]
                                      initWithTarget:self
-                                             action:@selector(dismissKeyboard)]];
+                                     action:@selector(dismissKeyboard)]];
 }
 
 #pragma mark -
@@ -92,33 +92,9 @@
 
 - (void)setupOptionsButtons
 {
-    self.optionsButtonsHidden = YES;
-    CGFloat red, green, blue;
-    [[self.themeManager.styles objectForKey:TINT] getRed:&red green:&green blue:&blue alpha:nil];
-    
-    self.addImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.addImageButton.layer.cornerRadius = 23;
-    self.addImageButton.layer.borderWidth = 1;
-    self.addImageButton.layer.borderColor = [UIColor colorWithRed:red green:green blue:blue alpha:1].CGColor;
-    self.addImageButton.clipsToBounds = YES;
-    [self.addImageButton addTarget:self action:@selector(onCameraClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.addImageButton setImage:[self.themeManager.styles objectForKey:CAMERA_IMAGE] forState:UIControlStateNormal];
-    
-    self.addListButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.addListButton.layer.cornerRadius = 23;
-    self.addListButton.layer.borderWidth = 1;
-    self.addListButton.layer.borderColor = [UIColor colorWithRed:red green:green blue:blue alpha:1].CGColor;
-    self.addListButton.clipsToBounds = YES;
-    [self.addListButton addTarget:self action:@selector(onListClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.addListButton setImage:[self.themeManager.styles objectForKey:LIST_IMAGE] forState:UIControlStateNormal];
-    
-    self.addDrawingButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.addDrawingButton.layer.cornerRadius = 23;
-    self.addDrawingButton.layer.borderWidth = 1;
-    self.addDrawingButton.layer.borderColor = [UIColor colorWithRed:red green:green blue:blue alpha:1].CGColor;
-    self.addDrawingButton.clipsToBounds = YES;
-    [self.addDrawingButton addTarget:self action:@selector(onDrawingClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.addDrawingButton setImage:[self.themeManager.styles objectForKey:DRAWING_IMAGE] forState:UIControlStateNormal];
+    self.addImageButton = [self getExpandingButtonWithImage:CAMERA_IMAGE andSelector:@selector(onCameraClick)];
+    self.addListButton = [self getExpandingButtonWithImage:LIST_IMAGE andSelector:@selector(onListClick)];
+    self.addDrawingButton = [self getExpandingButtonWithImage:DRAWING_IMAGE andSelector:@selector(onDrawingClick)];
 }
 
 -(void) deleteTempFolder
@@ -147,7 +123,7 @@
     }
 }
 
-#pragma mark - 
+#pragma mark -
 #pragma mark Options buttons
 
 - (IBAction)onOptionsClick:(UIButton *)sender
@@ -162,6 +138,7 @@
     }
 }
 
+
 - (void)showOptionsButtons
 {
     CGFloat optionsButtonFrameX = self.optionsButton.frame.origin.x;
@@ -174,25 +151,25 @@
     optionsButtonX = optionsButtonFrameX - 10;
     optionsButtonY = optionsButtonFrameY - SMALL_BUTTON_DISTANCE;
     CGRect newListButtonFrame = CGRectMake(optionsButtonX, optionsButtonY, SMALL_BUTTONS_WIDTH, SMALL_BUTTONS_HEIGHT);
-    
+        
     CGRect initialFrame = CGRectMake(optionsButtonFrameX + SMALL_BUTTON_DISTANCE / 2, optionsButtonFrameY + SMALL_BUTTON_DISTANCE / 2, 0, 0);
-    
+        
     self.addImageButton.frame = initialFrame;
     self.addDrawingButton.frame = initialFrame;
     self.addListButton.frame = initialFrame;
-    
+        
     [self.view addSubview:self.addImageButton];
     [self.view addSubview:self.addDrawingButton];
     [self.view addSubview:self.addListButton];
-    
+        
     [UIView animateWithDuration:0.5
-                     animations:^
-     {
-         self.addImageButton.frame = newImageButtonFrame;
-         self.addDrawingButton.frame = newDrawingButtonFrame;
-         self.addListButton.frame = newListButtonFrame;
-     }];
-    self.optionsButtonsHidden = NO;
+                        animations:^
+    {
+             self.addImageButton.frame = newImageButtonFrame;
+             self.addDrawingButton.frame = newDrawingButtonFrame;
+             self.addListButton.frame = newListButtonFrame;
+    }];
+        self.optionsButtonsHidden = NO;
 }
 
 - (void)hideOptionsButtons
@@ -238,8 +215,82 @@
 
 - (IBAction)onCreateClick:(id)sender
 {
-    NSMutableArray *array  = [[NSMutableArray alloc] init];
+    NSMutableArray *array  = [self getSelectionMenuForList:[self.manager getNotebookNamesList] andSelector:@selector(notebookSelected:)];
+    [array addObject:[self getInputAlertAction]];
+    [self displaySelectableMenuWithButton:sender list:array];
+}
 
+- (IBAction)onAlignCenterPressed:(id)sender
+{
+    [self centerText];
+}
+
+- (void)notebookSelected:(NSString*) noteBookSelected
+{
+    [self setNoteContent];
+    [self.navigationController popViewControllerAnimated:YES];
+    [self.manager addNote:self.note toNotebookWithName:noteBookSelected];
+}
+
+- (IBAction)onSettingsSelected:(UIButton*)sender
+{
+    [self showDatePickerFromButton:sender];
+}
+
+- (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller traitCollection:(UITraitCollection *)traitCollection {
+    return UIModalPresentationNone;
+}
+
+- (IBAction)onUnderlineSelected:(id)sender
+{
+    [self applyUnderlineOnSelectedText];
+}
+
+- (IBAction)onItalicStyleSelected:(id)sender
+{
+    [self applyItalicOnSelectedText];
+}
+
+- (IBAction)onBoldStyleSelected:(id)sender
+{
+    [self applyBoldOnSelectedText];
+}
+
+- (IBAction)onFontSelected:(id)sender
+{
+    NSMutableArray *array  = [self getSelectionMenuForList:self.fontList andSelector:@selector(updateNoteFont:)];
+    [self displaySelectableMenuWithButton:sender list:array];
+}
+
+- (IBAction)onSizeSelected:(UIButton *)sender
+{
+    NSMutableArray *array  = [self getSelectionMenuForList:self.textSizeList andSelector:@selector(updateNoteSize:)];
+    [self displaySelectableMenuWithButton:sender list:array];
+}
+
+#pragma mark -
+#pragma mark Private
+
+-(NSMutableArray*) getSelectionMenuForList:(NSArray*) itemList andSelector:(SEL) selector
+{
+    NSMutableArray *array  = [[NSMutableArray alloc] init];
+    
+    for (NSString* currentItem in itemList)
+    {
+        [array addObject:[UIAlertAction actionWithTitle:currentItem style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
+                          {
+                              [self performSelector:selector withObject:currentItem];
+                          }]];
+    }
+    
+    return array;
+}
+
+
+-(NSMutableArray*) getNotebookSelectionMenu
+{
+    NSMutableArray *array  = [[NSMutableArray alloc] init];
+    
     [array addObject:[self getInputAlertAction]];
     
     for (Notebook* currentItem in [self.manager getNotebookList])
@@ -249,23 +300,28 @@
                               [self performSelector:@selector(notebookSelected:) withObject:currentItem];
                           }]];
     }
+    return array;
+}
+
+-(UIButton*) getExpandingButtonWithImage:(NSString*) image andSelector:(SEL) selector
+{
+    UIButton *button = [[UIButton alloc] init];
+    self.optionsButtonsHidden = YES;
+    CGFloat red, green, blue;
+    [[self.themeManager.styles objectForKey:TINT] getRed:&red green:&green blue:&blue alpha:nil];
     
-    [self displaySelectableMenuWithButton:sender list:array];
+    button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.layer.cornerRadius = 23;
+    button.layer.borderWidth = 1;
+    button.layer.borderColor = [UIColor colorWithRed:red green:green blue:blue alpha:1].CGColor;
+    button.clipsToBounds = YES;
+    [button addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+    [button setImage:[self.themeManager.styles objectForKey:image] forState:UIControlStateNormal];
+    return button;
 }
 
-- (IBAction)onAlignCenterPressed:(id)sender
-{
-    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_CENTER];
-}
 
-- (void)notebookSelected:(Notebook*) noteBookSelected
-{
-    [self setNoteContent];
-    [self.navigationController popViewControllerAnimated:YES];
-    [self.manager addNote:self.note toNotebook:noteBookSelected];
-}
-
-- (IBAction)onSettingsSelected:(UIButton*)sender
+-(void) showDatePickerFromButton:(UIButton*) sender
 {
     DatePickerViewController *datePicker = [[DatePickerViewController alloc] initWithNibName:@"DatePickerViewController" bundle:nil];
     datePicker.delegate = self;
@@ -281,61 +337,33 @@
     [self presentViewController:datePicker animated:YES completion:nil];
 }
 
-- (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller traitCollection:(UITraitCollection *)traitCollection {
-    return UIModalPresentationNone;
+-(void)reminderDateSelected:(NSDate *)date
+{
+    [self setNoteReminderDate:date];
 }
 
-- (IBAction)onUnderlineSelected:(id)sender
+-(void) setNoteReminderDate:(NSDate*)date
+{
+    self.note.triggerDate = date.description;
+}
+
+-(void) centerText
+{
+    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_CENTER];
+}
+-(void) applyUnderlineOnSelectedText
 {
     [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_UNDERLINE];
 }
 
-- (IBAction)onItalicStyleSelected:(id)sender
-{
-    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_ITALIC];
-}
-
-- (IBAction)onBoldStyleSelected:(id)sender
+-(void) applyBoldOnSelectedText
 {
     [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_BOLD];
 }
 
-- (IBAction)onFontSelected:(id)sender
+-(void) applyItalicOnSelectedText
 {
-    NSMutableArray *array  = [[NSMutableArray alloc] init];
-    
-    for (NSString* currentItem in self.fontList)
-    {
-        [array addObject:[UIAlertAction actionWithTitle:currentItem style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
-                          {
-                              [self performSelector:@selector(updateNoteFont:) withObject:currentItem];
-                          }]];
-    }
-    
-    [self displaySelectableMenuWithButton:sender list:array];
-}
-
-- (IBAction)onSizeSelected:(UIButton *)sender
-{
-    NSMutableArray *array  = [[NSMutableArray alloc] init];
-    
-    for (NSString* currentItem in self.textSizeList)
-    {
-        [array addObject:[UIAlertAction actionWithTitle:currentItem style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
-                          {
-                              [self performSelector:@selector(updateNoteSize:) withObject:currentItem];
-                          }]];
-    }
-    
-    [self displaySelectableMenuWithButton:sender list:array];
-}
-
-#pragma mark -
-#pragma mark Private
-
--(void)reminderDateSelected:(NSDate *)date
-{
-    NSLog(@"%@",date);
+    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_ITALIC];
 }
 
 -(void) showImagePicker
@@ -406,9 +434,9 @@
     UIAlertAction *newNotebookAction = [UIAlertAction actionWithTitle:ALERT_INPUT_DIALOG_TITLE
                                                                 style:UIAlertActionStyleDestructive
                                                               handler:^(UIAlertAction * _Nonnull action)
-    {
-        [self presentViewController:[self getInputAlertActionController] animated:YES completion:nil];
-    }];
+                                        {
+                                            [self presentViewController:[self getInputAlertActionController] animated:YES completion:nil];
+                                        }];
     
     return newNotebookAction;
 }
@@ -420,12 +448,12 @@
                                                                       preferredStyle:UIAlertControllerStyleAlert];
     
     [inputController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField)
-    {
-        textField.placeholder = @"Name";
-        textField.textColor = [UIColor blueColor];
-        textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-        textField.borderStyle = UITextBorderStyleRoundedRect;
-    }];
+     {
+         textField.placeholder = @"Name";
+         textField.textColor = [UIColor blueColor];
+         textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+         textField.borderStyle = UITextBorderStyleRoundedRect;
+     }];
     
     [inputController addAction:[UIAlertAction actionWithTitle:ALERT_INPUT_DIALOG_CONFIRM_BUTTON_NAME
                                                         style:UIAlertActionStyleDefault
@@ -439,7 +467,7 @@
         }
         Notebook *newNotebook = [[Notebook alloc] initWithName:textFromField];
         [self.manager addNotebook:newNotebook];
-        [self notebookSelected:newNotebook];
+        [self notebookSelected:newNotebook.name];
     }]];
     
     [inputController addAction:[UIAlertAction actionWithTitle:ALERT_DIALOG_CANCEL_BUTTON_NAME style:UIAlertActionStyleCancel handler:nil]];
@@ -479,9 +507,9 @@
 -(NSString*) getNoteDirectoryPathForNote:(Note*)note inNotebookWithName:(NSString*) notebook
 {
     return [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-                            stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
-                            stringByAppendingPathComponent:notebook]
-                            stringByAppendingPathComponent:note.name];
+              stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
+             stringByAppendingPathComponent:notebook]
+            stringByAppendingPathComponent:note.name];
 }
 
 - (void)updateNoteFont:(NSString*) font
@@ -534,8 +562,6 @@
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
     
     [alert addAction:[UIAlertAction actionWithTitle:ALERT_DIALOG_CANCEL_BUTTON_NAME style:UIAlertActionStyleCancel handler:nil]];
-    
-
     
     for (UIAlertAction* currentItem in nameList)
     {

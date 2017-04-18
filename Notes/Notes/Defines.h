@@ -52,6 +52,7 @@
 #define NOTE_BODY_FILE @"body.html"
 #define NOTE_TAGS_FILE @"tags.txt"
 #define NOTE_DATE_FILE @"date.txt"
+#define NOTE_TRIGGER_DATE_FILE @"triggerDate.txt"
 
 #define SEARCH_BAR @"SearchBar"
 #define TABLEVIEW_BACKGROUND_COLOR @"TableViewBackgroundColor"
