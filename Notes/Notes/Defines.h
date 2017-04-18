@@ -92,4 +92,5 @@
 #define ALERT_INPUT_DIALOG_TITLE @"Create new"
 #define ALERT_INPUT_DIALOG_MESSAGE @"Enter a name"
 #define ALERT_INPUT_DIALOG_CONFIRM_BUTTON_NAME @"OK"
+#define TEMPLATE_CONTENTS @"<html><body><div id=\"content\" contenteditable=\"true\" style=\"font-family: Helvetica\"></div></body></html>"
 #endif /* Defines_h */

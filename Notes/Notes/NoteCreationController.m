@@ -524,11 +524,7 @@
 
 -(void) loadNoteTemplateHTML
 {
-    NSString *emptyFilePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-                               stringByAppendingPathComponent:EMPTY_FILE_NAME];
-    
-    NSURL *emptyFileURL = [[NSURL alloc] initWithString:emptyFilePath];
-    [self.noteBody loadRequest:[NSURLRequest requestWithURL:emptyFileURL]];
+    [self.noteBody loadHTMLString:TEMPLATE_CONTENTS baseURL:nil];
 }
 
 -(void) loadSavedHtml
