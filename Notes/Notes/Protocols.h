@@ -53,7 +53,7 @@
 @protocol EditableCellDelegate
 
 - (void)deleteButtonClickedOnCell:(EditableNotebookCell *)cell;
-- (void)editButtonClickedOnCell:(EditableNotebookCell *)cell;
+- (void)onCellNameChanged:(EditableNotebookCell *)cell;
 
 @end
 

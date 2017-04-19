@@ -124,14 +124,12 @@
 
 - (void)editButtonClicked
 {
-    self.editingMode = YES;
-    [self.tableView reloadData];
+    [self enterEditingMode];
 }
 
 - (void)closeButtonClicked
 {
-    self.editingMode = NO;
-    [self.tableView reloadData];
+    [self exitEditingMode];
 }
 
 #pragma mark -
@@ -213,15 +211,16 @@
         [label setText:NOTEBOOK_SECTION_NAME];
         if(!self.editingMode)
         {
-            UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(200, 5, 40, 25)];
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+            [button setFrame:CGRectMake(200, 5, 40, 25)];
             [button setTitle:@"Edit" forState:UIControlStateNormal];
-            [button setTitleColor:[self.themeManager.styles objectForKey:TINT] forState:UIControlStateNormal];
             [button addTarget:self action:@selector(editButtonClicked) forControlEvents:UIControlEventTouchUpInside];
             [view addSubview:button];
         }
         else
         {
-            UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(210, 5, 25, 25)];
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+            [button setFrame:CGRectMake(210, 5, 25, 25)];
             [button setImage:[UIImage imageNamed:@"close.png"] forState:UIControlStateNormal];
             [button addTarget:self action:@selector(closeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
             [view addSubview:button];
@@ -235,6 +234,18 @@
     
     [view addSubview:label];
     return view;
+}
+
+- (void)exitEditingMode
+{
+    self.editingMode = NO;
+    [self.tableView reloadData];
+}
+
+- (void)enterEditingMode
+{
+    self.editingMode = YES;
+    [self.tableView reloadData];
 }
 
 #pragma mark -
@@ -275,8 +286,6 @@
 
 - (void)panEnded:(UIPanGestureRecognizer *)pan
 {
-    self.editingMode = NO;
-    [self.tableView reloadData];
     [self.delegate hideLeftPanel];
 }
 
@@ -287,13 +296,16 @@
 {
     NSIndexPath *pathForDeleting = [self.tableView indexPathForCell:cell];
     [self.noteManager removeNotebookWithName:cell.nameLabel.text];
-    [[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] removeObjectAtIndex:pathForDeleting.row];
-    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:pathForDeleting] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableViewDataSource setObject:[self.noteManager getNotebookList] forKey:NOTEBOOK_KEY];
+    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:pathForDeleting] withRowAnimation:UITableViewRowAnimationTop];
 }
 
-- (void)editButtonClickedOnCell:(EditableNotebookCell *)cell
+- (void)onCellNameChanged:(EditableNotebookCell *)cell
 {
-    
+    NSLog(@"Under construction");
+    // TODO
+    // Vanka, make dat work work work work work work:
+    // [self.noteManager changeNotebookWithName:cell.nameBeforeEditing toNewName:cell.nameLabel.text];
 }
 
 @end

@@ -204,6 +204,7 @@
 
 - (void)hideLeftPanel
 {
+    [self.leftPanelViewController exitEditingMode];
     self.settingsPanelViewController.isHidden = YES;
     self.leftPanelViewController.isHidden = YES;
     [UIView animateWithDuration:0.5 animations:^{

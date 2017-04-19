@@ -10,19 +10,6 @@
 
 @implementation EditableNotebookCell
 
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    // Initialization code
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
 - (IBAction)deleteButtonClicked:(id)sender
 {
     [self.delegate deleteButtonClickedOnCell:self];
@@ -30,6 +17,24 @@
 
 - (IBAction)editButtonClicked:(id)sender
 {
-    [self.delegate editButtonClickedOnCell:self];
+    if(self.isEditing)
+    {
+        if(![self.nameBeforeEditing isEqualToString:self.nameLabel.text])
+        {
+            [self.delegate onCellNameChanged:self];
+        }
+        [self.nameLabel setUserInteractionEnabled:NO];
+        [self.nameLabel setBackgroundColor:[UIColor clearColor]];
+        [self.editButton setImage:[UIImage imageNamed:@"edit.png"] forState:UIControlStateNormal];
+        self.isEditing = NO;
+    }
+    else
+    {
+        self.nameBeforeEditing = self.nameLabel.text;
+        [self.nameLabel setUserInteractionEnabled:YES];
+        [self.nameLabel setBackgroundColor:[UIColor whiteColor]];
+        [self.editButton setImage:[UIImage imageNamed:@"check.png"] forState:UIControlStateNormal];
+        self.isEditing = YES;
+    }
 }
 @end

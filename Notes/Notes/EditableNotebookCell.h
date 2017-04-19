@@ -12,9 +12,12 @@
 @interface EditableNotebookCell : UITableViewCell
 @property (nonatomic, weak) id <EditableCellDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
+@property (weak, nonatomic) IBOutlet UITextField *nameLabel;
 @property (weak, nonatomic) IBOutlet UIButton *editButton;
-@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 - (IBAction)deleteButtonClicked:(id)sender;
 - (IBAction)editButtonClicked:(id)sender;
+
+@property BOOL isEditing;
+@property NSString *nameBeforeEditing;
 
 @end

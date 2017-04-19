@@ -19,6 +19,7 @@
 - (IBAction)settingsButtonClicked:(UIButton *)sender;
 - (void)loadTheme;
 - (void)reloadData;
+- (void)exitEditingMode;
 
 @property (weak, nonatomic) IBOutlet UIButton *facebookButton;
 @property (weak, nonatomic) IBOutlet UIButton *googleButton;
