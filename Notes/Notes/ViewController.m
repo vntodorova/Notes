@@ -220,7 +220,7 @@
 
 - (void)showLeftPanel
 {
-    [self.leftPanelViewController reloadData];
+    [self.leftPanelViewController reloadTableViewData];
     [self.view bringSubviewToFront:self.bluredView];
     [self.view bringSubviewToFront:self.leftPanelViewController.view];
     self.leftPanelViewController.isHidden = NO;

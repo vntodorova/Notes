@@ -18,7 +18,7 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil manager:(LocalNoteManager *)noteManager;
 - (IBAction)settingsButtonClicked:(UIButton *)sender;
 - (void)loadTheme;
-- (void)reloadData;
+- (void)reloadTableViewData;
 - (void)exitEditingMode;
 
 @property (weak, nonatomic) IBOutlet UIButton *facebookButton;

@@ -23,6 +23,10 @@
 - (UIBarButtonItem *)setupLeftBarButton:(id)target withSelector:(SEL)selector;
 - (UIBarButtonItem *)setupRightBarButton:(id)target withSelector:(SEL)selector;
 
+- (UIView *)getNotebookHeaderEditingMode:(SEL)action andTarget:(id)target;
+- (UIView *)getNotebookHeaderViewMode:(SEL)action andTarget:(id)target;
+- (UIView *)getRemindersHeader;
+
 - (TableViewCell *)getNewTableViewCell:(UITableView *)tableView withNote:(Note *)note andDelegate:(id)delegate;
 
 - (EditableNotebookCell *)getNewEditableCell:(UITableView *)tableView withNotebook:(Notebook *)notebook andDelegate:(id)delegate;

@@ -40,48 +40,21 @@
     if(self)
     {
         self.noteManager = noteManager;
-        self.isHidden = YES;
-        self.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
+        self.tableViewDataSource = [[NSMutableDictionary alloc] init];
+        self.dateTimeManager = [[DateTimeManager alloc] init];
+        self.layoutProvider = [LayoutProvider sharedInstance];
+        self.themeManager = [ThemeManager sharedInstance];
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setup];
-}
+    self.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
+    self.isHidden = YES;
 
-- (NSArray *)getAllReminders
-{
-    NSMutableArray *reminders = [[NSMutableArray alloc] init];
-    
-    for (Notebook *notebook in [self.noteManager getNotebookList]) {
-        NSArray *currentNotebook = [self.noteManager getNoteListForNotebook:notebook];
-        for (Note *note in currentNotebook) {
-            if(note.triggerDate != nil)
-            {
-               [reminders addObject:note];
-            }
-        }
-    }
-    
-    [reminders sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-                Note *note1 = (Note *)obj1;
-                Note *note2 = (Note *)obj2;
-                return [self.dateTimeManager compareStringDate:note1.triggerDate andDate:note2.triggerDate];
-            }];
-    return reminders;
-}
-
-- (void)setup
-{
-    self.tableViewDataSource = [[NSMutableDictionary alloc] init];
-    self.dateTimeManager = [[DateTimeManager alloc] init];
-    self.layoutProvider = [LayoutProvider sharedInstance];
-    self.themeManager = [ThemeManager sharedInstance];
-    
     [self loadTheme];
-    [self reloadData];
+    [self reloadTableViewData];
     
     UIPanGestureRecognizer *panGestureRecogniser = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognised:)];
     [self.view addGestureRecognizer:panGestureRecogniser];
@@ -99,11 +72,35 @@
     [self.tableView reloadData];
 }
 
-- (void)reloadData
+- (void)reloadTableViewData
 {
     [self.tableViewDataSource setObject:[self.noteManager getNotebookList] forKey:NOTEBOOK_KEY];
-    [self.tableViewDataSource setObject:[self getAllReminders] forKey:REMINDER_KEY];
+    [self.tableViewDataSource setObject:[self getNotesWithReminders] forKey:REMINDER_KEY];
     [self.tableView reloadData];
+}
+
+- (NSArray *)getNotesWithReminders
+{
+    NSMutableArray *reminders = [[NSMutableArray alloc] init];
+    
+    for (Notebook *notebook in [self.noteManager getNotebookList])
+    {
+        for (Note *note in [self.noteManager getNoteListForNotebook:notebook])
+        {
+            if(note.triggerDate != nil)
+            {
+                [reminders addObject:note];
+            }
+        }
+    }
+    
+    [reminders sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2)
+    {
+        Note *note1 = (Note *)obj1;
+        Note *note2 = (Note *)obj2;
+        return [self.dateTimeManager compareStringDate:note1.triggerDate andDate:note2.triggerDate];
+    }];
+    return reminders;
 }
 
 - (void)notebookClickedOnIndexPath:(NSIndexPath *)indexPath
@@ -121,44 +118,16 @@
     [self.delegate showSettings];
 }
 
-- (void)editButtonClicked
-{
-    [self enterEditingMode];
-}
-
-- (void)closeButtonClicked
-{
-    [self exitEditingMode];
-}
-
-- (void)exitEditingMode
-{
-    self.notebookSectionEditing = NO;
-    [self.tableView reloadData];
-}
-
 - (void)enterEditingMode
 {
     self.notebookSectionEditing = YES;
     [self.tableView reloadData];
 }
 
-- (void)addCloseButton:(UIView *)headerView
+- (void)exitEditingMode
 {
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button setFrame:CGRectMake(headerView.frame.size.width - HEADER_HEIGHT, 0, HEADER_HEIGHT, HEADER_HEIGHT)];
-    [button setImage:[UIImage imageNamed:CLOSE_IMAGE] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(closeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-    [headerView addSubview:button];
-}
-
-- (void)addEditButton:(UIView *)headerView
-{
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button setFrame:CGRectMake(headerView.frame.size.width - HEADER_HEIGHT, 0, HEADER_HEIGHT, HEADER_HEIGHT)];
-    [button setTitle:EDIT_BUTTON_NAME forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(editButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-    [headerView addSubview:button];
+    self.notebookSectionEditing = NO;
+    [self.tableView reloadData];
 }
 
 #pragma mark -
@@ -177,9 +146,7 @@
         }
         else
         {
-            cell = [self.layoutProvider getNewCell:tableView
-                                      withNotebook:notebook
-                                   andNotebookSize:[[self.noteManager getNoteListForNotebook:notebook] count]];
+            cell = [self.layoutProvider getNewCell:tableView withNotebook:notebook andNotebookSize:[[self.noteManager getNoteListForNotebook:notebook] count]];
         }
     }
     
@@ -194,18 +161,14 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSInteger numberOfRows = 0;
     switch (section) {
         case NOTEBOOKS_SECTION:
-            numberOfRows = [[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] count];
-            break;
+            return [[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] count];
         case REMINDERS_SECTION:
-            numberOfRows = [[self.tableViewDataSource objectForKey:REMINDER_KEY] count];
-            break;
+            return [[self.tableViewDataSource objectForKey:REMINDER_KEY] count];
         default:
-            break;
+            return 0;
     }
-    return numberOfRows;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -228,35 +191,25 @@
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, HEADER_HEIGHT)];
-    UILabel *headerTitle = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, tableView.frame.size.width, HEADER_HEIGHT)];
-    [headerTitle setTextColor:[self.themeManager.styles objectForKey:TINT]];
-    [headerView addSubview:headerTitle];
-    
+    UIView *header;
     switch (section) {
         case NOTEBOOKS_SECTION:
         {
-            [headerTitle setText:NOTEBOOK_SECTION_NAME];
             if(!self.notebookSectionEditing)
             {
-                [self addEditButton:headerView];
+                header = [self.layoutProvider getNotebookHeaderViewMode:@selector(enterEditingMode) andTarget:self];
             }
             else
             {
-                [self addCloseButton:headerView];
+                header = [self.layoutProvider getNotebookHeaderEditingMode:@selector(exitEditingMode) andTarget:self];
             }
             break;
         }
         case REMINDERS_SECTION:
-        {
-            [headerTitle setText:REMINDERS_SECTION_NAME];
-            break;
-        }
-        default:
+            header = [self.layoutProvider getRemindersHeader];
             break;
     }
-    
-    return headerView;
+    return header;
 }
 
 #pragma mark -

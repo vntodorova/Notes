@@ -78,6 +78,53 @@ static LayoutProvider *sharedInstance = nil;
 #pragma mark -
 #pragma mark LeftPanelViewController
 
+- (UIButton *)getHeaderButtonWithAction:(SEL)selector andTarget:(id)target
+{
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+    [button setFrame:CGRectMake(HEADER_WIDTH - HEADER_HEIGHT, 0, HEADER_HEIGHT, HEADER_HEIGHT)];
+    [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
+    return button;
+}
+
+- (UIView *)getNotebookHeaderEditingMode:(SEL)action andTarget:(id)target
+{
+    CGRect headerFrame = CGRectMake(0, 0, HEADER_WIDTH, HEADER_HEIGHT);
+    UIView *headerView = [[UIView alloc] initWithFrame: headerFrame];
+    UILabel *headerTitle = [[UILabel alloc] initWithFrame: headerFrame];
+    [headerTitle setTextColor:[self.themeManager.styles objectForKey:TINT]];
+    [headerView addSubview:headerTitle];
+    [headerTitle setText:NOTEBOOK_SECTION_NAME];
+    UIButton *button = [self getHeaderButtonWithAction:action andTarget:target];
+    [button setImage:[UIImage imageNamed:CLOSE_IMAGE] forState:UIControlStateNormal];
+    [headerView addSubview:button];
+    return headerView;
+}
+
+- (UIView *)getNotebookHeaderViewMode:(SEL)action andTarget:(id)target
+{
+    CGRect headerFrame = CGRectMake(0, 0, HEADER_WIDTH, HEADER_HEIGHT);
+    UIView *headerView = [[UIView alloc] initWithFrame: headerFrame];
+    UILabel *headerTitle = [[UILabel alloc] initWithFrame: headerFrame];
+    [headerTitle setTextColor:[self.themeManager.styles objectForKey:TINT]];
+    [headerView addSubview:headerTitle];
+    [headerTitle setText:NOTEBOOK_SECTION_NAME];
+    UIButton *button = [self getHeaderButtonWithAction:action andTarget:target];
+    [button setTitle:EDIT_BUTTON_NAME forState:UIControlStateNormal];
+    [headerView addSubview:button];
+    return headerView;
+}
+
+- (UIView *)getRemindersHeader
+{
+    CGRect headerFrame = CGRectMake(0, 0, HEADER_WIDTH, HEADER_HEIGHT);
+    UIView *headerView = [[UIView alloc] initWithFrame: headerFrame];
+    UILabel *headerTitle = [[UILabel alloc] initWithFrame: headerFrame];
+    [headerTitle setTextColor:[self.themeManager.styles objectForKey:TINT]];
+    [headerView addSubview:headerTitle];
+    [headerTitle setText:REMINDERS_SECTION_NAME];
+    return headerView;
+}
+
 - (EditableNotebookCell *)getNewEditableCell:(UITableView *)tableView withNotebook:(Notebook *)notebook andDelegate:(id)delegate
 {
     EditableNotebookCell *cell = [tableView dequeueReusableCellWithIdentifier:EDITABLE_NOTEBOOK_CELL_ID];
