@@ -12,6 +12,8 @@
 #define BUTTONS_HEIGHT 25
 #define BUTTONS_WIDTH 25
 
+#define HEADER_HEIGHT 30
+
 #define SMALL_BUTTONS_WIDTH 45
 #define SMALL_BUTTONS_HEIGHT 45
 #define SMALL_BUTTON_DISTANCE 60
@@ -25,6 +27,7 @@
 #define NOTEBOOK_CELL_ID @"NotebookCell"
 #define EDITABLE_NOTEBOOK_CELL_ID @"EditableNotebookCell"
 #define REMINDER_CELL_ID @"ReminderCell"
+#define GENERAL_NOTEBOOK_NAME @"General"
 
 #define CELL_DRAG_ACTIVATION_DISTANCE 70
 
@@ -77,6 +80,7 @@
 #define TAG_SEPARATION_INDICATORS @"# "
 
 #define REDACTATION_BUTTON_NAME @"Save"
+#define EDIT_BUTTON_NAME @"Edit"
 
 #define JS_COMMAND_GET_HTML @"document.documentElement.outerHTML"
 #define JS_COMMAND_UNDERLINE @"document.execCommand(\"Underline\")"
@@ -99,6 +103,7 @@
 #define TOOLBAR_ALIGN_RIGHT_IMAGE @"alignLeft"
 #define TOOLBAR_ALIGN_LEFT_IMAGE @"alignRight"
 #define TOOLBAR_CALENDAR_IMAGE @"calendar"
+#define CLOSE_IMAGE @"close"
 
 #define ALERT_INPUT_DIALOG_TITLE @"Create new"
 #define ALERT_INPUT_DIALOG_MESSAGE @"Enter a name"

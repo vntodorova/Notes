@@ -77,7 +77,7 @@ static LayoutProvider *sharedInstance = nil;
 #pragma mark -
 #pragma mark LeftPanelViewController
 
-- (EditableNotebookCell *)getNewEditableCell:(UITableView *)tableView withNotebook:(Notebook *)notebook
+- (EditableNotebookCell *)getNewEditableCell:(UITableView *)tableView withNotebook:(Notebook *)notebook andDelegate:(id)delegate
 {
     EditableNotebookCell *cell = [tableView dequeueReusableCellWithIdentifier:EDITABLE_NOTEBOOK_CELL_ID];
     if (cell == nil)
@@ -88,6 +88,7 @@ static LayoutProvider *sharedInstance = nil;
     cell.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_CELL_COLOR];
     cell.nameLabel.text = notebook.name;
     cell.nameLabel.textColor = [self.themeManager.styles objectForKey:TINT];
+    cell.delegate = delegate;
     return cell;
 }
 

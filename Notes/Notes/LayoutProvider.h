@@ -25,7 +25,7 @@
 
 - (TableViewCell *)getNewTableViewCell:(UITableView *)tableView withNote:(Note *)note;
 
-- (EditableNotebookCell *)getNewEditableCell:(UITableView *)tableView withNotebook:(Notebook *)notebook;
+- (EditableNotebookCell *)getNewEditableCell:(UITableView *)tableView withNotebook:(Notebook *)notebook andDelegate:(id)delegate;
 - (NotebookCell *)getNewCell:(UITableView *)tableView withNotebook:(Notebook *)notebook andNotebookSize:(NSInteger)size;
 - (UITableViewCell *)getNewCell:(UITableView *)tableView withReminder:(Reminder *)reminder;
 
