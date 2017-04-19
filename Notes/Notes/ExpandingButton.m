@@ -11,54 +11,31 @@
 #import "ThemeManager.h"
 
 @interface ExpandingButton()
-
 @property (nonatomic, strong) ThemeManager *themeManager;
-
-@property (nonatomic, strong) UIButton *addImageButton;
-@property (nonatomic, strong) UIButton *addDrawingButton;
-@property (nonatomic, strong) UIButton *addListButton;
-
+@property NSMutableArray<UIButton *> *buttons;
 @end
 
 @implementation ExpandingButton
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
-- (instancetype)init
+- (void)setup
 {
-    self = [super init];
-    if (self) {
-        self.isExpanded = NO;
-    }
-    return self;
-}
-
-- (void)addSmallButton
-{
+    [self setIsExpanded:NO];
     self.themeManager = [ThemeManager sharedInstance];
-    self.addImageButton = [self getButtonWithAction:@selector(onCameraClick) andImage:CAMERA_IMAGE];
-    self.addListButton = [self getButtonWithAction:@selector(onListClick) andImage:LIST_IMAGE];
-    self.addDrawingButton = [self getButtonWithAction:@selector(onDrawingClick) andImage:DRAWING_IMAGE];
+    self.buttons = [[NSMutableArray alloc] init];
 }
 
-- (UIButton *)getButtonWithAction:(SEL)selector andImage:(NSString *)imageName
+- (void)addSmallButtonWithAction:(SEL)selector target:(id)target andImage:(NSString *)imageName
 {
     CGFloat red, green, blue;
     [[self.themeManager.styles objectForKey:TINT] getRed:&red green:&green blue:&blue alpha:nil];
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     button.layer.cornerRadius = 23;
     button.layer.borderWidth = 1;
     button.layer.borderColor = [UIColor colorWithRed:red green:green blue:blue alpha:1].CGColor;
     button.clipsToBounds = YES;
-    [button addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
-    [button setImage:[self.themeManager.styles objectForKey:imageName] forState:UIControlStateNormal];
-    button.layer.backgroundColor = [UIColor darkGrayColor].CGColor;
-    return button;
+    [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
+    [button setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+    [self.buttons addObject:button];
 }
 
 - (void)showOptionsButtons
@@ -76,20 +53,18 @@
     
     CGRect initialFrame = CGRectMake(optionsButtonFrameX + SMALL_BUTTON_DISTANCE / 2, optionsButtonFrameY + SMALL_BUTTON_DISTANCE / 2, 0, 0);
     
-    self.addImageButton.frame = initialFrame;
-    self.addDrawingButton.frame = initialFrame;
-    self.addListButton.frame = initialFrame;
-    
-    [self.superview addSubview:self.addImageButton];
-    [self.superview addSubview:self.addDrawingButton];
-    [self.superview addSubview:self.addListButton];
+    for (UIButton *button in self.buttons)
+    {
+        [button setFrame:initialFrame];
+        [self.superview addSubview:button];
+    }
     
     [UIView animateWithDuration:0.5
                      animations:^
      {
-         self.addImageButton.frame = newImageButtonFrame;
-         self.addDrawingButton.frame = newDrawingButtonFrame;
-         self.addListButton.frame = newListButtonFrame;
+         [[self.buttons objectAtIndex:0] setFrame:newImageButtonFrame];
+         [[self.buttons objectAtIndex:1] setFrame:newDrawingButtonFrame];
+         [[self.buttons objectAtIndex:2] setFrame:newListButtonFrame];
      }];
     self.isExpanded = YES;
 }
@@ -100,15 +75,17 @@
     [UIView animateWithDuration:0.5
                      animations:^
      {
-         self.addListButton.frame = newFrame;
-         self.addDrawingButton.frame = newFrame;
-         self.addImageButton.frame = newFrame;
+         for (UIButton *button in self.buttons)
+         {
+             [button setFrame:newFrame];
+         }
      }
                      completion:^(BOOL finished)
      {
-         [self.addListButton removeFromSuperview];
-         [self.addDrawingButton removeFromSuperview];
-         [self.addImageButton removeFromSuperview];
+         for (UIButton *button in self.buttons)
+         {
+             [button removeFromSuperview];
+         }
      }];
     self.isExpanded = NO;
 }

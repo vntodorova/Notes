@@ -47,9 +47,6 @@ static ThemeManager *sharedInstance = nil;
     [self.styles setObject:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0] forKey:TINT];
     [self.styles setObject:[UIColor whiteColor] forKey:TEXTFIELDS_COLOR];
     [self.styles setObject:[NSNumber numberWithInt:UIBarStyleDefault] forKey:SEARCH_BAR];
-    [self.styles setObject:[UIImage imageNamed:@"camera_blue.png"] forKey:CAMERA_IMAGE];
-    [self.styles setObject:[UIImage imageNamed:@"drawing_blue.png"] forKey:DRAWING_IMAGE];
-    [self.styles setObject:[UIImage imageNamed:@"list_blue.png"] forKey:LIST_IMAGE];
 }
 
 - (void)loadDarkTheme
@@ -61,9 +58,6 @@ static ThemeManager *sharedInstance = nil;
     [self.styles setObject:[UIColor colorWithRed:180.0/255.0 green:180.0/255.0 blue:180.0/255.0 alpha:1] forKey:TINT];
     [self.styles setObject:[UIColor colorWithRed:120.0/255.0 green:120.0/255.0 blue:120.0/255.0 alpha:1] forKey:TEXTFIELDS_COLOR];
     [self.styles setObject:[NSNumber numberWithInt:UIBarStyleBlack] forKey:SEARCH_BAR];
-    [self.styles setObject:[UIImage imageNamed:@"camera_dark.png"] forKey:CAMERA_IMAGE];
-    [self.styles setObject:[UIImage imageNamed:@"drawing_dark.png"] forKey:DRAWING_IMAGE];
-    [self.styles setObject:[UIImage imageNamed:@"list_dark.png"] forKey:LIST_IMAGE];
 }
 
 - (void)reload

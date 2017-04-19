@@ -65,9 +65,9 @@
 #define NAVIGATION_BAR_COLOR @"NavigationBarColor"
 #define TINT @"Tint"
 #define TEXTFIELDS_COLOR @"TextFieldsColor"
-#define CAMERA_IMAGE @"CameraImage"
-#define LIST_IMAGE @"ListImage"
-#define DRAWING_IMAGE @"DrawingImage"
+#define CAMERA_IMAGE @"camera"
+#define LIST_IMAGE @"list"
+#define DRAWING_IMAGE @"drawing"
 #define RIGHT_ARROW_IMAGE @"RightArrowImage"
 #define DOWN_ARROW_IMAGE @"DownArrowImage"
 
@@ -75,9 +75,6 @@
 #define PUBLIC_IMAGE_IDENTIFIER @"public.image"
 #define DEFAULT_IMAGE_HTML @"<img src=\"%@\" alt=\"\" style=\"width:150;height:150;\">"
 #define START_OF_IMAGE_HTML @"<img src=\""
-
-
-
 
 #define REDACTATION_BUTTON_NAME @"Save"
 #define EDIT_BUTTON_NAME @"Edit"

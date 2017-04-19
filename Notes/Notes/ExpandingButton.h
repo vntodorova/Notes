@@ -8,16 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
+@class ThemeManager;
+
 @interface ExpandingButton : UIButton
 
 @property BOOL isExpanded;
 
-- (instancetype)init;
+- (void)setup;
 
 - (void)showOptionsButtons;
 
 - (void)hideOptionsButtons;
 
-- (void)addSmallButton;
+- (void)addSmallButtonWithAction:(SEL)selector target:(id)target andImage:(NSString *)imageName;
 
 @end

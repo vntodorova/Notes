@@ -32,7 +32,6 @@
 
 @property (nonatomic, strong) TagsParser *tagsParser;
 
-@property (nonatomic, assign) BOOL optionsButtonsHidden;
 @property (nonatomic, assign) int imageIndex;
 
 @property (nonatomic, assign) BOOL isNoteNew;
@@ -50,7 +49,6 @@
     self.fontList = [[NSMutableArray alloc] init];
     self.textSizeList = [[NSMutableArray alloc] init];
     self.themeManager = [ThemeManager sharedInstance];
-    [self.optionsButton addSmallButton];
     self.imageIndex = 0;
     return self;
 }
@@ -61,10 +59,10 @@
     [self loadTheme];
     [self inflateFontsList];
     [self inflateTextSizeList];
-    [self setupOptionsButtons];
     [self deleteTempFolder];
     [self createTempFolder];
     [self loadHTML];
+    [self setupOptionsButton];
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc]
                                      initWithTarget:self
                                      action:@selector(dismissKeyboard)]];
@@ -114,26 +112,12 @@
     [self.textSizeList addObject:@"14"];
 }
 
-- (void)setupOptionsButtons
+- (void)setupOptionsButton
 {
-    self.optionsButtonsHidden = YES;
-    CGFloat red, green, blue;
-    [[self.themeManager.styles objectForKey:TINT] getRed:&red green:&green blue:&blue alpha:nil];
-}
-
-- (UIButton *)getButtonWithAction:(SEL)selector andImage:(NSString *)imageName
-{
-    CGFloat red, green, blue;
-    [[self.themeManager.styles objectForKey:TINT] getRed:&red green:&green blue:&blue alpha:nil];
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.layer.cornerRadius = 23;
-    button.layer.borderWidth = 1;
-    button.layer.borderColor = [UIColor colorWithRed:red green:green blue:blue alpha:1].CGColor;
-    button.clipsToBounds = YES;
-    [button addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
-    [button setImage:[self.themeManager.styles objectForKey:imageName] forState:UIControlStateNormal];
-    button.layer.backgroundColor = [UIColor darkGrayColor].CGColor;
-    return button;
+    [self.optionsButton setup];
+    [self.optionsButton addSmallButtonWithAction:@selector(onListClick) target:self andImage:LIST_IMAGE];
+    [self.optionsButton addSmallButtonWithAction:@selector(onDrawingClick) target:self andImage:DRAWING_IMAGE];
+    [self.optionsButton addSmallButtonWithAction:@selector(onCameraClick) target:self andImage:CAMERA_IMAGE];
 }
 
 -(void) deleteTempFolder
@@ -174,26 +158,25 @@
     }
     else
     {
-        [self.optionsButton addSmallButton];
         [self.optionsButton showOptionsButtons];
     }
 }
 
 - (void)onListClick
 {
-  //  [self hideOptionsButtons];
+    [self.optionsButton hideOptionsButtons];
     NSLog(@"List clicked");
 }
 
 - (void)onCameraClick
 {
-  //  [self hideOptionsButtons];
+    [self.optionsButton hideOptionsButtons];
     [self showImagePicker];
 }
 
 - (void)onDrawingClick
 {
- //   [self hideOptionsButtons];
+    [self.optionsButton hideOptionsButtons];
     DrawingViewController *drawingViewController = [[DrawingViewController alloc] init];
     [self.navigationController pushViewController:drawingViewController animated:YES];
 }
