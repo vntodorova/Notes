@@ -293,6 +293,8 @@
 		B5B8FB681E93E67200A82813 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				1D2406431EA76E04002CE71B /* ExpandingButton.h */,
+				1D2406441EA76E04002CE71B /* ExpandingButton.m */,
 				B534C4501E8D433300AD25F6 /* TableViewCell.h */,
 				B534C4511E8D433300AD25F6 /* TableViewCell.m */,
 				B534C4521E8D433300AD25F6 /* TableViewCell.xib */,
@@ -319,8 +321,6 @@
 				B5E8AC3D1E9B9FDE00964B3C /* ThemeManager.m */,
 				1D2406401EA76C27002CE71B /* TagsParser.h */,
 				1D2406411EA76C27002CE71B /* TagsParser.m */,
-				1D2406431EA76E04002CE71B /* ExpandingButton.h */,
-				1D2406441EA76E04002CE71B /* ExpandingButton.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
