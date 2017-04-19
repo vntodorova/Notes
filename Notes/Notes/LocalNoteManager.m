@@ -48,13 +48,11 @@
     {
         return;
     }
-    else
-    {
-        [self.notebookDictionary setObject:[[NSMutableArray alloc] init] forKey:newNotebook.name];
-        [self.notebookList addObject:newNotebook];
-        NSString *notebookPath = [self getDirectoryPathForNotebookWithName:newNotebook.name];
-        [self createDirectoryAtPath:notebookPath];
-    }
+
+    [self.notebookDictionary setObject:[[NSMutableArray alloc] init] forKey:newNotebook.name];
+    [self.notebookList addObject:newNotebook];
+    NSString *notebookPath = [self getDirectoryPathForNotebookWithName:newNotebook.name];
+    [self createDirectoryAtPath:notebookPath];
 }
 
 - (void)addNote:(Note *)newNote toNotebook:(Notebook *)notebook
@@ -69,7 +67,18 @@
         return;
     }
     
+    NSMutableArray *noteList = [[NSMutableArray alloc]initWithArray:[self getNoteListForNotebookWithName:notebookName]];
+    for(Note *note in noteList)
+    {
+        if([note.name isEqualToString:newNote.name])
+        {
+            [self removeNote:note fromNotebookWithName:notebookName];
+            break;
+        }
+    }
+    
     NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName];
+    
     [array addObject:newNote];
     [self saveToDisk:newNote toNotebook:notebookName];
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_CREATED_EVENT object:nil userInfo:nil];
