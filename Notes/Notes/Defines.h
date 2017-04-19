@@ -75,9 +75,9 @@
 #define PUBLIC_IMAGE_IDENTIFIER @"public.image"
 #define DEFAULT_IMAGE_HTML @"<img src=\"%@\" alt=\"\" style=\"width:150;height:150;\">"
 #define START_OF_IMAGE_HTML @"<img src=\""
-#define TIME_DATE_FORMAT @"HH:mm:ss, dd-MM-yyyy"
 
-#define TAG_SEPARATION_INDICATORS @"# "
+
+
 
 #define REDACTATION_BUTTON_NAME @"Save"
 #define EDIT_BUTTON_NAME @"Edit"

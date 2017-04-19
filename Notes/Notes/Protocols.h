@@ -15,6 +15,7 @@
 @class EditableNotebookCell;
 
 @protocol NoteManagerDelegate
+
 - (void)addNote:(Note *)newNote toNotebook:(Notebook *)notebook;
 - (void)addNote:(Note *)newNote toNotebookWithName:(NSString *)notebookName;
 
@@ -24,7 +25,17 @@
 - (NSArray<Note *> *)getNoteListForNotebook:(Notebook *)notebook;
 - (NSArray<Note *> *)getNoteListForNotebookWithName:(NSString *)notebookName;
 
+- (NSURL*) getBaseURLforNote:(Note*) note inNotebook:(Notebook*) notebook;
+- (NSURL*) getBaseURLforNote:(Note*) note inNotebookWithName:(NSString*) notebookName;
+
+- (NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebook:(Notebook*) notebook;
+- (NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebookWithName:(NSString*) notebookName;
+
+- (void) deleteTempFolder;
+- (void) createTempFolder;
+
 - (void)exchangeNoteAtIndex:(NSInteger)firstIndex withNoteAtIndex:(NSInteger)secondIndex fromNotebook:(NSString *)notebookName;
+
 @end
 
 @protocol NoteBookManagerDelegate

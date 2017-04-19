@@ -15,6 +15,8 @@
 		1D24063A1EA74A0C002CE71B /* alignRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D2406371EA74A0C002CE71B /* alignRight.png */; };
 		1D24063B1EA74A0C002CE71B /* calendar.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D2406381EA74A0C002CE71B /* calendar.png */; };
 		1D24063C1EA74A0C002CE71B /* alignLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D2406391EA74A0C002CE71B /* alignLeft.png */; };
+		1D2406421EA76C27002CE71B /* TagsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D2406411EA76C27002CE71B /* TagsParser.m */; };
+		1D2406451EA76E04002CE71B /* ExpandingButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D2406441EA76E04002CE71B /* ExpandingButton.m */; };
 		1D352FC61E9F9FC500F0C7A0 /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D352FC41E9F9FC500F0C7A0 /* DatePickerViewController.m */; };
 		1D352FC71E9F9FC500F0C7A0 /* DatePickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D352FC51E9F9FC500F0C7A0 /* DatePickerViewController.xib */; };
 		1D4056041E8D1E5000E18D05 /* NoteCreationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D4056021E8D1E5000E18D05 /* NoteCreationController.m */; };
@@ -94,6 +96,10 @@
 		1D2406371EA74A0C002CE71B /* alignRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alignRight.png; sourceTree = "<group>"; };
 		1D2406381EA74A0C002CE71B /* calendar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = calendar.png; sourceTree = "<group>"; };
 		1D2406391EA74A0C002CE71B /* alignLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alignLeft.png; sourceTree = "<group>"; };
+		1D2406401EA76C27002CE71B /* TagsParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagsParser.h; sourceTree = "<group>"; };
+		1D2406411EA76C27002CE71B /* TagsParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagsParser.m; sourceTree = "<group>"; };
+		1D2406431EA76E04002CE71B /* ExpandingButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExpandingButton.h; sourceTree = "<group>"; };
+		1D2406441EA76E04002CE71B /* ExpandingButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExpandingButton.m; sourceTree = "<group>"; };
 		1D352FC31E9F9FC500F0C7A0 /* DatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
 		1D352FC41E9F9FC500F0C7A0 /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
 		1D352FC51E9F9FC500F0C7A0 /* DatePickerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DatePickerViewController.xib; sourceTree = "<group>"; };
@@ -329,6 +335,10 @@
 				1D9EF8B31E96393A00B35777 /* LocalNoteManager.m */,
 				B5E8AC3C1E9B9FDE00964B3C /* ThemeManager.h */,
 				B5E8AC3D1E9B9FDE00964B3C /* ThemeManager.m */,
+				1D2406401EA76C27002CE71B /* TagsParser.h */,
+				1D2406411EA76C27002CE71B /* TagsParser.m */,
+				1D2406431EA76E04002CE71B /* ExpandingButton.h */,
+				1D2406441EA76E04002CE71B /* ExpandingButton.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -567,6 +577,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D2406451EA76E04002CE71B /* ExpandingButton.m in Sources */,
 				B5A4A29C1EA6119500F7EC9D /* NotebookCell.m in Sources */,
 				B506D9C91E8E3CBB00555F1D /* LayoutProvider.m in Sources */,
 				B5A4A2B11EA64DBF00F7EC9D /* EditableNotebookCell.m in Sources */,
@@ -581,6 +592,7 @@
 				B5B8FB6D1E94D81D00A82813 /* DateTimeManager.m in Sources */,
 				B5E8ABE11E966BA600964B3C /* DrawingViewController.m in Sources */,
 				1D4056041E8D1E5000E18D05 /* NoteCreationController.m in Sources */,
+				1D2406421EA76C27002CE71B /* TagsParser.m in Sources */,
 				B526CB591E939E4C00FF4FA8 /* LeftPanelViewController.m in Sources */,
 				B5E8AC471E9CC41700964B3C /* SettingsPanelViewController.m in Sources */,
 				B5EFB34C1E8CFFD80024C211 /* main.m in Sources */,

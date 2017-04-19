@@ -5,11 +5,13 @@
 //  Created by VCS on 4/6/17.
 //  Copyright © 2017 Nemetschek DreamTeam. All rights reserved.
 //
-
+#import <UIKit/UIKit.h>
 #import "LocalNoteManager.h"
 #import "Defines.h"
 #import "Notebook.h"
 #import "Note.h"
+#import "DateTimeManager.h"
+#import "TagsParser.h"
 
 @interface LocalNoteManager()
 
@@ -123,19 +125,6 @@
     return self.notebookDictionary.allKeys;
 }
 
--(void) deleteItemAtPath:(NSString*) path
-{
-    NSError *error;
-    BOOL isSuccessful = [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
-    
-    if(!isSuccessful)
-    {
-        @throw [NSException exceptionWithName:@"FileNotFoundException"
-                                       reason:error.description
-                                     userInfo:nil];
-    }
-}
-
 - (NSArray<Note *> *)getNoteListForNotebook:(Notebook *)notebook
 {
     NSArray *array = nil;
@@ -161,7 +150,8 @@
 
 - (Notebook*) getNotebookWithName:(NSString *) notebookName
 {
-    for (Notebook *currentNotebook in self.notebookList) {
+    for (Notebook *currentNotebook in self.notebookList)
+    {
         if([currentNotebook.name isEqualToString:notebookName])
         {
             return currentNotebook;
@@ -170,8 +160,78 @@
     return nil;
 }
 
-#pragma mark PRIVATE
+-(void) deleteItemAtPath:(NSString*) path
+{
+    NSError *error;
+    BOOL isSuccessful = [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
+//    
+//    if(!isSuccessful)
+//    {
+//        @throw [NSException exceptionWithName:@"FileNotFoundException"
+//                                       reason:error.description
+//                                     userInfo:nil];
+//    }
+}
 
+-(void) deleteTempFolder
+{
+    NSString *tempDirectory = [self getTempDirectoryPath];
+    [self deleteItemAtPath:tempDirectory];
+}
+
+-(void) createTempFolder
+{
+    NSString *tempDirectory = [self getTempDirectoryPath];
+    [self createFoldarAtPath:tempDirectory];
+}
+
+-(NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebookWithName:(NSString*) notebookName
+{
+    NSURL *baseURL = [[self getBaseURLforNote:note inNotebookWithName:notebookName] URLByAppendingPathComponent:imageName];
+    NSString *mediaType = [imageInfo objectForKey:UIImagePickerControllerMediaType];
+    if ([mediaType isEqualToString:PUBLIC_IMAGE_IDENTIFIER])
+    {
+        UIImage *image = [imageInfo objectForKey:UIImagePickerControllerOriginalImage];
+        NSData *data = UIImagePNGRepresentation(image);
+        [data writeToURL:baseURL atomically:YES];
+    }
+    return baseURL.description;
+}
+
+-(NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebook:(Notebook*) notebook;
+{
+    return [self saveImage:imageInfo withName:imageName forNote:note  inNotebookWithName:notebook.name];
+}
+
+-(NSString*) getCurrentTime
+{
+    DateTimeManager *timeManager = [[DateTimeManager alloc] init];
+    return [timeManager getCurrentTime];
+}
+
+-(NSURL*) getBaseURLforNote:(Note*) note inNotebookWithName:(NSString*) notebookName
+{
+    NSString *loadedFilePath;
+    if(note.name.length > 0)
+    {
+      loadedFilePath = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
+    }
+    else
+    {
+        loadedFilePath = [self getTempDirectoryPath];
+    }
+    
+    NSURL *baseURL = [NSURL fileURLWithPath:loadedFilePath];
+    return baseURL;
+}
+
+-(NSURL*) getBaseURLforNote:(Note*) note inNotebook:(Notebook*) notebook
+{
+    return [self getBaseURLforNote:note inNotebookWithName:notebook.name];;
+}
+
+
+#pragma mark PRIVATE
 -(NSString*) getTempDirectoryPath
 {
     return [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]

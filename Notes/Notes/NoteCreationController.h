@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "Protocols.h"
 #import "DatePickerViewController.h"
+#import "ExpandingButton.h"
+
 @class LocalNoteManager;
 
 @interface NoteCreationController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIPopoverPresentationControllerDelegate, DatePickerDelegate>
@@ -30,7 +32,7 @@
 - (IBAction)onSizeSelected:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
-@property (weak, nonatomic) IBOutlet UIButton *optionsButton;
+@property (weak, nonatomic) IBOutlet ExpandingButton *optionsButton;
 @property (weak, nonatomic) IBOutlet UIButton *createButton;
 @property (weak, nonatomic) IBOutlet UIWebView *noteBody;
 @property (weak, nonatomic) IBOutlet UITextField *noteTags;

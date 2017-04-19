@@ -14,6 +14,8 @@
 #import "LayoutProvider.h"
 #import "Note.h"
 #import "LocalNoteManager.h"
+#import "DateTimeManager.h"
+#import "TagsParser.h"
 
 @interface NoteCreationController ()
 
@@ -27,11 +29,8 @@
 @property (nonatomic, strong) NSMutableArray *noteBookList;
 @property (nonatomic, strong) LocalNoteManager *manager;
 @property (nonatomic, strong) ThemeManager *themeManager;
-@property (nonatomic, strong) NSString *tempFolderPath;
 
-@property (nonatomic, strong) UIButton *addImageButton;
-@property (nonatomic, strong) UIButton *addDrawingButton;
-@property (nonatomic, strong) UIButton *addListButton;
+@property (nonatomic, strong) TagsParser *tagsParser;
 
 @property (nonatomic, assign) BOOL optionsButtonsHidden;
 @property (nonatomic, assign) int imageIndex;
@@ -47,11 +46,11 @@
     self = [super self];
     
     self.manager = manager;
-    self.tempFolderPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-                           stringByAppendingPathComponent:TEMP_FOLDER];
+    self.tagsParser = [[TagsParser alloc] init];
     self.fontList = [[NSMutableArray alloc] init];
     self.textSizeList = [[NSMutableArray alloc] init];
     self.themeManager = [ThemeManager sharedInstance];
+    [self.optionsButton addSmallButton];
     self.imageIndex = 0;
     return self;
 }
@@ -120,9 +119,6 @@
     self.optionsButtonsHidden = YES;
     CGFloat red, green, blue;
     [[self.themeManager.styles objectForKey:TINT] getRed:&red green:&green blue:&blue alpha:nil];
-    self.addImageButton = [self getButtonWithAction:@selector(onCameraClick) andImage:CAMERA_IMAGE];
-    self.addListButton = [self getButtonWithAction:@selector(onListClick) andImage:LIST_IMAGE];
-    self.addDrawingButton = [self getButtonWithAction:@selector(onDrawingClick) andImage:DRAWING_IMAGE];
 }
 
 - (UIButton *)getButtonWithAction:(SEL)selector andImage:(NSString *)imageName
@@ -142,13 +138,12 @@
 
 -(void) deleteTempFolder
 {
-    [[NSFileManager defaultManager] removeItemAtPath:self.tempFolderPath error:nil];
+    [self.manager deleteTempFolder];
 }
 
 -(void) createTempFolder
 {
-    NSFileManager *fm = [NSFileManager defaultManager];
-    [fm createDirectoryAtPath:self.tempFolderPath withIntermediateDirectories:YES attributes:nil error:nil];
+    [self.manager createTempFolder];
 }
 
 -(void) loadHTML
@@ -158,7 +153,7 @@
         self.isNoteNew = NO;
         [self loadSavedHtml];
         self.noteName.text = self.note.name;
-        self.noteTags.text = [self buildTextFromTags:self.note.tags];
+        self.noteTags.text = [self.tagsParser buildTextFromTags:self.note.tags];
         [self.createButton setTitle:REDACTATION_BUTTON_NAME forState:UIControlStateNormal];
     }
     else
@@ -171,85 +166,34 @@
 #pragma mark -
 #pragma mark Options buttons
 
-- (IBAction)onOptionsClick:(UIButton *)sender
+- (IBAction)onOptionsClick:(ExpandingButton *)sender
 {
-    if(self.optionsButtonsHidden)
+    if(self.optionsButton.isExpanded)
     {
-        [self showOptionsButtons];
+        [self.optionsButton hideOptionsButtons];
     }
     else
     {
-        [self hideOptionsButtons];
+        [self.optionsButton addSmallButton];
+        [self.optionsButton showOptionsButtons];
     }
-}
-
-- (void)showOptionsButtons
-{
-    CGFloat optionsButtonFrameX = self.optionsButton.frame.origin.x;
-    CGFloat optionsButtonFrameY = self.optionsButton.frame.origin.y;
-    long optionsButtonX = optionsButtonFrameX - SMALL_BUTTON_DISTANCE;
-    long optionsButtonY = optionsButtonFrameY - SMALL_BUTTON_DISTANCE;
-    CGRect newImageButtonFrame = CGRectMake(optionsButtonX, optionsButtonY, SMALL_BUTTONS_WIDTH, SMALL_BUTTONS_HEIGHT);
-    optionsButtonY = optionsButtonFrameY - 10;
-    CGRect newDrawingButtonFrame = CGRectMake(optionsButtonX, optionsButtonY, SMALL_BUTTONS_WIDTH, SMALL_BUTTONS_HEIGHT);
-    optionsButtonX = optionsButtonFrameX - 10;
-    optionsButtonY = optionsButtonFrameY - SMALL_BUTTON_DISTANCE;
-    CGRect newListButtonFrame = CGRectMake(optionsButtonX, optionsButtonY, SMALL_BUTTONS_WIDTH, SMALL_BUTTONS_HEIGHT);
-        
-    CGRect initialFrame = CGRectMake(optionsButtonFrameX + SMALL_BUTTON_DISTANCE / 2, optionsButtonFrameY + SMALL_BUTTON_DISTANCE / 2, 0, 0);
-        
-    self.addImageButton.frame = initialFrame;
-    self.addDrawingButton.frame = initialFrame;
-    self.addListButton.frame = initialFrame;
-        
-    [self.view addSubview:self.addImageButton];
-    [self.view addSubview:self.addDrawingButton];
-    [self.view addSubview:self.addListButton];
-        
-    [UIView animateWithDuration:0.5
-                        animations:^
-    {
-             self.addImageButton.frame = newImageButtonFrame;
-             self.addDrawingButton.frame = newDrawingButtonFrame;
-             self.addListButton.frame = newListButtonFrame;
-    }];
-        self.optionsButtonsHidden = NO;
-}
-
-- (void)hideOptionsButtons
-{
-    CGRect newFrame = CGRectMake(self.optionsButton.frame.origin.x + SMALL_BUTTON_DISTANCE / 2, self.optionsButton.frame.origin.y + SMALL_BUTTON_DISTANCE / 2, 0, 0);
-    [UIView animateWithDuration:0.5
-                     animations:^
-     {
-         self.addListButton.frame = newFrame;
-         self.addDrawingButton.frame = newFrame;
-         self.addImageButton.frame = newFrame;
-     }
-                     completion:^(BOOL finished)
-     {
-         [self.addListButton removeFromSuperview];
-         [self.addDrawingButton removeFromSuperview];
-         [self.addImageButton removeFromSuperview];
-     }];
-    self.optionsButtonsHidden = YES;
 }
 
 - (void)onListClick
 {
-    [self hideOptionsButtons];
+  //  [self hideOptionsButtons];
     NSLog(@"List clicked");
 }
 
 - (void)onCameraClick
 {
-    [self hideOptionsButtons];
+  //  [self hideOptionsButtons];
     [self showImagePicker];
 }
 
 - (void)onDrawingClick
 {
-    [self hideOptionsButtons];
+ //   [self hideOptionsButtons];
     DrawingViewController *drawingViewController = [[DrawingViewController alloc] init];
     [self.navigationController pushViewController:drawingViewController animated:YES];
 }
@@ -357,24 +301,6 @@
     return array;
 }
 
--(UIButton*) getExpandingButtonWithImage:(NSString*) image andSelector:(SEL) selector
-{
-    UIButton *button = [[UIButton alloc] init];
-    self.optionsButtonsHidden = YES;
-    CGFloat red, green, blue;
-    [[self.themeManager.styles objectForKey:TINT] getRed:&red green:&green blue:&blue alpha:nil];
-    
-    button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.layer.cornerRadius = 23;
-    button.layer.borderWidth = 1;
-    button.layer.borderColor = [UIColor colorWithRed:red green:green blue:blue alpha:1].CGColor;
-    button.clipsToBounds = YES;
-    [button addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
-    [button setImage:[self.themeManager.styles objectForKey:image] forState:UIControlStateNormal];
-    return button;
-}
-
-
 -(void) showDatePickerFromButton:(UIButton*) sender
 {
     DatePickerViewController *datePicker = [[DatePickerViewController alloc] initWithNibName:@"DatePickerViewController" bundle:nil];
@@ -443,55 +369,28 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    NSString *imageName = [NSString stringWithFormat:@"%@.png", [self getCurrentTime]];
-    NSString *imagePath;
-    if(self.isNoteNew)
-    {
-        imagePath = [self.tempFolderPath stringByAppendingPathComponent:imageName];
-    }
-    else
-    {
-        imagePath = [[self getNoteDirectoryPathForNote:self.note inNotebookWithName:self.currentNotebook] stringByAppendingPathComponent:imageName];
-    }
-    [self saveImage:info imagePath:imagePath];
+    NSString *imageName = [NSString stringWithFormat:@"%@.png",[self getCurrentTime]];
+    [self.manager saveImage:info withName:imageName forNote:self.note inNotebookWithName:self.currentNotebook];
     [self insertImageAtEndOfWebview:imageName];
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
--(NSString*) getCurrentTime
-{
-    NSDateFormatter *dateFormatter=[[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:TIME_DATE_FORMAT];
-    return [dateFormatter stringFromDate:[NSDate date]];
-}
 
--(void) saveImage:(NSDictionary*) imageInfo imagePath:(NSString*) imagePath
-{
-    NSString *mediaType = [imageInfo objectForKey:UIImagePickerControllerMediaType];
-    if ([mediaType isEqualToString:PUBLIC_IMAGE_IDENTIFIER])
-    {
-        UIImage *image = [imageInfo objectForKey:UIImagePickerControllerOriginalImage];
-        NSData *data = UIImagePNGRepresentation(image);
-        [data writeToFile:imagePath atomically:YES];
-    }
-}
-
--(void) insertImageAtEndOfWebview:(NSString*) imagePath
+-(void) insertImageAtEndOfWebview:(NSString*) imageName
 {
     NSMutableString *noteBody = [[NSMutableString alloc]initWithString:[self getNoteBodyHTML]];
     
-    NSString *imageHtml = [NSString stringWithFormat:DEFAULT_IMAGE_HTML, imagePath];
+    NSString *imageHtml = [NSString stringWithFormat:DEFAULT_IMAGE_HTML, imageName];
     NSRange range = [noteBody rangeOfString:@"</div>"];
     [noteBody insertString:imageHtml atIndex:range.location];
-    if(self.isNoteNew)
-    {
-        [self refreshWebView:noteBody baseURL:[NSURL fileURLWithPath:self.tempFolderPath]];
-    }
-    else
-    {
-        [self refreshWebView:noteBody baseURL:[NSURL fileURLWithPath:[self getNoteDirectoryPathForNote:self.note
-                                                                                  inNotebookWithName:self.currentNotebook]]];
-    }
+    
+    [self refreshWebView:noteBody baseURL:[self.manager getBaseURLforNote:self.note inNotebookWithName:self.currentNotebook]];
+}
+
+-(NSString*) getCurrentTime
+{
+    DateTimeManager *timeManager = [[DateTimeManager alloc] init];
+    return [timeManager getCurrentTime];
 }
 
 - (void)refreshWebView:(NSString*)noteBody baseURL:(NSURL*) baseURL
@@ -566,18 +465,10 @@
         self.note.name = UNNAMED_NOTE;
     }
     
-    self.note.tags = [self getTagsFromText:self.noteTags.text];
+    self.note.tags = [self.tagsParser getTagsFromText:self.noteTags.text];
     self.note.body = [self getNoteBodyHTML];
     
     self.note.dateCreated = [self getCurrentTime];
-}
-
--(NSString*) getNoteDirectoryPathForNote:(Note*)note inNotebookWithName:(NSString*) notebook
-{
-    return [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-              stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
-             stringByAppendingPathComponent:notebook]
-            stringByAppendingPathComponent:note.name];
 }
 
 - (void)updateNoteFont:(NSString*) font
@@ -597,12 +488,7 @@
 
 -(void) loadSavedHtml
 {
-    NSString *loadedFilePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-                                  stringByAppendingPathComponent:NOTE_NOTEBOOKS_FOLDER]
-                                 stringByAppendingPathComponent:self.currentNotebook]
-                                stringByAppendingPathComponent:self.note.name];
-
-    NSURL *baseURL = [NSURL fileURLWithPath:loadedFilePath];
+    NSURL *baseURL = [self.manager getBaseURLforNote:self.note inNotebookWithName:self.currentNotebook];
     [self.noteBody loadHTMLString:self.note.body baseURL:baseURL];
 }
 
@@ -630,31 +516,5 @@
     [self.view endEditing:YES];
 }
 
-- (NSArray *)getTagsFromText:(NSString *) tagsText
-{
-    NSArray *tagList;
-    NSCharacterSet *setOfIndicators = [NSCharacterSet characterSetWithCharactersInString:TAG_SEPARATION_INDICATORS];
-    tagList = [tagsText componentsSeparatedByCharactersInSet:setOfIndicators];
-    NSMutableArray *clearTagList = [[NSMutableArray alloc] init];
-    
-    for(NSString *tag in tagList)
-    {
-        if([tag isEqualToString:@""])
-        {
-            continue;
-        }
-        [clearTagList addObject:tag];
-    }
-    return clearTagList;
-}
 
--(NSString *) buildTextFromTags:(NSArray *)tagsList
-{
-    NSMutableString *tagsText = [[NSMutableString alloc] init];
-    for(NSString *tag in tagsList)
-    {
-        [tagsText appendFormat:@"#%@ ",tag];
-    }
-    return tagsText;
-}
 @end

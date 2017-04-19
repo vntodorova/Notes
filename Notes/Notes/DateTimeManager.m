@@ -67,6 +67,9 @@
     return [first compare:second] == NSOrderedDescending;
 };
 
-
+-(NSString*) getCurrentTime
+{
+    return [self.dateFormatter stringFromDate:[NSDate date]];
+}
 
 @end
