@@ -106,7 +106,7 @@ static LayoutProvider *sharedInstance = nil;
     return cell;
 }
 
-- (UITableViewCell *)getNewCell:(UITableView *)tableView withReminder:(Reminder *)reminder
+- (UITableViewCell *)getNewCell:(UITableView *)tableView withReminder:(Note *)note
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:REMINDER_CELL_ID];
     if (cell == nil)
@@ -114,9 +114,9 @@ static LayoutProvider *sharedInstance = nil;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:REMINDER_CELL_ID];
     }
     cell.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_CELL_COLOR];
-    //cell.textLabel.text = reminder.name;
+    cell.textLabel.text = note.name;
     cell.textLabel.textColor = [self.themeManager.styles objectForKey:TINT];
-    //cell.detailTextLabel.text = [self.dateTimeManager convertToRelativeDate:reminder.triggerDate];
+    cell.detailTextLabel.text = [self.dateTimeManager convertToRelativeDate:note.triggerDate];
     return cell;
 }
 
