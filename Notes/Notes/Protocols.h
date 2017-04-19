@@ -34,6 +34,9 @@
 - (void)renameNotebook:(Notebook*) notebook newName:(NSString*) newName;
 - (void)renameNotebookWithName:(NSString*) oldName newName:(NSString*) newName;
 
+- (void)renameNote:(Note*) note fromNotebook:(Notebook*) notebook oldName:(NSString*) oldName;
+- (void)renameNote:(Note*) note fromNotebookWithName:(NSString*) notebookName oldName:(NSString*) oldName;
+
 - (void) deleteTempFolder;
 - (void) createTempFolder;
 

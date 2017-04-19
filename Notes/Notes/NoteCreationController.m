@@ -32,8 +32,10 @@
 
 @property (nonatomic, strong) TagsParser *tagsParser;
 
-@property (nonatomic, assign) int imageIndex;
+@property (nonatomic, strong) NSString *startingNoteName;
 
+
+@property (nonatomic, assign) int imageIndex;
 @property (nonatomic, assign) BOOL isNoteNew;
 @end
 
@@ -134,6 +136,7 @@
 {
     if(self.note.name.length > 0)
     {
+        self.startingNoteName = self.note.name;
         self.isNoteNew = NO;
         [self loadSavedHtml];
         self.noteName.text = self.note.name;
@@ -210,6 +213,11 @@
 {
     [self setNoteContent];
     [self.navigationController popViewControllerAnimated:YES];
+    if(![self.startingNoteName isEqualToString:self.note.name])
+    {
+        [self.manager renameNote:self.note fromNotebookWithName:self.currentNotebook oldName:self.startingNoteName];
+    }
+    
     [self.manager addNote:self.note toNotebookWithName:noteBookSelected];
 }
 
@@ -259,11 +267,10 @@
     for (NSString* currentItem in itemList)
     {
         [array addObject:[UIAlertAction actionWithTitle:currentItem style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
-                          {
-                              [self performSelector:selector withObject:currentItem];
-                          }]];
+        {
+            [self performSelector:selector withObject:currentItem];
+        }]];
     }
-    
     return array;
 }
 
@@ -391,9 +398,9 @@
     UIAlertAction *newNotebookAction = [UIAlertAction actionWithTitle:ALERT_INPUT_DIALOG_TITLE
                                                                 style:UIAlertActionStyleDestructive
                                                               handler:^(UIAlertAction * _Nonnull action)
-                                        {
-                                            [self presentViewController:[self getInputAlertActionController] animated:YES completion:nil];
-                                        }];
+    {
+        [self presentViewController:[self getInputAlertActionController] animated:YES completion:nil];
+    }];
     
     return newNotebookAction;
 }
@@ -493,6 +500,5 @@
 {
     [self.view endEditing:YES];
 }
-
 
 @end

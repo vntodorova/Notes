@@ -124,6 +124,22 @@
     [self renameNotebookWithName:notebook.name newName:newName];
 }
 
+- (void)renameNote:(Note*) note fromNotebook:(Notebook*) notebook oldName:(NSString*) oldName
+{
+    [self renameNote:note fromNotebookWithName:notebook.name oldName:oldName];
+}
+
+- (void)renameNote:(Note*) note fromNotebookWithName:(NSString*) notebookName oldName:(NSString*) oldName
+{
+    Note *dummyNote = [[Note alloc] init];
+    dummyNote.name = oldName;
+    
+    NSString *oldPath = [self getNoteDirectoryPathForNote:dummyNote inNotebookWithName:notebookName];
+    NSString *newPath = [[oldPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:note.name];
+   
+    [[NSFileManager defaultManager] moveItemAtPath:oldPath toPath:newPath error:nil];
+}
+
 - (void)removeNote:(Note *)note fromNotebookWithName:(NSString *)notebookName
 {
     if(note == nil || notebookName == nil)
@@ -295,21 +311,20 @@
     [self saveData:newNote.dateCreated                  toFile:[noteRoot stringByAppendingPathComponent:NOTE_DATE_FILE]];
     [self saveData:newNote.triggerDate                  toFile:[noteRoot stringByAppendingPathComponent:NOTE_TRIGGER_DATE_FILE]];
     
-    [self coppyFilesFromTempFolderTo:noteRoot];
+    [self coppyFilesFromSource:[self getTempDirectoryPath] toDestination:noteRoot];
 }
 
--(void) coppyFilesFromTempFolderTo:(NSString*) destination
+-(void) coppyFilesFromSource:(NSString*)source toDestination:(NSString*) destination
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *tempFolderPath = [self getTempDirectoryPath];
-    NSArray *directoryContents = [self getDirectoryContentForPath:tempFolderPath];
+    NSArray *directoryContents = [self getDirectoryContentForPath:source];
     
     for(NSString *imageName in directoryContents)
     {
         BOOL isHidden = [imageName hasPrefix:@"."];
         if(!isHidden)
         {
-            NSString *imageSourcePath = [tempFolderPath stringByAppendingPathComponent:imageName];
+            NSString *imageSourcePath = [source stringByAppendingPathComponent:imageName];
             NSString *imageDestinationPath = [destination stringByAppendingPathComponent:imageName];
             
             [fileManager copyItemAtPath:imageSourcePath toPath:imageDestinationPath error:nil];
