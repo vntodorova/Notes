@@ -23,7 +23,7 @@
 - (UIBarButtonItem *)setupLeftBarButton:(id)target withSelector:(SEL)selector;
 - (UIBarButtonItem *)setupRightBarButton:(id)target withSelector:(SEL)selector;
 
-- (TableViewCell *)getNewTableViewCell:(UITableView *)tableView withNote:(Note *)note;
+- (TableViewCell *)getNewTableViewCell:(UITableView *)tableView withNote:(Note *)note andDelegate:(id)delegate;
 
 - (EditableNotebookCell *)getNewEditableCell:(UITableView *)tableView withNotebook:(Notebook *)notebook andDelegate:(id)delegate;
 - (NotebookCell *)getNewCell:(UITableView *)tableView withNotebook:(Notebook *)notebook andNotebookSize:(NSInteger)size;

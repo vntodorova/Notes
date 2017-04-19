@@ -59,10 +59,12 @@ static LayoutProvider *sharedInstance = nil;
 #pragma mark -
 #pragma mark Main ViewController
 
-- (TableViewCell *)getNewTableViewCell:(UITableView *)tableView withNote:(Note *)note
+- (TableViewCell *)getNewTableViewCell:(UITableView *)tableView withNote:(Note *)note andDelegate:(id)delegate;
 {
     TableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:TABLEVIEW_CELL_ID];
+    cell.delegate = delegate;
     cell.nameLabel.text = note.name;
+    cell.tableView = tableView;
     cell.infoLabel.text = note.dateCreated;
     cell.cellNote = note;
     cell.nameLabel.textColor = [self.themeManager.styles objectForKey:TINT];

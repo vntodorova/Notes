@@ -37,14 +37,20 @@
         self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     }
     self.layoutProvider = [LayoutProvider sharedInstance];
-    [self setupNavigationBar];
     self.noteManager = [[LocalNoteManager alloc] init];
     self.themeManager = [ThemeManager sharedInstance];
+    self.currentNotebook = GENERAL_NOTEBOOK_NAME;
+    
+    [self setupNavigationBar];
     [self loadTheme];
-    self.currentNotebook = @"General";
-    self.notesArray = [self.noteManager getNoteListForNotebookWithName:self.currentNotebook];
+    [self reloadTableViewData];
     [self.tableView registerNib:[UINib nibWithNibName:TABLEVIEW_CELL_ID bundle:nil] forCellReuseIdentifier:TABLEVIEW_CELL_ID];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoteCreated) name:NOTE_CREATED_EVENT object:nil];
+}
+
+- (void)reloadTableViewData
+{
+    self.notesArray = [self.noteManager getNoteListForNotebookWithName:self.currentNotebook];
     [self.tableView reloadData];
 }
 
@@ -135,8 +141,7 @@
 
 - (void)addButtonPressed
 {
-    Note* note = [[Note alloc] init];
-    [self showNoteCreationControllerWithNote:note];
+    [self showNoteCreationControllerWithNote:[[Note alloc] init]];
 }
 
 -(void) showNoteCreationControllerWithNote:(Note *) note
@@ -179,10 +184,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Note *note = [self.notesArray objectAtIndex:indexPath.row];
-    TableViewCell *cell = [self.layoutProvider getNewTableViewCell:tableView withNote:note];
-    cell.tableView = tableView;
-    cell.delegate = self;
-    return cell;
+    return [self.layoutProvider getNewTableViewCell:tableView withNote:note andDelegate:self];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -195,8 +197,7 @@
 
 -(void)onNoteCreated
 {
-    self.notesArray = [self.noteManager getNoteListForNotebookWithName:self.currentNotebook];
-    [self.tableView reloadData];
+    [self reloadTableViewData];
 }
 
 #pragma mark -
@@ -209,8 +210,9 @@
     self.leftPanelViewController.isHidden = YES;
     [UIView animateWithDuration:0.5 animations:^{
         self.bluredView.alpha = 0;
-        self.leftPanelViewController.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
-        self.settingsPanelViewController.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
+        CGRect hiddenFrame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
+        self.leftPanelViewController.view.frame = hiddenFrame;
+        self.settingsPanelViewController.view.frame = hiddenFrame;
     } completion:^(BOOL finished) {
         [self.view sendSubviewToBack:self.bluredView];
     }];
