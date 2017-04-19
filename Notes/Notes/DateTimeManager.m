@@ -22,7 +22,10 @@
     if(self)
     {
         self.dateFormatter = [[NSDateFormatter alloc] init];
-        [self.dateFormatter setDateFormat:@"HH:mm:ss, dd-MM-yyyy"];
+        [self.dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+        [self.dateFormatter setLocale:[NSLocale currentLocale]];
+        [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss ZZZZ"];
+        [self.dateFormatter setFormatterBehavior:NSDateFormatterBehaviorDefault];
     }
     return self;
 }
@@ -31,8 +34,7 @@
 {
     NSString *result;
     NSDate *date = [self.dateFormatter dateFromString:stringDate];
-    NSCalendarUnit units = NSCalendarUnitDay | NSCalendarUnitWeekOfYear |
-    NSCalendarUnitMonth | NSCalendarUnitYear;
+    NSCalendarUnit units = NSCalendarUnitDay | NSCalendarUnitWeekOfYear | NSCalendarUnitMonth | NSCalendarUnitYear;
     NSDateComponents *components = [[NSCalendar currentCalendar] components:units
                                                                    fromDate:[NSDate date]
                                                                      toDate:date

@@ -302,11 +302,6 @@
 
 -(void)reminderDateSelected:(NSDate *)date
 {
-    [self setNoteReminderDate:date];
-}
-
--(void) setNoteReminderDate:(NSDate*)date
-{
     self.note.triggerDate = date.description;
 }
 

@@ -49,14 +49,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setup];
-    [self setReminders];
 }
 
-- (void)setReminders
+- (NSArray *)getAllReminders
 {
     NSMutableArray *reminders = [[NSMutableArray alloc] init];
     
-    for (Notebook *notebook in [self.tableViewDataSource objectForKey:NOTEBOOK_KEY]) {
+    for (Notebook *notebook in [self.noteManager getNotebookList]) {
         NSArray *currentNotebook = [self.noteManager getNoteListForNotebook:notebook];
         for (Note *note in currentNotebook) {
             if(note.triggerDate != nil)
@@ -71,7 +70,7 @@
                 Note *note2 = (Note *)obj2;
                 return [self.dateTimeManager compareStringDate:note1.triggerDate andDate:note2.triggerDate];
             }];
-    [self.tableViewDataSource setObject:reminders forKey:REMINDER_KEY];
+    return reminders;
 }
 
 - (void)setup
@@ -103,6 +102,7 @@
 - (void)reloadData
 {
     [self.tableViewDataSource setObject:[self.noteManager getNotebookList] forKey:NOTEBOOK_KEY];
+    [self.tableViewDataSource setObject:[self getAllReminders] forKey:REMINDER_KEY];
     [self.tableView reloadData];
 }
 
