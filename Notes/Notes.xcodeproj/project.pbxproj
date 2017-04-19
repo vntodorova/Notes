@@ -40,7 +40,6 @@
 		B5A4A2B11EA64DBF00F7EC9D /* EditableNotebookCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A4A2AF1EA64DBF00F7EC9D /* EditableNotebookCell.m */; };
 		B5A4A2B21EA64DBF00F7EC9D /* EditableNotebookCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5A4A2B01EA64DBF00F7EC9D /* EditableNotebookCell.xib */; };
 		B5B8FB601E93C35200A82813 /* Notebook.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B8FB5F1E93C35200A82813 /* Notebook.m */; };
-		B5B8FB631E93E46B00A82813 /* Reminder.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B8FB621E93E46B00A82813 /* Reminder.m */; };
 		B5B8FB6D1E94D81D00A82813 /* DateTimeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B8FB6C1E94D81D00A82813 /* DateTimeManager.m */; };
 		B5E8ABDD1E96580900964B3C /* TableViewDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E8ABDC1E96580900964B3C /* TableViewDataModel.m */; };
 		B5E8ABE11E966BA600964B3C /* DrawingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E8ABDF1E966BA600964B3C /* DrawingViewController.m */; };
@@ -129,8 +128,6 @@
 		B5A4A2B01EA64DBF00F7EC9D /* EditableNotebookCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditableNotebookCell.xib; sourceTree = "<group>"; };
 		B5B8FB5E1E93C35200A82813 /* Notebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Notebook.h; sourceTree = "<group>"; };
 		B5B8FB5F1E93C35200A82813 /* Notebook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Notebook.m; sourceTree = "<group>"; };
-		B5B8FB611E93E46B00A82813 /* Reminder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reminder.h; sourceTree = "<group>"; };
-		B5B8FB621E93E46B00A82813 /* Reminder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reminder.m; sourceTree = "<group>"; };
 		B5B8FB6B1E94D81D00A82813 /* DateTimeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateTimeManager.h; sourceTree = "<group>"; };
 		B5B8FB6C1E94D81D00A82813 /* DateTimeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateTimeManager.m; sourceTree = "<group>"; };
 		B5E8ABDB1E96580900964B3C /* TableViewDataModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewDataModel.h; sourceTree = "<group>"; };
@@ -280,8 +277,6 @@
 			children = (
 				B5B8FB5E1E93C35200A82813 /* Notebook.h */,
 				B5B8FB5F1E93C35200A82813 /* Notebook.m */,
-				B5B8FB611E93E46B00A82813 /* Reminder.h */,
-				B5B8FB621E93E46B00A82813 /* Reminder.m */,
 				1D4056061E8D360600E18D05 /* Note.h */,
 				1D4056071E8D360600E18D05 /* Note.m */,
 				B5E8ABDB1E96580900964B3C /* TableViewDataModel.h */,
@@ -573,7 +568,6 @@
 				B5E8AC471E9CC41700964B3C /* SettingsPanelViewController.m in Sources */,
 				B5EFB34C1E8CFFD80024C211 /* main.m in Sources */,
 				1D352FC61E9F9FC500F0C7A0 /* DatePickerViewController.m in Sources */,
-				B5B8FB631E93E46B00A82813 /* Reminder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

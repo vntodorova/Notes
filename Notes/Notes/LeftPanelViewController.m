@@ -10,7 +10,6 @@
 #import "ViewController.h"
 #import "DateTimeManager.h"
 #import "Defines.h"
-#import "Reminder.h"
 #import "LayoutProvider.h"
 #import "SettingsPanelViewController.h"
 #import "ThemeManager.h"
@@ -50,35 +49,35 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setup];
-    [self testCode];
+    //[self testCode];
 }
 
-- (void)testCode
-{
-    //TODO delete
-    Reminder *reminder1 = [[Reminder alloc] init];
-    reminder1.name = @"Wash the car";
-    reminder1.triggerDate = @"13:00:00, 06-04-2018";
-    
-    Reminder *reminder2 = [[Reminder alloc] init];
-    reminder2.name = @"Random reminder name";
-    reminder2.triggerDate = @"13:00:00, 15-05-2017";
-    
-    Reminder *reminder3 = [[Reminder alloc] init];
-    reminder3.name = @"Add Settings button";
-    reminder3.triggerDate = @"13:00:00, 15-06-2017";
-    
-    NSMutableArray *reminders = [[NSMutableArray alloc] initWithObjects:reminder1, reminder2, reminder3, nil];
-    
-    [reminders sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-        Reminder *reminder1 = (Reminder *)obj1;
-        Reminder *reminder2 = (Reminder *)obj2;
-        return [self.dateTimeManager compareStringDate:reminder1.triggerDate andDate:reminder2.triggerDate];
-    }];
-    
-    [self.tableViewDataSource setObject:reminders forKey:REMINDER_KEY];
-    [self.tableView reloadData];
-}
+//- (void)testCode
+//{
+//    //TODO delete
+//    Reminder *reminder1 = [[Reminder alloc] init];
+//    reminder1.name = @"Wash the car";
+//    reminder1.triggerDate = @"13:00:00, 06-04-2018";
+//    
+//    Reminder *reminder2 = [[Reminder alloc] init];
+//    reminder2.name = @"Random reminder name";
+//    reminder2.triggerDate = @"13:00:00, 15-05-2017";
+//    
+//    Reminder *reminder3 = [[Reminder alloc] init];
+//    reminder3.name = @"Add Settings button";
+//    reminder3.triggerDate = @"13:00:00, 15-06-2017";
+//    
+//    NSMutableArray *reminders = [[NSMutableArray alloc] initWithObjects:reminder1, reminder2, reminder3, nil];
+//    
+//    [reminders sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+//        Reminder *reminder1 = (Reminder *)obj1;
+//        Reminder *reminder2 = (Reminder *)obj2;
+//        return [self.dateTimeManager compareStringDate:reminder1.triggerDate andDate:reminder2.triggerDate];
+//    }];
+//    
+//    [self.tableViewDataSource setObject:reminders forKey:REMINDER_KEY];
+//    [self.tableView reloadData];
+//}
 
 - (void)setup
 {

@@ -69,10 +69,10 @@
         return;
     }
     
-        NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName];
-        [array addObject:newNote];
-        [self saveToDisk:newNote toNotebook:notebookName];
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_CREATED_EVENT object:nil userInfo:nil];
+    NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName];
+    [array addObject:newNote];
+    [self saveToDisk:newNote toNotebook:notebookName];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_CREATED_EVENT object:nil userInfo:nil];
 }
 
 - (void)removeNotebook:(Notebook *)notebook
