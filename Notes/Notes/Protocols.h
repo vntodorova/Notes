@@ -31,6 +31,9 @@
 - (NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebook:(Notebook*) notebook;
 - (NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebookWithName:(NSString*) notebookName;
 
+- (void)renameNotebook:(Notebook*) notebook newName:(NSString*) newName;
+- (void)renameNotebookWithName:(NSString*) oldName newName:(NSString*) newName;
+
 - (void) deleteTempFolder;
 - (void) createTempFolder;
 

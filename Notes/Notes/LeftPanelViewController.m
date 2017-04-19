@@ -319,10 +319,7 @@
 
 - (void)onCellNameChanged:(EditableNotebookCell *)cell
 {
-    NSLog(@"Under construction");
-    // TODO
-    // Vanka, make dat work work work work work work:
-    // [self.noteManager changeNotebookWithName:cell.nameBeforeEditing toNewName:cell.nameLabel.text];
+    [self.noteManager renameNotebookWithName:cell.nameBeforeEditing newName:cell.nameLabel.text];
 }
 
 @end

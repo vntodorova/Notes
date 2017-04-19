@@ -68,13 +68,11 @@
     {
         return;
     }
-    else
-    {
+    
         NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName];
         [array addObject:newNote];
         [self saveToDisk:newNote toNotebook:notebookName];
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_CREATED_EVENT object:nil userInfo:nil];
-    }
 }
 
 - (void)removeNotebook:(Notebook *)notebook
@@ -98,6 +96,23 @@
 - (void)removeNote:(Note *)note fromNotebook:(Notebook *)notebook
 {
     [self removeNote:note fromNotebookWithName:notebook.name];
+}
+
+- (void)renameNotebookWithName:(NSString*) oldName newName:(NSString*) newName
+{
+    NSString *pathToNotebook = [self getDirectoryPathForNotebookWithName:oldName];
+    NSString *newPath = [[pathToNotebook stringByDeletingLastPathComponent] stringByAppendingPathComponent:newName];
+    [[NSFileManager defaultManager] moveItemAtPath:pathToNotebook toPath:newPath error:nil];
+    
+    [self.notebookDictionary setObject:[self.notebookDictionary objectForKey:oldName] forKey:newName];
+    [self.notebookDictionary removeObjectForKey:oldName];
+    
+    [self getNotebookWithName:oldName].name = newName;
+}
+
+- (void)renameNotebook:(Notebook*) notebook newName:(NSString*) newName
+{
+    [self renameNotebookWithName:notebook.name newName:newName];
 }
 
 - (void)removeNote:(Note *)note fromNotebookWithName:(NSString *)notebookName
@@ -164,19 +179,23 @@
 {
     NSError *error;
     BOOL isSuccessful = [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
-//    
-//    if(!isSuccessful)
-//    {
-//        @throw [NSException exceptionWithName:@"FileNotFoundException"
-//                                       reason:error.description
-//                                     userInfo:nil];
-//    }
+    
+    if(!isSuccessful)
+    {
+        @throw [NSException exceptionWithName:@"FileNotFoundException"
+                                       reason:error.description
+                                     userInfo:nil];
+    }
 }
 
 -(void) deleteTempFolder
 {
     NSString *tempDirectory = [self getTempDirectoryPath];
-    [self deleteItemAtPath:tempDirectory];
+    @try {
+            [self deleteItemAtPath:tempDirectory];
+    } @catch (NSException *exception) {
+        
+    }
 }
 
 -(void) createTempFolder

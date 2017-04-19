@@ -13,7 +13,7 @@
 
 -(instancetype)initWithName:(NSString*) name;
 
-@property (nonatomic, strong, readonly) NSString *name;
+@property (nonatomic, strong) NSString *name;
 
 @property BOOL isLoaded;
 
