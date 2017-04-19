@@ -92,6 +92,7 @@
 		1D24062E1EA63D15002CE71B /* alignLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = alignLeft.png; path = ../../../../../../Downloads/alignLeft.png; sourceTree = "<group>"; };
 		1D2406301EA63DDB002CE71B /* calendar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = calendar.png; path = ../../../../../../Downloads/calendar.png; sourceTree = "<group>"; };
 		1D2406321EA63DFE002CE71B /* alignRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = alignRight.png; path = ../../../../../../Downloads/alignRight.png; sourceTree = "<group>"; };
+		1D2406351EA66981002CE71B /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		1D352FC31E9F9FC500F0C7A0 /* DatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
 		1D352FC41E9F9FC500F0C7A0 /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
 		1D352FC51E9F9FC500F0C7A0 /* DatePickerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DatePickerViewController.xib; sourceTree = "<group>"; };
@@ -242,6 +243,14 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
+		1D2406341EA66981002CE71B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1D2406351EA66981002CE71B /* AssetsLibrary.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		1D9EF87B1E94EF7700B35777 /* Notes */ = {
 			isa = PBXGroup;
 			children = (
@@ -328,6 +337,7 @@
 				B5EFB3631E8CFFD80024C211 /* NotesTests */,
 				B5EFB36E1E8CFFD80024C211 /* NotesUITests */,
 				B5EFB3481E8CFFD80024C211 /* Products */,
+				1D2406341EA66981002CE71B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};

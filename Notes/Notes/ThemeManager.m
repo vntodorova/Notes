@@ -71,7 +71,8 @@ static ThemeManager *sharedInstance = nil;
     if([self.currentTheme isEqualToString:@"Light"])
     {
         [self loadLightTheme];
-    } else if([self.currentTheme isEqualToString:@"Dark"])
+    }
+    else if([self.currentTheme isEqualToString:@"Dark"])
     {
         [self loadDarkTheme];
     }

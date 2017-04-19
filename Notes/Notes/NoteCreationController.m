@@ -33,10 +33,10 @@
 @property (nonatomic, strong) UIButton *addDrawingButton;
 @property (nonatomic, strong) UIButton *addListButton;
 
-@property BOOL optionsButtonsHidden;
-@property int imageIndex;
+@property (nonatomic, assign) BOOL optionsButtonsHidden;
+@property (nonatomic, assign) int imageIndex;
 
-@property BOOL isNoteNew;
+@property (nonatomic, assign) BOOL isNoteNew;
 @end
 
 @implementation NoteCreationController
@@ -158,7 +158,7 @@
         self.isNoteNew = NO;
         [self loadSavedHtml];
         self.noteName.text = self.note.name;
-        self.noteTags.text = [self buildTextFromTags: self.note.tags];
+        self.noteTags.text = [self buildTextFromTags:self.note.tags];
         [self.createButton setTitle:REDACTATION_BUTTON_NAME forState:UIControlStateNormal];
     }
     else
@@ -567,21 +567,9 @@
     }
     
     self.note.tags = [self getTagsFromText:self.noteTags.text];
-    self.note.body = [self changeHTMLImagePathsToLocal:[self getNoteBodyHTML]];
+    self.note.body = [self getNoteBodyHTML];
     
     self.note.dateCreated = [self getCurrentTime];
-}
-
--(NSString*) changeHTMLImagePathsToLocal:(NSString*) html
-{
-    NSString *notePath = [self getNoteDirectoryPathForNote:self.note inNotebookWithName:self.currentNotebook];
-    NSString *stringForReplace = [self.tempFolderPath stringByAppendingString:@"/"];
-    html = [html stringByReplacingOccurrencesOfString:stringForReplace withString:@""];
-    
-    stringForReplace = [notePath stringByAppendingString:@"/"];
-    html = [html stringByReplacingOccurrencesOfString:stringForReplace withString:@""];
-    
-    return html;
 }
 
 -(NSString*) getNoteDirectoryPathForNote:(Note*)note inNotebookWithName:(NSString*) notebook
