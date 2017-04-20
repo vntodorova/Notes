@@ -17,7 +17,7 @@
 
 @property NSMutableDictionary<NSString*, NSMutableArray<Note*>*> *notebookDictionary;
 @property NSMutableArray<Notebook*> *notebookList;
-
+@property TagsParser *tagParser;
 @end
 
 @implementation LocalNoteManager
@@ -28,8 +28,9 @@
     if (self)
     {
         self.notebookDictionary = [[NSMutableDictionary alloc] init];
-        [self createDirectoryAtPath: [self getNotebooksRootDirectoryPath]];
         self.notebookList = [[NSMutableArray alloc] init];
+        self.tagParser = [[TagsParser alloc] init];
+        [self createDirectoryAtPath: [self getNotebooksRootDirectoryPath]];
         [self loadNotebooks];
     }
     return self;
@@ -53,6 +54,12 @@
     [self.notebookList addObject:newNotebook];
     NSString *notebookPath = [self getDirectoryPathForNotebookWithName:newNotebook.name];
     [self createDirectoryAtPath:notebookPath];
+}
+
+- (void)addNotebookWithName:(NSString *) notebookName
+{
+    Notebook *notebook = [[Notebook alloc] initWithName:notebookName];
+    [self addNotebook:notebook];
 }
 
 - (void)addNote:(Note *)newNote toNotebook:(Notebook *)notebook
@@ -314,10 +321,10 @@
     
     [self createDirectoryAtPath:noteRoot];
     
-    [self saveData:[self buildTagsForSave:newNote.tags] toFile:[noteRoot stringByAppendingPathComponent:NOTE_TAGS_FILE]];
-    [self saveData:newNote.body                         toFile:[noteRoot stringByAppendingPathComponent:NOTE_BODY_FILE]];
-    [self saveData:newNote.dateCreated                  toFile:[noteRoot stringByAppendingPathComponent:NOTE_DATE_FILE]];
-    [self saveData:newNote.triggerDate                  toFile:[noteRoot stringByAppendingPathComponent:NOTE_TRIGGER_DATE_FILE]];
+    [self saveData:[self.tagParser buildTextFromTags:newNote.tags]  toFile:[noteRoot stringByAppendingPathComponent:NOTE_TAGS_FILE]];
+    [self saveData:newNote.body                                     toFile:[noteRoot stringByAppendingPathComponent:NOTE_BODY_FILE]];
+    [self saveData:newNote.dateCreated                              toFile:[noteRoot stringByAppendingPathComponent:NOTE_DATE_FILE]];
+    [self saveData:newNote.triggerDate                              toFile:[noteRoot stringByAppendingPathComponent:NOTE_TRIGGER_DATE_FILE]];
     
     [self coppyFilesFromSource:[self getTempDirectoryPath] toDestination:noteRoot];
 }
@@ -325,9 +332,9 @@
 -(void) coppyFilesFromSource:(NSString*)source toDestination:(NSString*) destination
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSArray *directoryContents = [self getDirectoryContentForPath:source];
-    
-    for(NSString *imageName in directoryContents)
+    NSEnumerator *directoryContents = [self getEnumeratorForDir:source];
+    NSString *imageName;
+    while(imageName = [directoryContents nextObject])
     {
         BOOL isHidden = [imageName hasPrefix:@"."];
         if(!isHidden)
@@ -363,16 +370,6 @@
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     [fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
-}
-
-- (NSString*) buildTagsForSave:(NSArray*) tags
-{
-    NSMutableString *tagsContent = [[NSMutableString alloc] init];
-    for (NSString *tag in tags)
-    {
-        [tagsContent appendString:[NSString stringWithFormat:@"#%@", tag]];
-    }
-    return tagsContent;
 }
 
 //LOAD DATA
@@ -426,6 +423,11 @@
     return content;
 }
 
+-(NSDirectoryEnumerator*) getEnumeratorForDir:(NSString*) dir
+{
+    return [[NSFileManager defaultManager] enumeratorAtPath:dir];
+}
+
 - (Note*)loadNoteWithPath:(NSString*) notePath andName:(NSString*) noteName
 {
     Note *note = [[Note alloc] init];
@@ -436,7 +438,7 @@
     note.triggerDate = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_TRIGGER_DATE_FILE]];
     
     NSString *tags = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_TAGS_FILE]];
-    note.tags = [self getTagsFromText:tags];
+    note.tags = [self.tagParser getTagsFromText:tags];
     return note;
 }
 
@@ -447,21 +449,4 @@
     return fileContents;
 }
 
-- (NSArray *)getTagsFromText:(NSString *) tagsText
-{
-    NSArray *tagList;
-    NSCharacterSet *setOfIndicators = [NSCharacterSet characterSetWithCharactersInString:TAG_SEPARATION_INDICATORS];
-    tagList = [tagsText componentsSeparatedByCharactersInSet:setOfIndicators];
-    NSMutableArray *clearTagList = [[NSMutableArray alloc] init];
-    
-    for(NSString *tag in tagList)
-    {
-        if([tag isEqualToString:@""])
-        {
-            continue;
-        }
-        [clearTagList addObject:tag];
-    }
-    return clearTagList;
-}
 @end

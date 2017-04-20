@@ -46,6 +46,7 @@
 
 @protocol NoteBookManagerDelegate
 - (void)addNotebook:(Notebook *)newNotebook;
+- (void)addNotebookWithName:(NSString *) notebookName;
 
 - (void)removeNotebook:(Notebook *)notebook;
 - (void)removeNotebookWithName:(NSString *)notebookName;
