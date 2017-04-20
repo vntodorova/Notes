@@ -78,6 +78,28 @@ static LayoutProvider *sharedInstance = nil;
 #pragma mark -
 #pragma mark LeftPanelViewController
 
+- (UIView *)getConfirmationViewFor:(id)target firstAction:(SEL)action1 secondAction:(SEL)action2 frame:(CGRect)frame
+{
+    UIView *confirmationView = [[UIView alloc] initWithFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height - SMALL_MARGIN)];
+    [confirmationView setBackgroundColor:[UIColor colorWithRed:230.0/255.0 green:95.0/255.0 blue:95.0/255.0 alpha:1.0]];
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, frame.size.width, frame.size.height)];
+    [title setTextColor:[UIColor blackColor]];
+    [title setText:@"Confirm"];
+    
+    UIButton *okButton = [[UIButton alloc] initWithFrame:CGRectMake(180, MARGIN, BUTTONS_WIDTH, BUTTONS_WIDTH)];
+    [okButton setImage:[UIImage imageNamed:@"check"] forState:UIControlStateNormal];
+    [okButton addTarget:target action:action1 forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton *cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(210, MARGIN, BUTTONS_WIDTH, BUTTONS_WIDTH)];
+    [cancelButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
+    [cancelButton addTarget:target action:action2 forControlEvents:UIControlEventTouchUpInside];
+    
+    [confirmationView addSubview:title];
+    [confirmationView addSubview:okButton];
+    [confirmationView addSubview:cancelButton];
+    return confirmationView;
+}
+
 - (UIButton *)getHeaderButtonWithAction:(SEL)selector andTarget:(id)target
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];

@@ -26,8 +26,9 @@
 @property (nonatomic, strong) DateTimeManager *dateTimeManager;
 @property (nonatomic, strong) ThemeManager *themeManager;
 
-@property BOOL notebookSectionEditing;
-
+@property BOOL sectionEditingMode;
+@property EditableNotebookCell *cellForDeleting;
+@property UIView *confirmationView;
 @property float pointerStartPanCoordinatesX;
 @property float panelStartPanCoordinatesX;
 @end
@@ -121,13 +122,14 @@
 
 - (void)enterEditingMode
 {
-    self.notebookSectionEditing = YES;
+    self.sectionEditingMode = YES;
     [self.tableView reloadData];
 }
 
 - (void)exitEditingMode
 {
-    self.notebookSectionEditing = NO;
+    [self cancelDeletingCell];
+    self.sectionEditingMode = NO;
     [self.tableView reloadData];
 }
 
@@ -141,7 +143,7 @@
     if(indexPath.section == NOTEBOOKS_SECTION)
     {
         Notebook *notebook = [[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] objectAtIndex:indexPath.row];
-        if(self.notebookSectionEditing && ![notebook.name isEqualToString:GENERAL_NOTEBOOK_NAME])
+        if(self.sectionEditingMode && ![notebook.name isEqualToString:GENERAL_NOTEBOOK_NAME])
         {
             cell = [self.layoutProvider getNewEditableCell:tableView withNotebook:notebook andDelegate:self];
         }
@@ -193,11 +195,11 @@
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView *header;
-    if(section == NOTEBOOKS_SECTION && self.notebookSectionEditing)
+    if(section == NOTEBOOKS_SECTION && self.sectionEditingMode)
     {
         header = [self.layoutProvider getNotebookHeaderWithAction:@selector(exitEditingMode) target:self editingMode:YES];
     }
-    if(section == NOTEBOOKS_SECTION && !self.notebookSectionEditing)
+    if(section == NOTEBOOKS_SECTION && !self.sectionEditingMode)
     {
         header = [self.layoutProvider getNotebookHeaderWithAction:@selector(enterEditingMode) target:self editingMode:NO];
     }
@@ -254,15 +256,37 @@
 
 - (void)deleteButtonClickedOnCell:(EditableNotebookCell *)cell
 {
-    NSIndexPath *pathForDeleting = [self.tableView indexPathForCell:cell];
-    [self.noteManager removeNotebookWithName:cell.nameLabel.text];
-    [self.tableViewDataSource setObject:[self.noteManager getNotebookList] forKey:NOTEBOOK_KEY];
-    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:pathForDeleting] withRowAnimation:UITableViewRowAnimationTop];
+    self.cellForDeleting = cell;
+    if(self.confirmationView != nil)
+    {
+        [self.confirmationView setFrame:CGRectMake(cell.frame.origin.x, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height - SMALL_MARGIN)];
+    }
+    else
+    {
+        self.confirmationView = [self.layoutProvider getConfirmationViewFor:self firstAction:@selector(deleteCell) secondAction:@selector(cancelDeletingCell) frame:cell.frame];
+        [self.tableView addSubview:self.confirmationView];
+    }
 }
 
 - (void)onCellNameChanged:(EditableNotebookCell *)cell
 {
     [self.noteManager renameNotebookWithName:cell.nameBeforeEditing newName:cell.nameLabel.text];
+}
+
+- (void)deleteCell
+{
+    NSIndexPath *pathForDeleting = [self.tableView indexPathForCell:self.cellForDeleting];
+    [self.noteManager removeNotebookWithName:self.cellForDeleting.nameLabel.text];
+    [self.tableViewDataSource setObject:[self.noteManager getNotebookList] forKey:NOTEBOOK_KEY];
+    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:pathForDeleting] withRowAnimation:UITableViewRowAnimationTop];
+    [self.confirmationView removeFromSuperview];
+    self.confirmationView = nil;
+}
+
+- (void)cancelDeletingCell
+{
+    [self.confirmationView removeFromSuperview];
+    self.confirmationView = nil;
 }
 
 #pragma mark -

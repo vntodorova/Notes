@@ -18,6 +18,7 @@
 #pragma mark LayoutProvider
 #define HEADER_HEIGHT 30
 #define HEADER_WIDTH 230
+#define MARGIN 10
 #define TABLEVIEW_CELL_ID @"TableViewCell"
 #define NOTEBOOK_CELL_ID @"NotebookCell"
 #define EDITABLE_NOTEBOOK_CELL_ID @"EditableNotebookCell"
@@ -52,6 +53,7 @@
 #define REMINDERS_SECTION 1
 #define NOTEBOOK_KEY @"Notebook"
 #define REMINDER_KEY @"Reminder"
+#define SMALL_MARGIN 0.5
 
 #pragma mark -
 #pragma mark LocalNoteManager
