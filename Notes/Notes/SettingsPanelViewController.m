@@ -36,6 +36,14 @@
     self.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
     self.pickerView.dataSource = self;
     self.pickerView.delegate = self;
+    if([self.themeManager.currentTheme isEqualToString:LIGHT_THEME])
+    {
+        [self.pickerView selectRow:0 inComponent:0 animated:YES];
+    }
+    else
+    {
+        [self.pickerView selectRow:1 inComponent:0 animated:YES];
+    }
     self.layoutProvider = [LayoutProvider sharedInstance];
     [self loadTheme];
 }

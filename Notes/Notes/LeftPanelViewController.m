@@ -128,7 +128,7 @@
 
 - (void)exitEditingMode
 {
-    [self cancelDeletingCell];
+    [self dismissConfirmationView];
     self.sectionEditingMode = NO;
     [self.tableView reloadData];
 }
@@ -259,12 +259,11 @@
     self.cellForDeleting = cell;
     if(self.confirmationView != nil)
     {
-        [self.confirmationView setFrame:CGRectMake(cell.frame.origin.x, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height - SMALL_MARGIN)];
+        [self moveConfirmationViewToCell:cell];
     }
     else
     {
-        self.confirmationView = [self.layoutProvider getConfirmationViewFor:self firstAction:@selector(deleteCell) secondAction:@selector(cancelDeletingCell) frame:cell.frame];
-        [self.tableView addSubview:self.confirmationView];
+        [self addConfirmationViewToCell:cell];
     }
 }
 
@@ -279,14 +278,39 @@
     [self.noteManager removeNotebookWithName:self.cellForDeleting.nameLabel.text];
     [self.tableViewDataSource setObject:[self.noteManager getNotebookList] forKey:NOTEBOOK_KEY];
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:pathForDeleting] withRowAnimation:UITableViewRowAnimationTop];
-    [self.confirmationView removeFromSuperview];
-    self.confirmationView = nil;
+    [self dismissConfirmationView];
 }
 
-- (void)cancelDeletingCell
+- (void)dismissConfirmationView
 {
-    [self.confirmationView removeFromSuperview];
-    self.confirmationView = nil;
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.confirmationView setAlpha:0];
+    } completion:^(BOOL finished) {
+        [self.confirmationView removeFromSuperview];
+        self.confirmationView = nil;
+    }];
+}
+
+- (void)moveConfirmationViewToCell:(EditableNotebookCell *)cell
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.confirmationView setAlpha:0];
+    } completion:^(BOOL finished) {
+        [self.confirmationView setFrame:CGRectMake(cell.frame.origin.x, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height - SMALL_MARGIN)];
+    }];
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.confirmationView setAlpha:1];
+    }];
+}
+
+- (void)addConfirmationViewToCell:(EditableNotebookCell *)cell
+{
+    self.confirmationView = [self.layoutProvider getConfirmationViewFor:self firstAction:@selector(deleteCell) secondAction:@selector(dismissConfirmationView) frame:cell.frame];
+    [self.confirmationView setAlpha:0];
+    [self.tableView addSubview:self.confirmationView];
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.confirmationView setAlpha:1];
+    }];
 }
 
 #pragma mark -
