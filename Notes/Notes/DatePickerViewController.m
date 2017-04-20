@@ -7,32 +7,22 @@
 //
 
 #import "DatePickerViewController.h"
+#import "ThemeManager.h"
+#import "Defines.h"
 
 @interface DatePickerViewController ()
-
+@property ThemeManager *themeManager;
 @end
 
 @implementation DatePickerViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    self.themeManager = [ThemeManager sharedInstance];
+    [self.view setTintColor:[self.themeManager.styles objectForKey:TINT]];
+    [self.view setBackgroundColor:[self.themeManager.styles objectForKey:BACKGROUND_COLOR]];
+    [self.datePicker setValue:[self.themeManager.styles objectForKey:TINT] forKey:@"textColor"];
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (IBAction)onCancelClicked:(id)sender
 {

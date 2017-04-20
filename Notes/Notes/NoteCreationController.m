@@ -409,11 +409,11 @@
     UIAlertController *inputController = [UIAlertController alertControllerWithTitle:ALERT_INPUT_DIALOG_TITLE
                                                                              message:ALERT_INPUT_DIALOG_MESSAGE
                                                                       preferredStyle:UIAlertControllerStyleAlert];
-    
+    [inputController.view setTintColor:[self.themeManager.styles objectForKey:ALERTCONTROLLER_TINT]];
     [inputController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField)
      {
          textField.placeholder = @"Name";
-         textField.textColor = [UIColor blueColor];
+         textField.textColor = [self.themeManager.styles objectForKey:ALERTCONTROLLER_TINT];
          textField.clearButtonMode = UITextFieldViewModeWhileEditing;
          textField.borderStyle = UITextBorderStyleRoundedRect;
      }];
@@ -476,12 +476,12 @@
     [self.noteBody loadHTMLString:self.note.body baseURL:baseURL];
 }
 
-- (void)displaySelectableMenuWithButton:(UIButton *) button list:(NSMutableArray*)nameList
+- (void)displaySelectableMenuWithButton:(UIButton *)button list:(NSMutableArray *)nameList
 {
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:ALERT_DIALOG_TITLE
                                                                    message:nil
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
-    
+    [alert.view setTintColor:[self.themeManager.styles objectForKey:ALERTCONTROLLER_TINT]];
     [alert addAction:[UIAlertAction actionWithTitle:ALERT_DIALOG_CANCEL_BUTTON_NAME style:UIAlertActionStyleCancel handler:nil]];
     
     for (UIAlertAction* currentItem in nameList)

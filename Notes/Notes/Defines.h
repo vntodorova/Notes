@@ -74,6 +74,7 @@
 #define BACKGROUND_COLOR @"BackgroundColor"
 #define NAVIGATION_BAR_COLOR @"NavigationBarColor"
 #define TINT @"Tint"
+#define ALERTCONTROLLER_TINT @"AlertControllerTint"
 #define CAMERA_IMAGE @"camera"
 #define LIST_IMAGE @"list"
 #define DRAWING_IMAGE @"drawing"

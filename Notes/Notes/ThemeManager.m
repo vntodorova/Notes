@@ -46,6 +46,7 @@ static ThemeManager *sharedInstance = nil;
     [self.styles setObject:[UIColor colorWithRed:220.0/255.0 green:220.0/255.0 blue:220.0/255.0 alpha:1] forKey:BACKGROUND_COLOR];
     [self.styles setObject:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0] forKey:TINT];
     [self.styles setObject:[NSNumber numberWithInt:UIBarStyleDefault] forKey:SEARCH_BAR];
+    [self.styles setObject:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0] forKey:ALERTCONTROLLER_TINT];
 }
 
 - (void)loadDarkTheme
@@ -56,6 +57,7 @@ static ThemeManager *sharedInstance = nil;
     [self.styles setObject:[UIColor colorWithRed:60.0/255.0 green:60.0/255.0 blue:60.0/255.0 alpha:1] forKey:BACKGROUND_COLOR];
     [self.styles setObject:[UIColor colorWithRed:180.0/255.0 green:180.0/255.0 blue:180.0/255.0 alpha:1] forKey:TINT];
     [self.styles setObject:[NSNumber numberWithInt:UIBarStyleBlack] forKey:SEARCH_BAR];
+    [self.styles setObject:[UIColor darkGrayColor] forKey:ALERTCONTROLLER_TINT];
 }
 
 - (void)reload
