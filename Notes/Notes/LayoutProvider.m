@@ -86,7 +86,7 @@ static LayoutProvider *sharedInstance = nil;
     return button;
 }
 
-- (UIView *)getNotebookHeaderEditingMode:(SEL)action andTarget:(id)target
+- (UIView *)getNotebookHeaderWithAction:(SEL)action target:(id)target editingMode:(BOOL)editingMode
 {
     CGRect headerFrame = CGRectMake(0, 0, HEADER_WIDTH, HEADER_HEIGHT);
     UIView *headerView = [[UIView alloc] initWithFrame: headerFrame];
@@ -95,20 +95,16 @@ static LayoutProvider *sharedInstance = nil;
     [headerView addSubview:headerTitle];
     [headerTitle setText:NOTEBOOK_SECTION_NAME];
     UIButton *button = [self getHeaderButtonWithAction:action andTarget:target];
-    [button setImage:[UIImage imageNamed:CLOSE_IMAGE] forState:UIControlStateNormal];
-    [headerView addSubview:button];
-    return headerView;
-}
-
-- (UIView *)getNotebookHeaderViewMode:(SEL)action andTarget:(id)target
-{
-    CGRect headerFrame = CGRectMake(0, 0, HEADER_WIDTH, HEADER_HEIGHT);
-    UIView *headerView = [[UIView alloc] initWithFrame: headerFrame];
-    UILabel *headerTitle = [[UILabel alloc] initWithFrame: headerFrame];
-    [headerTitle setTextColor:[self.themeManager.styles objectForKey:TINT]];
-    [headerView addSubview:headerTitle];
-    [headerTitle setText:NOTEBOOK_SECTION_NAME];
-    UIButton *button = [self getHeaderButtonWithAction:action andTarget:target];
+    
+    if(editingMode)
+    {
+        [button setImage:[UIImage imageNamed:CLOSE_IMAGE] forState:UIControlStateNormal];
+    }
+    else
+    {
+        [button setTitle:EDIT_BUTTON_NAME forState:UIControlStateNormal];
+    }
+    
     [button setTitle:EDIT_BUTTON_NAME forState:UIControlStateNormal];
     [headerView addSubview:button];
     return headerView;

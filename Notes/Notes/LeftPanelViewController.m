@@ -192,22 +192,17 @@
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView *header;
-    switch (section) {
-        case NOTEBOOKS_SECTION:
-        {
-            if(!self.notebookSectionEditing)
-            {
-                header = [self.layoutProvider getNotebookHeaderViewMode:@selector(enterEditingMode) andTarget:self];
-            }
-            else
-            {
-                header = [self.layoutProvider getNotebookHeaderEditingMode:@selector(exitEditingMode) andTarget:self];
-            }
-            break;
-        }
-        case REMINDERS_SECTION:
-            header = [self.layoutProvider getRemindersHeader];
-            break;
+    if(section == NOTEBOOKS_SECTION && self.notebookSectionEditing)
+    {
+        header = [self.layoutProvider getNotebookHeaderWithAction:@selector(exitEditingMode) target:self editingMode:YES];
+    }
+    if(section == NOTEBOOKS_SECTION && !self.notebookSectionEditing)
+    {
+        header = [self.layoutProvider getNotebookHeaderWithAction:@selector(enterEditingMode) target:self editingMode:NO];
+    }
+    if(section == REMINDERS_SECTION)
+    {
+        header = [self.layoutProvider getRemindersHeader];
     }
     return header;
 }
