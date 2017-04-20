@@ -123,14 +123,14 @@
 - (void)enterEditingMode
 {
     self.sectionEditingMode = YES;
-    [self.tableView reloadData];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:NOTEBOOKS_SECTION] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)exitEditingMode
 {
     [self dismissConfirmationView];
     self.sectionEditingMode = NO;
-    [self.tableView reloadData];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:NOTEBOOKS_SECTION] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 #pragma mark -

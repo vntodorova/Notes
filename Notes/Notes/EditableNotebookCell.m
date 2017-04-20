@@ -19,22 +19,26 @@
 {
     if(self.isEditing)
     {
+        self.isEditing = NO;
         if(![self.nameBeforeEditing isEqualToString:self.nameLabel.text])
         {
             [self.delegate onCellNameChanged:self];
         }
         [self.nameLabel setUserInteractionEnabled:NO];
-        [self.nameLabel setBackgroundColor:[UIColor clearColor]];
-        [self.editButton setImage:[UIImage imageNamed:@"edit.png"] forState:UIControlStateNormal];
-        self.isEditing = NO;
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.nameLabel setBackgroundColor:[UIColor clearColor]];
+            [self.editButton setImage:[UIImage imageNamed:@"edit.png"] forState:UIControlStateNormal];
+        }];
     }
     else
     {
+        self.isEditing = YES;
         self.nameBeforeEditing = self.nameLabel.text;
         [self.nameLabel setUserInteractionEnabled:YES];
-        [self.nameLabel setBackgroundColor:[UIColor whiteColor]];
-        [self.editButton setImage:[UIImage imageNamed:@"check.png"] forState:UIControlStateNormal];
-        self.isEditing = YES;
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.nameLabel setBackgroundColor:[UIColor whiteColor]];
+            [self.editButton setImage:[UIImage imageNamed:@"check.png"] forState:UIControlStateNormal];
+        }];
     }
 }
 @end
