@@ -189,4 +189,44 @@ static LayoutProvider *sharedInstance = nil;
     return cell;
 }
 
+#pragma mark -
+#pragma mark DrawingViewController
+
+- (UIButton *)getButtonWithImageName:(NSString *)imageName action:(SEL)action target:(id)target
+{
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, BUTTONS_WIDTH, BUTTONS_HEIGHT)];
+    [button setBackgroundImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+    [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+    return button;
+}
+
+- (UIBarButtonItem *)getSaveBarButtonWithAction:(SEL)action andTarget:(id)target
+{
+    UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [saveButton addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+    [saveButton setTitle:@"Save" forState:UIControlStateNormal];
+    saveButton.frame = CGRectMake(0, 0, 40, BUTTONS_HEIGHT);
+    return [[UIBarButtonItem alloc] initWithCustomView:saveButton];
+}
+
+- (UIBarButtonItem *)getSettingsBarButtonWithAction:(SEL)action andTarget:(id)target
+{
+    return [[UIBarButtonItem alloc] initWithCustomView:[self getButtonWithImageName:@"settings" action:action target:target]];
+}
+
+- (UIBarButtonItem *)getEraserBarButtonWithAction:(SEL)action andTarget:(id)target
+{
+    return [[UIBarButtonItem alloc] initWithCustomView:[self getButtonWithImageName:@"eraser" action:action target:target]];
+}
+
+- (UIBarButtonItem *)getPenBarButtonWithAction:(SEL)action andTarget:(id)target
+{
+    return [[UIBarButtonItem alloc] initWithCustomView:[self getButtonWithImageName:@"pen" action:action target:target]];
+}
+
+- (UIBarButtonItem *)getColorPickerBarButtonWithAction:(SEL)action andTarget:(id)target
+{
+    return [[UIBarButtonItem alloc] initWithCustomView:[self getButtonWithImageName:@"colorPicker" action:action target:target]];
+}
+
 @end

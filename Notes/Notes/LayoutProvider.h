@@ -34,4 +34,10 @@
 - (NotebookCell *)getNewCell:(UITableView *)tableView withNotebook:(Notebook *)notebook andNotebookSize:(NSInteger)size;
 - (UITableViewCell *)getNewCell:(UITableView *)tableView withReminder:(Reminder *)reminder;
 
+- (UIBarButtonItem *)getSaveBarButtonWithAction:(SEL)action andTarget:(id)target;
+- (UIBarButtonItem *)getSettingsBarButtonWithAction:(SEL)action andTarget:(id)target;
+- (UIBarButtonItem *)getEraserBarButtonWithAction:(SEL)action andTarget:(id)target;
+- (UIBarButtonItem *)getPenBarButtonWithAction:(SEL)action andTarget:(id)target;
+- (UIBarButtonItem *)getColorPickerBarButtonWithAction:(SEL)action andTarget:(id)target;
+
 @end

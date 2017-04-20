@@ -28,6 +28,7 @@
     CGFloat opacity;
     BOOL mouseSwiped;
     BOOL settingsHidden;
+    UIColor *lastBrushColor;
 }
 
 - (void)viewDidLoad {
@@ -43,8 +44,6 @@
     [self.opacitySlider setValue:1.0];
     brushSize = self.sizeSlider.value*40;
     opacity = self.opacitySlider.value;
-    [self.settingsPanel setHidden:YES];
-    settingsHidden = YES;
     
     [self.view bringSubviewToFront:self.bluredView];
     [self.view bringSubviewToFront:self.settingsPanel];
@@ -66,40 +65,22 @@
 
 - (void)setupToolbarButtons
 {
-    UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [saveButton addTarget:self action:@selector(saveButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    [saveButton setTitle:@"Save" forState:UIControlStateNormal];
-    saveButton.frame = CGRectMake(0, 0, 40, BUTTONS_HEIGHT);
-    UIBarButtonItem *saveToolbarButton = [[UIBarButtonItem alloc] initWithCustomView:saveButton];
-    
-    UIButton *settingsButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, BUTTONS_WIDTH, BUTTONS_HEIGHT)];
-    [settingsButton setBackgroundImage:[UIImage imageNamed:@"settings.png"] forState:UIControlStateNormal];
-    [settingsButton addTarget:self action:@selector(settingsButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *settingsToolbarButton = [[UIBarButtonItem alloc] initWithCustomView:settingsButton];
-
-    UIButton *eraserButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, BUTTONS_WIDTH, BUTTONS_HEIGHT)];
-    [eraserButton setBackgroundImage:[UIImage imageNamed:@"eraser.png"] forState:UIControlStateNormal];
-    [eraserButton addTarget:self action:@selector(eraserButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *eraserToolbarButton = [[UIBarButtonItem alloc] initWithCustomView:eraserButton];
-    
-    UIButton *penButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, BUTTONS_WIDTH, BUTTONS_HEIGHT)];
-    [penButton setBackgroundImage:[UIImage imageNamed:@"pen.png"] forState:UIControlStateNormal];
-    [penButton addTarget:self action:@selector(penButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *penToolbarButton = [[UIBarButtonItem alloc] initWithCustomView:penButton];
-    
-    UIButton *colorButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, BUTTONS_WIDTH, BUTTONS_HEIGHT)];
-    [colorButton setBackgroundImage:[UIImage imageNamed:@"colorPicker.png"] forState:UIControlStateNormal];
-    [colorButton addTarget:self action:@selector(colorPickerButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *colorToolbarButton = [[UIBarButtonItem alloc] initWithCustomView:colorButton];
-    
+    UIBarButtonItem *saveToolbarButton = [self.layoutProvider getSaveBarButtonWithAction:@selector(saveButtonPressed) andTarget:self];
+    UIBarButtonItem *settingsToolbarButton = [self.layoutProvider getSettingsBarButtonWithAction:@selector(settingsButtonPressed) andTarget:self];
+    UIBarButtonItem *eraserToolbarButton = [self.layoutProvider getEraserBarButtonWithAction:@selector(eraserButtonPressed) andTarget:self];
+    UIBarButtonItem *penToolbarButton = [self.layoutProvider getPenBarButtonWithAction:@selector(penButtonPressed) andTarget:self];
+    UIBarButtonItem *colorToolbarButton = [self.layoutProvider getColorPickerBarButtonWithAction:@selector(colorPickerButtonPressed) andTarget:self];
     NSArray *leftButtonsArray = [NSArray arrayWithObjects:saveToolbarButton, settingsToolbarButton, eraserToolbarButton, penToolbarButton, colorToolbarButton, nil];
-    
     self.navigationItem.rightBarButtonItems = leftButtonsArray;
 }
 
 - (void)setBrushColor:(UIColor *)newColor
 {
     [newColor getRed:&red green:&green blue:&blue alpha:&opacity];
+    if(newColor != [UIColor whiteColor])
+    {
+        lastBrushColor = newColor;
+    }
 }
 
 #pragma mark -
@@ -110,7 +91,6 @@
     if(!settingsHidden)
     {
         [self hideSettingsPanel];
-        settingsHidden = YES;
     }
     mouseSwiped = NO;
     UITouch *touch = [touches anyObject];
@@ -167,6 +147,7 @@
 
 - (void)showSettingsPanel
 {
+    settingsHidden = NO;
     self.bluredView.frame = CGRectMake(self.settingsPanel.frame.origin.x, self.settingsPanel.frame.origin.y, self.settingsPanel.frame.size.width, self.settingsPanel.frame.size.height + 20);
     [self.bluredView setHidden:NO];
     [self.settingsPanel setHidden:NO];
@@ -178,6 +159,7 @@
 
 - (void)hideSettingsPanel
 {
+    settingsHidden = YES;
     [UIView animateWithDuration:0.5 animations:^{
         [self.bluredView setAlpha:0];
         [self.settingsPanel setAlpha:0];
@@ -190,11 +172,6 @@
 #pragma mark -
 #pragma mark Button methods
 
-- (void)discardButtonPressed
-{
-    
-}
-
 - (void)saveButtonPressed
 {
     
@@ -205,76 +182,39 @@
     if(settingsHidden)
     {
         [self showSettingsPanel];
-        settingsHidden = NO;
-    } else if(!settingsHidden)
+    }
+    else
     {
         [self hideSettingsPanel];
-        settingsHidden = YES;
     }
 }
 
 - (void)eraserButtonPressed
 {
     [self setBrushColor:[UIColor whiteColor]];
-    brushSize = 10.0;
 }
 
 - (void)penButtonPressed
 {
-    [self setBrushColor:[UIColor blackColor]];
-    opacity = 1.0;
-    brushSize = 10.0;
+    [self setBrushColor:lastBrushColor];
 }
 
 - (void)colorPickerButtonPressed
 {
+    NSArray *colorNames = [NSArray arrayWithObjects:@"Black", @"Red", @"Blue", @"Cyan", @"Green", @"Orange", @"Purple", @"Magenta", @"Yellow", nil];
+    NSArray *colors = [NSArray arrayWithObjects:[UIColor blackColor], [UIColor redColor], [UIColor blueColor], [UIColor cyanColor], [UIColor greenColor], [UIColor orangeColor], [UIColor purpleColor], [UIColor magentaColor], [UIColor yellowColor], nil];
+    
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Pick a color" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction* blackColor = [UIAlertAction actionWithTitle:@"Black" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self setBrushColor:[UIColor blackColor]];
-    }];
-    [alertController addAction:blackColor];
-        
-    UIAlertAction* redColor = [UIAlertAction actionWithTitle:@"Red" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self setBrushColor:[UIColor redColor]];
-             }];
-    [alertController addAction:redColor];
-    
-    UIAlertAction* blueColor= [UIAlertAction actionWithTitle:@"Blue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self setBrushColor:[UIColor blueColor]];
-    }];
-    [alertController addAction:blueColor];
-    
-    UIAlertAction* cyanColor= [UIAlertAction actionWithTitle:@"Cyan" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self setBrushColor:[UIColor cyanColor]];
-    }];
-    [alertController addAction:cyanColor];
-    
-    UIAlertAction* greenColor= [UIAlertAction actionWithTitle:@"Green" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self setBrushColor:[UIColor greenColor]];
-    }];
-    [alertController addAction:greenColor];
-    
-    UIAlertAction* orangeColor= [UIAlertAction actionWithTitle:@"Orange" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self setBrushColor:[UIColor orangeColor]];
-    }];
-    [alertController addAction:orangeColor];
-    
-    UIAlertAction* purpleColor= [UIAlertAction actionWithTitle:@"Purple" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self setBrushColor:[UIColor purpleColor]];
-    }];
-    [alertController addAction:purpleColor];
-    
-    UIAlertAction* magentaColor= [UIAlertAction actionWithTitle:@"Magenta" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self setBrushColor:[UIColor magentaColor]];
-    }];
-    [alertController addAction:magentaColor];
-    
-    UIAlertAction* yellowColor= [UIAlertAction actionWithTitle:@"Yellow" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self setBrushColor:[UIColor yellowColor]];
-    }];
-    [alertController addAction:yellowColor];
-    
+    for (NSInteger i = 0; i < colorNames.count ; i++) {
+        UIAlertAction* action = [UIAlertAction actionWithTitle:[colorNames objectAtIndex:i] style:UIAlertActionStyleDefault handler:^
+                                 (UIAlertAction * _Nonnull action) {
+                                     [self setBrushColor:[colors objectAtIndex:i]];
+                                 }];
+        [alertController addAction:action];
+    }
+    // TODO
+    // Crashes on iPad
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
