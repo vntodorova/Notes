@@ -217,7 +217,6 @@
     {
         [self.manager renameNote:self.note fromNotebookWithName:self.currentNotebook oldName:self.startingNoteName];
     }
-    
     [self.manager addNote:self.note toNotebookWithName:noteBookSelected];
 }
 

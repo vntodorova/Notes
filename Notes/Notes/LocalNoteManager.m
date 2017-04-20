@@ -67,21 +67,29 @@
         return;
     }
     
+    if(![self noteExists:newNote inNotebookWithName:notebookName])
+    {
+        NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName];
+        
+        [array addObject:newNote];
+    }
+    
+    [self saveToDisk:newNote toNotebook:notebookName];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_CREATED_EVENT object:nil userInfo:nil];
+}
+
+- (BOOL)noteExists:(Note*)newNote inNotebookWithName:(NSString*)notebookName
+{
     NSMutableArray *noteList = [[NSMutableArray alloc]initWithArray:[self getNoteListForNotebookWithName:notebookName]];
     for(Note *note in noteList)
     {
         if([note.name isEqualToString:newNote.name])
         {
-            [self removeNote:note fromNotebookWithName:notebookName];
+            return YES;
             break;
         }
     }
-    
-    NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName];
-    
-    [array addObject:newNote];
-    [self saveToDisk:newNote toNotebook:notebookName];
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_CREATED_EVENT object:nil userInfo:nil];
+    return NO;
 }
 
 - (void)removeNotebook:(Notebook *)notebook
