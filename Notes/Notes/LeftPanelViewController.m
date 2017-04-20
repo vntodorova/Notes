@@ -257,6 +257,10 @@
 - (void)deleteButtonClickedOnCell:(EditableNotebookCell *)cell
 {
     self.cellForDeleting = cell;
+    if([[self.noteManager getNoteListForNotebookWithName:cell.nameLabel.text] count] == 0)
+    {
+        [self deleteCell];
+    }
     if(self.confirmationView != nil)
     {
         [self moveConfirmationViewToCell:cell];
