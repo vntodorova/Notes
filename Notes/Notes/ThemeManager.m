@@ -27,11 +27,11 @@ static ThemeManager *sharedInstance = nil;
     self = [super init];
     if (self) {
         self.styles = [[NSMutableDictionary alloc] init];
-        self.themeNames = [[NSArray alloc] initWithObjects:@"Light", @"Dark", nil];
-        self.currentTheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"Theme"];
+        self.themeNames = [[NSArray alloc] initWithObjects:LIGHT_THEME, DARK_THEME, nil];
+        self.currentTheme = [[NSUserDefaults standardUserDefaults] stringForKey:THEME_KEY];
         if(self.currentTheme == nil)
         {
-            self.currentTheme = @"Light";
+            self.currentTheme = LIGHT_THEME;
         }
         [self setNewTheme:self.currentTheme];
     }
@@ -41,11 +41,10 @@ static ThemeManager *sharedInstance = nil;
 - (void)loadLightTheme
 {
     [self.styles setObject:[UIColor colorWithRed:220.0/255.0 green:220.0/255.0 blue:220.0/255.0 alpha:1] forKey:TABLEVIEW_BACKGROUND_COLOR];
-    [self.styles setObject:[UIColor whiteColor] forKey:TABLEVIEW_CELL_COLOR];
+    [self.styles setObject:[UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:1] forKey:TABLEVIEW_CELL_COLOR];
     [self.styles setObject:[UIColor colorWithRed:220.0/255.0 green:220.0/255.0 blue:220.0/255.0 alpha:1] forKey:NAVIGATION_BAR_COLOR];
     [self.styles setObject:[UIColor colorWithRed:220.0/255.0 green:220.0/255.0 blue:220.0/255.0 alpha:1] forKey:BACKGROUND_COLOR];
     [self.styles setObject:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0] forKey:TINT];
-    [self.styles setObject:[UIColor whiteColor] forKey:TEXTFIELDS_COLOR];
     [self.styles setObject:[NSNumber numberWithInt:UIBarStyleDefault] forKey:SEARCH_BAR];
 }
 
@@ -56,17 +55,16 @@ static ThemeManager *sharedInstance = nil;
     [self.styles setObject:[UIColor colorWithRed:60.0/255.0 green:60.0/255.0 blue:60.0/255.0 alpha:1] forKey:NAVIGATION_BAR_COLOR];
     [self.styles setObject:[UIColor colorWithRed:60.0/255.0 green:60.0/255.0 blue:60.0/255.0 alpha:1] forKey:BACKGROUND_COLOR];
     [self.styles setObject:[UIColor colorWithRed:180.0/255.0 green:180.0/255.0 blue:180.0/255.0 alpha:1] forKey:TINT];
-    [self.styles setObject:[UIColor colorWithRed:120.0/255.0 green:120.0/255.0 blue:120.0/255.0 alpha:1] forKey:TEXTFIELDS_COLOR];
     [self.styles setObject:[NSNumber numberWithInt:UIBarStyleBlack] forKey:SEARCH_BAR];
 }
 
 - (void)reload
 {
-    if([self.currentTheme isEqualToString:@"Light"])
+    if([self.currentTheme isEqualToString:LIGHT_THEME])
     {
         [self loadLightTheme];
     }
-    else if([self.currentTheme isEqualToString:@"Dark"])
+    else if([self.currentTheme isEqualToString:DARK_THEME])
     {
         [self loadDarkTheme];
     }
@@ -74,7 +72,7 @@ static ThemeManager *sharedInstance = nil;
 
 - (void)setNewTheme:(NSString *)newThemeName
 {
-    [[NSUserDefaults standardUserDefaults] setValue:newThemeName forKey:@"Theme"];
+    [[NSUserDefaults standardUserDefaults] setValue:newThemeName forKey:THEME_KEY];
     [[NSUserDefaults standardUserDefaults] synchronize];
     self.currentTheme = newThemeName;
     [self reload];

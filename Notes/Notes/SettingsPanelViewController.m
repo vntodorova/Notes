@@ -56,7 +56,7 @@
     if(![previousTheme isEqualToString:chosenTheme])
     {
         [self.themeManager setNewTheme:chosenTheme];
-        [self.delegate onThemeChanged];
+        [[NSNotificationCenter defaultCenter] postNotificationName:THEME_CHANGED_EVENT object:nil userInfo:nil];
         [self loadTheme];
     }
     [self dismiss];

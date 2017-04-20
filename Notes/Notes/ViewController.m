@@ -46,6 +46,7 @@
     [self reloadTableViewData];
     [self.tableView registerNib:[UINib nibWithNibName:TABLEVIEW_CELL_ID bundle:nil] forCellReuseIdentifier:TABLEVIEW_CELL_ID];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoteCreated) name:NOTE_CREATED_EVENT object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onThemeChanged) name:THEME_CHANGED_EVENT object:nil];
 }
 
 - (void)reloadTableViewData
@@ -193,11 +194,16 @@
 }
 
 #pragma mark -
-#pragma mark NoteCreationController delegates
+#pragma mark Notification handlers
 
--(void)onNoteCreated
+- (void)onNoteCreated
 {
     [self reloadTableViewData];
+}
+
+- (void)onThemeChanged
+{
+    [self loadTheme];
 }
 
 #pragma mark -
@@ -241,12 +247,6 @@
     [UIView animateWithDuration:0.5 animations:^{
         self.settingsPanelViewController.view.frame = CGRectMake(0, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
     }];
-}
-
-- (void)onThemeChanged
-{
-    [self loadTheme];
-    [self.leftPanelViewController loadTheme];
 }
 
 - (void)changeCurrentNotebook:(NSString *)newNotebookName

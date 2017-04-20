@@ -64,7 +64,6 @@
 - (void)hideLeftPanel;
 - (void)showSettings;
 - (void)changeCurrentNotebook:(NSString *)newNotebookName;
-- (void)onThemeChanged;
 @end
 
 @protocol EditableCellDelegate

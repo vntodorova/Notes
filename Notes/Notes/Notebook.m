@@ -13,7 +13,7 @@
 -(instancetype)initWithName:(NSString*) name
 {
     self = [super init];
-    self->_name = name;
+    self.name = name;
     self.isLoaded = false;
     return self;
 }

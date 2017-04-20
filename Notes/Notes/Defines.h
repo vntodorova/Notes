@@ -39,6 +39,7 @@
 #define LEFT_PANEL_NIBNAME @"LeftPanelViewController"
 #define SETTINGS_PANEL_NIBNAME @"SettingsPanelViewController"
 #define GENERAL_NOTEBOOK_NAME @"General"
+#define THEME_CHANGED_EVENT @"ThemeChangedEvent"
 #define LEFT_PANEL_WIDTH 250
 
 #pragma mark -
@@ -71,10 +72,12 @@
 #define BACKGROUND_COLOR @"BackgroundColor"
 #define NAVIGATION_BAR_COLOR @"NavigationBarColor"
 #define TINT @"Tint"
-#define TEXTFIELDS_COLOR @"TextFieldsColor"
 #define CAMERA_IMAGE @"camera"
 #define LIST_IMAGE @"list"
 #define DRAWING_IMAGE @"drawing"
+#define LIGHT_THEME @"light"
+#define DARK_THEME @"dark"
+#define THEME_KEY @"theme"
 
 #pragma mark -
 #pragma mark NoteCreationController

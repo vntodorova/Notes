@@ -148,6 +148,7 @@ static LayoutProvider *sharedInstance = nil;
     cell.nameLabel.text = notebook.name;
     cell.nameLabel.textColor = [self.themeManager.styles objectForKey:TINT];
     cell.detailsLabel.text = [NSString stringWithFormat:@"%ld items",size];
+    cell.detailsLabel.textColor = [self.themeManager.styles objectForKey:TINT];
     return cell;
 }
 
@@ -156,12 +157,13 @@ static LayoutProvider *sharedInstance = nil;
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:REMINDER_CELL_ID];
     if (cell == nil)
     {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:REMINDER_CELL_ID];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:REMINDER_CELL_ID];
     }
     cell.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_CELL_COLOR];
     cell.textLabel.text = note.name;
     cell.textLabel.textColor = [self.themeManager.styles objectForKey:TINT];
     cell.detailTextLabel.text = [self.dateTimeManager convertToRelativeDate:note.triggerDate];
+    cell.detailTextLabel.textColor = [self.themeManager.styles objectForKey:TINT];
     return cell;
 }
 

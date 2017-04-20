@@ -51,6 +51,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onThemeChanged) name:THEME_CHANGED_EVENT object:nil];
     self.isHidden = YES;
 
     [self loadTheme];
@@ -262,6 +263,14 @@
 - (void)onCellNameChanged:(EditableNotebookCell *)cell
 {
     [self.noteManager renameNotebookWithName:cell.nameBeforeEditing newName:cell.nameLabel.text];
+}
+
+#pragma mark -
+#pragma mark Notification handlers
+
+- (void)onThemeChanged
+{
+    [self loadTheme];
 }
 
 @end
