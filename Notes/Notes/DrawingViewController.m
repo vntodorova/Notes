@@ -164,25 +164,26 @@
 
 - (void)showSettingsPanel
 {
-    settingsHidden = NO;
     self.bluredView.frame = CGRectMake(self.settingsPanel.frame.origin.x, self.settingsPanel.frame.origin.y, self.settingsPanel.frame.size.width, self.settingsPanel.frame.size.height + 20);
     [self.bluredView setHidden:NO];
     [self.settingsPanel setHidden:NO];
     [UIView animateWithDuration:0.5 animations:^{
         [self.bluredView setAlpha:1];
         [self.settingsPanel setAlpha:1];
+    } completion:^(BOOL finished) {
+        settingsHidden = NO;
     }];
 }
 
 - (void)hideSettingsPanel
 {
-    settingsHidden = YES;
     [UIView animateWithDuration:0.5 animations:^{
         [self.bluredView setAlpha:0];
         [self.settingsPanel setAlpha:0];
     } completion:^(BOOL finished) {
         [self.settingsPanel setHidden:YES];
         [self.bluredView setHidden:YES];
+        settingsHidden = YES;
     }];
 }
 
@@ -231,8 +232,11 @@
                                  }];
         [alertController addAction:action];
     }
-    // TODO
-    // Crashes on iPad
+    
+    alertController.popoverPresentationController.sourceView = self.view;
+    UIBarButtonItem *item = [self.navigationItem.rightBarButtonItems lastObject];
+    CGRect itemFrame = [[item valueForKey:@"view"] frame];
+    alertController.popoverPresentationController.sourceRect = CGRectMake(itemFrame.origin.x, itemFrame.origin.y + 20, itemFrame.size.width, itemFrame.size.height);
     [self presentViewController:alertController animated:YES completion:nil];
 }
 

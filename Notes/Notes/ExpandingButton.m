@@ -11,7 +11,6 @@
 #import "ThemeManager.h"
 
 @interface ExpandingButton()
-@property (nonatomic, strong) ThemeManager *themeManager;
 @property NSMutableArray<UIButton *> *buttons;
 @end
 
@@ -20,20 +19,19 @@
 - (void)setup
 {
     [self setIsExpanded:NO];
-    self.themeManager = [ThemeManager sharedInstance];
     self.buttons = [[NSMutableArray alloc] init];
 }
 
 - (void)addSmallButtonWithAction:(SEL)selector target:(id)target andImage:(NSString *)imageName
 {
     CGFloat red, green, blue;
-    [[self.themeManager.styles objectForKey:TINT] getRed:&red green:&green blue:&blue alpha:nil];
+    [[[ThemeManager sharedInstance].styles objectForKey:TINT] getRed:&red green:&green blue:&blue alpha:nil];
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     button.layer.cornerRadius = 23;
     button.layer.borderWidth = 1;
     button.layer.borderColor = [UIColor colorWithRed:red green:green blue:blue alpha:1].CGColor;
     button.clipsToBounds = YES;
-    [button setBackgroundColor:[self.themeManager.styles objectForKey:BUTTONS_BACKGROUND_COLOR]];
+    [button setBackgroundColor:[[ThemeManager sharedInstance].styles objectForKey:BUTTONS_BACKGROUND_COLOR]];
     [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
     [button setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
     [self.buttons addObject:button];

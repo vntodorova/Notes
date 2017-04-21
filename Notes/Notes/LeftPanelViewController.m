@@ -290,8 +290,7 @@
     [UIView animateWithDuration:0.3 animations:^{
         [self.confirmationView setAlpha:0];
     } completion:^(BOOL finished) {
-        [self.confirmationView removeFromSuperview];
-        self.confirmationView = nil;
+        [self.confirmationView setHidden:YES];
     }];
 }
 
@@ -300,6 +299,7 @@
     [UIView animateWithDuration:0.3 animations:^{
         [self.confirmationView setAlpha:0];
     } completion:^(BOOL finished) {
+        [self.confirmationView setHidden:NO];
         [self.confirmationView setFrame:CGRectMake(cell.frame.origin.x, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height - SMALL_MARGIN)];
     }];
     [UIView animateWithDuration:0.3 animations:^{
@@ -311,6 +311,7 @@
 {
     self.confirmationView = [self.layoutProvider confirmationViewFor:self firstAction:@selector(deleteCell) secondAction:@selector(dismissConfirmationView) frame:cell.frame];
     [self.confirmationView setAlpha:0];
+    [self.confirmationView setHidden:NO];
     [self.tableView addSubview:self.confirmationView];
     [UIView animateWithDuration:0.3 animations:^{
         [self.confirmationView setAlpha:1];

@@ -151,9 +151,7 @@ static LayoutProvider *sharedInstance = nil;
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:EDITABLE_NOTEBOOK_CELL_ID owner:self options:nil];
         cell = [nib objectAtIndex:0];
     }
-    cell.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_CELL_COLOR];
-    cell.nameLabel.text = notebook.name;
-    cell.nameLabel.textColor = [self.themeManager.styles objectForKey:TINT];
+    [cell setupWithNotebook:notebook];
     cell.delegate = delegate;
     return cell;
 }

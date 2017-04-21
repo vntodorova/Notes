@@ -17,6 +17,9 @@
 - (IBAction)deleteButtonClicked:(id)sender;
 - (IBAction)editButtonClicked:(id)sender;
 
+- (void)setupWithNotebook:(Notebook *)notebook;
+- (void)exitNameEditingMode;
+
 @property BOOL isEditing;
 @property NSString *nameBeforeEditing;
 
