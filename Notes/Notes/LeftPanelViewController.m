@@ -145,18 +145,18 @@
         Notebook *notebook = [[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] objectAtIndex:indexPath.row];
         if(self.sectionEditingMode && ![notebook.name isEqualToString:GENERAL_NOTEBOOK_NAME])
         {
-            cell = [self.layoutProvider getNewEditableCell:tableView withNotebook:notebook andDelegate:self];
+            cell = [self.layoutProvider newEditableCell:tableView notebook:notebook delegate:self];
         }
         else
         {
-            cell = [self.layoutProvider getNewCell:tableView withNotebook:notebook andNotebookSize:[[self.noteManager getNoteListForNotebook:notebook] count]];
+            cell = [self.layoutProvider newCell:tableView notebook:notebook notebookSize:[[self.noteManager getNoteListForNotebook:notebook] count]];
         }
     }
     
     if(indexPath.section == REMINDERS_SECTION)
     {
         NSMutableArray *reminders = [self.tableViewDataSource objectForKey:REMINDER_KEY];
-        cell = [self.layoutProvider getNewCell:tableView withReminder:[reminders objectAtIndex:indexPath.row]];
+        cell = [self.layoutProvider newCell:tableView reminder:[reminders objectAtIndex:indexPath.row]];
     }
 
     return cell;
@@ -197,15 +197,15 @@
     UIView *header;
     if(section == NOTEBOOKS_SECTION && self.sectionEditingMode)
     {
-        header = [self.layoutProvider getNotebookHeaderWithAction:@selector(exitEditingMode) target:self editingMode:YES];
+        header = [self.layoutProvider notebookHeaderWithAction:@selector(exitEditingMode) target:self editingMode:YES];
     }
     if(section == NOTEBOOKS_SECTION && !self.sectionEditingMode)
     {
-        header = [self.layoutProvider getNotebookHeaderWithAction:@selector(enterEditingMode) target:self editingMode:NO];
+        header = [self.layoutProvider notebookHeaderWithAction:@selector(enterEditingMode) target:self editingMode:NO];
     }
     if(section == REMINDERS_SECTION)
     {
-        header = [self.layoutProvider getRemindersHeader];
+        header = [self.layoutProvider remindersHeader];
     }
     return header;
 }
@@ -309,7 +309,7 @@
 
 - (void)addConfirmationViewToCell:(EditableNotebookCell *)cell
 {
-    self.confirmationView = [self.layoutProvider getConfirmationViewFor:self firstAction:@selector(deleteCell) secondAction:@selector(dismissConfirmationView) frame:cell.frame];
+    self.confirmationView = [self.layoutProvider confirmationViewFor:self firstAction:@selector(deleteCell) secondAction:@selector(dismissConfirmationView) frame:cell.frame];
     [self.confirmationView setAlpha:0];
     [self.tableView addSubview:self.confirmationView];
     [UIView animateWithDuration:0.3 animations:^{

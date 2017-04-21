@@ -74,4 +74,10 @@
 
 @end
 
+@protocol DrawingDelegate
+
+- (void)drawingSavedAsImage:(UIImage *)image;
+
+@end
+
 #endif /* Protocols_h */

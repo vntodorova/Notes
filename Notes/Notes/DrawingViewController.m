@@ -65,11 +65,11 @@
 
 - (void)setupToolbarButtons
 {
-    UIBarButtonItem *saveToolbarButton = [self.layoutProvider getSaveBarButtonWithAction:@selector(saveButtonPressed) andTarget:self];
-    UIBarButtonItem *settingsToolbarButton = [self.layoutProvider getSettingsBarButtonWithAction:@selector(settingsButtonPressed) andTarget:self];
-    UIBarButtonItem *eraserToolbarButton = [self.layoutProvider getEraserBarButtonWithAction:@selector(eraserButtonPressed) andTarget:self];
-    UIBarButtonItem *penToolbarButton = [self.layoutProvider getPenBarButtonWithAction:@selector(penButtonPressed) andTarget:self];
-    UIBarButtonItem *colorToolbarButton = [self.layoutProvider getColorPickerBarButtonWithAction:@selector(colorPickerButtonPressed) andTarget:self];
+    UIBarButtonItem *saveToolbarButton = [self.layoutProvider saveBarButtonWithAction:@selector(saveButtonPressed) target:self];
+    UIBarButtonItem *settingsToolbarButton = [self.layoutProvider settingsBarButtonWithAction:@selector(settingsButtonPressed) target:self];
+    UIBarButtonItem *eraserToolbarButton = [self.layoutProvider eraserBarButtonWithAction:@selector(eraserButtonPressed) target:self];
+    UIBarButtonItem *penToolbarButton = [self.layoutProvider penBarButtonWithAction:@selector(penButtonPressed) target:self];
+    UIBarButtonItem *colorToolbarButton = [self.layoutProvider colorPickerBarButtonWithAction:@selector(colorPickerButtonPressed) target:self];
     NSArray *leftButtonsArray = [NSArray arrayWithObjects:saveToolbarButton, settingsToolbarButton, eraserToolbarButton, penToolbarButton, colorToolbarButton, nil];
     self.navigationItem.rightBarButtonItems = leftButtonsArray;
 }
@@ -81,6 +81,23 @@
     {
         lastBrushColor = newColor;
     }
+}
+
+- (UIImage *)imageOfScreen
+{
+    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+    CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
+    CGContextRef ctx = CGBitmapContextCreate(nil, screenSize.width, screenSize.height, 8, 4*(int)screenSize.width, colorSpaceRef, kCGImageAlphaPremultipliedLast);
+    CGContextTranslateCTM(ctx, 0.0, screenSize.height);
+    CGContextScaleCTM(ctx, 1.0, -1.0);
+    
+    [(CALayer*)self.view.layer renderInContext:ctx];
+    
+    CGImageRef cgImage = CGBitmapContextCreateImage(ctx);
+    UIImage *image = [UIImage imageWithCGImage:cgImage];
+    CGImageRelease(cgImage);
+    CGContextRelease(ctx);
+    return image;
 }
 
 #pragma mark -
@@ -174,7 +191,8 @@
 
 - (void)saveButtonPressed
 {
-    
+    [self.delegate drawingSavedAsImage:[self imageOfScreen]];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)settingsButtonPressed

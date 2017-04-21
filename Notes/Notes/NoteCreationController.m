@@ -181,7 +181,16 @@
 {
     [self.optionsButton hideOptionsButtons];
     DrawingViewController *drawingViewController = [[DrawingViewController alloc] init];
+    drawingViewController.delegate = self;
     [self.navigationController pushViewController:drawingViewController animated:YES];
+}
+
+#pragma mark -
+#pragma mark DrawingDelegate
+
+- (void)drawingSavedAsImage:(UIImage *)image
+{
+    NSLog(@"Drawing saved");
 }
 
 #pragma mark -

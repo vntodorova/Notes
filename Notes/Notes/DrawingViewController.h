@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Protocols.h"
 
 @interface DrawingViewController : UIViewController
 
@@ -18,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UISlider *sizeSlider;
 @property (weak, nonatomic) IBOutlet UISlider *opacitySlider;
 @property (weak, nonatomic) IBOutlet UIView *settingsPanel;
+@property (weak, nonatomic) id <DrawingDelegate> delegate;
 
 - (IBAction)sizeSliderChanged:(id)sender;
 - (IBAction)opacitySliderChanged:(id)sender;

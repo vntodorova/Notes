@@ -46,20 +46,20 @@ static LayoutProvider *sharedInstance = nil;
 #pragma mark -
 #pragma mark Navigation controller
 
-- (UIBarButtonItem *)setupLeftBarButton:(id)target withSelector:(SEL)selector;
+- (UIBarButtonItem *)setupLeftBarButton:(id)target action:(SEL)action;
 {
-    return [[UIBarButtonItem alloc] initWithTitle:@"Menu" style:UIBarButtonItemStylePlain target:target action:selector];
+    return [[UIBarButtonItem alloc] initWithTitle:@"Menu" style:UIBarButtonItemStylePlain target:target action:action];
 }
 
-- (UIBarButtonItem *)setupRightBarButton:(id)target withSelector:(SEL)selector;
+- (UIBarButtonItem *)setupRightBarButton:(id)target action:(SEL)action;
 {
-    return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:target action:selector];
+    return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:target action:action];
 }
 
 #pragma mark -
 #pragma mark Main ViewController
 
-- (TableViewCell *)getNewTableViewCell:(UITableView *)tableView withNote:(Note *)note andDelegate:(id)delegate;
+- (TableViewCell *)newTableViewCell:(UITableView *)tableView note:(Note *)note delegate:(id)delegate;
 {
     TableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:TABLEVIEW_CELL_ID];
     cell.delegate = delegate;
@@ -78,7 +78,7 @@ static LayoutProvider *sharedInstance = nil;
 #pragma mark -
 #pragma mark LeftPanelViewController
 
-- (UIView *)getConfirmationViewFor:(id)target firstAction:(SEL)action1 secondAction:(SEL)action2 frame:(CGRect)frame
+- (UIView *)confirmationViewFor:(id)target firstAction:(SEL)action1 secondAction:(SEL)action2 frame:(CGRect)frame
 {
     UIView *confirmationView = [[UIView alloc] initWithFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height - SMALL_MARGIN)];
     [confirmationView setBackgroundColor:[UIColor colorWithRed:230.0/255.0 green:95.0/255.0 blue:95.0/255.0 alpha:1.0]];
@@ -100,7 +100,7 @@ static LayoutProvider *sharedInstance = nil;
     return confirmationView;
 }
 
-- (UIButton *)getHeaderButtonWithAction:(SEL)selector andTarget:(id)target
+- (UIButton *)headerButtonWithAction:(SEL)selector target:(id)target
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     [button setFrame:CGRectMake(HEADER_WIDTH - HEADER_HEIGHT, 0, HEADER_HEIGHT, HEADER_HEIGHT)];
@@ -108,7 +108,7 @@ static LayoutProvider *sharedInstance = nil;
     return button;
 }
 
-- (UIView *)getNotebookHeaderWithAction:(SEL)action target:(id)target editingMode:(BOOL)editingMode
+- (UIView *)notebookHeaderWithAction:(SEL)action target:(id)target editingMode:(BOOL)editingMode
 {
     CGRect headerFrame = CGRectMake(0, 0, HEADER_WIDTH, HEADER_HEIGHT);
     UIView *headerView = [[UIView alloc] initWithFrame: headerFrame];
@@ -116,7 +116,7 @@ static LayoutProvider *sharedInstance = nil;
     [headerTitle setTextColor:[self.themeManager.styles objectForKey:TINT]];
     [headerView addSubview:headerTitle];
     [headerTitle setText:NOTEBOOK_SECTION_NAME];
-    UIButton *button = [self getHeaderButtonWithAction:action andTarget:target];
+    UIButton *button = [self headerButtonWithAction:action target:target];
     
     if(editingMode)
     {
@@ -132,7 +132,7 @@ static LayoutProvider *sharedInstance = nil;
     return headerView;
 }
 
-- (UIView *)getRemindersHeader
+- (UIView *)remindersHeader
 {
     CGRect headerFrame = CGRectMake(0, 0, HEADER_WIDTH, HEADER_HEIGHT);
     UIView *headerView = [[UIView alloc] initWithFrame: headerFrame];
@@ -143,7 +143,7 @@ static LayoutProvider *sharedInstance = nil;
     return headerView;
 }
 
-- (EditableNotebookCell *)getNewEditableCell:(UITableView *)tableView withNotebook:(Notebook *)notebook andDelegate:(id)delegate
+- (EditableNotebookCell *)newEditableCell:(UITableView *)tableView notebook:(Notebook *)notebook delegate:(id)delegate
 {
     EditableNotebookCell *cell = [tableView dequeueReusableCellWithIdentifier:EDITABLE_NOTEBOOK_CELL_ID];
     if (cell == nil)
@@ -158,7 +158,7 @@ static LayoutProvider *sharedInstance = nil;
     return cell;
 }
 
-- (UITableViewCell *)getNewCell:(UITableView *)tableView withNotebook:(Notebook *)notebook andNotebookSize:(NSInteger)size
+- (UITableViewCell *)newCell:(UITableView *)tableView notebook:(Notebook *)notebook notebookSize:(NSInteger)size
 {
     NotebookCell *cell = [tableView dequeueReusableCellWithIdentifier:NOTEBOOK_CELL_ID];
     if (cell == nil)
@@ -174,7 +174,7 @@ static LayoutProvider *sharedInstance = nil;
     return cell;
 }
 
-- (UITableViewCell *)getNewCell:(UITableView *)tableView withReminder:(Note *)note
+- (UITableViewCell *)newCell:(UITableView *)tableView reminder:(Note *)note
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:REMINDER_CELL_ID];
     if (cell == nil)
@@ -192,7 +192,7 @@ static LayoutProvider *sharedInstance = nil;
 #pragma mark -
 #pragma mark DrawingViewController
 
-- (UIButton *)getButtonWithImageName:(NSString *)imageName action:(SEL)action target:(id)target
+- (UIButton *)buttonWithImageName:(NSString *)imageName action:(SEL)action target:(id)target
 {
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, BUTTONS_WIDTH, BUTTONS_HEIGHT)];
     [button setBackgroundImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
@@ -200,7 +200,7 @@ static LayoutProvider *sharedInstance = nil;
     return button;
 }
 
-- (UIBarButtonItem *)getSaveBarButtonWithAction:(SEL)action andTarget:(id)target
+- (UIBarButtonItem *)saveBarButtonWithAction:(SEL)action target:(id)target
 {
     UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [saveButton addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
@@ -209,24 +209,24 @@ static LayoutProvider *sharedInstance = nil;
     return [[UIBarButtonItem alloc] initWithCustomView:saveButton];
 }
 
-- (UIBarButtonItem *)getSettingsBarButtonWithAction:(SEL)action andTarget:(id)target
+- (UIBarButtonItem *)settingsBarButtonWithAction:(SEL)action target:(id)target
 {
-    return [[UIBarButtonItem alloc] initWithCustomView:[self getButtonWithImageName:@"settings" action:action target:target]];
+    return [[UIBarButtonItem alloc] initWithCustomView:[self buttonWithImageName:@"settings" action:action target:target]];
 }
 
-- (UIBarButtonItem *)getEraserBarButtonWithAction:(SEL)action andTarget:(id)target
+- (UIBarButtonItem *)eraserBarButtonWithAction:(SEL)action target:(id)target
 {
-    return [[UIBarButtonItem alloc] initWithCustomView:[self getButtonWithImageName:@"eraser" action:action target:target]];
+    return [[UIBarButtonItem alloc] initWithCustomView:[self buttonWithImageName:@"eraser" action:action target:target]];
 }
 
-- (UIBarButtonItem *)getPenBarButtonWithAction:(SEL)action andTarget:(id)target
+- (UIBarButtonItem *)penBarButtonWithAction:(SEL)action target:(id)target
 {
-    return [[UIBarButtonItem alloc] initWithCustomView:[self getButtonWithImageName:@"pen" action:action target:target]];
+    return [[UIBarButtonItem alloc] initWithCustomView:[self buttonWithImageName:@"pen" action:action target:target]];
 }
 
-- (UIBarButtonItem *)getColorPickerBarButtonWithAction:(SEL)action andTarget:(id)target
+- (UIBarButtonItem *)colorPickerBarButtonWithAction:(SEL)action target:(id)target
 {
-    return [[UIBarButtonItem alloc] initWithCustomView:[self getButtonWithImageName:@"colorPicker" action:action target:target]];
+    return [[UIBarButtonItem alloc] initWithCustomView:[self buttonWithImageName:@"colorPicker" action:action target:target]];
 }
 
 @end

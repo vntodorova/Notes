@@ -85,12 +85,12 @@
 {
     [self.navigationController.navigationBar setTintColor:[self.themeManager.styles objectForKey:TINT]];
     UIBarButtonItem *leftNavigationBarButton = [self.layoutProvider setupLeftBarButton:self
-                                                                          withSelector:@selector(drawerButtonPressed)];
+                                                                          action:@selector(drawerButtonPressed)];
     self.navigationController.topViewController.navigationItem.leftBarButtonItem = leftNavigationBarButton;
     leftNavigationBarButton.enabled = TRUE;
     
     UIBarButtonItem *rightNavigationBarButton = [self.layoutProvider setupRightBarButton:self
-                                                                            withSelector:@selector(addButtonPressed)];
+                                                                            action:@selector(addButtonPressed)];
     self.navigationController.topViewController.navigationItem.rightBarButtonItem = rightNavigationBarButton;
     rightNavigationBarButton.enabled = TRUE;
     
@@ -190,7 +190,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Note *note = [self.notesArray objectAtIndex:indexPath.row];
-    return [self.layoutProvider getNewTableViewCell:tableView withNote:note andDelegate:self];
+    return [self.layoutProvider newTableViewCell:tableView note:note delegate:self];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

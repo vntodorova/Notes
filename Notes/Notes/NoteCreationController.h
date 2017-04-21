@@ -13,7 +13,7 @@
 
 @class LocalNoteManager;
 
-@interface NoteCreationController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIPopoverPresentationControllerDelegate, DatePickerDelegate>
+@interface NoteCreationController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIPopoverPresentationControllerDelegate, DatePickerDelegate, DrawingDelegate>
 
 - (instancetype)initWithManager:(LocalNoteManager*) manager;
 
