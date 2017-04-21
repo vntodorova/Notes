@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16F60a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -11,10 +11,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NoteCreationController">
             <connections>
-                <outlet property="alignCenterButton" destination="0UO-0p-zex" id="Kfh-Su-zL3"/>
-                <outlet property="alignLeftButton" destination="OUw-hL-dfA" id="1Lg-QM-5tQ"/>
-                <outlet property="alignRightButton" destination="P86-TT-FyK" id="MHR-g8-CFa"/>
-                <outlet property="calendarButton" destination="O2d-8B-KYc" id="tVy-Ti-EuO"/>
                 <outlet property="createButton" destination="5UX-3b-ySm" id="MQh-4L-qFJ"/>
                 <outlet property="noteBody" destination="Udl-bA-HC1" id="b4f-jg-wr0"/>
                 <outlet property="noteName" destination="Fme-iL-Fez" id="1SD-F7-u1V"/>
@@ -33,7 +29,7 @@
                     <rect key="frame" x="15" y="627" width="46" height="30"/>
                     <state key="normal" title="Create"/>
                     <connections>
-                        <action selector="onCreateClick:" destination="-1" eventType="touchUpInside" id="BUJ-VG-z3k"/>
+                        <action selector="createSelected:" destination="-1" eventType="touchUpInside" id="nv4-oz-zoQ"/>
                     </connections>
                 </button>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Fme-iL-Fez">
@@ -55,7 +51,7 @@
                         <constraint firstAttribute="height" constant="30" id="ign-sI-pmg"/>
                     </constraints>
                     <connections>
-                        <action selector="onOptionsClick:" destination="-1" eventType="touchUpInside" id="lm6-jx-b4D"/>
+                        <action selector="optionsSelected:" destination="-1" eventType="touchUpInside" id="IPG-PN-gnI"/>
                     </connections>
                 </button>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JM0-5u-0lL">
@@ -64,30 +60,27 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="UHC-Vr-ITK"/>
                         <barButtonItem style="plain" id="l05-Bt-oPs">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="HKR-NN-yVg">
-                                <rect key="frame" x="22" y="7" width="31" height="30"/>
+                                <rect key="frame" x="15" y="7" width="31" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Font"/>
                                 <connections>
-                                    <action selector="onFontSelected:" destination="-1" eventType="touchUpInside" id="L40-8m-Xjd"/>
+                                    <action selector="fontSelected:" destination="-1" eventType="touchUpInside" id="bkv-NU-a66"/>
                                 </connections>
                             </button>
                         </barButtonItem>
                         <barButtonItem style="plain" id="Z32-0u-1yo">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Z03-0k-6IF">
-                                <rect key="frame" x="63" y="7" width="30" height="30"/>
+                                <rect key="frame" x="56" y="7" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Size"/>
                                 <connections>
-                                    <action selector="onSizeSelected:" destination="-1" eventType="touchUpInside" id="Cfx-fL-ljm"/>
+                                    <action selector="sizeSelected:" destination="-1" eventType="touchUpInside" id="esm-h9-ytb"/>
                                 </connections>
                             </button>
-                            <connections>
-                                <action selector="onSizeSelected:" destination="-1" id="zaP-hM-Qwg"/>
-                            </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" id="2L3-o1-aYo">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" id="Mrv-oK-0Ve">
-                                <rect key="frame" x="103" y="7" width="30" height="30"/>
+                                <rect key="frame" x="96" y="7" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal">
                                     <attributedString key="attributedTitle">
@@ -100,13 +93,13 @@
                                     </attributedString>
                                 </state>
                                 <connections>
-                                    <action selector="onBoldStyleSelected:" destination="-1" eventType="touchUpInside" id="oxJ-rh-5bX"/>
+                                    <action selector="boldSelected:" destination="-1" eventType="touchUpInside" id="pkf-ze-5OS"/>
                                 </connections>
                             </button>
                         </barButtonItem>
                         <barButtonItem style="plain" id="n8K-9B-2d1">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" id="oKm-kI-Znm">
-                                <rect key="frame" x="143" y="7" width="30" height="30"/>
+                                <rect key="frame" x="136" y="7" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal">
                                     <attributedString key="attributedTitle">
@@ -119,13 +112,13 @@
                                     </attributedString>
                                 </state>
                                 <connections>
-                                    <action selector="onItalicStyleSelected:" destination="-1" eventType="touchUpInside" id="muX-Ht-x1s"/>
+                                    <action selector="italicSelected:" destination="-1" eventType="touchUpInside" id="hIk-PD-ppP"/>
                                 </connections>
                             </button>
                         </barButtonItem>
                         <barButtonItem style="plain" id="Pj4-WK-mzp">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" id="f4C-Wq-5xS">
-                                <rect key="frame" x="183" y="7" width="30" height="30"/>
+                                <rect key="frame" x="176" y="7" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal">
                                     <attributedString key="attributedTitle">
@@ -138,47 +131,47 @@
                                     </attributedString>
                                 </state>
                                 <connections>
-                                    <action selector="onUnderlineSelected:" destination="-1" eventType="touchUpInside" id="Z13-d6-615"/>
+                                    <action selector="underlineSelected:" destination="-1" eventType="touchUpInside" id="PZR-Ek-fp9"/>
                                 </connections>
                             </button>
                         </barButtonItem>
                         <barButtonItem style="plain" id="Zlc-p5-3HN">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="OUw-hL-dfA">
-                                <rect key="frame" x="223" y="10" width="25" height="25"/>
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="OUw-hL-dfA">
+                                <rect key="frame" x="216" y="10" width="25" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button" image="alignLeft.png"/>
                                 <connections>
-                                    <action selector="onAlignLeftPressed:" destination="-1" eventType="touchUpInside" id="mvt-YI-uZV"/>
+                                    <action selector="alignLeftSelected:" destination="-1" eventType="touchUpInside" id="XfH-F9-WFR"/>
                                 </connections>
                             </button>
                         </barButtonItem>
                         <barButtonItem image="alignCenter.png" style="plain" id="9zI-Tn-ghj">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="0UO-0p-zex">
-                                <rect key="frame" x="258" y="10" width="25" height="25"/>
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="0UO-0p-zex">
+                                <rect key="frame" x="251" y="10" width="25" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="alignCenter.png"/>
                                 <connections>
-                                    <action selector="onAlignCenterPressed:" destination="-1" eventType="touchUpInside" id="kyS-vd-V01"/>
+                                    <action selector="alignCenterSelected:" destination="-1" eventType="touchUpInside" id="cOL-gA-upn"/>
                                 </connections>
                             </button>
                         </barButtonItem>
                         <barButtonItem style="plain" id="W56-eP-uUq">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="P86-TT-FyK">
-                                <rect key="frame" x="293" y="10" width="25" height="25"/>
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="P86-TT-FyK">
+                                <rect key="frame" x="286" y="10" width="25" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button" image="alignRight.png"/>
                                 <connections>
-                                    <action selector="onAlignRightPressed:" destination="-1" eventType="touchUpInside" id="Tdp-Md-d5R"/>
+                                    <action selector="alignRightSelected:" destination="-1" eventType="touchUpInside" id="9gA-gW-ny2"/>
                                 </connections>
                             </button>
                         </barButtonItem>
                         <barButtonItem style="done" id="Ptn-ZX-18i">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="O2d-8B-KYc">
-                                <rect key="frame" x="328" y="10" width="25" height="25"/>
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="O2d-8B-KYc" userLabel="List Button">
+                                <rect key="frame" x="321" y="2" width="40" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="calendar.png"/>
+                                <state key="normal" image="list.png"/>
                                 <connections>
-                                    <action selector="onSettingsSelected:" destination="-1" eventType="touchUpInside" id="znm-pS-kBI"/>
+                                    <action selector="listSelected:" destination="-1" eventType="touchUpInside" id="aVo-nD-O7A"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -193,7 +186,7 @@
                     <rect key="frame" x="87" y="627" width="33" height="30"/>
                     <state key="normal" title="Lock"/>
                     <connections>
-                        <action selector="onLockClick:" destination="-1" eventType="touchUpInside" id="ufb-Zt-6jD"/>
+                        <action selector="lockSelected:" destination="-1" eventType="touchUpInside" id="iJj-va-l4p"/>
                     </connections>
                 </button>
             </subviews>
@@ -227,6 +220,6 @@
         <image name="alignCenter.png" width="128" height="128"/>
         <image name="alignLeft.png" width="128" height="128"/>
         <image name="alignRight.png" width="128" height="128"/>
-        <image name="calendar.png" width="128" height="128"/>
+        <image name="list.png" width="128" height="128"/>
     </resources>
 </document>

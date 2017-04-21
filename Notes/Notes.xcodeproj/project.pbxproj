@@ -13,7 +13,6 @@
 		1D07C0DC1E9251F900E85CAF /* list.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D07C0D61E9251F900E85CAF /* list.png */; };
 		1D24062D1EA63787002CE71B /* alignCenter.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D24062C1EA63787002CE71B /* alignCenter.png */; };
 		1D24063A1EA74A0C002CE71B /* alignRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D2406371EA74A0C002CE71B /* alignRight.png */; };
-		1D24063B1EA74A0C002CE71B /* calendar.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D2406381EA74A0C002CE71B /* calendar.png */; };
 		1D24063C1EA74A0C002CE71B /* alignLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D2406391EA74A0C002CE71B /* alignLeft.png */; };
 		1D2406421EA76C27002CE71B /* TagsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D2406411EA76C27002CE71B /* TagsParser.m */; };
 		1D2406451EA76E04002CE71B /* ExpandingButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D2406441EA76E04002CE71B /* ExpandingButton.m */; };
@@ -60,6 +59,7 @@
 		B5EFB3651E8CFFD80024C211 /* NotesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB3641E8CFFD80024C211 /* NotesTests.m */; };
 		B5EFB3701E8CFFD80024C211 /* NotesUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB36F1E8CFFD80024C211 /* NotesUITests.m */; };
 		B5EFB37E1E8D006F0024C211 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5EFB37D1E8D006F0024C211 /* ViewController.xib */; };
+		B5F0A5C31EAA1A4000437525 /* reminder.png in Resources */ = {isa = PBXBuildFile; fileRef = B5F0A5C21EAA1A4000437525 /* reminder.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,7 +87,6 @@
 		1D24062C1EA63787002CE71B /* alignCenter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alignCenter.png; sourceTree = "<group>"; };
 		1D2406351EA66981002CE71B /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		1D2406371EA74A0C002CE71B /* alignRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alignRight.png; sourceTree = "<group>"; };
-		1D2406381EA74A0C002CE71B /* calendar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = calendar.png; sourceTree = "<group>"; };
 		1D2406391EA74A0C002CE71B /* alignLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alignLeft.png; sourceTree = "<group>"; };
 		1D2406401EA76C27002CE71B /* TagsParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagsParser.h; sourceTree = "<group>"; };
 		1D2406411EA76C27002CE71B /* TagsParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagsParser.m; sourceTree = "<group>"; };
@@ -161,6 +160,7 @@
 		B5EFB36F1E8CFFD80024C211 /* NotesUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotesUITests.m; sourceTree = "<group>"; };
 		B5EFB3711E8CFFD80024C211 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B5EFB37D1E8D006F0024C211 /* ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
+		B5F0A5C21EAA1A4000437525 /* reminder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reminder.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -210,7 +210,6 @@
 			isa = PBXGroup;
 			children = (
 				1D2406371EA74A0C002CE71B /* alignRight.png */,
-				1D2406381EA74A0C002CE71B /* calendar.png */,
 				1D2406391EA74A0C002CE71B /* alignLeft.png */,
 				1D24062C1EA63787002CE71B /* alignCenter.png */,
 				1D07C0D41E9251F900E85CAF /* camera.png */,
@@ -227,6 +226,7 @@
 				B5E8ABEF1E97B1F600964B3C /* settings.png */,
 				B5A4A2AC1EA64B0C00F7EC9D /* close.png */,
 				B580EF471EA755CD0097C69D /* check.png */,
+				B5F0A5C21EAA1A4000437525 /* reminder.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -513,11 +513,11 @@
 				B580EF481EA755CD0097C69D /* check.png in Resources */,
 				1D24063A1EA74A0C002CE71B /* alignRight.png in Resources */,
 				B5E8ABEA1E967F0600964B3C /* eraser.png in Resources */,
-				1D24063B1EA74A0C002CE71B /* calendar.png in Resources */,
 				B534C4541E8D433300AD25F6 /* TableViewCell.xib in Resources */,
 				B53CB76D1E95379B009DFF27 /* facebook.png in Resources */,
 				B526CB5A1E939E4C00FF4FA8 /* LeftPanelViewController.xib in Resources */,
 				B5A4A29D1EA6119500F7EC9D /* NotebookCell.xib in Resources */,
+				B5F0A5C31EAA1A4000437525 /* reminder.png in Resources */,
 				B5EFB37E1E8D006F0024C211 /* ViewController.xib in Resources */,
 				B5E8ABF01E97B1F600964B3C /* settings.png in Resources */,
 				1D352FC71E9F9FC500F0C7A0 /* DatePickerViewController.xib in Resources */,

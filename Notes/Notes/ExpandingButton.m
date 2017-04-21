@@ -33,6 +33,7 @@
     button.layer.borderWidth = 1;
     button.layer.borderColor = [UIColor colorWithRed:red green:green blue:blue alpha:1].CGColor;
     button.clipsToBounds = YES;
+    [button setBackgroundColor:[self.themeManager.styles objectForKey:BUTTONS_BACKGROUND_COLOR]];
     [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
     [button setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
     [self.buttons addObject:button];

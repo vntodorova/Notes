@@ -73,6 +73,7 @@
 #define TABLEVIEW_CELL_COLOR @"TableViewCellColor"
 #define BACKGROUND_COLOR @"BackgroundColor"
 #define NAVIGATION_BAR_COLOR @"NavigationBarColor"
+#define BUTTONS_BACKGROUND_COLOR @"ButtonsBackgroundColor"
 #define TINT @"Tint"
 #define ALERTCONTROLLER_TINT @"AlertControllerTint"
 #define CAMERA_IMAGE @"camera"
@@ -81,6 +82,7 @@
 #define LIGHT_THEME @"light"
 #define DARK_THEME @"dark"
 #define THEME_KEY @"theme"
+#define REMINDER_IMAGE @"reminder"
 
 #pragma mark -
 #pragma mark NoteCreationController
@@ -102,7 +104,6 @@
 #define TOOLBAR_ALIGN_CENTER_IMAGE @"alignCenter"
 #define TOOLBAR_ALIGN_RIGHT_IMAGE @"alignLeft"
 #define TOOLBAR_ALIGN_LEFT_IMAGE @"alignRight"
-#define TOOLBAR_CALENDAR_IMAGE @"calendar"
 #define ALERT_INPUT_DIALOG_TITLE @"Create new"
 #define ALERT_INPUT_DIALOG_MESSAGE @"Enter a name"
 #define ALERT_INPUT_DIALOG_CONFIRM_BUTTON_NAME @"OK"

@@ -13,24 +13,24 @@
 
 @class LocalNoteManager;
 
-@interface NoteCreationController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIPopoverPresentationControllerDelegate, DatePickerDelegate, DrawingDelegate>
-- (IBAction)onLockClick:(id)sender;
+@interface NoteCreationController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, DatePickerDelegate, DrawingDelegate>
+- (IBAction)lockSelected:(id)sender;
 
 - (instancetype)initWithManager:(LocalNoteManager*) manager;
 
-- (IBAction)onAlignRightPressed:(id)sender;
-- (IBAction)onAlignLeftPressed:(id)sender;
-- (IBAction)onAlignCenterPressed:(id)sender;
+- (IBAction)alignRightSelected:(id)sender;
+- (IBAction)alignLeftSelected:(id)sender;
+- (IBAction)alignCenterSelected:(id)sender;
 
-- (IBAction)onOptionsClick:(id)sender;
-- (IBAction)onCreateClick:(id)sender;
+- (IBAction)optionsSelected:(id)sender;
+- (IBAction)createSelected:(id)sender;
 
-- (IBAction)onSettingsSelected:(id)sender;
-- (IBAction)onUnderlineSelected:(id)sender;
-- (IBAction)onItalicStyleSelected:(id)sender;
-- (IBAction)onBoldStyleSelected:(id)sender;
-- (IBAction)onFontSelected:(id)sender;
-- (IBAction)onSizeSelected:(id)sender;
+- (IBAction)listSelected:(id)sender;
+- (IBAction)underlineSelected:(id)sender;
+- (IBAction)italicSelected:(id)sender;
+- (IBAction)boldSelected:(id)sender;
+- (IBAction)fontSelected:(id)sender;
+- (IBAction)sizeSelected:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (weak, nonatomic) IBOutlet ExpandingButton *optionsButton;
