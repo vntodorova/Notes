@@ -45,7 +45,6 @@
 -(instancetype)initWithManager:(LocalNoteManager *)manager
 {
     self = [super self];
-    
     self.manager = manager;
     self.tagsParser = [[TagsParser alloc] init];
     self.fontList = [[NSMutableArray alloc] init];
@@ -168,7 +167,7 @@
 - (void)onListClick
 {
     [self.optionsButton hideOptionsButtons];
-    NSLog(@"List clicked");
+    [self.noteBody stringByEvaluatingJavaScriptFromString:@"'insertHTML', false, '<a>hi<a>'"];
 }
 
 - (void)onCameraClick
@@ -203,8 +202,15 @@
     [self displaySelectableMenuWithButton:sender list:array];
 }
 
+
+- (IBAction)onLockClick:(id)sender
+{
+    [self toggleWebViewForEditing];
+}
+
 - (IBAction)onAlignCenterPressed:(id)sender
 {
+   // [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_CHECKBOX];
     [self alignSelectedTextCenter];
 }
 
@@ -222,7 +228,7 @@
 {
     [self setNoteContent];
     [self.navigationController popViewControllerAnimated:YES];
-    if(![self.startingNoteName isEqualToString:self.note.name])
+    if(![self.startingNoteName isEqualToString:self.note.name] && self.startingNoteName != nil)
     {
         [self.manager renameNote:self.note fromNotebookWithName:self.currentNotebook oldName:self.startingNoteName];
     }
@@ -369,7 +375,7 @@
 }
 
 
--(void) insertImageAtEndOfWebview:(NSString*) imageName
+- (void) insertImageAtEndOfWebview:(NSString*) imageName
 {
     NSMutableString *noteBody = [[NSMutableString alloc]initWithString:[self getNoteBodyHTML]];
     
@@ -380,7 +386,23 @@
     [self refreshWebView:noteBody baseURL:[self.manager getBaseURLforNote:self.note inNotebookWithName:self.currentNotebook]];
 }
 
--(NSString*) getCurrentTime
+- (void)toggleWebViewForEditing
+{
+    NSMutableString *noteBody = [[NSMutableString alloc]initWithString:[self getNoteBodyHTML]];
+    NSRange range = [noteBody rangeOfString:@"contenteditable=\"true\""];
+    if(range.location == NSNotFound)
+    {
+        range = [noteBody rangeOfString:@"contenteditable=\"false\""];
+        [noteBody replaceCharactersInRange:range withString:@"contenteditable=\"true\""];
+    }
+    else
+    {
+        [noteBody replaceCharactersInRange:range withString:@"contenteditable=\"false\""];
+    }
+    [self refreshWebView:noteBody baseURL:[self.manager getBaseURLforNote:self.note inNotebookWithName:self.currentNotebook]];
+}
+
+- (NSString*) getCurrentTime
 {
     DateTimeManager *timeManager = [[DateTimeManager alloc] init];
     return [timeManager getCurrentTime];

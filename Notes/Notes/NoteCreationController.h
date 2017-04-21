@@ -14,6 +14,7 @@
 @class LocalNoteManager;
 
 @interface NoteCreationController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UIPopoverPresentationControllerDelegate, DatePickerDelegate, DrawingDelegate>
+- (IBAction)onLockClick:(id)sender;
 
 - (instancetype)initWithManager:(LocalNoteManager*) manager;
 

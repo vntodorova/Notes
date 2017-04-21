@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -189,6 +189,13 @@
                     <rect key="frame" x="15" y="149" width="345" height="463"/>
                     <color key="backgroundColor" red="0.36078431372549019" green="0.38823529411764707" blue="0.40392156862745099" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </webView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vIT-ga-RsM">
+                    <rect key="frame" x="87" y="627" width="33" height="30"/>
+                    <state key="normal" title="Lock"/>
+                    <connections>
+                        <action selector="onLockClick:" destination="-1" eventType="touchUpInside" id="ufb-Zt-6jD"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
             <constraints>
@@ -202,9 +209,11 @@
                 <constraint firstAttribute="bottom" secondItem="5UX-3b-ySm" secondAttribute="bottom" constant="10" id="du8-Cu-NYa"/>
                 <constraint firstItem="CnX-oi-qcZ" firstAttribute="width" secondItem="Fme-iL-Fez" secondAttribute="width" id="iTL-DB-JIi"/>
                 <constraint firstItem="Udl-bA-HC1" firstAttribute="top" secondItem="CnX-oi-qcZ" secondAttribute="bottom" constant="15" id="jSI-r4-HoZ"/>
+                <constraint firstItem="vIT-ga-RsM" firstAttribute="leading" secondItem="5UX-3b-ySm" secondAttribute="trailing" constant="26" id="khs-TP-42Y"/>
                 <constraint firstItem="JM0-5u-0lL" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="lr1-Gs-QBb"/>
                 <constraint firstItem="5UX-3b-ySm" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="15" id="mZB-qb-uEw"/>
                 <constraint firstItem="Fme-iL-Fez" firstAttribute="top" secondItem="JM0-5u-0lL" secondAttribute="bottom" constant="15" id="mi2-fs-pXq"/>
+                <constraint firstItem="vIT-ga-RsM" firstAttribute="top" secondItem="Udl-bA-HC1" secondAttribute="bottom" constant="15" id="nHP-9z-zHE"/>
                 <constraint firstItem="CnX-oi-qcZ" firstAttribute="leading" secondItem="Fme-iL-Fez" secondAttribute="leading" id="qvY-hA-Yiw"/>
                 <constraint firstItem="JM0-5u-0lL" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="r49-eu-5KL"/>
                 <constraint firstAttribute="trailing" secondItem="0hH-eE-bxj" secondAttribute="trailing" constant="20" id="tsO-xw-29H"/>

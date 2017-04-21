@@ -95,6 +95,7 @@
 #define JS_COMMAND_ALIGN_RIGHT @"document.execCommand(\"justifyRight\")"
 #define JS_COMMAND_ALIGN_LEFT @"document.execCommand(\"justifyLeft\")"
 #define JS_COMMAND_FONT_TYPE @"document.execCommand('fontName', false, '%@')"
+#define JS_COMMAND_CHECKBOX @"document.execCommand('insertHTML', false, ' <input type=\"checkbox\"> <br><br> ')"
 #define JS_COMMAND_FONT_SIZE @"document.execCommand('fontSize', false, '%@')"
 #define ALERT_DIALOG_TITLE @"CHOOSE NOTEBOOK"
 #define ALERT_DIALOG_CANCEL_BUTTON_NAME @"Cancel"
