@@ -39,6 +39,7 @@ static LayoutProvider *sharedInstance = nil;
     if (self) {
         self.dateTimeManager = [[DateTimeManager alloc] init];
         self.themeManager = [ThemeManager sharedInstance];
+        self.screenSize = [UIScreen mainScreen].bounds.size;
     }
     return self;
 }
@@ -69,6 +70,19 @@ static LayoutProvider *sharedInstance = nil;
     cell.cellNote = note;
     cell.nameLabel.textColor = [self.themeManager.styles objectForKey:TINT];
     cell.infoLabel.textColor = [self.themeManager.styles objectForKey:TINT];
+    cell.layer.cornerRadius = 5;
+    cell.layer.masksToBounds = YES;
+    cell.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_CELL_COLOR];
+    return cell;
+}
+
+- (UITableViewCell *)searchResultCellWithNote:(Note *)note notebook:(Notebook *)notebook;
+{
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:SEARCH_RESULT_CELL_ID];
+    cell.textLabel.text = note.name;
+    cell.detailTextLabel.text = notebook.name;
+    cell.textLabel.textColor = [self.themeManager.styles objectForKey:TINT];
+    cell.detailTextLabel.textColor = [self.themeManager.styles objectForKey:TINT];
     cell.layer.cornerRadius = 5;
     cell.layer.masksToBounds = YES;
     cell.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_CELL_COLOR];

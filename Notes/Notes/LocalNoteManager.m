@@ -36,6 +36,20 @@
     return self;
 }
 
+- (Notebook *)notebookContainingNote:(Note *)note
+{
+    for (Notebook *currentNotebook in self.notebookList)
+    {
+        NSArray *notes = [self getNoteListForNotebook:currentNotebook];
+        for (Note *currentNote in notes) {
+            if (currentNote == note) {
+                return currentNotebook;
+            }
+        }
+    }
+    return nil;
+}
+
 - (void)exchangeNoteAtIndex:(NSInteger)firstIndex withNoteAtIndex:(NSInteger)secondIndex fromNotebook:(NSString *)notebookName
 {
     NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName];
@@ -201,6 +215,16 @@
     Notebook *notebook = [self getNotebookWithName:notebookName];
     NSArray *noteList = [self getNoteListForNotebook:notebook];
     return noteList;
+}
+
+- (NSArray<Note *> *)getAllNotes
+{
+    NSMutableArray *allNotes = [[NSMutableArray alloc] init];
+    NSArray *allNotebooks = [self getNotebookList];
+    for (Notebook *currentNotebook in allNotebooks) {
+        [allNotes addObjectsFromArray:[self getNoteListForNotebook:currentNotebook]];
+    }
+    return allNotes;
 }
 
 - (Notebook*) getNotebookWithName:(NSString *) notebookName

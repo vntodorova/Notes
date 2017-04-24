@@ -24,9 +24,13 @@
 @property (nonatomic, strong) ThemeManager *themeManager;
 @property (nonatomic, strong) LeftPanelViewController *leftPanelViewController;
 @property (nonatomic, strong) SettingsPanelViewController *settingsPanelViewController;
+@property (nonatomic, strong) UISearchBar *searchBar;
 @property NSString *currentNotebook;
 @property NSArray<Note *> *notesArray;
 @property UIVisualEffectView *bluredView;
+@property NSMutableArray *filteredNotes;
+@property NSArray *allNotes;
+@property BOOL isSearching;
 @end
 
 @implementation ViewController
@@ -39,6 +43,8 @@
     self.layoutProvider = [LayoutProvider sharedInstance];
     self.noteManager = [[LocalNoteManager alloc] init];
     self.themeManager = [ThemeManager sharedInstance];
+    self.filteredNotes = [[NSMutableArray alloc] init];
+    self.allNotes = [self.noteManager getAllNotes];
     self.currentNotebook = GENERAL_NOTEBOOK_NAME;
     [self createGeneralNotebook];
     [self setupNavigationBar];
@@ -94,9 +100,10 @@
     self.navigationController.topViewController.navigationItem.rightBarButtonItem = rightNavigationBarButton;
     rightNavigationBarButton.enabled = TRUE;
     
-    UISearchBar *searchBar = [[UISearchBar alloc] init];
-    [searchBar setBarStyle:[[self.themeManager.styles objectForKey:SEARCH_BAR] integerValue]];
-    self.navigationController.topViewController.navigationItem.titleView = searchBar;
+    self.searchBar = [[UISearchBar alloc] init];
+    [self.searchBar setBarStyle:[[self.themeManager.styles objectForKey:SEARCH_BAR] integerValue]];
+    self.searchBar.delegate = self;
+    self.navigationController.topViewController.navigationItem.titleView = self.searchBar;
 }
 
 - (void)loadTheme
@@ -119,7 +126,7 @@
 }
 
 - (void)setupSettingsPanel
-{	
+{
     self.settingsPanelViewController = [[SettingsPanelViewController alloc] initWithNibName:SETTINGS_PANEL_NIBNAME bundle:nil manager:self.noteManager];
     self.settingsPanelViewController.delegate = self;
     [self.view addSubview:self.settingsPanelViewController.view];
@@ -184,13 +191,27 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.notesArray count];
+    if(self.isSearching)
+    {
+        return [self.filteredNotes count];
+    }
+    else
+    {
+        return [self.notesArray count];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Note *note = [self.notesArray objectAtIndex:indexPath.row];
-    return [self.layoutProvider newTableViewCell:tableView note:note delegate:self];
+    if(self.isSearching)
+    {
+        Note *note = [self.filteredNotes objectAtIndex:indexPath.row];
+        return [self.layoutProvider searchResultCellWithNote:note notebook:[self.noteManager notebookContainingNote:note]];
+    }
+    else
+    {
+        return [self.layoutProvider newTableViewCell:tableView note:[self.notesArray objectAtIndex:indexPath.row] delegate:self];
+    }
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -203,6 +224,7 @@
 
 - (void)onNoteCreated
 {
+    self.allNotes = [self.noteManager getAllNotes];
     [self reloadTableViewData];
 }
 
@@ -267,6 +289,44 @@
 - (void)tapGestureRecognised:(UITapGestureRecognizer *)tap
 {
     [self hideLeftPanel];
+}
+
+#pragma mark -
+#pragma mark SearchBar delegates
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+    self.isSearching = YES;
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    [self.filteredNotes removeAllObjects];
+    
+    if([searchText length] != 0)
+    {
+        self.isSearching = YES;
+        [self filterNotes];
+    }
+    else
+    {
+        self.isSearching = NO;
+    }
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+}
+
+- (void)filterNotes
+{
+    NSString *searchString = self.searchBar.text;
+    for (Note *currentNote in self.allNotes)
+    {
+        NSString *currentNoteName = currentNote.name;
+        
+        if ([currentNoteName rangeOfString:searchString options:NSCaseInsensitiveSearch].location != NSNotFound)
+        {
+            [self.filteredNotes addObject:currentNote];
+        }
+    }
 }
 
 @end

@@ -29,6 +29,7 @@
 - (UIView *)remindersHeader;
 
 - (TableViewCell *)newTableViewCell:(UITableView *)tableView note:(Note *)note delegate:(id)delegate;
+- (UITableViewCell *)searchResultCellWithNote:(Note *)note notebook:(Notebook *)notebook;
 
 - (EditableNotebookCell *)newEditableCell:(UITableView *)tableView notebook:(Notebook *)notebook delegate:(id)delegate;
 - (NotebookCell *)newCell:(UITableView *)tableView notebook:(Notebook *)notebook notebookSize:(NSInteger)size;
@@ -39,5 +40,7 @@
 - (UIBarButtonItem *)eraserBarButtonWithAction:(SEL)action target:(id)target;
 - (UIBarButtonItem *)penBarButtonWithAction:(SEL)action target:(id)target;
 - (UIBarButtonItem *)colorPickerBarButtonWithAction:(SEL)action target:(id)target;
+
+@property CGSize screenSize;
 
 @end

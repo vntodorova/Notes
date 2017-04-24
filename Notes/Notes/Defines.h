@@ -23,6 +23,7 @@
 #define NOTEBOOK_CELL_ID @"NotebookCell"
 #define EDITABLE_NOTEBOOK_CELL_ID @"EditableNotebookCell"
 #define REMINDER_CELL_ID @"ReminderCell"
+#define SEARCH_RESULT_CELL_ID @"SearchResultCell"
 #define NOTEBOOK_SECTION_NAME @"Notebooks"
 #define REMINDERS_SECTION_NAME @"Reminders"
 #define EDIT_BUTTON_NAME @"Edit"

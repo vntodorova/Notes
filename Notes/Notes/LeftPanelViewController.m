@@ -51,7 +51,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
+    self.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.layoutProvider.screenSize.height);
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onThemeChanged) name:THEME_CHANGED_EVENT object:nil];
     self.isHidden = YES;
 

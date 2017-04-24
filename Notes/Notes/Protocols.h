@@ -24,6 +24,7 @@
 
 - (NSArray<Note *> *)getNoteListForNotebook:(Notebook *)notebook;
 - (NSArray<Note *> *)getNoteListForNotebookWithName:(NSString *)notebookName;
+- (NSArray<Note *> *)getAllNotes;
 
 - (NSURL*) getBaseURLforNote:(Note*) note inNotebook:(Notebook*) notebook;
 - (NSURL*) getBaseURLforNote:(Note*) note inNotebookWithName:(NSString*) notebookName;
@@ -31,25 +32,27 @@
 - (NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebook:(Notebook*) notebook;
 - (NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebookWithName:(NSString*) notebookName;
 
-- (void)renameNotebook:(Notebook*) notebook newName:(NSString*) newName;
-- (void)renameNotebookWithName:(NSString*) oldName newName:(NSString*) newName;
+- (void)renameNote:(Note *)note fromNotebook:(Notebook *)notebook oldName:(NSString *)oldName;
+- (void)renameNote:(Note *)note fromNotebookWithName:(NSString *)notebookName oldName:(NSString *)oldName;
 
-- (void)renameNote:(Note*) note fromNotebook:(Notebook*) notebook oldName:(NSString*) oldName;
-- (void)renameNote:(Note*) note fromNotebookWithName:(NSString*) notebookName oldName:(NSString*) oldName;
-
-- (void) deleteTempFolder;
-- (void) createTempFolder;
+- (void)deleteTempFolder;
+- (void)createTempFolder;
 
 - (void)exchangeNoteAtIndex:(NSInteger)firstIndex withNoteAtIndex:(NSInteger)secondIndex fromNotebook:(NSString *)notebookName;
 
+- (Notebook *)notebookContainingNote:(Note *)note;
+
 @end
 
-@protocol NoteBookManagerDelegate
+@protocol NotebookManagerDelegate
 - (void)addNotebook:(Notebook *)newNotebook;
 - (void)addNotebookWithName:(NSString *) notebookName;
 
 - (void)removeNotebook:(Notebook *)notebook;
 - (void)removeNotebookWithName:(NSString *)notebookName;
+
+- (void)renameNotebook:(Notebook*) notebook newName:(NSString*) newName;
+- (void)renameNotebookWithName:(NSString*) oldName newName:(NSString*) newName;
 
 - (NSArray<Notebook *> *)getNotebookList;
 - (NSArray *) getNotebookNamesList;

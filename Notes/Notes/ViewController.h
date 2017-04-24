@@ -15,7 +15,7 @@
 @class SettingsPanelViewController;
 @class NoteCreationController;
 
-@interface ViewController : UIViewController <UITableViewDataSource,UITableViewDelegate, TableViewCellDelegate, LeftPanelDelegate, UIGestureRecognizerDelegate>
+@interface ViewController : UIViewController <UITableViewDataSource,UITableViewDelegate, TableViewCellDelegate, LeftPanelDelegate, UIGestureRecognizerDelegate, UISearchBarDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 

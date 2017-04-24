@@ -60,6 +60,7 @@
 		B5EFB3701E8CFFD80024C211 /* NotesUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = B5EFB36F1E8CFFD80024C211 /* NotesUITests.m */; };
 		B5EFB37E1E8D006F0024C211 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5EFB37D1E8D006F0024C211 /* ViewController.xib */; };
 		B5F0A5C31EAA1A4000437525 /* reminder.png in Resources */ = {isa = PBXBuildFile; fileRef = B5F0A5C21EAA1A4000437525 /* reminder.png */; };
+		B5F0A5C51EADE7A300437525 /* sync.png in Resources */ = {isa = PBXBuildFile; fileRef = B5F0A5C41EADE7A300437525 /* sync.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -161,6 +162,7 @@
 		B5EFB3711E8CFFD80024C211 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B5EFB37D1E8D006F0024C211 /* ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
 		B5F0A5C21EAA1A4000437525 /* reminder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reminder.png; sourceTree = "<group>"; };
+		B5F0A5C41EADE7A300437525 /* sync.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sync.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -227,6 +229,7 @@
 				B5A4A2AC1EA64B0C00F7EC9D /* close.png */,
 				B580EF471EA755CD0097C69D /* check.png */,
 				B5F0A5C21EAA1A4000437525 /* reminder.png */,
+				B5F0A5C41EADE7A300437525 /* sync.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -517,6 +520,7 @@
 				B53CB76D1E95379B009DFF27 /* facebook.png in Resources */,
 				B526CB5A1E939E4C00FF4FA8 /* LeftPanelViewController.xib in Resources */,
 				B5A4A29D1EA6119500F7EC9D /* NotebookCell.xib in Resources */,
+				B5F0A5C51EADE7A300437525 /* sync.png in Resources */,
 				B5F0A5C31EAA1A4000437525 /* reminder.png in Resources */,
 				B5EFB37E1E8D006F0024C211 /* ViewController.xib in Resources */,
 				B5E8ABF01E97B1F600964B3C /* settings.png in Resources */,

@@ -33,7 +33,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.view.frame.size.height);
+    self.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.layoutProvider.screenSize.height);
     self.pickerView.dataSource = self;
     self.pickerView.delegate = self;
     if([self.themeManager.currentTheme isEqualToString:LIGHT_THEME])
@@ -53,6 +53,7 @@
     self.view.backgroundColor = [self.themeManager.styles objectForKey:BACKGROUND_COLOR];
     [self.view setTintColor:[self.themeManager.styles objectForKey:TINT]];
     [self.textLabel setTextColor:[self.themeManager.styles objectForKey:TINT]];
+    [self.synchronizeLabel setTextColor:[self.themeManager.styles objectForKey:TINT]];
     [self.pickerView reloadAllComponents];
 }
 
@@ -81,6 +82,11 @@
 - (IBAction)cancelButtonClicked:(UIButton *)sender
 {
     [self dismiss];
+}
+
+- (IBAction)synchronize:(UIButton *)sender
+{
+    
 }
 
 #pragma mark -

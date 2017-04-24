@@ -9,8 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "Protocols.h"
 
-@interface LocalNoteManager : NSObject <NoteManagerDelegate, NoteBookManagerDelegate>
-
-
+@interface LocalNoteManager : NSObject <NoteManagerDelegate, NotebookManagerDelegate>
 
 @end
