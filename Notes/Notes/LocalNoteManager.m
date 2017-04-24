@@ -281,6 +281,14 @@
     return baseURL.description;
 }
 
+- (NSString *)saveUIImage:(UIImage *)image withName:(NSString *)imageName forNote:(Note *)note inNotebookWithName:(NSString *)notebookName
+{
+    NSURL *baseURL = [[self getBaseURLforNote:note inNotebookWithName:notebookName] URLByAppendingPathComponent:imageName];
+    NSData *data = UIImagePNGRepresentation(image);
+    [data writeToURL:baseURL atomically:YES];
+    return baseURL.description;
+}
+
 -(NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebook:(Notebook*) notebook;
 {
     return [self saveImage:imageInfo withName:imageName forNote:note  inNotebookWithName:notebook.name];

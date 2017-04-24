@@ -434,7 +434,9 @@
 
 - (void)drawingSavedAsImage:(UIImage *)image
 {
-    NSLog(@"Drawing saved");
+    NSString *imageName = [NSString stringWithFormat:@"%@.png",[self currentTime]];
+    [self.manager saveUIImage:image withName:imageName forNote:self.note inNotebookWithName:self.currentNotebook];
+    [self insertImageAtEndOfWebview:imageName];
 }
 
 #pragma mark -
