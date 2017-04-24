@@ -14,7 +14,6 @@
 @class LocalNoteManager;
 
 @interface NoteCreationController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, DatePickerDelegate, DrawingDelegate>
-- (IBAction)lockSelected:(id)sender;
 
 - (instancetype)initWithManager:(LocalNoteManager*) manager;
 
@@ -24,6 +23,7 @@
 
 - (IBAction)optionsSelected:(id)sender;
 - (IBAction)createSelected:(id)sender;
+- (IBAction)lockSelected:(id)sender;
 
 - (IBAction)listSelected:(id)sender;
 - (IBAction)underlineSelected:(id)sender;

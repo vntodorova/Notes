@@ -26,7 +26,7 @@
 @property (nonatomic, strong) ThemeManager *themeManager;
 
 @property (nonatomic, strong) TagsParser *tagsParser;
-
+@property (nonatomic, strong) NSString *tempNoteReminder;
 @property (nonatomic, strong) NSString *startingNoteName;
 
 @property (nonatomic, assign) int imageIndex;
@@ -157,7 +157,8 @@
     
     for (NSString* currentItem in itemList)
     {
-        [array addObject:[UIAlertAction actionWithTitle:currentItem style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
+        [array addObject:[UIAlertAction actionWithTitle:currentItem style:UIAlertActionStyleDefault
+                                                handler:^(UIAlertAction *action)
                           {
                               [self performSelector:selector withObject:currentItem];
                           }]];
@@ -183,7 +184,7 @@
     
     self.note.tags = [self.tagsParser getTagsFromText:self.noteTags.text];
     self.note.body = [self getNoteBodyHTML];
-    
+    self.note.triggerDate = self.tempNoteReminder;
     self.note.dateCreated = [self currentTime];
 }
 
@@ -410,7 +411,7 @@
 
 - (void)reminderDateSelected:(NSDate *)date
 {
-    self.note.triggerDate = date.description;
+    self.tempNoteReminder = date.description;
 }
 
 - (void)showDatePickerFromButton:(UIButton *)sender
@@ -418,7 +419,7 @@
     DatePickerViewController *datePicker = [[DatePickerViewController alloc] initWithNibName:@"DatePickerViewController" bundle:nil];
     datePicker.delegate = self;
     datePicker.modalPresentationStyle = UIModalPresentationPopover;
-    datePicker.preferredContentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height / 2);
+    datePicker.preferredContentSize = CGSizeMake(500, 300);
     
     UIPopoverPresentationController *popPC = datePicker.popoverPresentationController;
     datePicker.popoverPresentationController.sourceRect = sender.frame;

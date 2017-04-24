@@ -70,8 +70,8 @@
     UIBarButtonItem *eraserToolbarButton = [self.layoutProvider eraserBarButtonWithAction:@selector(eraserButtonPressed) target:self];
     UIBarButtonItem *penToolbarButton = [self.layoutProvider penBarButtonWithAction:@selector(penButtonPressed) target:self];
     UIBarButtonItem *colorToolbarButton = [self.layoutProvider colorPickerBarButtonWithAction:@selector(colorPickerButtonPressed) target:self];
-    NSArray *leftButtonsArray = [NSArray arrayWithObjects:saveToolbarButton, settingsToolbarButton, eraserToolbarButton, penToolbarButton, colorToolbarButton, nil];
-    self.navigationItem.rightBarButtonItems = leftButtonsArray;
+    NSArray *rightButtonsArray = [NSArray arrayWithObjects:saveToolbarButton, settingsToolbarButton, eraserToolbarButton, penToolbarButton, colorToolbarButton, nil];
+    self.navigationItem.rightBarButtonItems = rightButtonsArray;
 }
 
 - (void)setBrushColor:(UIColor *)newColor

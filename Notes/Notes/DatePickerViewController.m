@@ -21,6 +21,7 @@
     self.themeManager = [ThemeManager sharedInstance];
     [self.view setTintColor:[self.themeManager.styles objectForKey:TINT]];
     [self.view setBackgroundColor:[self.themeManager.styles objectForKey:BACKGROUND_COLOR]];
+    [self.view setFrame:CGRectMake(0, 0, 100, 100)];
     [self.datePicker setValue:[self.themeManager.styles objectForKey:TINT] forKey:@"textColor"];
 }
 
