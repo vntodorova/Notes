@@ -14,6 +14,7 @@
 @class LocalNoteManager;
 
 @interface LeftPanelViewController : UIViewController <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate, EditableCellDelegate>
+- (IBAction)onGoogleClick:(id)sender;
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil manager:(LocalNoteManager *)noteManager;
 - (IBAction)settingsButtonClicked:(UIButton *)sender;
@@ -24,7 +25,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *facebookButton;
 @property (weak, nonatomic) IBOutlet UIButton *googleButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) id <LeftPanelDelegate> delegate;
+@property (weak, nonatomic) UIViewController<LeftPanelDelegate>* presentingViewControllerDelegate;
 @property NSMutableDictionary *tableViewDataSource;
 @property BOOL isHidden;
 

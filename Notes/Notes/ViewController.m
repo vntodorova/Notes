@@ -16,6 +16,7 @@
 #import "LocalNoteManager.h"
 #import "ThemeManager.h"
 #import "Note.h"
+#import <ObjectiveDropboxOfficial/ObjectiveDropboxOfficial.h>
 
 @interface ViewController()
 
@@ -40,6 +41,13 @@
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     }
+    
+    [DBClientsManager authorizeFromController:[UIApplication sharedApplication]
+                                   controller:self
+                                      openURL:^(NSURL *url) {
+                                          [[UIApplication sharedApplication] openURL:url];
+                                      }];
+    
     self.layoutProvider = [LayoutProvider sharedInstance];
     self.noteManager = [[LocalNoteManager alloc] init];
     self.themeManager = [ThemeManager sharedInstance];
@@ -118,7 +126,7 @@
 - (void)setupLeftPanel
 {
     self.leftPanelViewController = [[LeftPanelViewController alloc] initWithNibName:LEFT_PANEL_NIBNAME bundle:nil manager:self.noteManager];
-    self.leftPanelViewController.delegate = self;
+    self.leftPanelViewController.presentingViewControllerDelegate = self;
     [self.view addSubview:self.leftPanelViewController.view];
     [self setupBlurView];
     [self.view addSubview:self.bluredView];
@@ -281,6 +289,15 @@
     self.currentNotebook = newNotebookName;
     self.notesArray = [self.noteManager getNoteListForNotebookWithName:self.currentNotebook];
     [self.tableView reloadData];
+}
+
+-(void)authDropbox
+{
+    [DBClientsManager authorizeFromController:[UIApplication sharedApplication]
+                                   controller:self
+                                      openURL:^(NSURL *url) {
+                                          [[UIApplication sharedApplication] openURL:url];
+                                      }];
 }
 
 #pragma mark -

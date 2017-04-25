@@ -11,4 +11,6 @@
 
 @interface LocalNoteManager : NSObject <NoteManagerDelegate, NotebookManagerDelegate>
 
+-(NSString*) getNoteDirectoryPathForNote:(Note*)note inNotebookWithName:(NSString*) notebookName;
+
 @end

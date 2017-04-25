@@ -1,0 +1,15 @@
+PODS:
+  - cloudrail-si-ios-sdk (5.5.0)
+  - ObjectiveDropboxOfficial (3.0.14)
+
+DEPENDENCIES:
+  - cloudrail-si-ios-sdk
+  - ObjectiveDropboxOfficial
+
+SPEC CHECKSUMS:
+  cloudrail-si-ios-sdk: b087213f1d1657ba95788a2ab6593ba7892d3b2e
+  ObjectiveDropboxOfficial: a6e1d97b6a9ec7f0cb41969bf198cf720d579fe5
+
+PODFILE CHECKSUM: 974269e1442ae50c1949a696c1447ac00ff4a0ab
+
+COCOAPODS: 1.2.1

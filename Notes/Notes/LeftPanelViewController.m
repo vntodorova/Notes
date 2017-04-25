@@ -18,6 +18,7 @@
 #import "Note.h"
 #import "EditableNotebookCell.h"
 #import "NotebookCell.h"
+#import "DropboxNoteManager.h"
 
 @interface LeftPanelViewController()
 
@@ -25,6 +26,7 @@
 @property (nonatomic, strong) LayoutProvider *layoutProvider;
 @property (nonatomic, strong) DateTimeManager *dateTimeManager;
 @property (nonatomic, strong) ThemeManager *themeManager;
+@property (nonatomic, strong) DropboxNoteManager *dropboxNoteManager;
 
 @property BOOL sectionEditingMode;
 @property EditableNotebookCell *cellForDeleting;
@@ -34,6 +36,11 @@
 @end
 
 @implementation LeftPanelViewController
+
+- (IBAction)onGoogleClick:(id)sender
+{
+    [self.dropboxNoteManager synchFiles];
+}
 
 -(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil manager:(LocalNoteManager *)noteManager
 {
@@ -45,6 +52,7 @@
         self.dateTimeManager = [[DateTimeManager alloc] init];
         self.layoutProvider = [LayoutProvider sharedInstance];
         self.themeManager = [ThemeManager sharedInstance];
+        self.dropboxNoteManager = [[DropboxNoteManager alloc] initWithController:self manager:self.noteManager];
     }
     return self;
 }
@@ -108,8 +116,8 @@
 - (void)notebookClickedOnIndexPath:(NSIndexPath *)indexPath
 {
     Notebook *clickedNotebook = [[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] objectAtIndex:indexPath.row];
-    [self.delegate changeCurrentNotebook:clickedNotebook.name];
-    [self.delegate hideLeftPanel];
+    [self.presentingViewControllerDelegate changeCurrentNotebook:clickedNotebook.name];
+    [self.presentingViewControllerDelegate hideLeftPanel];
 }
 
 #pragma mark -
@@ -117,7 +125,7 @@
 
 - (IBAction)settingsButtonClicked:(UIButton *)sender
 {
-    [self.delegate showSettings];
+    [self.presentingViewControllerDelegate showSettings];
 }
 
 - (void)enterEditingMode
@@ -248,7 +256,7 @@
 
 - (void)panEnded:(UIPanGestureRecognizer *)pan
 {
-    [self.delegate hideLeftPanel];
+    [self.presentingViewControllerDelegate hideLeftPanel];
 }
 
 #pragma mark -

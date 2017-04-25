@@ -69,6 +69,9 @@
 - (void)hideLeftPanel;
 - (void)showSettings;
 - (void)changeCurrentNotebook:(NSString *)newNotebookName;
+
+//TODO: testing
+-(void)authDropbox;
 @end
 
 @protocol EditableCellDelegate
