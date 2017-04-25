@@ -19,8 +19,8 @@
 
 @interface NoteCreationController ()
 
-@property (nonatomic, strong) NSMutableArray *fontList;
-@property (nonatomic, strong) NSMutableArray *textSizeList;
+@property (nonatomic, strong) NSArray *fontList;
+@property (nonatomic, strong) NSArray *textSizeList;
 @property (nonatomic, strong) NSMutableArray *noteBookList;
 @property (nonatomic, strong) LocalNoteManager *manager;
 @property (nonatomic, strong) ThemeManager *themeManager;
@@ -29,8 +29,8 @@
 @property (nonatomic, strong) NSString *tempNoteReminder;
 @property (nonatomic, strong) NSString *startingNoteName;
 
-@property (nonatomic, assign) int imageIndex;
-@property (nonatomic, assign) BOOL isNoteNew;
+@property BOOL keyboardIsShown;
+@property CGRect keyboardFrame;
 @end
 
 @implementation NoteCreationController
@@ -41,10 +41,9 @@
     self = [super self];
     self.manager = manager;
     self.tagsParser = [[TagsParser alloc] init];
-    self.fontList = [[NSMutableArray alloc] init];
-    self.textSizeList = [[NSMutableArray alloc] init];
+    self.fontList = [[NSArray alloc] initWithObjects:TIMES_NEW_ROMAN, ARIAL, FUTURA, VERDANA, nil];
+    self.textSizeList = [[NSArray alloc] initWithObjects:@"10", @"11", @"12", @"13", @"14", nil];
     self.themeManager = [ThemeManager sharedInstance];
-    self.imageIndex = 0;
     return self;
 }
 
@@ -52,8 +51,6 @@
 {
     [super viewDidLoad];
     [self loadTheme];
-    [self inflateFontsList];
-    [self inflateTextSizeList];
     [self deleteTempFolder];
     [self createTempFolder];
     [self loadHTML];
@@ -61,6 +58,21 @@
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc]
                                      initWithTarget:self
                                      action:@selector(dismissKeyboard)]];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+}
+
+-(void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [self dismissKeyboard];
 }
 
 #pragma mark -
@@ -68,27 +80,10 @@
 
 - (void)loadTheme
 {
-    self.view.tintColor = [self.themeManager.styles objectForKey:TINT];
-    self.view.backgroundColor = [self.themeManager.styles objectForKey:BACKGROUND_COLOR];
-    self.toolbar.barTintColor = [self.themeManager.styles objectForKey:NAVIGATION_BAR_COLOR];
-    self.optionsButton.tintColor = [self.themeManager.styles objectForKey:TINT];
-}
-
-- (void)inflateFontsList
-{
-    [self.fontList addObject:@"Times New Roman"];
-    [self.fontList addObject:@"Arial"];
-    [self.fontList addObject:@"Futura"];
-    [self.fontList addObject:@"Verdana"];
-}
-
-- (void)inflateTextSizeList
-{
-    [self.textSizeList addObject:@"10"];
-    [self.textSizeList addObject:@"11"];
-    [self.textSizeList addObject:@"12"];
-    [self.textSizeList addObject:@"13"];
-    [self.textSizeList addObject:@"14"];
+    [self.view setTintColor:[self.themeManager.styles objectForKey:TINT]];
+    [self.view setBackgroundColor:[self.themeManager.styles objectForKey:BACKGROUND_COLOR]];
+    [self.toolbar setBarTintColor:[self.themeManager.styles objectForKey:NAVIGATION_BAR_COLOR]];
+    [self.optionsButton setTintColor:[self.themeManager.styles objectForKey:TINT]];
 }
 
 - (void)setupOptionsButton
@@ -113,16 +108,14 @@
 {
     if(self.note.name.length > 0)
     {
-        self.startingNoteName = self.note.name;
-        self.isNoteNew = NO;
+        [self setStartingNoteName:self.note.name];
         [self loadSavedHtml];
-        self.noteName.text = self.note.name;
-        self.noteTags.text = [self.tagsParser buildTextFromTags:self.note.tags];
+        [self.noteName setText:self.note.name];
+        [self.noteTags setText:[self.tagsParser buildTextFromTags:self.note.tags]];
         [self.createButton setTitle:REDACTATION_BUTTON_NAME forState:UIControlStateNormal];
     }
     else
     {
-        self.isNoteNew = YES;
         [self loadNoteTemplateHTML];
     }
 }
@@ -198,17 +191,17 @@
 
 - (IBAction)alignCenterSelected:(id)sender
 {
-    [self alignSelectedTextCenter];
+    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_ALIGN_CENTER];
 }
 
 - (IBAction)alignRightSelected:(id)sender
 {
-    [self alignSelectedTextRight];
+    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_ALIGN_RIGHT];
 }
 
 - (IBAction)alignLeftSelected:(id)sender
 {
-    [self alignSelectedTextLeft];
+    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_ALIGN_LEFT];
 }
 
 - (IBAction)listSelected:(id)sender
@@ -218,17 +211,17 @@
 
 - (IBAction)underlineSelected:(id)sender
 {
-    [self applyUnderlineOnSelectedText];
+    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_UNDERLINE];
 }
 
 - (IBAction)italicSelected:(id)sender
 {
-    [self applyItalicOnSelectedText];
+    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_ITALIC];
 }
 
 - (IBAction)boldSelected:(id)sender
 {
-    [self applyBoldOnSelectedText];
+    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_BOLD];
 }
 
 - (IBAction)fontSelected:(id)sender
@@ -260,7 +253,7 @@
 }
 
 #pragma mark -
-#pragma mark Options buttons
+#pragma mark Hidden buttons
 
 - (IBAction)optionsSelected:(id)sender
 {
@@ -296,36 +289,6 @@
 
 #pragma mark -
 #pragma mark Webview editing methods
-
-- (void)alignSelectedTextCenter
-{
-    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_ALIGN_CENTER];
-}
-
-- (void)alignSelectedTextRight
-{
-    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_ALIGN_RIGHT];
-}
-
-- (void)alignSelectedTextLeft
-{
-    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_ALIGN_LEFT];
-}
-
-- (void)applyUnderlineOnSelectedText
-{
-    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_UNDERLINE];
-}
-
-- (void)applyBoldOnSelectedText
-{
-    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_BOLD];
-}
-
-- (void)applyItalicOnSelectedText
-{
-    [self.noteBody stringByEvaluatingJavaScriptFromString:JS_COMMAND_ITALIC];
-}
 
 - (void)insertImageAtEndOfWebview:(NSString *)imageName
 {
@@ -506,6 +469,32 @@
     popPresenter.sourceView = button;
     popPresenter.sourceRect = button.bounds;
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+#pragma mark -
+#pragma mark Keyboard notifications
+
+- (void)keyboardDidShow:(NSNotification *)notification
+{
+    if(!self.keyboardIsShown)
+    {
+        self.keyboardFrame = [[[notification userInfo] valueForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+        CGRect viewFrame = self.view.frame;
+        viewFrame.size.height -= self.keyboardFrame.size.height;
+        self.view.frame = viewFrame;
+    }
+    self.keyboardIsShown = YES;
+}
+
+- (void)keyboardDidHide:(NSNotification *)notification
+{
+    if(self.keyboardIsShown)
+    {
+        CGRect viewFrame = self.view.frame;
+        viewFrame.size.height += self.keyboardFrame.size.height;
+        self.view.frame = viewFrame;
+    }
+    self.keyboardIsShown = NO;
 }
 
 @end

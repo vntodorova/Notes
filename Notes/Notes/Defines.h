@@ -87,6 +87,10 @@
 
 #pragma mark -
 #pragma mark NoteCreationController
+#define TIMES_NEW_ROMAN @"Times New Roman"
+#define ARIAL @"Arial"
+#define FUTURA @"Futura"
+#define VERDANA @"Verdana"
 #define UNNAMED_NOTE @"Unnamed"
 #define DEFAULT_IMAGE_HTML @"<img src=\"%@\" alt=\"\" style=\"width:150;height:150;\">"
 #define REDACTATION_BUTTON_NAME @"Save"
