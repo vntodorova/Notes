@@ -11,7 +11,7 @@
 
 @implementation TagsParser
 
-- (NSArray *)getTagsFromText:(NSString *) tagsText
+- (NSArray *)getTagsFromText:(NSString *)tagsText
 {
     NSArray *tagList;
     NSCharacterSet *setOfIndicators = [NSCharacterSet characterSetWithCharactersInString:TAG_SEPARATION_INDICATORS];
@@ -29,7 +29,7 @@
     return clearTagList;
 }
 
-- (NSString *) buildTextFromTags:(NSArray *)tagsList
+- (NSString *)buildTextFromTags:(NSArray *)tagsList
 {
     NSMutableString *tagsText = [[NSMutableString alloc] init];
     for(NSString *tag in tagsList)

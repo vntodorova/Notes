@@ -32,7 +32,7 @@
     return self;
 }
 
--(void) deleteItemAtPath:(NSString*) path
+- (void)deleteItemAtPath:(NSString *)path
 {
     NSError *error;
     BOOL isSuccessful = [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
@@ -45,31 +45,31 @@
     }
 }
 
--(NSString*) getTempDirectoryPath
+- (NSString *)getTempDirectoryPath
 {
     return [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
             stringByAppendingPathComponent:TEMP_FOLDER];
 }
 
--(NSString*) getNotebooksRootDirectoryPath
+- (NSString *)getNotebooksRootDirectoryPath
 {
     return [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
             stringByAppendingPathComponent: NOTE_NOTEBOOKS_FOLDER];
 }
 
--(NSString*) getDirectoryPathForNotebookWithName: (NSString*) notebookName
+- (NSString *)getDirectoryPathForNotebookWithName: (NSString*) notebookName
 {
     return [[self getNotebooksRootDirectoryPath]
             stringByAppendingPathComponent:notebookName];
 }
 
--(NSString*) getNoteDirectoryPathForNote:(Note*)note inNotebookWithName:(NSString*) notebookName
+- (NSString *)getNoteDirectoryPathForNote:(Note *)note inNotebookWithName:(NSString *)notebookName
 {
     return [[self getDirectoryPathForNotebookWithName:notebookName]
             stringByAppendingPathComponent:note.name];
 }
 
-- (void) saveToDisk:(Note *)newNote toNotebook:(NSString *)notebookName
+- (void)saveToDisk:(Note *)newNote toNotebook:(NSString *)notebookName
 {
     NSString *noteRoot = [self getNoteDirectoryPathForNote:newNote inNotebookWithName:notebookName];
     
@@ -80,10 +80,10 @@
     [self saveData:newNote.dateCreated                              toFile:[noteRoot stringByAppendingPathComponent:NOTE_DATE_FILE]];
     [self saveData:newNote.triggerDate                              toFile:[noteRoot stringByAppendingPathComponent:NOTE_TRIGGER_DATE_FILE]];
     
-    [self coppyFilesFromSource:[self getTempDirectoryPath] toDestination:noteRoot];
+    [self copyFilesFromSource:[self getTempDirectoryPath] toDestination:noteRoot];
 }
 
--(void) coppyFilesFromSource:(NSString*)source toDestination:(NSString*) destination
+- (void)copyFilesFromSource:(NSString *)source toDestination:(NSString *)destination
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSEnumerator *directoryContents = [self getEnumeratorForDir:source];
@@ -101,13 +101,13 @@
     }
 }
 
--(void) saveData:(NSString*) fileContent toFile:(NSString*) path
+- (void)saveData:(NSString *)fileContent toFile:(NSString *)path
 {
     NSError *error;
     [fileContent writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error];
 }
 
--(void) createDirectoryAtPath:(NSString*) path
+- (void)createDirectoryAtPath:(NSString *)path
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if([fileManager fileExistsAtPath:path isDirectory:nil])
@@ -120,7 +120,7 @@
     }
 }
 
--(void) createFoldarAtPath:(NSString*) path
+- (void)createFoldarAtPath:(NSString *)path
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     [fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
@@ -195,7 +195,7 @@
     return note;
 }
 
-- (NSString*)loadDataFromFilePath:(NSString*) path
+- (NSString *)loadDataFromFilePath:(NSString *)path
 {
     NSError *error;
     NSString *fileContents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
@@ -227,12 +227,12 @@
     [self deleteItemAtPath:path];
 }
 
-- (void)renameNote:(Note*) note fromNotebook:(Notebook*) notebook oldName:(NSString*) oldName
+- (void)renameNote:(Note *)note fromNotebook:(Notebook*) notebook oldName:(NSString*) oldName
 {
     [self renameNote:note fromNotebookWithName:notebook.name oldName:oldName];
 }
 
-- (void)renameNote:(Note*) note fromNotebookWithName:(NSString*) notebookName oldName:(NSString*) oldName
+- (void)renameNote:(Note *)note fromNotebookWithName:(NSString *)notebookName oldName:(NSString *)oldName
 {
     Note *dummyNote = [[Note alloc] init];
     dummyNote.name = oldName;
@@ -246,13 +246,13 @@
 #pragma mark -
 #pragma mark Notebook manager delegate
 
-- (void)addNotebook:(Notebook *) newNotebook
+- (void)addNotebook:(Notebook *)newNotebook
 {
     NSString *notebookPath = [self getDirectoryPathForNotebookWithName:newNotebook.name];
     [self createDirectoryAtPath:notebookPath];
 }
 
-- (void)addNotebookWithName:(NSString *) notebookName
+- (void)addNotebookWithName:(NSString *)notebookName
 {
     Notebook *notebook = [[Notebook alloc] initWithName:notebookName];
     [self addNotebook:notebook];
@@ -269,24 +269,24 @@
     [self deleteItemAtPath:notebookPath];
 }
 
-- (void)renameNotebook:(Notebook*) notebook newName:(NSString*) newName
+- (void)renameNotebook:(Notebook *)notebook newName:(NSString *)newName
 {
     [self renameNotebookWithName:notebook.name newName:newName];
 }
 
-- (void)renameNotebookWithName:(NSString*) oldName newName:(NSString*) newName
+- (void)renameNotebookWithName:(NSString *)oldName newName:(NSString *)newName
 {
     NSString *pathToNotebook = [self getDirectoryPathForNotebookWithName:oldName];
     NSString *newPath = [[pathToNotebook stringByDeletingLastPathComponent] stringByAppendingPathComponent:newName];
     [[NSFileManager defaultManager] moveItemAtPath:pathToNotebook toPath:newPath error:nil];
 }
 
-- (NSArray<Note *> *)getNoteListForNotebook:(Notebook *)notebook
+- (NSArray *)getNoteListForNotebook:(Notebook *)notebook
 {
     return [self getNoteListForNotebookWithName:notebook.name];
 }
 
-- (NSArray<Note *> *)getNoteListForNotebookWithName:(NSString *)notebookName
+- (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
 {
     return [self loadNotesForNotebookWithName:notebookName];
 }

@@ -63,7 +63,6 @@
         }
         [self synchronizeNotesInNotebook:currentNotebook];
     }
-
 }
 
 - (void)synchronizeNotesInNotebook:(Notebook *)notebook
@@ -84,18 +83,18 @@
     }
 }
 
-- (void) removeNotebookFromAllLists:(NSString *) notebookName
+- (void)removeNotebookFromAllLists:(NSString *)notebookName
 {
     [self.notebookDictionary removeObjectForKey:notebookName];
     [self.notebookList removeObject:[self getNotebookWithName:notebookName]];
 }
 
-- (NSArray *) getNotebookNamesList
+- (NSArray *)getNotebookNamesList
 {
     return self.notebookDictionary.allKeys;
 }
 
-- (NSArray<Note *> *)getNoteListForNotebook:(Notebook *)notebook
+- (NSArray *)getNoteListForNotebook:(Notebook *)notebook
 {
     NSArray *array = nil;
     if(notebook)
@@ -133,7 +132,7 @@
     return NO;
 }
 
-- (Notebook*) getNotebookWithName:(NSString *) notebookName
+- (Notebook *)getNotebookWithName:(NSString *)notebookName
 {
     for (Notebook *currentNotebook in self.notebookList)
     {
@@ -251,7 +250,7 @@
     return nil;
 }
 
-- (NSArray<Note *> *)getAllNotes
+- (NSArray *)getAllNotes
 {
     NSMutableArray *allNotes = [[NSMutableArray alloc] init];
     NSArray *allNotebooks = [self getNotebookList];
@@ -261,12 +260,12 @@
     return allNotes;
 }
 
-- (NSURL*) getBaseURLforNote:(Note*) note inNotebook:(Notebook*) notebook
+- (NSURL *)getBaseURLforNote:(Note *)note inNotebook:(Notebook *)notebook
 {
     return [self getBaseURLforNote:note inNotebookWithName:notebook.name];
 }
 
-- (NSURL*) getBaseURLforNote:(Note*) note inNotebookWithName:(NSString*) notebookName
+- (NSURL *)getBaseURLforNote:(Note *)note inNotebookWithName:(NSString *)notebookName
 {
     NSString *loadedFilePath;
     if(note.name.length > 0)
@@ -282,19 +281,19 @@
     return baseURL;
 }
 
-- (NSArray<Notebook *> *)getNotebookList
+- (NSArray *)getNotebookList
 {
     [self.dropboxManager getNotebookList];
     [self.notebookList addObjectsFromArray:[self.localManager getNotebookList]];
     return self.notebookList;
 }
 
--(NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebook:(Notebook*) notebook;
+- (NSString *)saveImage:(NSDictionary *)imageInfo withName:(NSString *)imageName forNote:(Note *)note inNotebook:(Notebook *)notebook;
 {
     return [self saveImage:imageInfo withName:imageName forNote:note  inNotebookWithName:notebook.name];
 }
 
--(NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebookWithName:(NSString*) notebookName
+- (NSString *)saveImage:(NSDictionary *)imageInfo withName:(NSString *)imageName forNote:(Note *)note inNotebookWithName:(NSString *)notebookName
 {
     NSURL *baseURL = [[self getBaseURLforNote:note inNotebookWithName:notebookName] URLByAppendingPathComponent:imageName];
     NSString *mediaType = [imageInfo objectForKey:UIImagePickerControllerMediaType];

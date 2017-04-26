@@ -16,7 +16,7 @@
 
 @implementation DateTimeManager
 
--(instancetype)init
+- (instancetype)init
 {
     self = [super init];
     if(self)
@@ -69,7 +69,7 @@
     return [first compare:second] == NSOrderedDescending;
 };
 
--(NSString*) getCurrentTime
+- (NSString *)getCurrentTime
 {
     return [self.dateFormatter stringFromDate:[NSDate date]];
 }

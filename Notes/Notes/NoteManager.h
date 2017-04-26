@@ -21,17 +21,17 @@
 - (void)exchangeNoteAtIndex:(NSInteger)firstIndex withNoteAtIndex:(NSInteger)secondIndex fromNotebook:(NSString *)notebookName;
 
 - (Notebook *)notebookContainingNote:(Note *)note;
-- (NSArray<Note *> *)getNoteListForNotebook:(Notebook *)notebook;
-- (NSArray<Note *> *)getNoteListForNotebookWithName:(NSString *)notebookName;
-- (NSArray<Note *> *)getAllNotes;
+- (NSArray *)getNoteListForNotebook:(Notebook *)notebook;
+- (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName;
+- (NSArray *)getAllNotes;
 
-- (NSURL*) getBaseURLforNote:(Note*) note inNotebook:(Notebook*) notebook;
-- (NSURL*) getBaseURLforNote:(Note*) note inNotebookWithName:(NSString*) notebookName;
-- (NSArray<Notebook *> *)getNotebookList;
-- (NSArray *) getNotebookNamesList;
+- (NSURL *)getBaseURLforNote:(Note *)note inNotebook:(Notebook *)notebook;
+- (NSURL *)getBaseURLforNote:(Note *)note inNotebookWithName:(NSString *)notebookName;
+- (NSArray *)getNotebookList;
+- (NSArray *)getNotebookNamesList;
 
-- (NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebook:(Notebook*) notebook;
-- (NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebookWithName:(NSString*) notebookName;
+- (NSString *)saveImage:(NSDictionary *)imageInfo withName:(NSString *)imageName forNote:(Note *)note inNotebook:(Notebook *)notebook;
+- (NSString *)saveImage:(NSDictionary *)imageInfo withName:(NSString *)imageName forNote:(Note *)note inNotebookWithName:(NSString *)notebookName;
 - (NSString *)saveUIImage:(UIImage *)image withName:(NSString *)imageName forNote:(Note *)note inNotebookWithName:(NSString *)notebookName;
 
 @end

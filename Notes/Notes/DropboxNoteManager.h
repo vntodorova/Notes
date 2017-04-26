@@ -16,7 +16,7 @@
 
 - (id)initWithManager:(id)manager;
 
-- (void)synchFiles;
+- (void)syncFiles;
 
 @end
 
