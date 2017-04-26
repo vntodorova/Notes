@@ -27,6 +27,9 @@
 - (void)renameNote:(Note *)note fromNotebook:(Notebook *)notebook oldName:(NSString *)oldName;
 - (void)renameNote:(Note *)note fromNotebookWithName:(NSString *)notebookName oldName:(NSString *)oldName;
 
+- (NSArray*) getNotebookList;
+- (NSArray<Note *> *)getNoteListForNotebook:(Notebook *)notebook;
+- (NSArray<Note *> *)getNoteListForNotebookWithName:(NSString *)notebookName;
 @end
 
 @protocol NotebookManagerDelegate

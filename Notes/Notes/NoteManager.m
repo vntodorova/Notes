@@ -36,39 +36,69 @@
         self.notebookDictionary = [[NSMutableDictionary alloc] init];
         self.notebookList = [[NSMutableArray alloc] init];
         self.tagParser = [[TagsParser alloc] init];
-        [self createDirectoryAtPath: [self getNotebooksRootDirectoryPath]];
-        [self loadNotebooks];
     }
     return self;
 }
 
-- (void)loadNotebooks
+- (void) removeNotebookFromAllLists:(NSString *) notebookName
 {
-    NSArray *directoryContents = [self getDirectoryContentForPath: [self getNotebooksRootDirectoryPath]];
-    
-    for(int i = 0; i < directoryContents.count; i++)
-    {
-        Notebook *loadedNotebook = [[Notebook alloc] initWithName:[directoryContents objectAtIndex:i]];
-        BOOL isHidden = [loadedNotebook.name hasPrefix:@"."];
-        if(!isHidden)
-        {
-            [self.notebookList addObject:loadedNotebook];
-            [self.notebookDictionary setObject:[[NSMutableArray alloc]init] forKey:loadedNotebook.name];
-        }
-    }
+    [self.notebookDictionary removeObjectForKey:notebookName];
+    [self.notebookList removeObject:[self getNotebookWithName:notebookName]];
 }
 
-- (void)createDirectoryAtPath:(NSString *)path
+- (NSArray *) getNotebookNamesList
 {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    if([fileManager fileExistsAtPath:path isDirectory:nil])
+    return self.notebookDictionary.allKeys;
+}
+
+- (NSArray<Note *> *)getNoteListForNotebook:(Notebook *)notebook
+{
+    NSArray *array = nil;
+    if(notebook)
     {
-        return;
+        if(!notebook.isLoaded)
+        {
+            NSArray *notes = [self.localManager getNoteListForNotebook:notebook];
+            NSMutableArray *loaddedNotes = [[NSMutableArray alloc] initWithArray:notes];
+            [self.notebookDictionary setObject:loaddedNotes forKey:notebook.name];
+            notebook.isLoaded = YES;
+        }
+        array = [self.notebookDictionary objectForKey:notebook.name];
     }
-    else
+    return array;
+}
+
+- (NSArray<Note *> *)getNoteListForNotebookWithName:(NSString *)notebookName
+{
+    Notebook *notebook = [self getNotebookWithName:notebookName];
+    NSArray *noteList = [self getNoteListForNotebook:notebook];
+    return noteList;
+}
+
+- (BOOL)noteExists:(Note*)newNote inNotebookWithName:(NSString*)notebookName
+{
+    NSMutableArray *noteList = [[NSMutableArray alloc]initWithArray:[self getNoteListForNotebookWithName:notebookName]];
+    for(Note *note in noteList)
     {
-        [self createFoldarAtPath:path];
+        if([note.name isEqualToString:newNote.name])
+        {
+            return YES;
+            break;
+        }
     }
+    return NO;
+}
+
+- (Notebook*) getNotebookWithName:(NSString *) notebookName
+{
+    for (Notebook *currentNotebook in self.notebookList)
+    {
+        if([currentNotebook.name isEqualToString:notebookName])
+        {
+            return currentNotebook;
+        }
+    }
+    return nil;
 }
 
 - (BOOL)networkAvailable
@@ -90,25 +120,6 @@
             stringByAppendingPathComponent: NOTE_NOTEBOOKS_FOLDER];
 }
 
-- (NSMutableArray *)loadNotesForNotebook:(Notebook *)notebook
-{
-    NSString *path = [self getDirectoryPathForNotebookWithName:notebook.name];
-    NSMutableArray<Note*> *array = [[NSMutableArray alloc] init];
-    
-    NSArray *directoryContents = [self getDirectoryContentForPath: path];
-    
-    for(NSString *noteName in directoryContents)
-    {
-        BOOL isHidden = [noteName hasPrefix:@"."];
-        if(!isHidden)
-        {
-            NSString *notePath = [NSString stringWithFormat:@"%@/%@",path, noteName];
-            [array addObject:[self loadNoteWithPath:notePath andName:noteName]];
-        }
-    }
-    return array;
-}
-
 - (NSArray *)getDirectoryContentForPath:(NSString *)path
 {
     NSError *error;
@@ -122,39 +133,6 @@
     }
     
     return content;
-}
-
-- (Note *)loadNoteWithPath:(NSString *)notePath andName:(NSString *)noteName
-{
-    Note *note = [[Note alloc] init];
-    
-    note.name = noteName;
-    note.body = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_BODY_FILE]];
-    note.dateCreated = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_DATE_FILE]];
-    note.triggerDate = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_TRIGGER_DATE_FILE]];
-    
-    NSString *tags = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_TAGS_FILE]];
-    note.tags = [self.tagParser getTagsFromText:tags];
-    return note;
-}
-
-- (NSString *)loadDataFromFilePath:(NSString *)path
-{
-    NSError *error;
-    NSString *fileContents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
-    return fileContents;
-}
-
-- (Notebook*) getNotebookWithName:(NSString *) notebookName
-{
-    for (Notebook *currentNotebook in self.notebookList)
-    {
-        if([currentNotebook.name isEqualToString:notebookName])
-        {
-            return currentNotebook;
-        }
-    }
-    return nil;
 }
 
 - (NSString *)getTempDirectoryPath
@@ -229,29 +207,6 @@
     return nil;
 }
 
-- (NSArray<Note *> *)getNoteListForNotebook:(Notebook *)notebook
-{
-    NSArray *array = nil;
-    if(notebook)
-    {
-        if(!notebook.isLoaded)
-        {
-            NSMutableArray *loaddedNotes = [self loadNotesForNotebook:notebook];
-            [self.notebookDictionary setObject:loaddedNotes forKey:notebook.name];
-            notebook.isLoaded = YES;
-        }
-        array = [self.notebookDictionary objectForKey:notebook.name];
-    }
-    return array;
-}
-
-- (NSArray<Note *> *)getNoteListForNotebookWithName:(NSString *)notebookName
-{
-    Notebook *notebook = [self getNotebookWithName:notebookName];
-    NSArray *noteList = [self getNoteListForNotebook:notebook];
-    return noteList;
-}
-
 - (NSArray<Note *> *)getAllNotes
 {
     NSMutableArray *allNotes = [[NSMutableArray alloc] init];
@@ -285,12 +240,8 @@
 
 - (NSArray<Notebook *> *)getNotebookList
 {
+    [self.notebookList addObjectsFromArray:[self.localManager getNotebookList]];
     return self.notebookList;
-}
-
-- (NSArray *)getNotebookNamesList
-{
-    return self.notebookDictionary.allKeys;
 }
 
 -(NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebook:(Notebook*) notebook;
@@ -333,6 +284,18 @@
 
 - (void)addNote:(Note *)newNote toNotebookWithName:(NSString *)notebookName
 {
+    if(newNote == nil || notebookName == nil)
+    {
+        return;
+    }
+    
+    if(![self noteExists:newNote inNotebookWithName:notebookName])
+    {
+        NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName];
+        
+        [array addObject:newNote];
+    }
+    
     [self.localManager addNote:newNote toNotebookWithName:notebookName];
     if([self networkAvailable])
     {
@@ -343,6 +306,10 @@
 - (void)removeNote:(Note *)note fromNotebook:(Notebook *)notebookName
 {
     [self.localManager removeNote:note fromNotebook:notebookName];
+    
+    NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName.name];
+    [array removeObject:note];
+    
     if([self networkAvailable])
     {
         [self.dropboxManager removeNote:note fromNotebook:notebookName];
@@ -351,6 +318,10 @@
 
 - (void)removeNote:(Note *)note fromNotebookWithName:(NSString *)notebookName
 {
+    if(note == nil || notebookName == nil)
+    {
+        return;
+    }
     [self.localManager removeNote:note fromNotebookWithName:notebookName];
     if([self networkAvailable])
     {
@@ -381,6 +352,14 @@
 
 - (void)addNotebook:(Notebook *)newNotebook
 {
+    if(newNotebook == nil || [self.notebookDictionary objectForKey:newNotebook.name] != nil)
+    {
+        return;
+    }
+    
+    [self.notebookDictionary setObject:[[NSMutableArray alloc] init] forKey:newNotebook.name];
+    [self.notebookList addObject:newNotebook];
+    
     [self.localManager addNotebook:newNotebook];
     if([self networkAvailable])
     {
@@ -408,6 +387,7 @@
 
 - (void)removeNotebookWithName:(NSString *)notebookName
 {
+    [self removeNotebookFromAllLists:notebookName];
     [self.localManager removeNotebookWithName:notebookName];
     if([self networkAvailable])
     {
@@ -426,6 +406,11 @@
 
 - (void)renameNotebookWithName:(NSString *)oldName newName:(NSString *)newName
 {
+    [self.notebookDictionary setObject:[self.notebookDictionary objectForKey:oldName] forKey:newName];
+    [self.notebookDictionary removeObjectForKey:oldName];
+    
+    [self getNotebookWithName:oldName].name = newName;
+    
     [self.localManager renameNotebookWithName:oldName newName:newName];
     if([self networkAvailable])
     {

@@ -15,8 +15,6 @@
 
 @interface LocalNoteManager()
 
-@property NSMutableDictionary<NSString*, NSMutableArray<Note*>*> *notebookDictionary;
-@property NSMutableArray<Notebook*> *notebookList;
 @property TagsParser *tagParser;
 @end
 
@@ -27,73 +25,11 @@
     self = [super init];
     if (self)
     {
-        self.notebookDictionary = [[NSMutableDictionary alloc] init];
-        self.notebookList = [[NSMutableArray alloc] init];
         self.tagParser = [[TagsParser alloc] init];
         [self createDirectoryAtPath: [self getNotebooksRootDirectoryPath]];
         [self loadNotebooks];
     }
     return self;
-}
-
-- (BOOL)noteExists:(Note*)newNote inNotebookWithName:(NSString*)notebookName
-{
-    NSMutableArray *noteList = [[NSMutableArray alloc]initWithArray:[self getNoteListForNotebookWithName:notebookName]];
-    for(Note *note in noteList)
-    {
-        if([note.name isEqualToString:newNote.name])
-        {
-            return YES;
-            break;
-        }
-    }
-    return NO;
-}
-
-- (void) removeNotebookFromAllLists:(NSString *) notebookName
-{
-    [self.notebookDictionary removeObjectForKey:notebookName];
-    [self.notebookList removeObject:[self getNotebookWithName:notebookName]];
-}
-
-- (NSArray *) getNotebookNamesList
-{
-    return self.notebookDictionary.allKeys;
-}
-
-- (NSArray<Note *> *)getNoteListForNotebook:(Notebook *)notebook
-{
-    NSArray *array = nil;
-    if(notebook)
-    {
-        if(!notebook.isLoaded)
-        {
-            NSMutableArray *loaddedNotes = [self loadNotesForNotebook:notebook];
-            [self.notebookDictionary setObject:loaddedNotes forKey:notebook.name];
-            notebook.isLoaded = YES;
-        }
-        array = [self.notebookDictionary objectForKey:notebook.name];
-    }
-    return array;
-}
-
-- (NSArray<Note *> *)getNoteListForNotebookWithName:(NSString *)notebookName
-{
-    Notebook *notebook = [self getNotebookWithName:notebookName];
-    NSArray *noteList = [self getNoteListForNotebook:notebook];
-    return noteList;
-}
-
-- (Notebook*) getNotebookWithName:(NSString *) notebookName
-{
-    for (Notebook *currentNotebook in self.notebookList)
-    {
-        if([currentNotebook.name isEqualToString:notebookName])
-        {
-            return currentNotebook;
-        }
-    }
-    return nil;
 }
 
 -(void) deleteItemAtPath:(NSString*) path
@@ -190,25 +126,25 @@
     [fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
 }
 
-- (void) loadNotebooks
+- (NSArray*) loadNotebooks
 {
     NSArray *directoryContents = [self getDirectoryContentForPath: [self getNotebooksRootDirectoryPath]];
-    
+    NSMutableArray *notebooksList = [[NSMutableArray alloc] init];
     for(int i = 0; i < directoryContents.count; i++)
     {
         Notebook *loadedNotebook = [[Notebook alloc] initWithName:[directoryContents objectAtIndex:i]];
         BOOL isHidden = [loadedNotebook.name hasPrefix:@"."];
         if(!isHidden)
         {
-            [self.notebookList addObject:loadedNotebook];
-            [self.notebookDictionary setObject:[[NSMutableArray alloc]init] forKey:loadedNotebook.name];
+            [notebooksList addObject:loadedNotebook];
         }
     }
+    return notebooksList;
 }
 
-- (NSMutableArray*) loadNotesForNotebook:(Notebook*) notebook
+- (NSMutableArray*) loadNotesForNotebookWithName:(NSString*) notebookName
 {
-    NSString *path = [self getDirectoryPathForNotebookWithName:notebook.name];
+    NSString *path = [self getDirectoryPathForNotebookWithName:notebookName];
     NSMutableArray<Note*> *array = [[NSMutableArray alloc] init];
     
     NSArray *directoryContents = [self getDirectoryContentForPath: path];
@@ -276,18 +212,6 @@
 
 - (void)addNote:(Note *)newNote toNotebookWithName:(NSString *)notebookName
 {
-    if(newNote == nil || notebookName == nil)
-    {
-        return;
-    }
-    
-    if(![self noteExists:newNote inNotebookWithName:notebookName])
-    {
-        NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName];
-        
-        [array addObject:newNote];
-    }
-    
     [self saveToDisk:newNote toNotebook:notebookName];
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_CREATED_EVENT object:nil userInfo:nil];
 }
@@ -299,16 +223,7 @@
 
 - (void)removeNote:(Note *)note fromNotebookWithName:(NSString *)notebookName
 {
-    if(note == nil || notebookName == nil)
-    {
-        return;
-    }
-    
     NSString *path = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
-    
-    NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName];
-    [array removeObject:note];
-    
     [self deleteItemAtPath:path];
 }
 
@@ -333,13 +248,6 @@
 
 - (void)addNotebook:(Notebook *) newNotebook
 {
-    if(newNotebook == nil || [self.notebookDictionary objectForKey:newNotebook.name] != nil)
-    {
-        return;
-    }
-    
-    [self.notebookDictionary setObject:[[NSMutableArray alloc] init] forKey:newNotebook.name];
-    [self.notebookList addObject:newNotebook];
     NSString *notebookPath = [self getDirectoryPathForNotebookWithName:newNotebook.name];
     [self createDirectoryAtPath:notebookPath];
 }
@@ -357,7 +265,6 @@
 
 - (void)removeNotebookWithName:(NSString *)notebookName
 {
-    [self removeNotebookFromAllLists:notebookName];
     NSString *notebookPath = [self getDirectoryPathForNotebookWithName:notebookName];
     [self deleteItemAtPath:notebookPath];
 }
@@ -372,11 +279,20 @@
     NSString *pathToNotebook = [self getDirectoryPathForNotebookWithName:oldName];
     NSString *newPath = [[pathToNotebook stringByDeletingLastPathComponent] stringByAppendingPathComponent:newName];
     [[NSFileManager defaultManager] moveItemAtPath:pathToNotebook toPath:newPath error:nil];
-    
-    [self.notebookDictionary setObject:[self.notebookDictionary objectForKey:oldName] forKey:newName];
-    [self.notebookDictionary removeObjectForKey:oldName];
-    
-    [self getNotebookWithName:oldName].name = newName;
 }
 
+- (NSArray<Note *> *)getNoteListForNotebook:(Notebook *)notebook
+{
+    return [self getNoteListForNotebookWithName:notebook.name];
+}
+
+- (NSArray<Note *> *)getNoteListForNotebookWithName:(NSString *)notebookName
+{
+    return [self loadNotesForNotebookWithName:notebookName];
+}
+
+-(NSArray *)getNotebookList
+{
+    return [self loadNotebooks];
+}
 @end
