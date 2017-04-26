@@ -291,7 +291,7 @@
     [self.tableViewDataSource setObject:[self.noteManager getNotebookList] forKey:NOTEBOOK_KEY];
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:pathForDeleting] withRowAnimation:UITableViewRowAnimationTop];
     [self dismissConfirmationView];
-    [self.delegate changeCurrentNotebook:GENERAL_NOTEBOOK_NAME];
+    [self.presentingViewControllerDelegate changeCurrentNotebook:GENERAL_NOTEBOOK_NAME];
 }
 
 - (void)dismissConfirmationView

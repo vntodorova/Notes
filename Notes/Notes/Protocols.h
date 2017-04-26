@@ -9,6 +9,8 @@
 #ifndef Protocols_h
 #define Protocols_h
 
+#import <UIKit/UIKit.h>
+
 @class Notebook;
 @class Note;
 @class TableViewCell;
@@ -84,6 +86,12 @@
 @protocol DrawingDelegate
 
 - (void)drawingSavedAsImage:(UIImage *)image;
+
+@end
+
+@protocol DatePickerDelegate
+
+-(void) reminderDateSelected:(NSDate* )date;
 
 @end
 

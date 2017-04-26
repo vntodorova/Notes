@@ -43,6 +43,8 @@
 		B5A4A2B21EA64DBF00F7EC9D /* EditableNotebookCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5A4A2B01EA64DBF00F7EC9D /* EditableNotebookCell.xib */; };
 		B5B8FB601E93C35200A82813 /* Notebook.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B8FB5F1E93C35200A82813 /* Notebook.m */; };
 		B5B8FB6D1E94D81D00A82813 /* DateTimeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B8FB6C1E94D81D00A82813 /* DateTimeManager.m */; };
+		B5E3AD2C1EAF838C00552687 /* NoteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E3AD2B1EAF838C00552687 /* NoteManager.m */; };
+		B5E3AD2F1EAF869900552687 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E3AD2E1EAF869900552687 /* Reachability.m */; };
 		B5E8ABDD1E96580900964B3C /* TableViewDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E8ABDC1E96580900964B3C /* TableViewDataModel.m */; };
 		B5E8ABE11E966BA600964B3C /* DrawingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5E8ABDF1E966BA600964B3C /* DrawingViewController.m */; };
 		B5E8ABE21E966BA600964B3C /* DrawingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5E8ABE01E966BA600964B3C /* DrawingViewController.xib */; };
@@ -65,7 +67,6 @@
 		B5F0A5C31EAA1A4000437525 /* reminder.png in Resources */ = {isa = PBXBuildFile; fileRef = B5F0A5C21EAA1A4000437525 /* reminder.png */; };
 		B5F0A5C51EADE7A300437525 /* sync.png in Resources */ = {isa = PBXBuildFile; fileRef = B5F0A5C41EADE7A300437525 /* sync.png */; };
 		DB3D32BCA09A92C149DA27B8 /* Pods_NotesTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40CB34B4BF2772254DB07A72 /* Pods_NotesTests.framework */; };
-
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -144,6 +145,10 @@
 		B5B8FB5F1E93C35200A82813 /* Notebook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Notebook.m; sourceTree = "<group>"; };
 		B5B8FB6B1E94D81D00A82813 /* DateTimeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateTimeManager.h; sourceTree = "<group>"; };
 		B5B8FB6C1E94D81D00A82813 /* DateTimeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateTimeManager.m; sourceTree = "<group>"; };
+		B5E3AD2A1EAF838C00552687 /* NoteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteManager.h; sourceTree = "<group>"; };
+		B5E3AD2B1EAF838C00552687 /* NoteManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteManager.m; sourceTree = "<group>"; };
+		B5E3AD2D1EAF869900552687 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		B5E3AD2E1EAF869900552687 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		B5E8ABDB1E96580900964B3C /* TableViewDataModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewDataModel.h; sourceTree = "<group>"; };
 		B5E8ABDC1E96580900964B3C /* TableViewDataModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewDataModel.m; sourceTree = "<group>"; };
 		B5E8ABDE1E966BA600964B3C /* DrawingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingViewController.h; sourceTree = "<group>"; };
@@ -179,7 +184,6 @@
 		B5F0A5C41EADE7A300437525 /* sync.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sync.png; sourceTree = "<group>"; };
 		DB8C97C0694A1D8551FD3C56 /* Pods_Notes.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Notes.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD1826E711920725E65B62EF /* Pods-NotesTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotesTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NotesTests/Pods-NotesTests.debug.xcconfig"; sourceTree = "<group>"; };
-
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -357,6 +361,10 @@
 				1D2406411EA76C27002CE71B /* TagsParser.m */,
 				B5E8AC3C1E9B9FDE00964B3C /* ThemeManager.h */,
 				B5E8AC3D1E9B9FDE00964B3C /* ThemeManager.m */,
+				B5E3AD2A1EAF838C00552687 /* NoteManager.h */,
+				B5E3AD2B1EAF838C00552687 /* NoteManager.m */,
+				B5E3AD2D1EAF869900552687 /* Reachability.h */,
+				B5E3AD2E1EAF869900552687 /* Reachability.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -741,6 +749,7 @@
 			files = (
 				1D2406451EA76E04002CE71B /* ExpandingButton.m in Sources */,
 				B5A4A29C1EA6119500F7EC9D /* NotebookCell.m in Sources */,
+				B5E3AD2C1EAF838C00552687 /* NoteManager.m in Sources */,
 				B506D9C91E8E3CBB00555F1D /* LayoutProvider.m in Sources */,
 				B5A4A2B11EA64DBF00F7EC9D /* EditableNotebookCell.m in Sources */,
 				B5E8ABDD1E96580900964B3C /* TableViewDataModel.m in Sources */,
@@ -755,6 +764,7 @@
 				B5B8FB6D1E94D81D00A82813 /* DateTimeManager.m in Sources */,
 				B5E8ABE11E966BA600964B3C /* DrawingViewController.m in Sources */,
 				1D4056041E8D1E5000E18D05 /* NoteCreationController.m in Sources */,
+				B5E3AD2F1EAF869900552687 /* Reachability.m in Sources */,
 				1D2406421EA76C27002CE71B /* TagsParser.m in Sources */,
 				B526CB591E939E4C00FF4FA8 /* LeftPanelViewController.m in Sources */,
 				B5E8AC471E9CC41700964B3C /* SettingsPanelViewController.m in Sources */,

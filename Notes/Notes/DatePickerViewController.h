@@ -7,12 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@protocol DatePickerDelegate
-
--(void) reminderDateSelected:(NSDate* )date;
-
-@end
+#import "Protocols.h"
 
 @interface DatePickerViewController : UIViewController
 
