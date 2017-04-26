@@ -40,7 +40,8 @@
 - (IBAction)onGoogleClick:(id)sender
 {
 //    [self.dropboxNoteManager synchFiles];
-    [self.dropboxNoteManager addNotebookWithName:@"DankJorko"];
+//    [self.dropboxNoteManager addNotebookWithName:@"DankJorko"];
+    [self.dropboxNoteManager addNote:[[self.noteManager getAllNotes] objectAtIndex:0] toNotebookWithName:@"4"];
 }
 
 -(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil manager:(NoteManager *)noteManager

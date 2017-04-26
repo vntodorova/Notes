@@ -62,7 +62,7 @@ static NSString *const clientID = GDRIVE_KEY;
 
 -(void)renameNotebookWithName:(NSString *)oldName newName:(NSString *)newName
 {
-    [self renameFolder:oldName newName:newName];
+    [self renameNotebookInDropbox:oldName newName:newName];
 }
 
 -(void)renameNotebook:(Notebook *)notebook newName:(NSString *)newName
@@ -74,7 +74,6 @@ static NSString *const clientID = GDRIVE_KEY;
 -(void)addNote:(Note *)newNote toNotebookWithName:(NSString *)notebookName
 {
     [self uploadNote:newNote inNotebookWithName:notebookName];
-    
 }
 
 -(void)addNote:(Note *)newNote toNotebook:(Notebook *)notebook
@@ -95,12 +94,12 @@ static NSString *const clientID = GDRIVE_KEY;
 
 -(void)renameNote:(Note *)note fromNotebookWithName:(NSString *)notebookName oldName:(NSString *)oldName
 {
-    
+    [self renameNoteInDropbox:note fromNotebookWithName:notebookName oldName:oldName];
 }
 
 -(void)renameNote:(Note *)note fromNotebook:(Notebook *)notebook oldName:(NSString *)oldName
 {
-
+    [self renameNoteInDropbox:note fromNotebookWithName:notebook.name oldName:oldName];
 }
 
 //===============================
@@ -119,10 +118,20 @@ static NSString *const clientID = GDRIVE_KEY;
     [self.client.filesRoutes delete_:path];
 }
 
--(void) renameFolder:(NSString*)oldName newName:(NSString *)newName
+-(void) renameNotebookInDropbox:(NSString*)oldName newName:(NSString *)newName
 {
     NSString *oldPath = [self getDirectoryPathForNotebookWithName:oldName];
     NSString *newPath = [self getDirectoryPathForNotebookWithName:newName];
+    [self.client.filesRoutes dCopy:oldPath toPath:newPath];
+    [self deleteFolderAt:oldPath];
+}
+
+-(void) renameNoteInDropbox:(Note*) note fromNotebookWithName:(NSString*) notebookName oldName:(NSString*)oldName
+{
+    NSString *oldPath = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
+    Note *oldNote = [[Note alloc] init];
+    oldNote.name = oldName;
+    NSString *newPath = [self getNoteDirectoryPathForNote:oldNote inNotebookWithName:notebookName];
     [self.client.filesRoutes dCopy:oldPath toPath:newPath];
     [self deleteFolderAt:oldPath];
 }
