@@ -9,11 +9,12 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "Protocols.h"
+
 @class NoteManager;
 
 @interface DropboxNoteManager : NSObject<UIPopoverPresentationControllerDelegate, NotebookManagerDelegate, NoteManagerDelegate>
 
--(id)initWithManager:(id)manager;
+- (id)initWithManager:(id)manager;
 
 - (void)synchFiles;
 

@@ -126,7 +126,7 @@
     [fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
 }
 
-- (NSArray*) loadNotebooks
+- (NSArray *)loadNotebooks
 {
     NSArray *directoryContents = [self getDirectoryContentForPath: [self getNotebooksRootDirectoryPath]];
     NSMutableArray *notebooksList = [[NSMutableArray alloc] init];
@@ -142,7 +142,7 @@
     return notebooksList;
 }
 
-- (NSMutableArray*) loadNotesForNotebookWithName:(NSString*) notebookName
+- (NSMutableArray *)loadNotesForNotebookWithName:(NSString *)notebookName
 {
     NSString *path = [self getDirectoryPathForNotebookWithName:notebookName];
     NSMutableArray<Note*> *array = [[NSMutableArray alloc] init];
@@ -161,7 +161,7 @@
     return array;
 }
 
--(NSArray*) getDirectoryContentForPath:(NSString*) path
+- (NSArray *)getDirectoryContentForPath:(NSString *)path
 {
     NSError *error;
     NSArray *content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&error];
@@ -176,12 +176,12 @@
     return content;
 }
 
--(NSDirectoryEnumerator*) getEnumeratorForDir:(NSString*) dir
+- (NSDirectoryEnumerator *)getEnumeratorForDir:(NSString *)dir
 {
     return [[NSFileManager defaultManager] enumeratorAtPath:dir];
 }
 
-- (Note*)loadNoteWithPath:(NSString*) notePath andName:(NSString*) noteName
+- (Note *)loadNoteWithPath:(NSString *)notePath andName:(NSString*) noteName
 {
     Note *note = [[Note alloc] init];
     

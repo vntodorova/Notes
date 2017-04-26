@@ -22,7 +22,6 @@
 - (IBAction)cancelButtonClicked:(UIButton *)sender;
 - (IBAction)synchronize:(UIButton *)sender;
 
-@property (weak, nonatomic) IBOutlet UILabel *synchronizeLabel;
 @property (weak, nonatomic) IBOutlet UIPickerView *pickerView;
 @property (weak, nonatomic) IBOutlet UILabel *textLabel;
 @property (nonatomic, weak) id <LeftPanelDelegate> delegate;

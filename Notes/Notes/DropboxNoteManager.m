@@ -18,9 +18,6 @@
 @property DBUserClient *client;
 @end
 
-static NSString *const rederect = @"com.nemetschek.bg.Notes:/oauth2redirect";
-static NSString *const clientID = GDRIVE_KEY;
-
 @implementation DropboxNoteManager
 
 -(id)initWithManager:(id)manager
@@ -142,8 +139,7 @@ static NSString *const clientID = GDRIVE_KEY;
 
 -(NSString*) getDirectoryPathForNotebookWithName: (NSString*) notebookName
 {
-    return [[NSString stringWithFormat:@"/Notebooks"]
-            stringByAppendingPathComponent:notebookName];
+    return [@"/Notebooks" stringByAppendingPathComponent:notebookName];
 }
 
 -(void) synchFiles

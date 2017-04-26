@@ -7,6 +7,7 @@
 //
 
 #import "TagsParser.h"
+#define TAG_SEPARATION_INDICATORS @"# "
 
 @implementation TagsParser
 

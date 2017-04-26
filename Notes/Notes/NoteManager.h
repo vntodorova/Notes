@@ -11,6 +11,8 @@
 
 @interface NoteManager : NSObject <NoteManagerDelegate, NotebookManagerDelegate>
 
+- (void)synchronize;
+
 - (NSString *)getNoteDirectoryPathForNote:(Note *)note inNotebookWithName:(NSString *)notebookName;
 
 - (void)deleteTempFolder;

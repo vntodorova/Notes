@@ -53,7 +53,6 @@
     self.view.backgroundColor = [self.themeManager.styles objectForKey:BACKGROUND_COLOR];
     [self.view setTintColor:[self.themeManager.styles objectForKey:TINT]];
     [self.textLabel setTextColor:[self.themeManager.styles objectForKey:TINT]];
-    [self.synchronizeLabel setTextColor:[self.themeManager.styles objectForKey:TINT]];
     [self.pickerView reloadAllComponents];
 }
 
@@ -86,7 +85,7 @@
 
 - (IBAction)synchronize:(UIButton *)sender
 {
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:SYNCHRONIZATION object:nil userInfo:nil];
 }
 
 #pragma mark -

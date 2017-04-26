@@ -42,6 +42,7 @@
 #define SETTINGS_PANEL_NIBNAME @"SettingsPanelViewController"
 #define GENERAL_NOTEBOOK_NAME @"General"
 #define THEME_CHANGED_EVENT @"ThemeChangedEvent"
+#define SYNCHRONIZATION @"Sync"
 #define LEFT_PANEL_WIDTH 250
 
 #pragma mark -
@@ -114,5 +115,6 @@
 #define ALERT_INPUT_DIALOG_CONFIRM_BUTTON_NAME @"OK"
 #define TEMPLATE_CONTENTS @"<html><body><div id=\"content\" contenteditable=\"true\" style=\"font-family: Helvetica\"></div></body></html>"
 
-#define GDRIVE_KEY @"538442508149-sslbf4n759anofb7p4137i96a3atacpk.apps.googleusercontent.com"
+#define FILE_NOT_FOUND_EXCEPTION @"FileNotFoundException"
+#define DIRECTORY_NOT_FOUND_EXCEPTION @"DirectoryNotFoundException"
 #endif /* Defines_h */

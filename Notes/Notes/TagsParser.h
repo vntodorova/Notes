@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#define TAG_SEPARATION_INDICATORS @"# "
-
 @interface TagsParser : NSObject
 
 - (NSArray *)getTagsFromText:(NSString *) tagsText;

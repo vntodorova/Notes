@@ -20,8 +20,8 @@
 @property (nonatomic, strong) LocalNoteManager *localManager;
 @property (nonatomic, strong) DropboxNoteManager *dropboxManager;
 @property TagsParser *tagParser;
-@property NSMutableDictionary<NSString*, NSMutableArray<Note*>*> *notebookDictionary;
-@property NSMutableArray<Notebook*> *notebookList;
+@property NSMutableDictionary *notebookDictionary;
+@property NSMutableArray *notebookList;
 @end
 
 @implementation NoteManager
@@ -36,8 +36,52 @@
         self.notebookDictionary = [[NSMutableDictionary alloc] init];
         self.notebookList = [[NSMutableArray alloc] init];
         self.tagParser = [[TagsParser alloc] init];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(synchronize) name:SYNCHRONIZATION object:nil];
     }
     return self;
+}
+
+- (void)synchronize
+{
+    NSArray *localNotebooks = [self.localManager getNotebookList];
+    NSArray *dropboxNotebooks = [self.dropboxManager getNotebookList];
+    
+    for (Notebook *currentNotebook in localNotebooks)
+    {
+        if(![dropboxNotebooks containsObject:currentNotebook])
+        {
+            [self.dropboxManager addNotebook:currentNotebook];
+        }
+        [self synchronizeNotesInNotebook:currentNotebook];
+    }
+    
+    for (Notebook *currentNotebook in dropboxNotebooks)
+    {
+        if(![localNotebooks containsObject:currentNotebook])
+        {
+            [self.localManager addNotebook:currentNotebook];
+        }
+        [self synchronizeNotesInNotebook:currentNotebook];
+    }
+
+}
+
+- (void)synchronizeNotesInNotebook:(Notebook *)notebook
+{
+    NSArray *currentNotebookLocalNotes = [self.localManager getNoteListForNotebook:notebook];
+    NSArray *currentNotebookDropboxNotes = [self.dropboxManager getNoteListForNotebook:notebook];
+    for (Note *currentNote in currentNotebookLocalNotes) {
+        if(![currentNotebookDropboxNotes containsObject:currentNote])
+        {
+            [self.dropboxManager addNote:currentNote toNotebook:notebook];
+        }
+    }
+    for (Note *currentNote in currentNotebookDropboxNotes) {
+        if(![currentNotebookLocalNotes containsObject:currentNote])
+        {
+            [self.localManager addNote:currentNote toNotebook:notebook];
+        }
+    }
 }
 
 - (void) removeNotebookFromAllLists:(NSString *) notebookName
@@ -68,14 +112,14 @@
     return array;
 }
 
-- (NSArray<Note *> *)getNoteListForNotebookWithName:(NSString *)notebookName
+- (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
 {
     Notebook *notebook = [self getNotebookWithName:notebookName];
     NSArray *noteList = [self getNoteListForNotebook:notebook];
     return noteList;
 }
 
-- (BOOL)noteExists:(Note*)newNote inNotebookWithName:(NSString*)notebookName
+- (BOOL)noteExists:(Note *)newNote inNotebookWithName:(NSString *)notebookName
 {
     NSMutableArray *noteList = [[NSMutableArray alloc]initWithArray:[self getNoteListForNotebookWithName:notebookName]];
     for(Note *note in noteList)
@@ -127,7 +171,7 @@
     
     if(error)
     {
-        @throw [NSException exceptionWithName:@"DirectoryNotFound"
+        @throw [NSException exceptionWithName:DIRECTORY_NOT_FOUND_EXCEPTION
                                        reason:error.description
                                      userInfo:nil];
     }
@@ -148,7 +192,7 @@
     
     if(!isSuccessful)
     {
-        @throw [NSException exceptionWithName:@"FileNotFoundException"
+        @throw [NSException exceptionWithName:FILE_NOT_FOUND_EXCEPTION
                                        reason:error.description
                                      userInfo:nil];
     }
