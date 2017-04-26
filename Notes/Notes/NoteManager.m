@@ -32,7 +32,7 @@
     if(self)
     {
         self.localManager = [[LocalNoteManager alloc] init];
-        self.dropboxManager = [[DropboxNoteManager alloc] init];
+        self.dropboxManager = [[DropboxNoteManager alloc] initWithManager:self];
         self.notebookDictionary = [[NSMutableDictionary alloc] init];
         self.notebookList = [[NSMutableArray alloc] init];
         self.tagParser = [[TagsParser alloc] init];
@@ -327,7 +327,7 @@
     [self.localManager addNote:newNote toNotebook:notebook];
     if([self networkAvailable])
     {
-        //[self.dropboxManager addNote:newNote toNotebook:notebook];
+        [self.dropboxManager addNote:newNote toNotebook:notebook];
     }
 }
 
@@ -336,7 +336,7 @@
     [self.localManager addNote:newNote toNotebookWithName:notebookName];
     if([self networkAvailable])
     {
-        //[self.dropboxManager addNote:newNote toNotebookWithName:notebookName];
+        [self.dropboxManager addNote:newNote toNotebookWithName:notebookName];
     }
 }
 
@@ -345,7 +345,7 @@
     [self.localManager removeNote:note fromNotebook:notebookName];
     if([self networkAvailable])
     {
-        //[self.dropboxManager removeNote:note fromNotebook:notebookName];
+        [self.dropboxManager removeNote:note fromNotebook:notebookName];
     }
 }
 
@@ -354,7 +354,7 @@
     [self.localManager removeNote:note fromNotebookWithName:notebookName];
     if([self networkAvailable])
     {
-        //[self.dropboxManager removeNote:note fromNotebookWithName:notebookName];
+        [self.dropboxManager removeNote:note fromNotebookWithName:notebookName];
     }
 }
 
@@ -363,7 +363,7 @@
     [self.localManager renameNote:note fromNotebook:notebook oldName:oldName];
     if([self networkAvailable])
     {
-        //[self.dropboxManager renameNote:note fromNotebook:notebook oldName:oldName];
+        [self.dropboxManager renameNote:note fromNotebook:notebook oldName:oldName];
     }
 }
 
@@ -372,7 +372,7 @@
     [self.localManager renameNote:note fromNotebookWithName:notebookName oldName:oldName];
     if([self networkAvailable])
     {
-        //[self.dropboxManager renameNote:note fromNotebookWithName:notebookName oldName:oldName];
+        [self.dropboxManager renameNote:note fromNotebookWithName:notebookName oldName:oldName];
     }
 }
 
@@ -384,7 +384,7 @@
     [self.localManager addNotebook:newNotebook];
     if([self networkAvailable])
     {
-        //[self.dropboxManager addNotebook:newNotebook];
+        [self.dropboxManager addNotebook:newNotebook];
     }
 }
 
@@ -393,7 +393,7 @@
     [self.localManager addNotebookWithName:notebookName];
     if([self networkAvailable])
     {
-        //[self.dropboxManager addNotebookWithName:notebookName];
+        [self.dropboxManager addNotebookWithName:notebookName];
     }
 }
 
@@ -402,7 +402,7 @@
     [self.localManager removeNotebook:notebook];
     if([self networkAvailable])
     {
-        //[self.dropboxManager removeNotebook:notebook];
+        [self.dropboxManager removeNotebook:notebook];
     }
 }
 
@@ -411,7 +411,7 @@
     [self.localManager removeNotebookWithName:notebookName];
     if([self networkAvailable])
     {
-        //[self.dropboxManager removeNotebookWithName:notebookName];
+        [self.dropboxManager removeNotebookWithName:notebookName];
     }
 }
 
@@ -420,7 +420,7 @@
     [self.localManager renameNotebook:notebook newName:newName];
     if([self networkAvailable])
     {
-        //[self.dropboxManager renameNotebook:notebook newName:newName];
+        [self.dropboxManager renameNotebook:notebook newName:newName];
     }
 }
 
@@ -429,7 +429,7 @@
     [self.localManager renameNotebookWithName:oldName newName:newName];
     if([self networkAvailable])
     {
-        //[self.dropboxManager renameNotebookWithName:oldName newName:newName];
+        [self.dropboxManager renameNotebookWithName:oldName newName:newName];
     }
 }
 

@@ -14,7 +14,6 @@
 #import "Note.h"
 
 @interface DropboxNoteManager()
-@property UIViewController *controller;
 @property NoteManager *manager;
 @property DBUserClient *client;
 @end
@@ -24,11 +23,10 @@ static NSString *const clientID = GDRIVE_KEY;
 
 @implementation DropboxNoteManager
 
--(id)initWithController:(UIViewController *)controller manager:(id)manager
+-(id)initWithManager:(id)manager
 {
     self = [super init];
     self.manager = manager;
-    self.controller = controller;
     self.client = [DBClientsManager authorizedClient];
     return self;
 }
@@ -158,7 +156,7 @@ static NSString *const clientID = GDRIVE_KEY;
     NSArray *notebookList = [self.manager getNotebookList];
     for (Notebook *notebook in notebookList)
     {
-        [self synchNoteFoldersForNotebookWithName:notebook];
+        [self synchNoteFoldersForNotebookWithName:notebook.name];
     }
 }
 
@@ -203,48 +201,6 @@ static NSString *const clientID = GDRIVE_KEY;
     }
     
     return content;
-}
-
--(void) handleError: (DBFILESListFolderError *) routeError networkError:(DBRequestError *) networkError
-{
-    NSString *title = @"";
-    NSString *message = @"";
-    if (routeError) {
-        title = @"Route-specific error";
-        if ([routeError isPath]) {
-            message = [NSString stringWithFormat:@"Invalid path: %@", routeError.path];
-        }
-    } else {
-        title = @"Generic request error";
-        if ([networkError isInternalServerError]) {
-            DBRequestInternalServerError *internalServerError = [networkError asInternalServerError];
-            message = [NSString stringWithFormat:@"%@", internalServerError];
-        } else if ([networkError isBadInputError]) {
-            DBRequestBadInputError *badInputError = [networkError asBadInputError];
-            message = [NSString stringWithFormat:@"%@", badInputError];
-        } else if ([networkError isAuthError]) {
-            DBRequestAuthError *authError = [networkError asAuthError];
-            message = [NSString stringWithFormat:@"%@", authError];
-        } else if ([networkError isRateLimitError]) {
-            DBRequestRateLimitError *rateLimitError = [networkError asRateLimitError];
-            message = [NSString stringWithFormat:@"%@", rateLimitError];
-        } else if ([networkError isHttpError]) {
-            DBRequestHttpError *genericHttpError = [networkError asHttpError];
-            message = [NSString stringWithFormat:@"%@", genericHttpError];
-        } else if ([networkError isClientError]) {
-            DBRequestClientError *genericLocalError = [networkError asClientError];
-            message = [NSString stringWithFormat:@"%@", genericLocalError];
-        }
-    }
-    
-    UIAlertController *alertController =
-    [UIAlertController alertControllerWithTitle:title
-                                        message:message
-                                 preferredStyle:(UIAlertControllerStyle)UIAlertControllerStyleAlert];
-    [alertController addAction:[UIAlertAction actionWithTitle:@"OK"
-                                                        style:(UIAlertActionStyle)UIAlertActionStyleCancel
-                                                      handler:nil]];
-    [self.controller presentViewController:alertController animated:YES completion:nil];
 }
 
 @end

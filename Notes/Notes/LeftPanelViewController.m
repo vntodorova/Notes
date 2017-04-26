@@ -26,7 +26,6 @@
 @property (nonatomic, strong) LayoutProvider *layoutProvider;
 @property (nonatomic, strong) DateTimeManager *dateTimeManager;
 @property (nonatomic, strong) ThemeManager *themeManager;
-@property (nonatomic, strong) DropboxNoteManager *dropboxNoteManager;
 
 @property BOOL sectionEditingMode;
 @property EditableNotebookCell *cellForDeleting;
@@ -39,9 +38,7 @@
 
 - (IBAction)onGoogleClick:(id)sender
 {
-//    [self.dropboxNoteManager synchFiles];
-//    [self.dropboxNoteManager addNotebookWithName:@"DankJorko"];
-    [self.dropboxNoteManager addNote:[[self.noteManager getAllNotes] objectAtIndex:0] toNotebookWithName:@"4"];
+
 }
 
 -(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil manager:(NoteManager *)noteManager
@@ -54,7 +51,6 @@
         self.dateTimeManager = [[DateTimeManager alloc] init];
         self.layoutProvider = [LayoutProvider sharedInstance];
         self.themeManager = [ThemeManager sharedInstance];
-        self.dropboxNoteManager = [[DropboxNoteManager alloc] initWithController:self manager:self.noteManager];
     }
     return self;
 }
