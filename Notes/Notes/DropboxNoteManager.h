@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "LocalNoteManager.h"
 
-@interface DropboxNoteManager : NSObject<UIPopoverPresentationControllerDelegate>
+@interface DropboxNoteManager : NSObject<UIPopoverPresentationControllerDelegate, NotebookManagerDelegate, NoteManagerDelegate>
 
 -initWithController:(UIViewController*) controller manager:(LocalNoteManager *) manager;
 

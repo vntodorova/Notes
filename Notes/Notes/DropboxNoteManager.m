@@ -33,20 +33,110 @@ static NSString *const clientID = GDRIVE_KEY;
     return self;
 }
 
--(void)uploadFile
+//===============================
+//========= DELEGATE ============
+//===============================
+
+//------ NOTEBOOKS ------
+-(void)addNotebookWithName:(NSString *)notebookName
 {
-    [[self.client.filesRoutes listFolder:@"/Notebooks"] setResponseBlock:^(DBFILESListFolderResult * _Nullable result, DBFILESListFolderError * _Nullable routeError, DBRequestError * _Nullable networkError) {
-        if (result)
-        {
-            for (DBFILESMetadata *item in result.entries) {
-                NSLog(@"Files in folder %@", item);
-            }
-        }
-        else
-        {
-            [self handleError:routeError networkError:networkError];
-        }
-    }];
+    NSString *notebookPath = [self getDirectoryPathForNotebookWithName:notebookName];
+    [self createFolderAt:notebookPath];
+}
+
+-(void)addNotebook:(Notebook *)newNotebook
+{
+    [self addNotebookWithName:newNotebook.name];
+}
+
+-(void)removeNotebookWithName:(NSString *)notebookName
+{
+    NSString *notebookPath = [self getDirectoryPathForNotebookWithName:notebookName];
+    [self deleteFolderAt:notebookPath];
+}
+
+-(void)removeNotebook:(Notebook *)notebook
+{
+    [self removeNotebookWithName:notebook.name];
+}
+
+-(void)renameNotebookWithName:(NSString *)oldName newName:(NSString *)newName
+{
+    [self renameFolder:oldName newName:newName];
+}
+
+-(void)renameNotebook:(Notebook *)notebook newName:(NSString *)newName
+{
+    [self renameNotebookWithName:notebook.name newName:newName];
+}
+
+//------ NOTES -------
+-(void)addNote:(Note *)newNote toNotebookWithName:(NSString *)notebookName
+{
+    [self uploadNote:newNote inNotebookWithName:notebookName];
+    
+}
+
+-(void)addNote:(Note *)newNote toNotebook:(Notebook *)notebook
+{
+    [self addNote:newNote toNotebookWithName:notebook.name];
+}
+
+-(void)removeNote:(Note *)note fromNotebookWithName:(NSString *)notebookName
+{
+    NSString *notebookPath = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
+    [self deleteFolderAt:notebookPath];
+}
+
+-(void)removeNote:(Note *)note fromNotebook:(Notebook *)notebook
+{
+    [self removeNote:note fromNotebookWithName:notebook.name];
+}
+
+-(void)renameNote:(Note *)note fromNotebookWithName:(NSString *)notebookName oldName:(NSString *)oldName
+{
+    
+}
+
+-(void)renameNote:(Note *)note fromNotebook:(Notebook *)notebook oldName:(NSString *)oldName
+{
+
+}
+
+//===============================
+//======== END DELEGATE =========
+//===============================
+
+//zdr vanka
+
+-(void) createFolderAt:(NSString*)path
+{
+    [self.client.filesRoutes createFolder:path];
+}
+
+-(void) deleteFolderAt:(NSString*)path
+{
+    [self.client.filesRoutes delete_:path];
+}
+
+-(void) renameFolder:(NSString*)oldName newName:(NSString *)newName
+{
+    NSString *oldPath = [self getDirectoryPathForNotebookWithName:oldName];
+    NSString *newPath = [self getDirectoryPathForNotebookWithName:newName];
+    [self.client.filesRoutes dCopy:oldPath toPath:newPath];
+    [self deleteFolderAt:oldPath];
+}
+
+-(NSString*) getNoteDirectoryPathForNote:(Note*)note inNotebookWithName:(NSString*) notebookName
+{
+    return [[self getDirectoryPathForNotebookWithName:notebookName]
+            stringByAppendingPathComponent:note.name];
+}
+
+-(NSString*) getDirectoryPathForNotebookWithName: (NSString*) notebookName
+{
+    return [[NSString stringWithFormat:@"/Notebooks"]
+            stringByAppendingPathComponent:notebookName];
 }
 
 -(void) synchFiles
@@ -59,30 +149,31 @@ static NSString *const clientID = GDRIVE_KEY;
     NSArray *notebookList = [self.manager getNotebookList];
     for (Notebook *notebook in notebookList)
     {
-        [self synchNoteFoldersForNotebook:notebook];
+        [self synchNoteFoldersForNotebookWithName:notebook];
     }
 }
 
--(void) synchNoteFoldersForNotebook:(Notebook*)notebook
+-(void) synchNoteFoldersForNotebookWithName:(NSString*)notebookName
 {
-    NSArray *noteList = [self.manager getNoteListForNotebookWithName:notebook.name];
+    NSArray *noteList = [self.manager getNoteListForNotebookWithName:notebookName];
     for (Note *note in noteList)
     {
-        [self synchFilesForNote:note inNotebook:notebook];
+        [self uploadNote:note inNotebookWithName:notebookName];
     }
 }
+//zdr vanka
 
--(void) synchFilesForNote:(Note*)note inNotebook:(Notebook*) notebook
+-(void) uploadNote:(Note*)note inNotebookWithName:(NSString*) notebookName
 {
     //---- CREATE FOLDER -----
-    NSString *notePathInDropBox = [NSString stringWithFormat:@"/Notebooks/%@/%@", notebook.name, note.name];
-    [self.client.filesRoutes createFolder:notePathInDropBox];
+    NSString *notePathInDropBox = [NSString stringWithFormat:@"/Notebooks/%@/%@", notebookName, note.name];
+    [self createFolderAt:notePathInDropBox];
     
     //---- UPLOAD FILES -----
-    NSArray *filesList = [self getDirectoryContentForPath:[self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebook.name]];
+    NSArray *filesList = [self getDirectoryContentForPath:[self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName]];
     
     for (NSString *fileName in filesList) {
-        NSString *noteFilesPath = [[self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebook.name]
+        NSString *noteFilesPath = [[self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName]
                                    stringByAppendingPathComponent:fileName];
         NSString *dropboxPath = [NSString stringWithFormat:@"%@/%@",notePathInDropBox,fileName];
         NSData *data = [[NSFileManager defaultManager] contentsAtPath:noteFilesPath];
@@ -145,7 +236,6 @@ static NSString *const clientID = GDRIVE_KEY;
                                                         style:(UIAlertActionStyle)UIAlertActionStyleCancel
                                                       handler:nil]];
     [self.controller presentViewController:alertController animated:YES completion:nil];
-
 }
 
 @end
