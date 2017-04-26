@@ -13,7 +13,7 @@
 #import "LayoutProvider.h"
 #import "SettingsPanelViewController.h"
 #import "ThemeManager.h"
-#import "LocalNoteManager.h"
+#import "NoteManager.h"
 #import "Notebook.h"
 #import "Note.h"
 #import "EditableNotebookCell.h"
@@ -22,7 +22,7 @@
 
 @interface LeftPanelViewController()
 
-@property (nonatomic, strong) LocalNoteManager *noteManager;
+@property (nonatomic, strong) NoteManager *noteManager;
 @property (nonatomic, strong) LayoutProvider *layoutProvider;
 @property (nonatomic, strong) DateTimeManager *dateTimeManager;
 @property (nonatomic, strong) ThemeManager *themeManager;
@@ -43,7 +43,7 @@
     [self.dropboxNoteManager addNotebookWithName:@"DankJorko"];
 }
 
--(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil manager:(LocalNoteManager *)noteManager
+-(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil manager:(NoteManager *)noteManager
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if(self)

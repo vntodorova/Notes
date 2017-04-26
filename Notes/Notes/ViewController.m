@@ -13,7 +13,9 @@
 #import "LeftPanelViewController.h"
 #import "LayoutProvider.h"
 #import "SettingsPanelViewController.h"
+#import "NoteManager.h"
 #import "LocalNoteManager.h"
+#import "DropboxNoteManager.h"
 #import "ThemeManager.h"
 #import "Note.h"
 #import <ObjectiveDropboxOfficial/ObjectiveDropboxOfficial.h>
@@ -21,7 +23,9 @@
 @interface ViewController()
 
 @property (nonatomic, strong) LayoutProvider *layoutProvider;
-@property (nonatomic, strong) LocalNoteManager *noteManager;
+@property (nonatomic, strong) NoteManager *noteManager;
+@property (nonatomic, strong) LocalNoteManager *localNoteManager;
+@property (nonatomic, strong) DropboxNoteManager *dropboxManager;
 @property (nonatomic, strong) ThemeManager *themeManager;
 @property (nonatomic, strong) LeftPanelViewController *leftPanelViewController;
 @property (nonatomic, strong) SettingsPanelViewController *settingsPanelViewController;
@@ -49,7 +53,8 @@
                                       }];
     
     self.layoutProvider = [LayoutProvider sharedInstance];
-    self.noteManager = [[LocalNoteManager alloc] init];
+    self.localNoteManager = [[LocalNoteManager alloc] init];
+    self.noteManager = [[NoteManager alloc] init];
     self.themeManager = [ThemeManager sharedInstance];
     self.filteredNotes = [[NSMutableArray alloc] init];
     self.allNotes = [self.noteManager getAllNotes];
@@ -135,7 +140,7 @@
 
 - (void)setupSettingsPanel
 {
-    self.settingsPanelViewController = [[SettingsPanelViewController alloc] initWithNibName:SETTINGS_PANEL_NIBNAME bundle:nil manager:self.noteManager];
+    self.settingsPanelViewController = [[SettingsPanelViewController alloc] initWithNibName:SETTINGS_PANEL_NIBNAME bundle:nil];
     self.settingsPanelViewController.delegate = self;
     [self.view addSubview:self.settingsPanelViewController.view];
 }

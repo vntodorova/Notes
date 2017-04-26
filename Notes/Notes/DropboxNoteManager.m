@@ -9,13 +9,13 @@
 #import "DropboxNoteManager.h"
 #import "Defines.h"
 #import <ObjectiveDropboxOfficial/ObjectiveDropboxOfficial.h>
-#import "LocalNoteManager.h"
+#import "NoteManager.h"
 #import "Notebook.h"
 #import "Note.h"
 
 @interface DropboxNoteManager()
 @property UIViewController *controller;
-@property LocalNoteManager *manager;
+@property NoteManager *manager;
 @property DBUserClient *client;
 @end
 

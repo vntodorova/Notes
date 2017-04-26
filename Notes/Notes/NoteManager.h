@@ -28,4 +28,8 @@
 - (NSArray<Notebook *> *)getNotebookList;
 - (NSArray *) getNotebookNamesList;
 
+- (NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebook:(Notebook*) notebook;
+- (NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebookWithName:(NSString*) notebookName;
+- (NSString *)saveUIImage:(UIImage *)image withName:(NSString *)imageName forNote:(Note *)note inNotebookWithName:(NSString *)notebookName;
+
 @end

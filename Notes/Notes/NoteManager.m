@@ -26,13 +26,13 @@
 
 @implementation NoteManager
 
-- (instancetype)initWithLocalManager:(LocalNoteManager *)localManager andDropboxManager:(DropboxNoteManager *)dropboxManager
+- (instancetype)init
 {
     self = [super init];
     if(self)
     {
-        self.localManager = localManager;
-        self.dropboxManager = dropboxManager;
+        self.localManager = [[LocalNoteManager alloc] init];
+        self.dropboxManager = [[DropboxNoteManager alloc] init];
         self.notebookDictionary = [[NSMutableDictionary alloc] init];
         self.notebookList = [[NSMutableArray alloc] init];
         self.tagParser = [[TagsParser alloc] init];
@@ -293,6 +293,32 @@
     return self.notebookDictionary.allKeys;
 }
 
+-(NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebook:(Notebook*) notebook;
+{
+    return [self saveImage:imageInfo withName:imageName forNote:note  inNotebookWithName:notebook.name];
+}
+
+-(NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebookWithName:(NSString*) notebookName
+{
+    NSURL *baseURL = [[self getBaseURLforNote:note inNotebookWithName:notebookName] URLByAppendingPathComponent:imageName];
+    NSString *mediaType = [imageInfo objectForKey:UIImagePickerControllerMediaType];
+    if ([mediaType isEqualToString:PUBLIC_IMAGE_IDENTIFIER])
+    {
+        UIImage *image = [imageInfo objectForKey:UIImagePickerControllerOriginalImage];
+        NSData *data = UIImagePNGRepresentation(image);
+        [data writeToURL:baseURL atomically:YES];
+    }
+    return baseURL.description;
+}
+
+- (NSString *)saveUIImage:(UIImage *)image withName:(NSString *)imageName forNote:(Note *)note inNotebookWithName:(NSString *)notebookName
+{
+    NSURL *baseURL = [[self getBaseURLforNote:note inNotebookWithName:notebookName] URLByAppendingPathComponent:imageName];
+    NSData *data = UIImagePNGRepresentation(image);
+    [data writeToURL:baseURL atomically:YES];
+    return baseURL.description;
+}
+
 #pragma mark -
 #pragma mark Note delegates
 
@@ -330,21 +356,6 @@
     {
         //[self.dropboxManager removeNote:note fromNotebookWithName:notebookName];
     }
-}
-
-- (NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebook:(Notebook*) notebook
-{
-    return [self.localManager saveImage:imageInfo withName:imageName forNote:note inNotebook:notebook];
-}
-
-- (NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebookWithName:(NSString*) notebookName
-{
-    return [self.localManager saveImage:imageInfo withName:imageName forNote:note inNotebookWithName:notebookName];
-}
-
-- (NSString *)saveUIImage:(UIImage *)image withName:(NSString *)imageName forNote:(Note *)note inNotebookWithName:(NSString *)notebookName
-{
-    return [self.localManager saveUIImage:image withName:imageName forNote:note inNotebookWithName:notebookName];
 }
 
 - (void)renameNote:(Note *)note fromNotebook:(Notebook *)notebook oldName:(NSString *)oldName

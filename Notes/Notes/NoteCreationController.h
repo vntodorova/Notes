@@ -11,11 +11,11 @@
 #import "DatePickerViewController.h"
 #import "ExpandingButton.h"
 
-@class LocalNoteManager;
+@class NoteManager;
 
 @interface NoteCreationController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate, DatePickerDelegate, DrawingDelegate>
 
-- (instancetype)initWithManager:(LocalNoteManager*) manager;
+- (instancetype)initWithManager:(NoteManager*) manager;
 
 - (IBAction)alignRightSelected:(id)sender;
 - (IBAction)alignLeftSelected:(id)sender;

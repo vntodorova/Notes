@@ -11,12 +11,12 @@
 
 @class Notebook;
 @class Reminder;
-@class LocalNoteManager;
+@class NoteManager;
 
 @interface LeftPanelViewController : UIViewController <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate, EditableCellDelegate>
 - (IBAction)onGoogleClick:(id)sender;
 
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil manager:(LocalNoteManager *)noteManager;
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil manager:(NoteManager *)noteManager;
 - (IBAction)settingsButtonClicked:(UIButton *)sender;
 - (void)loadTheme;
 - (void)reloadTableViewData;

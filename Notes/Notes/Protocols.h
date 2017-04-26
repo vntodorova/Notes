@@ -24,30 +24,13 @@
 - (void)removeNote:(Note *)note fromNotebook:(Notebook *)notebookName;
 - (void)removeNote:(Note *)note fromNotebookWithName:(NSString *)notebookName;
 
-- (NSArray<Note *> *)getNoteListForNotebook:(Notebook *)notebook;
-- (NSArray<Note *> *)getNoteListForNotebookWithName:(NSString *)notebookName;
-- (NSArray<Note *> *)getAllNotes;
-
-- (NSURL*) getBaseURLforNote:(Note*) note inNotebook:(Notebook*) notebook;
-- (NSURL*) getBaseURLforNote:(Note*) note inNotebookWithName:(NSString*) notebookName;
-
-- (NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebook:(Notebook*) notebook;
-- (NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebookWithName:(NSString*) notebookName;
-- (NSString *)saveUIImage:(UIImage *)image withName:(NSString *)imageName forNote:(Note *)note inNotebookWithName:(NSString *)notebookName;
-
 - (void)renameNote:(Note *)note fromNotebook:(Notebook *)notebook oldName:(NSString *)oldName;
 - (void)renameNote:(Note *)note fromNotebookWithName:(NSString *)notebookName oldName:(NSString *)oldName;
-
-- (void)deleteTempFolder;
-- (void)createTempFolder;
-
-- (void)exchangeNoteAtIndex:(NSInteger)firstIndex withNoteAtIndex:(NSInteger)secondIndex fromNotebook:(NSString *)notebookName;
-
-- (Notebook *)notebookContainingNote:(Note *)note;
 
 @end
 
 @protocol NotebookManagerDelegate
+
 - (void)addNotebook:(Notebook *)newNotebook;
 - (void)addNotebookWithName:(NSString *) notebookName;
 
@@ -57,23 +40,25 @@
 - (void)renameNotebook:(Notebook*) notebook newName:(NSString*) newName;
 - (void)renameNotebookWithName:(NSString*) oldName newName:(NSString*) newName;
 
-- (NSArray<Notebook *> *)getNotebookList;
-- (NSArray *) getNotebookNamesList;
 @end
 
 @protocol TableViewCellDelegate
+
 - (void)panGestureRecognisedOnCell:(TableViewCell *)cell;
 - (void)tapGestureRecognisedOnCell:(TableViewCell *)cell;
 - (void)exchangeObjectAtIndex:(NSInteger)firstIndex withObjectAtIndex:(NSInteger)secondIndex;
+
 @end
 
 @protocol LeftPanelDelegate
+
 - (void)hideLeftPanel;
 - (void)showSettings;
 - (void)changeCurrentNotebook:(NSString *)newNotebookName;
 
 //TODO: testing
 -(void)authDropbox;
+
 @end
 
 @protocol EditableCellDelegate

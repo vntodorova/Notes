@@ -13,7 +13,7 @@
 #import "ThemeManager.h"
 #import "LayoutProvider.h"
 #import "Note.h"
-#import "LocalNoteManager.h"
+#import "NoteManager.h"
 #import "DateTimeManager.h"
 #import "TagsParser.h"
 
@@ -22,7 +22,7 @@
 @property (nonatomic, strong) NSArray *fontList;
 @property (nonatomic, strong) NSArray *textSizeList;
 @property (nonatomic, strong) NSMutableArray *noteBookList;
-@property (nonatomic, strong) LocalNoteManager *manager;
+@property (nonatomic, strong) NoteManager *manager;
 @property (nonatomic, strong) ThemeManager *themeManager;
 
 @property (nonatomic, strong) TagsParser *tagsParser;
@@ -36,7 +36,7 @@
 @implementation NoteCreationController
 
 
-- (instancetype)initWithManager:(LocalNoteManager *)manager
+- (instancetype)initWithManager:(NoteManager *)manager
 {
     self = [super self];
     self.manager = manager;

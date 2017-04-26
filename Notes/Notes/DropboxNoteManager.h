@@ -8,13 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "LocalNoteManager.h"
+
+@class NoteManager;
 
 @interface DropboxNoteManager : NSObject<UIPopoverPresentationControllerDelegate, NotebookManagerDelegate, NoteManagerDelegate>
 
--initWithController:(UIViewController*) controller manager:(LocalNoteManager *) manager;
+- (id)initWithController:(UIViewController*) controller manager:(NoteManager *) manager;
 
--(void) synchFiles;
+- (void)synchFiles;
 
 @end
 

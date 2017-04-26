@@ -36,69 +36,6 @@
     return self;
 }
 
-- (Notebook *)notebookContainingNote:(Note *)note
-{
-    for (Notebook *currentNotebook in self.notebookList)
-    {
-        NSArray *notes = [self getNoteListForNotebook:currentNotebook];
-        for (Note *currentNote in notes) {
-            if (currentNote == note) {
-                return currentNotebook;
-            }
-        }
-    }
-    return nil;
-}
-
-- (void)exchangeNoteAtIndex:(NSInteger)firstIndex withNoteAtIndex:(NSInteger)secondIndex fromNotebook:(NSString *)notebookName
-{
-    NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName];
-    [array exchangeObjectAtIndex:firstIndex withObjectAtIndex:secondIndex];
-    [self.notebookDictionary setObject:array forKey:notebookName];
-}
-
-- (void)addNotebook:(Notebook *) newNotebook
-{
-    if(newNotebook == nil || [self.notebookDictionary objectForKey:newNotebook.name] != nil)
-    {
-        return;
-    }
-
-    [self.notebookDictionary setObject:[[NSMutableArray alloc] init] forKey:newNotebook.name];
-    [self.notebookList addObject:newNotebook];
-    NSString *notebookPath = [self getDirectoryPathForNotebookWithName:newNotebook.name];
-    [self createDirectoryAtPath:notebookPath];
-}
-
-- (void)addNotebookWithName:(NSString *) notebookName
-{
-    Notebook *notebook = [[Notebook alloc] initWithName:notebookName];
-    [self addNotebook:notebook];
-}
-
-- (void)addNote:(Note *)newNote toNotebook:(Notebook *)notebook
-{
-    [self addNote:newNote toNotebookWithName:notebook.name];
-}
-
-- (void)addNote:(Note *)newNote toNotebookWithName:(NSString *)notebookName
-{
-    if(newNote == nil || notebookName == nil)
-    {
-        return;
-    }
-    
-    if(![self noteExists:newNote inNotebookWithName:notebookName])
-    {
-        NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName];
-        
-        [array addObject:newNote];
-    }
-    
-    [self saveToDisk:newNote toNotebook:notebookName];
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_CREATED_EVENT object:nil userInfo:nil];
-}
-
 - (BOOL)noteExists:(Note*)newNote inNotebookWithName:(NSString*)notebookName
 {
     NSMutableArray *noteList = [[NSMutableArray alloc]initWithArray:[self getNoteListForNotebookWithName:notebookName]];
@@ -113,80 +50,10 @@
     return NO;
 }
 
-- (void)removeNotebook:(Notebook *)notebook
-{
-    [self removeNotebookWithName:notebook.name];
-}
-
-- (void)removeNotebookWithName:(NSString *)notebookName
-{
-    [self removeNotebookFromAllLists:notebookName];
-    NSString *notebookPath = [self getDirectoryPathForNotebookWithName:notebookName];
-    [self deleteItemAtPath:notebookPath];
-}
-
 - (void) removeNotebookFromAllLists:(NSString *) notebookName
 {
     [self.notebookDictionary removeObjectForKey:notebookName];
     [self.notebookList removeObject:[self getNotebookWithName:notebookName]];
-}
-
-- (void)removeNote:(Note *)note fromNotebook:(Notebook *)notebook
-{
-    [self removeNote:note fromNotebookWithName:notebook.name];
-}
-
-- (void)renameNotebookWithName:(NSString*) oldName newName:(NSString*) newName
-{
-    NSString *pathToNotebook = [self getDirectoryPathForNotebookWithName:oldName];
-    NSString *newPath = [[pathToNotebook stringByDeletingLastPathComponent] stringByAppendingPathComponent:newName];
-    [[NSFileManager defaultManager] moveItemAtPath:pathToNotebook toPath:newPath error:nil];
-    
-    [self.notebookDictionary setObject:[self.notebookDictionary objectForKey:oldName] forKey:newName];
-    [self.notebookDictionary removeObjectForKey:oldName];
-    
-    [self getNotebookWithName:oldName].name = newName;
-}
-
-- (void)renameNotebook:(Notebook*) notebook newName:(NSString*) newName
-{
-    [self renameNotebookWithName:notebook.name newName:newName];
-}
-
-- (void)renameNote:(Note*) note fromNotebook:(Notebook*) notebook oldName:(NSString*) oldName
-{
-    [self renameNote:note fromNotebookWithName:notebook.name oldName:oldName];
-}
-
-- (void)renameNote:(Note*) note fromNotebookWithName:(NSString*) notebookName oldName:(NSString*) oldName
-{
-    Note *dummyNote = [[Note alloc] init];
-    dummyNote.name = oldName;
-    
-    NSString *oldPath = [self getNoteDirectoryPathForNote:dummyNote inNotebookWithName:notebookName];
-    NSString *newPath = [[oldPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:note.name];
-   
-    [[NSFileManager defaultManager] moveItemAtPath:oldPath toPath:newPath error:nil];
-}
-
-- (void)removeNote:(Note *)note fromNotebookWithName:(NSString *)notebookName
-{
-    if(note == nil || notebookName == nil)
-    {
-        return;
-    }
-    
-    NSString *path = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
-    
-    NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName];
-    [array removeObject:note];
-    
-    [self deleteItemAtPath:path];
-}
-
-- (NSArray *)getNotebookList
-{
-    return self.notebookList;
 }
 
 - (NSArray *) getNotebookNamesList
@@ -217,16 +84,6 @@
     return noteList;
 }
 
-- (NSArray<Note *> *)getAllNotes
-{
-    NSMutableArray *allNotes = [[NSMutableArray alloc] init];
-    NSArray *allNotebooks = [self getNotebookList];
-    for (Notebook *currentNotebook in allNotebooks) {
-        [allNotes addObjectsFromArray:[self getNoteListForNotebook:currentNotebook]];
-    }
-    return allNotes;
-}
-
 - (Notebook*) getNotebookWithName:(NSString *) notebookName
 {
     for (Notebook *currentNotebook in self.notebookList)
@@ -252,77 +109,6 @@
     }
 }
 
--(void) deleteTempFolder
-{
-    NSString *tempDirectory = [self getTempDirectoryPath];
-    @try {
-            [self deleteItemAtPath:tempDirectory];
-    } @catch (NSException *exception) {
-        
-    }
-}
-
--(void) createTempFolder
-{
-    NSString *tempDirectory = [self getTempDirectoryPath];
-    [self createFoldarAtPath:tempDirectory];
-}
-
--(NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebookWithName:(NSString*) notebookName
-{
-    NSURL *baseURL = [[self getBaseURLforNote:note inNotebookWithName:notebookName] URLByAppendingPathComponent:imageName];
-    NSString *mediaType = [imageInfo objectForKey:UIImagePickerControllerMediaType];
-    if ([mediaType isEqualToString:PUBLIC_IMAGE_IDENTIFIER])
-    {
-        UIImage *image = [imageInfo objectForKey:UIImagePickerControllerOriginalImage];
-        NSData *data = UIImagePNGRepresentation(image);
-        [data writeToURL:baseURL atomically:YES];
-    }
-    return baseURL.description;
-}
-
-- (NSString *)saveUIImage:(UIImage *)image withName:(NSString *)imageName forNote:(Note *)note inNotebookWithName:(NSString *)notebookName
-{
-    NSURL *baseURL = [[self getBaseURLforNote:note inNotebookWithName:notebookName] URLByAppendingPathComponent:imageName];
-    NSData *data = UIImagePNGRepresentation(image);
-    [data writeToURL:baseURL atomically:YES];
-    return baseURL.description;
-}
-
--(NSString*) saveImage:(NSDictionary*) imageInfo withName:(NSString*)imageName forNote:(Note*) note inNotebook:(Notebook*) notebook;
-{
-    return [self saveImage:imageInfo withName:imageName forNote:note  inNotebookWithName:notebook.name];
-}
-
--(NSString*) getCurrentTime
-{
-    DateTimeManager *timeManager = [[DateTimeManager alloc] init];
-    return [timeManager getCurrentTime];
-}
-
--(NSURL*) getBaseURLforNote:(Note*) note inNotebookWithName:(NSString*) notebookName
-{
-    NSString *loadedFilePath;
-    if(note.name.length > 0)
-    {
-      loadedFilePath = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
-    }
-    else
-    {
-        loadedFilePath = [self getTempDirectoryPath];
-    }
-    
-    NSURL *baseURL = [NSURL fileURLWithPath:loadedFilePath];
-    return baseURL;
-}
-
--(NSURL*) getBaseURLforNote:(Note*) note inNotebook:(Notebook*) notebook
-{
-    return [self getBaseURLforNote:note inNotebookWithName:notebook.name];;
-}
-
-
-#pragma mark PRIVATE
 -(NSString*) getTempDirectoryPath
 {
     return [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
@@ -404,7 +190,6 @@
     [fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
 }
 
-//LOAD DATA
 - (void) loadNotebooks
 {
     NSArray *directoryContents = [self getDirectoryContentForPath: [self getNotebooksRootDirectoryPath]];
@@ -479,6 +264,119 @@
     NSError *error;
     NSString *fileContents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
     return fileContents;
+}
+
+#pragma mark -
+#pragma mark Note manager delegate
+
+- (void)addNote:(Note *)newNote toNotebook:(Notebook *)notebook
+{
+    [self addNote:newNote toNotebookWithName:notebook.name];
+}
+
+- (void)addNote:(Note *)newNote toNotebookWithName:(NSString *)notebookName
+{
+    if(newNote == nil || notebookName == nil)
+    {
+        return;
+    }
+    
+    if(![self noteExists:newNote inNotebookWithName:notebookName])
+    {
+        NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName];
+        
+        [array addObject:newNote];
+    }
+    
+    [self saveToDisk:newNote toNotebook:notebookName];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_CREATED_EVENT object:nil userInfo:nil];
+}
+
+- (void)removeNote:(Note *)note fromNotebook:(Notebook *)notebook
+{
+    [self removeNote:note fromNotebookWithName:notebook.name];
+}
+
+- (void)removeNote:(Note *)note fromNotebookWithName:(NSString *)notebookName
+{
+    if(note == nil || notebookName == nil)
+    {
+        return;
+    }
+    
+    NSString *path = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
+    
+    NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName];
+    [array removeObject:note];
+    
+    [self deleteItemAtPath:path];
+}
+
+- (void)renameNote:(Note*) note fromNotebook:(Notebook*) notebook oldName:(NSString*) oldName
+{
+    [self renameNote:note fromNotebookWithName:notebook.name oldName:oldName];
+}
+
+- (void)renameNote:(Note*) note fromNotebookWithName:(NSString*) notebookName oldName:(NSString*) oldName
+{
+    Note *dummyNote = [[Note alloc] init];
+    dummyNote.name = oldName;
+    
+    NSString *oldPath = [self getNoteDirectoryPathForNote:dummyNote inNotebookWithName:notebookName];
+    NSString *newPath = [[oldPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:note.name];
+    
+    [[NSFileManager defaultManager] moveItemAtPath:oldPath toPath:newPath error:nil];
+}
+
+#pragma mark -
+#pragma mark Notebook manager delegate
+
+- (void)addNotebook:(Notebook *) newNotebook
+{
+    if(newNotebook == nil || [self.notebookDictionary objectForKey:newNotebook.name] != nil)
+    {
+        return;
+    }
+    
+    [self.notebookDictionary setObject:[[NSMutableArray alloc] init] forKey:newNotebook.name];
+    [self.notebookList addObject:newNotebook];
+    NSString *notebookPath = [self getDirectoryPathForNotebookWithName:newNotebook.name];
+    [self createDirectoryAtPath:notebookPath];
+}
+
+- (void)addNotebookWithName:(NSString *) notebookName
+{
+    Notebook *notebook = [[Notebook alloc] initWithName:notebookName];
+    [self addNotebook:notebook];
+}
+
+- (void)removeNotebook:(Notebook *)notebook
+{
+    [self removeNotebookWithName:notebook.name];
+}
+
+- (void)removeNotebookWithName:(NSString *)notebookName
+{
+    [self removeNotebookFromAllLists:notebookName];
+    NSString *notebookPath = [self getDirectoryPathForNotebookWithName:notebookName];
+    [self deleteItemAtPath:notebookPath];
+}
+
+- (void)renameNotebook:(Notebook*) notebook newName:(NSString*) newName
+{
+    [self renameNotebookWithName:notebook.name newName:newName];
+}
+
+- (void)renameNotebookWithName:(NSString*) oldName newName:(NSString*) newName
+{
+    NSString *pathToNotebook = [self getDirectoryPathForNotebookWithName:oldName];
+    NSString *newPath = [[pathToNotebook stringByDeletingLastPathComponent] stringByAppendingPathComponent:newName];
+    [[NSFileManager defaultManager] moveItemAtPath:pathToNotebook toPath:newPath error:nil];
+    
+    [self.notebookDictionary setObject:[self.notebookDictionary objectForKey:oldName] forKey:newName];
+    [self.notebookDictionary removeObjectForKey:oldName];
+    
+    [self getNotebookWithName:oldName].name = newName;
 }
 
 @end

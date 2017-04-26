@@ -12,11 +12,11 @@
 @class ViewController;
 @class ViewController;
 @class ThemeManager;
-@class LocalNoteManager;
+@class NoteManager;
 
 @interface SettingsPanelViewController : UIViewController <UIPickerViewDelegate, UIPickerViewDataSource>
 
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil manager:(LocalNoteManager *)noteManager;
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
 
 - (IBAction)saveButtonClicked:(UIButton *)sender;
 - (IBAction)cancelButtonClicked:(UIButton *)sender;
