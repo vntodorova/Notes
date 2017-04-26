@@ -32,6 +32,7 @@
 //========= DELEGATE ============
 //===============================
 
+
 //------ NOTEBOOKS ------
 -(void)addNotebookWithName:(NSString *)notebookName
 {
@@ -97,11 +98,61 @@
     [self renameNoteInDropbox:note fromNotebookWithName:notebook.name oldName:oldName];
 }
 
+-(NSArray *)getNotebookList
+{
+    NSMutableArray *notebookList = [[NSMutableArray alloc] init];
+    [[self.client.filesRoutes listFolder:@"/Notebooks"]
+     setResponseBlock:^(DBFILESListFolderResult *response, DBFILESListFolderError *routeError, DBRequestError *networkError)
+     {
+         if (response)
+         {
+             for (DBFILESMetadata *data in response.entries)
+             {
+                 Notebook *notebook = [[Notebook alloc] initWithName:data.name];
+                 [notebookList addObject:notebook];
+             }
+         } else {
+             NSLog(@"%@\n%@\n", routeError, networkError);
+         }
+     }];
+    return notebookList;
+}
+
+-(void) sendRequestForContentsInPath:(NSString*) path
+{
+    NSMutableArray *notebookList = [[NSMutableArray alloc] init];
+    [[self.client.filesRoutes listFolder:@"/Notebooks"]
+     setResponseBlock:^(DBFILESListFolderResult *response, DBFILESListFolderError *routeError, DBRequestError *networkError)
+     {
+         if (response)
+         {
+             for (DBFILESMetadata *data in response.entries)
+             {
+                 Notebook *notebook = [[Notebook alloc] initWithName:data.name];
+                 [notebookList addObject:notebook];
+             }
+         } else {
+             NSLog(@"%@\n%@\n", routeError, networkError);
+         }
+     }];
+}
+
+-(NSArray<Note *> *)getNoteListForNotebook:(Notebook *)notebook
+{
+    return nil;
+}
+
+-(NSArray<Note *> *)getNoteListForNotebookWithName:(NSString *)notebookName
+{
+    return nil;
+}
+
 //===============================
 //======== END DELEGATE =========
 //===============================
 
 //zdr vanka
+//ko pr veni
 
 -(void) createFolderAt:(NSString*)path
 {
@@ -164,7 +215,6 @@
         [self uploadNote:note inNotebookWithName:notebookName];
     }
 }
-//zdr vanka
 
 -(void) uploadNote:(Note*)note inNotebookWithName:(NSString*) notebookName
 {

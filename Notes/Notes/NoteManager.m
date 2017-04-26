@@ -284,6 +284,7 @@
 
 - (NSArray<Notebook *> *)getNotebookList
 {
+    [self.dropboxManager getNotebookList];
     [self.notebookList addObjectsFromArray:[self.localManager getNotebookList]];
     return self.notebookList;
 }
