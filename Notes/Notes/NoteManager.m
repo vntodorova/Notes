@@ -257,19 +257,6 @@
     return baseURL;
 }
 
-<<<<<<< 1edb8bce72c0aa35ea0ad19e3d4aafd03a7237fb
-- (NSArray *)getNotebookList
-{
-    [self.dropboxManager getNotebookList];
-    if(self.notebookList.count == 0)
-    {
-        [self.notebookList addObjectsFromArray:[self.localManager getNotebookList]];
-    }
-    return self.notebookList;
-}
-
-=======
->>>>>>> af98662e73970f601107094802d8c20858d28afc
 - (NSString *)saveImage:(NSDictionary *)imageInfo withName:(NSString *)imageName forNote:(Note *)note inNotebook:(Notebook *)notebook;
 {
     return [self saveImage:imageInfo withName:imageName forNote:note  inNotebookWithName:notebook.name];
@@ -472,7 +459,10 @@
 - (NSArray *)getNotebookList
 {
     [self.dropboxManager getNotebookList];
-    [self.notebookList addObjectsFromArray:[self.localManager getNotebookList]];
+    if(self.notebookList.count == 0)
+    {
+        [self.notebookList addObjectsFromArray:[self.localManager getNotebookList]];
+    }
     return self.notebookList;
 }
 
