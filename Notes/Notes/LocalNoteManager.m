@@ -26,7 +26,7 @@
     if (self)
     {
         self.tagParser = [[TagsParser alloc] init];
-        [self createDirectoryAtPath: [self notebooksRootDirectoryPath]];
+        [self createDirectoryAtPath: [self getNotebooksRootDirectoryPath]];
         [self loadNotebooks];
     }
     return self;
@@ -45,33 +45,33 @@
     }
 }
 
-- (NSString *)tempDirectoryPath
+- (NSString *)getTempDirectoryPath
 {
     return [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
             stringByAppendingPathComponent:TEMP_FOLDER];
 }
 
-- (NSString *)notebooksRootDirectoryPath
+- (NSString *)getNotebooksRootDirectoryPath
 {
     return [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
             stringByAppendingPathComponent: NOTE_NOTEBOOKS_FOLDER];
 }
 
-- (NSString *)directoryPathForNotebookWithName: (NSString*) notebookName
+- (NSString *)getDirectoryPathForNotebookWithName: (NSString*) notebookName
 {
-    return [[self notebooksRootDirectoryPath]
+    return [[self getNotebooksRootDirectoryPath]
             stringByAppendingPathComponent:notebookName];
 }
 
-- (NSString *)noteDirectoryPathForNote:(Note *)note inNotebookWithName:(NSString *)notebookName
+- (NSString *)getNoteDirectoryPathForNote:(Note *)note inNotebookWithName:(NSString *)notebookName
 {
-    return [[self directoryPathForNotebookWithName:notebookName]
+    return [[self getDirectoryPathForNotebookWithName:notebookName]
             stringByAppendingPathComponent:note.name];
 }
 
 - (void)saveToDisk:(Note *)newNote toNotebook:(NSString *)notebookName
 {
-    NSString *noteRoot = [self noteDirectoryPathForNote:newNote inNotebookWithName:notebookName];
+    NSString *noteRoot = [self getNoteDirectoryPathForNote:newNote inNotebookWithName:notebookName];
     
     [self createDirectoryAtPath:noteRoot];
     
@@ -80,7 +80,7 @@
     [self saveData:newNote.dateCreated                              toFile:[noteRoot stringByAppendingPathComponent:NOTE_DATE_FILE]];
     [self saveData:newNote.triggerDate                              toFile:[noteRoot stringByAppendingPathComponent:NOTE_TRIGGER_DATE_FILE]];
     
-    [self copyFilesFromSource:[self tempDirectoryPath] toDestination:noteRoot];
+    [self copyFilesFromSource:[self getTempDirectoryPath] toDestination:noteRoot];
 }
 
 - (void)copyFilesFromSource:(NSString *)source toDestination:(NSString *)destination
@@ -116,11 +116,11 @@
     }
     else
     {
-        [self createFolderAtPath:path];
+        [self createFoldarAtPath:path];
     }
 }
 
-- (void)createFolderAtPath:(NSString *)path
+- (void)createFoldarAtPath:(NSString *)path
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     [fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
@@ -128,7 +128,7 @@
 
 - (NSArray *)loadNotebooks
 {
-    NSArray *directoryContents = [self getDirectoryContentForPath: [self notebooksRootDirectoryPath]];
+    NSArray *directoryContents = [self getDirectoryContentForPath: [self getNotebooksRootDirectoryPath]];
     NSMutableArray *notebooksList = [[NSMutableArray alloc] init];
     for(int i = 0; i < directoryContents.count; i++)
     {
@@ -144,7 +144,7 @@
 
 - (NSMutableArray *)loadNotesForNotebookWithName:(NSString *)notebookName
 {
-    NSString *path = [self directoryPathForNotebookWithName:notebookName];
+    NSString *path = [self getDirectoryPathForNotebookWithName:notebookName];
     NSMutableArray<Note*> *array = [[NSMutableArray alloc] init];
     
     NSArray *directoryContents = [self getDirectoryContentForPath: path];
@@ -223,7 +223,7 @@
 
 - (void)removeNote:(Note *)note fromNotebookWithName:(NSString *)notebookName
 {
-    NSString *path = [self noteDirectoryPathForNote:note inNotebookWithName:notebookName];
+    NSString *path = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
     [self deleteItemAtPath:path];
 }
 
@@ -237,20 +237,10 @@
     Note *dummyNote = [[Note alloc] init];
     dummyNote.name = oldName;
     
-    NSString *oldPath = [self noteDirectoryPathForNote:dummyNote inNotebookWithName:notebookName];
+    NSString *oldPath = [self getNoteDirectoryPathForNote:dummyNote inNotebookWithName:notebookName];
     NSString *newPath = [[oldPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:note.name];
     
     [[NSFileManager defaultManager] moveItemAtPath:oldPath toPath:newPath error:nil];
-}
-
-- (NSArray *)noteListForNotebook:(Notebook *)notebook
-{
-    return [self noteListForNotebookWithName:notebook.name];
-}
-
-- (NSArray *)noteListForNotebookWithName:(NSString *)notebookName
-{
-    return [self loadNotesForNotebookWithName:notebookName];
 }
 
 #pragma mark -
@@ -258,7 +248,7 @@
 
 - (void)addNotebook:(Notebook *)newNotebook
 {
-    NSString *notebookPath = [self directoryPathForNotebookWithName:newNotebook.name];
+    NSString *notebookPath = [self getDirectoryPathForNotebookWithName:newNotebook.name];
     [self createDirectoryAtPath:notebookPath];
 }
 
@@ -275,7 +265,7 @@
 
 - (void)removeNotebookWithName:(NSString *)notebookName
 {
-    NSString *notebookPath = [self directoryPathForNotebookWithName:notebookName];
+    NSString *notebookPath = [self getDirectoryPathForNotebookWithName:notebookName];
     [self deleteItemAtPath:notebookPath];
 }
 
@@ -286,12 +276,22 @@
 
 - (void)renameNotebookWithName:(NSString *)oldName newName:(NSString *)newName
 {
-    NSString *pathToNotebook = [self directoryPathForNotebookWithName:oldName];
+    NSString *pathToNotebook = [self getDirectoryPathForNotebookWithName:oldName];
     NSString *newPath = [[pathToNotebook stringByDeletingLastPathComponent] stringByAppendingPathComponent:newName];
     [[NSFileManager defaultManager] moveItemAtPath:pathToNotebook toPath:newPath error:nil];
 }
 
--(NSArray *)notebookList
+- (NSArray *)getNoteListForNotebook:(Notebook *)notebook
+{
+    return [self getNoteListForNotebookWithName:notebook.name];
+}
+
+- (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
+{
+    return [self loadNotesForNotebookWithName:notebookName];
+}
+
+-(NSArray *)getNotebookList
 {
     return [self loadNotebooks];
 }

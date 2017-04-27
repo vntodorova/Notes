@@ -241,7 +241,7 @@
 
 - (IBAction)createSelected:(id)sender
 {
-    NSMutableArray *array  = [self selectionMenuForList:[self.manager notebookNamesList] andSelector:@selector(notebookSelected:)];
+    NSMutableArray *array  = [self selectionMenuForList:[self.manager getNotebookNamesList] andSelector:@selector(notebookSelected:)];
     [array addObject:[self getInputAlertAction]];
     [self displaySelectableMenuWithButton:sender list:array];
 }
@@ -298,7 +298,7 @@
     NSRange range = [noteBody rangeOfString:@"</div>"];
     [noteBody insertString:imageHtml atIndex:range.location];
     
-    [self refreshWebView:noteBody baseURL:[self.manager baseURLforNote:self.note inNotebookWithName:self.currentNotebook]];
+    [self refreshWebView:noteBody baseURL:[self.manager getBaseURLforNote:self.note inNotebookWithName:self.currentNotebook]];
 }
 
 - (void)updateNoteFont:(NSString*) font
@@ -318,7 +318,7 @@
 
 - (void)loadSavedHtml
 {
-    NSURL *baseURL = [self.manager baseURLforNote:self.note inNotebookWithName:self.currentNotebook];
+    NSURL *baseURL = [self.manager getBaseURLforNote:self.note inNotebookWithName:self.currentNotebook];
     [self.noteBody loadHTMLString:self.note.body baseURL:baseURL];
 }
 
@@ -335,7 +335,7 @@
     {
         [noteBody replaceCharactersInRange:range withString:@"contenteditable=\"false\""];
     }
-    [self refreshWebView:noteBody baseURL:[self.manager baseURLforNote:self.note inNotebookWithName:self.currentNotebook]];
+    [self refreshWebView:noteBody baseURL:[self.manager getBaseURLforNote:self.note inNotebookWithName:self.currentNotebook]];
 }
 
 - (void)refreshWebView:(NSString *)noteBody baseURL:(NSURL *)baseURL
