@@ -28,95 +28,6 @@
     return self;
 }
 
-//===============================
-//========= DELEGATE ============
-//===============================
-
-//------ NOTEBOOKS ------
-- (void)addNotebookWithName:(NSString *)notebookName
-{
-    NSString *notebookPath = [self getDirectoryPathForNotebookWithName:notebookName];
-    [self createFolderAt:notebookPath];
-}
-
-- (void)addNotebook:(Notebook *)newNotebook
-{
-    [self addNotebookWithName:newNotebook.name];
-}
-
-- (void)removeNotebookWithName:(NSString *)notebookName
-{
-    NSString *notebookPath = [self getDirectoryPathForNotebookWithName:notebookName];
-    [self deleteFolderAt:notebookPath];
-}
-
-- (void)removeNotebook:(Notebook *)notebook
-{
-    [self removeNotebookWithName:notebook.name];
-}
-
-- (void)renameNotebookWithName:(NSString *)oldName newName:(NSString *)newName
-{
-    [self renameNotebookInDropbox:oldName newName:newName];
-}
-
-- (void)renameNotebook:(Notebook *)notebook newName:(NSString *)newName
-{
-    [self renameNotebookWithName:notebook.name newName:newName];
-}
-
-//------ NOTES -------
-- (void)addNote:(Note *)newNote toNotebookWithName:(NSString *)notebookName
-{
-    [self uploadNote:newNote inNotebookWithName:notebookName];
-}
-
-- (void)addNote:(Note *)newNote toNotebook:(Notebook *)notebook
-{
-    [self addNote:newNote toNotebookWithName:notebook.name];
-}
-
-- (void)removeNote:(Note *)note fromNotebookWithName:(NSString *)notebookName
-{
-    NSString *notebookPath = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
-    [self deleteFolderAt:notebookPath];
-}
-
-- (void)removeNote:(Note *)note fromNotebook:(Notebook *)notebook
-{
-    [self removeNote:note fromNotebookWithName:notebook.name];
-}
-
-- (void)renameNote:(Note *)note fromNotebookWithName:(NSString *)notebookName oldName:(NSString *)oldName
-{
-    [self renameNoteInDropbox:note fromNotebookWithName:notebookName oldName:oldName];
-}
-
-- (void)renameNote:(Note *)note fromNotebook:(Notebook *)notebook oldName:(NSString *)oldName
-{
-    [self renameNoteInDropbox:note fromNotebookWithName:notebook.name oldName:oldName];
-}
-
-- (NSArray *)getNotebookList
-{
-    NSMutableArray *notebookList = [[NSMutableArray alloc] init];
-    [[self.client.filesRoutes listFolder:@"/Notebooks"]
-     setResponseBlock:^(DBFILESListFolderResult *response, DBFILESListFolderError *routeError, DBRequestError *networkError)
-     {
-         if (response)
-         {
-             for (DBFILESMetadata *data in response.entries)
-             {
-                 Notebook *notebook = [[Notebook alloc] initWithName:data.name];
-                 [notebookList addObject:notebook];
-             }
-         } else {
-             NSLog(@"%@\n%@\n", routeError, networkError);
-         }
-     }];
-    return notebookList;
-}
-
 - (void)sendRequestForContentsInPath:(NSString*) path
 {
     NSMutableArray *notebookList = [[NSMutableArray alloc] init];
@@ -135,24 +46,6 @@
          }
      }];
 }
-
-- (NSArray *)getNoteListForNotebook:(Notebook *)notebook
-{
-    return nil;
-}
-
-- (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
-{
-    return nil;
-}
-
-//===============================
-//======== END DELEGATE =========
-//===============================
-
-//zdr vanka
-//ko pr veni
-//n6 vanka
 
 - (void)createFolderAt:(NSString *)path
 {
@@ -244,6 +137,105 @@
                                      userInfo:nil];
     }
     return content;
+}
+
+#pragma mark -
+#pragma mark Note manager delegates
+
+- (void)addNote:(Note *)newNote toNotebookWithName:(NSString *)notebookName
+{
+    [self uploadNote:newNote inNotebookWithName:notebookName];
+}
+
+- (void)addNote:(Note *)newNote toNotebook:(Notebook *)notebook
+{
+    [self addNote:newNote toNotebookWithName:notebook.name];
+}
+
+- (void)removeNote:(Note *)note fromNotebookWithName:(NSString *)notebookName
+{
+    NSString *notebookPath = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
+    [self deleteFolderAt:notebookPath];
+}
+
+- (void)removeNote:(Note *)note fromNotebook:(Notebook *)notebook
+{
+    [self removeNote:note fromNotebookWithName:notebook.name];
+}
+
+- (void)renameNote:(Note *)note fromNotebookWithName:(NSString *)notebookName oldName:(NSString *)oldName
+{
+    [self renameNoteInDropbox:note fromNotebookWithName:notebookName oldName:oldName];
+}
+
+- (void)renameNote:(Note *)note fromNotebook:(Notebook *)notebook oldName:(NSString *)oldName
+{
+    [self renameNoteInDropbox:note fromNotebookWithName:notebook.name oldName:oldName];
+}
+
+- (NSArray *)getNoteListForNotebook:(Notebook *)notebook
+{
+    return nil;
+}
+
+- (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
+{
+    return nil;
+}
+
+#pragma mark -
+#pragma mark Notebook manager delegates
+
+- (void)addNotebookWithName:(NSString *)notebookName
+{
+    NSString *notebookPath = [self getDirectoryPathForNotebookWithName:notebookName];
+    [self createFolderAt:notebookPath];
+}
+
+- (void)addNotebook:(Notebook *)newNotebook
+{
+    [self addNotebookWithName:newNotebook.name];
+}
+
+- (void)removeNotebookWithName:(NSString *)notebookName
+{
+    NSString *notebookPath = [self getDirectoryPathForNotebookWithName:notebookName];
+    [self deleteFolderAt:notebookPath];
+}
+
+- (void)removeNotebook:(Notebook *)notebook
+{
+    [self removeNotebookWithName:notebook.name];
+}
+
+- (void)renameNotebookWithName:(NSString *)oldName newName:(NSString *)newName
+{
+    [self renameNotebookInDropbox:oldName newName:newName];
+}
+
+- (void)renameNotebook:(Notebook *)notebook newName:(NSString *)newName
+{
+    [self renameNotebookWithName:notebook.name newName:newName];
+}
+
+- (NSArray *)getNotebookList
+{
+    NSMutableArray *notebookList = [[NSMutableArray alloc] init];
+    [[self.client.filesRoutes listFolder:@"/Notebooks"]
+     setResponseBlock:^(DBFILESListFolderResult *response, DBFILESListFolderError *routeError, DBRequestError *networkError)
+     {
+         if (response)
+         {
+             for (DBFILESMetadata *data in response.entries)
+             {
+                 Notebook *notebook = [[Notebook alloc] initWithName:data.name];
+                 [notebookList addObject:notebook];
+             }
+         } else {
+             NSLog(@"%@\n%@\n", routeError, networkError);
+         }
+     }];
+    return notebookList;
 }
 
 @end

@@ -243,6 +243,16 @@
     [[NSFileManager defaultManager] moveItemAtPath:oldPath toPath:newPath error:nil];
 }
 
+- (NSArray *)getNoteListForNotebook:(Notebook *)notebook
+{
+    return [self getNoteListForNotebookWithName:notebook.name];
+}
+
+- (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
+{
+    return [self loadNotesForNotebookWithName:notebookName];
+}
+
 #pragma mark -
 #pragma mark Notebook manager delegate
 
@@ -279,16 +289,6 @@
     NSString *pathToNotebook = [self getDirectoryPathForNotebookWithName:oldName];
     NSString *newPath = [[pathToNotebook stringByDeletingLastPathComponent] stringByAppendingPathComponent:newName];
     [[NSFileManager defaultManager] moveItemAtPath:pathToNotebook toPath:newPath error:nil];
-}
-
-- (NSArray *)getNoteListForNotebook:(Notebook *)notebook
-{
-    return [self getNoteListForNotebookWithName:notebook.name];
-}
-
-- (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
-{
-    return [self loadNotesForNotebookWithName:notebookName];
 }
 
 -(NSArray *)getNotebookList

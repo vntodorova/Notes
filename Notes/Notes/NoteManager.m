@@ -94,30 +94,6 @@
     return self.notebookDictionary.allKeys;
 }
 
-- (NSArray *)getNoteListForNotebook:(Notebook *)notebook
-{
-    NSArray *array = nil;
-    if(notebook)
-    {
-        if(!notebook.isLoaded)
-        {
-            NSArray *notes = [self.localManager getNoteListForNotebook:notebook];
-            NSMutableArray *loaddedNotes = [[NSMutableArray alloc] initWithArray:notes];
-            [self.notebookDictionary setObject:loaddedNotes forKey:notebook.name];
-            notebook.isLoaded = YES;
-        }
-        array = [self.notebookDictionary objectForKey:notebook.name];
-    }
-    return array;
-}
-
-- (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
-{
-    Notebook *notebook = [self getNotebookWithName:notebookName];
-    NSArray *noteList = [self getNoteListForNotebook:notebook];
-    return noteList;
-}
-
 - (BOOL)noteExists:(Note *)newNote inNotebookWithName:(NSString *)notebookName
 {
     NSMutableArray *noteList = [[NSMutableArray alloc]initWithArray:[self getNoteListForNotebookWithName:notebookName]];
@@ -281,6 +257,7 @@
     return baseURL;
 }
 
+<<<<<<< 1edb8bce72c0aa35ea0ad19e3d4aafd03a7237fb
 - (NSArray *)getNotebookList
 {
     [self.dropboxManager getNotebookList];
@@ -291,6 +268,8 @@
     return self.notebookList;
 }
 
+=======
+>>>>>>> af98662e73970f601107094802d8c20858d28afc
 - (NSString *)saveImage:(NSDictionary *)imageInfo withName:(NSString *)imageName forNote:(Note *)note inNotebook:(Notebook *)notebook;
 {
     return [self saveImage:imageInfo withName:imageName forNote:note  inNotebookWithName:notebook.name];
@@ -394,6 +373,31 @@
     }
 }
 
+- (NSArray *)getNoteListForNotebook:(Notebook *)notebook
+{
+    NSArray *array = nil;
+    if(notebook)
+    {
+        if(!notebook.isLoaded)
+        {
+            NSArray *notes = [self.localManager getNoteListForNotebook:notebook];
+            NSMutableArray *loaddedNotes = [[NSMutableArray alloc] initWithArray:notes];
+            [self.notebookDictionary setObject:loaddedNotes forKey:notebook.name];
+            notebook.isLoaded = YES;
+        }
+        array = [self.notebookDictionary objectForKey:notebook.name];
+    }
+    return array;
+}
+
+- (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
+{
+    Notebook *notebook = [self getNotebookWithName:notebookName];
+    NSArray *noteList = [self getNoteListForNotebook:notebook];
+    return noteList;
+}
+
+
 #pragma mark -
 #pragma mark Notebook delegates
 
@@ -463,6 +467,13 @@
     {
         [self.dropboxManager renameNotebookWithName:oldName newName:newName];
     }
+}
+
+- (NSArray *)getNotebookList
+{
+    [self.dropboxManager getNotebookList];
+    [self.notebookList addObjectsFromArray:[self.localManager getNotebookList]];
+    return self.notebookList;
 }
 
 @end
