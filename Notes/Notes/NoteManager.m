@@ -284,7 +284,10 @@
 - (NSArray *)getNotebookList
 {
     [self.dropboxManager getNotebookList];
-    [self.notebookList addObjectsFromArray:[self.localManager getNotebookList]];
+    if(self.notebookList.count == 0)
+    {
+        [self.notebookList addObjectsFromArray:[self.localManager getNotebookList]];
+    }
     return self.notebookList;
 }
 
