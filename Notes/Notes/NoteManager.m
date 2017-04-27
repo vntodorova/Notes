@@ -21,7 +21,7 @@
 @property (nonatomic, strong) DropboxNoteManager *dropboxManager;
 @property TagsParser *tagParser;
 @property NSMutableDictionary *notebookDictionary;
-@property NSMutableArray *notebookList;
+@property (nonatomic) NSMutableArray *notebooks;
 @end
 
 @implementation NoteManager
@@ -34,7 +34,7 @@
         self.localManager = [[LocalNoteManager alloc] init];
         self.dropboxManager = [[DropboxNoteManager alloc] initWithManager:self];
         self.notebookDictionary = [[NSMutableDictionary alloc] init];
-        self.notebookList = [[NSMutableArray alloc] init];
+        self.notebooks = [[NSMutableArray alloc] init];
         self.tagParser = [[TagsParser alloc] init];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(synchronize) name:SYNCHRONIZATION object:nil];
     }
@@ -43,8 +43,8 @@
 
 - (void)synchronize
 {
-    NSArray *localNotebooks = [self.localManager getNotebookList];
-    NSArray *dropboxNotebooks = [self.dropboxManager getNotebookList];
+    NSArray *localNotebooks = [self.localManager notebookList];
+    NSArray *dropboxNotebooks = [self.dropboxManager notebookList];
     
     for (Notebook *currentNotebook in localNotebooks)
     {
@@ -67,8 +67,8 @@
 
 - (void)synchronizeNotesInNotebook:(Notebook *)notebook
 {
-    NSArray *currentNotebookLocalNotes = [self.localManager getNoteListForNotebook:notebook];
-    NSArray *currentNotebookDropboxNotes = [self.dropboxManager getNoteListForNotebook:notebook];
+    NSArray *currentNotebookLocalNotes = [self.localManager noteListForNotebook:notebook];
+    NSArray *currentNotebookDropboxNotes = [self.dropboxManager noteListForNotebook:notebook];
     for (Note *currentNote in currentNotebookLocalNotes) {
         if(![currentNotebookDropboxNotes containsObject:currentNote])
         {
@@ -86,41 +86,17 @@
 - (void)removeNotebookFromAllLists:(NSString *)notebookName
 {
     [self.notebookDictionary removeObjectForKey:notebookName];
-    [self.notebookList removeObject:[self getNotebookWithName:notebookName]];
+    [self.notebooks removeObject:[self notebookWithName:notebookName]];
 }
 
-- (NSArray *)getNotebookNamesList
+- (NSArray *)notebookNamesList
 {
     return self.notebookDictionary.allKeys;
 }
 
-- (NSArray *)getNoteListForNotebook:(Notebook *)notebook
-{
-    NSArray *array = nil;
-    if(notebook)
-    {
-        if(!notebook.isLoaded)
-        {
-            NSArray *notes = [self.localManager getNoteListForNotebook:notebook];
-            NSMutableArray *loaddedNotes = [[NSMutableArray alloc] initWithArray:notes];
-            [self.notebookDictionary setObject:loaddedNotes forKey:notebook.name];
-            notebook.isLoaded = YES;
-        }
-        array = [self.notebookDictionary objectForKey:notebook.name];
-    }
-    return array;
-}
-
-- (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
-{
-    Notebook *notebook = [self getNotebookWithName:notebookName];
-    NSArray *noteList = [self getNoteListForNotebook:notebook];
-    return noteList;
-}
-
 - (BOOL)noteExists:(Note *)newNote inNotebookWithName:(NSString *)notebookName
 {
-    NSMutableArray *noteList = [[NSMutableArray alloc]initWithArray:[self getNoteListForNotebookWithName:notebookName]];
+    NSMutableArray *noteList = [[NSMutableArray alloc]initWithArray:[self noteListForNotebookWithName:notebookName]];
     for(Note *note in noteList)
     {
         if([note.name isEqualToString:newNote.name])
@@ -132,7 +108,7 @@
     return NO;
 }
 
-- (Notebook *)getNotebookWithName:(NSString *)notebookName
+- (Notebook *)notebookWithName:(NSString *)notebookName
 {
     for (Notebook *currentNotebook in self.notebookList)
     {
@@ -151,19 +127,19 @@
     return networkStatus != NotReachable;
 }
 
-- (NSString *)getDirectoryPathForNotebookWithName:(NSString *)notebookName
+- (NSString *)directoryPathForNotebookWithName:(NSString *)notebookName
 {
-    return [[self getNotebooksRootDirectoryPath]
+    return [[self notebooksRootDirectoryPath]
             stringByAppendingPathComponent:notebookName];
 }
 
-- (NSString *)getNotebooksRootDirectoryPath
+- (NSString *)notebooksRootDirectoryPath
 {
     return [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
             stringByAppendingPathComponent: NOTE_NOTEBOOKS_FOLDER];
 }
 
-- (NSArray *)getDirectoryContentForPath:(NSString *)path
+- (NSArray *)directoryContentForPath:(NSString *)path
 {
     NSError *error;
     NSArray *content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&error];
@@ -178,7 +154,7 @@
     return content;
 }
 
-- (NSString *)getTempDirectoryPath
+- (NSString *)tempDirectoryPath
 {
     return [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
             stringByAppendingPathComponent:TEMP_FOLDER];
@@ -206,15 +182,15 @@
 #pragma mark -
 #pragma mark Public methods
 
-- (NSString *)getNoteDirectoryPathForNote:(Note *)note inNotebookWithName:(NSString *)notebookName
+- (NSString *)noteDirectoryPathForNote:(Note *)note inNotebookWithName:(NSString *)notebookName
 {
-    return [[self getDirectoryPathForNotebookWithName:notebookName]
+    return [[self directoryPathForNotebookWithName:notebookName]
             stringByAppendingPathComponent:note.name];
 }
 
 - (void)deleteTempFolder
 {
-    NSString *tempDirectory = [self getTempDirectoryPath];
+    NSString *tempDirectory = [self tempDirectoryPath];
     @try
     {
         [self deleteItemAtPath:tempDirectory];
@@ -225,7 +201,7 @@
 
 - (void)createTempFolder
 {
-    NSString *tempDirectory = [self getTempDirectoryPath];
+    NSString *tempDirectory = [self tempDirectoryPath];
     [self createFoldarAtPath:tempDirectory];
 }
 
@@ -240,7 +216,7 @@
 {
     for (Notebook *currentNotebook in self.notebookList)
     {
-        NSArray *notes = [self getNoteListForNotebook:currentNotebook];
+        NSArray *notes = [self noteListForNotebook:currentNotebook];
         for (Note *currentNote in notes) {
             if (currentNote == note) {
                 return currentNotebook;
@@ -250,42 +226,35 @@
     return nil;
 }
 
-- (NSArray *)getAllNotes
+- (NSArray *)allNotes
 {
     NSMutableArray *allNotes = [[NSMutableArray alloc] init];
-    NSArray *allNotebooks = [self getNotebookList];
+    NSArray *allNotebooks = [self notebookList];
     for (Notebook *currentNotebook in allNotebooks) {
-        [allNotes addObjectsFromArray:[self getNoteListForNotebook:currentNotebook]];
+        [allNotes addObjectsFromArray:[self noteListForNotebook:currentNotebook]];
     }
     return allNotes;
 }
 
-- (NSURL *)getBaseURLforNote:(Note *)note inNotebook:(Notebook *)notebook
+- (NSURL *)baseURLforNote:(Note *)note inNotebook:(Notebook *)notebook
 {
-    return [self getBaseURLforNote:note inNotebookWithName:notebook.name];
+    return [self baseURLforNote:note inNotebookWithName:notebook.name];
 }
 
-- (NSURL *)getBaseURLforNote:(Note *)note inNotebookWithName:(NSString *)notebookName
+- (NSURL *)baseURLforNote:(Note *)note inNotebookWithName:(NSString *)notebookName
 {
     NSString *loadedFilePath;
     if(note.name.length > 0)
     {
-        loadedFilePath = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
+        loadedFilePath = [self noteDirectoryPathForNote:note inNotebookWithName:notebookName];
     }
     else
     {
-        loadedFilePath = [self getTempDirectoryPath];
+        loadedFilePath = [self tempDirectoryPath];
     }
     
     NSURL *baseURL = [NSURL fileURLWithPath:loadedFilePath];
     return baseURL;
-}
-
-- (NSArray *)getNotebookList
-{
-    [self.dropboxManager getNotebookList];
-    [self.notebookList addObjectsFromArray:[self.localManager getNotebookList]];
-    return self.notebookList;
 }
 
 - (NSString *)saveImage:(NSDictionary *)imageInfo withName:(NSString *)imageName forNote:(Note *)note inNotebook:(Notebook *)notebook;
@@ -295,7 +264,7 @@
 
 - (NSString *)saveImage:(NSDictionary *)imageInfo withName:(NSString *)imageName forNote:(Note *)note inNotebookWithName:(NSString *)notebookName
 {
-    NSURL *baseURL = [[self getBaseURLforNote:note inNotebookWithName:notebookName] URLByAppendingPathComponent:imageName];
+    NSURL *baseURL = [[self baseURLforNote:note inNotebookWithName:notebookName] URLByAppendingPathComponent:imageName];
     NSString *mediaType = [imageInfo objectForKey:UIImagePickerControllerMediaType];
     if ([mediaType isEqualToString:PUBLIC_IMAGE_IDENTIFIER])
     {
@@ -308,7 +277,7 @@
 
 - (NSString *)saveUIImage:(UIImage *)image withName:(NSString *)imageName forNote:(Note *)note inNotebookWithName:(NSString *)notebookName
 {
-    NSURL *baseURL = [[self getBaseURLforNote:note inNotebookWithName:notebookName] URLByAppendingPathComponent:imageName];
+    NSURL *baseURL = [[self baseURLforNote:note inNotebookWithName:notebookName] URLByAppendingPathComponent:imageName];
     NSData *data = UIImagePNGRepresentation(image);
     [data writeToURL:baseURL atomically:YES];
     return baseURL.description;
@@ -391,6 +360,30 @@
     }
 }
 
+- (NSArray *)noteListForNotebook:(Notebook *)notebook
+{
+    NSArray *array = nil;
+    if(notebook)
+    {
+        if(!notebook.isLoaded)
+        {
+            NSArray *notes = [self.localManager noteListForNotebook:notebook];
+            NSMutableArray *loaddedNotes = [[NSMutableArray alloc] initWithArray:notes];
+            [self.notebookDictionary setObject:loaddedNotes forKey:notebook.name];
+            notebook.isLoaded = YES;
+        }
+        array = [self.notebookDictionary objectForKey:notebook.name];
+    }
+    return array;
+}
+
+- (NSArray *)noteListForNotebookWithName:(NSString *)notebookName
+{
+    Notebook *notebook = [self notebookWithName:notebookName];
+    NSArray *noteList = [self noteListForNotebook:notebook];
+    return noteList;
+}
+
 #pragma mark -
 #pragma mark Notebook delegates
 
@@ -402,7 +395,7 @@
     }
     
     [self.notebookDictionary setObject:[[NSMutableArray alloc] init] forKey:newNotebook.name];
-    [self.notebookList addObject:newNotebook];
+    [self.notebooks addObject:newNotebook];
     
     [self.localManager addNotebook:newNotebook];
     if([self networkAvailable])
@@ -453,13 +446,20 @@
     [self.notebookDictionary setObject:[self.notebookDictionary objectForKey:oldName] forKey:newName];
     [self.notebookDictionary removeObjectForKey:oldName];
     
-    [self getNotebookWithName:oldName].name = newName;
+    [self notebookWithName:oldName].name = newName;
     
     [self.localManager renameNotebookWithName:oldName newName:newName];
     if([self networkAvailable])
     {
         [self.dropboxManager renameNotebookWithName:oldName newName:newName];
     }
+}
+
+- (NSArray *)notebookList
+{
+    [self.dropboxManager notebookList];
+    [self.notebooks addObjectsFromArray:[self.localManager notebookList]];
+    return self.notebookList;
 }
 
 @end

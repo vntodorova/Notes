@@ -82,7 +82,7 @@
 
 - (void)reloadTableViewData
 {
-    [self.tableViewDataSource setObject:[self.noteManager getNotebookList] forKey:NOTEBOOK_KEY];
+    [self.tableViewDataSource setObject:[self.noteManager notebookList] forKey:NOTEBOOK_KEY];
     [self.tableViewDataSource setObject:[self getNotesWithReminders] forKey:REMINDER_KEY];
     [self.tableView reloadData];
 }
@@ -91,9 +91,9 @@
 {
     NSMutableArray *reminders = [[NSMutableArray alloc] init];
     
-    for (Notebook *notebook in [self.noteManager getNotebookList])
+    for (Notebook *notebook in [self.noteManager notebookList])
     {
-        for (Note *note in [self.noteManager getNoteListForNotebook:notebook])
+        for (Note *note in [self.noteManager noteListForNotebook:notebook])
         {
             if(note.triggerDate != nil)
             {
@@ -155,7 +155,7 @@
         }
         else
         {
-            cell = [self.layoutProvider newCell:tableView notebook:notebook notebookSize:[[self.noteManager getNoteListForNotebook:notebook] count]];
+            cell = [self.layoutProvider newCell:tableView notebook:notebook notebookSize:[[self.noteManager noteListForNotebook:notebook] count]];
         }
     }
     
@@ -263,7 +263,7 @@
 - (void)deleteButtonClickedOnCell:(EditableNotebookCell *)cell
 {
     self.cellForDeleting = cell;
-    if([[self.noteManager getNoteListForNotebookWithName:cell.nameLabel.text] count] == 0)
+    if([[self.noteManager noteListForNotebookWithName:cell.nameLabel.text] count] == 0)
     {
         [self deleteCell];
     }
@@ -286,7 +286,7 @@
 {
     NSIndexPath *pathForDeleting = [self.tableView indexPathForCell:self.cellForDeleting];
     [self.noteManager removeNotebookWithName:self.cellForDeleting.nameLabel.text];
-    [self.tableViewDataSource setObject:[self.noteManager getNotebookList] forKey:NOTEBOOK_KEY];
+    [self.tableViewDataSource setObject:[self.noteManager notebookList] forKey:NOTEBOOK_KEY];
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:pathForDeleting] withRowAnimation:UITableViewRowAnimationTop];
     [self dismissConfirmationView];
     [self.presentingViewControllerDelegate changeCurrentNotebook:GENERAL_NOTEBOOK_NAME];

@@ -57,7 +57,7 @@
     self.noteManager = [[NoteManager alloc] init];
     self.themeManager = [ThemeManager sharedInstance];
     self.filteredNotes = [[NSMutableArray alloc] init];
-    self.allNotes = [self.noteManager getAllNotes];
+    self.allNotes = [self.noteManager allNotes];
     self.currentNotebook = GENERAL_NOTEBOOK_NAME;
     [self createGeneralNotebook];
     [self setupNavigationBar];
@@ -75,7 +75,7 @@
 
 - (void)reloadTableViewData
 {
-    self.notesArray = [self.noteManager getNoteListForNotebookWithName:self.currentNotebook];
+    self.notesArray = [self.noteManager noteListForNotebookWithName:self.currentNotebook];
     [self.tableView reloadData];
 }
 
@@ -185,7 +185,7 @@
 {
     NSIndexPath *pathForDeleting = [self.tableView indexPathForCell:cell];
     [self.noteManager removeNote:cell.cellNote fromNotebookWithName:self.currentNotebook];
-    self.notesArray = [self.noteManager getNoteListForNotebookWithName:self.currentNotebook];
+    self.notesArray = [self.noteManager noteListForNotebookWithName:self.currentNotebook];
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:pathForDeleting] withRowAnimation:UITableViewRowAnimationRight];
 }
 
@@ -237,7 +237,7 @@
 
 - (void)onNoteCreated
 {
-    self.allNotes = [self.noteManager getAllNotes];
+    self.allNotes = [self.noteManager allNotes];
     [self reloadTableViewData];
 }
 
@@ -292,7 +292,7 @@
 - (void)changeCurrentNotebook:(NSString *)newNotebookName
 {
     self.currentNotebook = newNotebookName;
-    self.notesArray = [self.noteManager getNoteListForNotebookWithName:self.currentNotebook];
+    self.notesArray = [self.noteManager noteListForNotebookWithName:self.currentNotebook];
     [self.tableView reloadData];
 }
 

@@ -13,7 +13,7 @@
 
 - (void)synchronize;
 
-- (NSString *)getNoteDirectoryPathForNote:(Note *)note inNotebookWithName:(NSString *)notebookName;
+- (NSString *)noteDirectoryPathForNote:(Note *)note inNotebookWithName:(NSString *)notebookName;
 
 - (void)deleteTempFolder;
 - (void)createTempFolder;
@@ -21,14 +21,11 @@
 - (void)exchangeNoteAtIndex:(NSInteger)firstIndex withNoteAtIndex:(NSInteger)secondIndex fromNotebook:(NSString *)notebookName;
 
 - (Notebook *)notebookContainingNote:(Note *)note;
-- (NSArray *)getNoteListForNotebook:(Notebook *)notebook;
-- (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName;
-- (NSArray *)getAllNotes;
+- (NSArray *)allNotes;
 
-- (NSURL *)getBaseURLforNote:(Note *)note inNotebook:(Notebook *)notebook;
-- (NSURL *)getBaseURLforNote:(Note *)note inNotebookWithName:(NSString *)notebookName;
-- (NSArray *)getNotebookList;
-- (NSArray *)getNotebookNamesList;
+- (NSURL *)baseURLforNote:(Note *)note inNotebook:(Notebook *)notebook;
+- (NSURL *)baseURLforNote:(Note *)note inNotebookWithName:(NSString *)notebookName;
+- (NSArray *)notebookNamesList;
 
 - (NSString *)saveImage:(NSDictionary *)imageInfo withName:(NSString *)imageName forNote:(Note *)note inNotebook:(Notebook *)notebook;
 - (NSString *)saveImage:(NSDictionary *)imageInfo withName:(NSString *)imageName forNote:(Note *)note inNotebookWithName:(NSString *)notebookName;
