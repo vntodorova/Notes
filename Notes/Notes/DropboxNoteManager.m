@@ -117,7 +117,7 @@
     return notebookList;
 }
 
-- (void) sendRequestForContentsInPath:(NSString*) path
+- (void)sendRequestForContentsInPath:(NSString*) path
 {
     NSMutableArray *notebookList = [[NSMutableArray alloc] init];
     [[self.client.filesRoutes listFolder:@"/Notebooks"]
