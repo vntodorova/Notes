@@ -31,12 +31,13 @@
     self = [super init];
     if(self)
     {
-        self.localManager = [[LocalNoteManager alloc] init];
+        self.localManager = [[LocalNoteManager alloc] initWithResponseHandler:self];
         self.dropboxManager = [[DropboxNoteManager alloc] initWithManager:self];
         self.notebookDictionary = [[NSMutableDictionary alloc] init];
         self.notebookList = [[NSMutableArray alloc] init];
         self.tagParser = [[TagsParser alloc] init];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(synchronize) name:SYNCHRONIZATION object:nil];
+       
     }
     return self;
 }
@@ -316,17 +317,9 @@
     }
 }
 
-- (void)removeNote:(Note *)note fromNotebook:(Notebook *)notebookName
+- (void)removeNote:(Note *)note fromNotebook:(Notebook *)notebook
 {
-    [self.localManager removeNote:note fromNotebook:notebookName];
-    
-    NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName.name];
-    [array removeObject:note];
-    
-    if([self networkAvailable])
-    {
-        [self.dropboxManager removeNote:note fromNotebook:notebookName];
-    }
+    [self removeNote:note fromNotebookWithName:notebook.name];
 }
 
 - (void)removeNote:(Note *)note fromNotebookWithName:(NSString *)notebookName
@@ -335,6 +328,7 @@
     {
         return;
     }
+    [[self.notebookDictionary objectForKey:notebookName] removeObject:note];
     [self.localManager removeNote:note fromNotebookWithName:notebookName];
     if([self networkAvailable])
     {
@@ -367,9 +361,7 @@
     {
         if(!notebook.isLoaded)
         {
-            NSArray *notes = [self.localManager getNoteListForNotebook:notebook];
-            NSMutableArray *loaddedNotes = [[NSMutableArray alloc] initWithArray:notes];
-            [self.notebookDictionary setObject:loaddedNotes forKey:notebook.name];
+            [self.localManager requestNoteListForNotebook:notebook];
             notebook.isLoaded = YES;
         }
         array = [self.notebookDictionary objectForKey:notebook.name];
@@ -384,6 +376,15 @@
     return noteList;
 }
 
+- (void)requestNoteListForNotebook:(Notebook *)notebook
+{
+    [self requestNoteListForNotebookWithName:notebook.name];
+}
+
+- (void)requestNoteListForNotebookWithName:(NSString *)notebookName
+{
+    [self.localManager requestNoteListForNotebookWithName:notebookName];
+}
 
 #pragma mark -
 #pragma mark Notebook delegates
@@ -461,9 +462,35 @@
     [self.dropboxManager getNotebookList];
     if(self.notebookList.count == 0)
     {
-        [self.notebookList addObjectsFromArray:[self.localManager getNotebookList]];
+        [self.localManager requestNotebookList];
     }
     return self.notebookList;
+}
+
+- (void)requestNotebookList
+{
+    [self.localManager requestNotebookList];
+}
+
+#pragma mark -
+#pragma mark ResponseHandler
+
+- (void)handleResponseWithNotebookList:(NSArray *) notebookList
+{
+    [self.notebookList addObjectsFromArray:notebookList];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTEBOOK_LIST_CHANGED object:nil userInfo:nil];
+}
+
+- (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebook:(Notebook *)notebook
+{
+    [self handleResponseWithNoteList:noteList fromNotebookWithName:notebook.name];
+}
+
+- (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebookWithName:(NSString *)notebookName
+{
+    NSMutableArray *loaddedNotes = [[NSMutableArray alloc] initWithArray:noteList];
+    [self.notebookDictionary setObject:loaddedNotes forKey:notebookName];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_LIST_CHANGED object:notebookName userInfo:nil];
 }
 
 @end

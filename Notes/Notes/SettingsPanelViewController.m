@@ -85,6 +85,7 @@
 
 - (IBAction)synchronize:(UIButton *)sender
 {
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:SYNCHRONIZATION object:nil userInfo:nil];
 }
 

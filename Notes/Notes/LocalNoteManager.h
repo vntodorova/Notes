@@ -11,4 +11,6 @@
 
 @interface LocalNoteManager : NSObject <NoteManagerDelegate, NotebookManagerDelegate>
 
+- (instancetype)initWithResponseHandler:(id)responseHandler;
+
 @end

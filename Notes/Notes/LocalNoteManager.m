@@ -14,18 +14,19 @@
 #import "TagsParser.h"
 
 @interface LocalNoteManager()
-
+@property id<ResponseHandler> responseHandler;
 @property TagsParser *tagParser;
 @end
 
 @implementation LocalNoteManager
 
-- (instancetype)init
+- (instancetype)initWithResponseHandler:(id)responseHandler
 {
     self = [super init];
     if (self)
     {
         self.tagParser = [[TagsParser alloc] init];
+        self.responseHandler = responseHandler;
         [self createDirectoryAtPath: [self getNotebooksRootDirectoryPath]];
         [self loadNotebooks];
     }
@@ -243,15 +244,6 @@
     [[NSFileManager defaultManager] moveItemAtPath:oldPath toPath:newPath error:nil];
 }
 
-- (NSArray *)getNoteListForNotebook:(Notebook *)notebook
-{
-    return [self getNoteListForNotebookWithName:notebook.name];
-}
-
-- (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
-{
-    return [self loadNotesForNotebookWithName:notebookName];
-}
 
 #pragma mark -
 #pragma mark Notebook manager delegate
@@ -291,8 +283,41 @@
     [[NSFileManager defaultManager] moveItemAtPath:pathToNotebook toPath:newPath error:nil];
 }
 
+
+#pragma mark asynch
+
 -(NSArray *)getNotebookList
 {
-    return [self loadNotebooks];
+    return nil;
 }
+
+- (void)requestNotebookList
+{
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        [self.responseHandler handleResponseWithNotebookList:[self loadNotebooks]];
+    });
+}
+
+- (void)requestNoteListForNotebook:(Notebook *)notebook
+{
+    [self requestNoteListForNotebookWithName: notebook.name];
+}
+
+- (void)requestNoteListForNotebookWithName:(NSString *)notebookName
+{
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        [self.responseHandler handleResponseWithNoteList:[self loadNotesForNotebookWithName:notebookName] fromNotebookWithName:notebookName];
+    });
+}
+
+- (NSArray *)getNoteListForNotebook:(Notebook *)notebook
+{
+    return nil;
+}
+
+- (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
+{
+    return nil;
+}
+
 @end

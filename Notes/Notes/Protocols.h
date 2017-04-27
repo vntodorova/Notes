@@ -29,6 +29,9 @@
 
 - (NSArray *)getNoteListForNotebook:(Notebook *)notebook;
 - (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName;
+
+- (void)requestNoteListForNotebook:(Notebook *)notebook;
+- (void)requestNoteListForNotebookWithName:(NSString *)notebookName;
 @end
 
 @protocol NotebookManagerDelegate
@@ -43,6 +46,16 @@
 - (void)renameNotebookWithName:(NSString *)oldName newName:(NSString *)newName;
 
 - (NSArray *)getNotebookList;
+
+- (void)requestNotebookList;
+
+@end
+
+@protocol ResponseHandler
+
+- (void)handleResponseWithNotebookList:(NSArray *)notebookList;
+- (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebook:(Notebook *)notebook;
+- (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebookWithName:(NSString *)notebookName;
 
 @end
 

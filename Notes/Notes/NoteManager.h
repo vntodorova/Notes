@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Protocols.h"
 
-@interface NoteManager : NSObject <NoteManagerDelegate, NotebookManagerDelegate>
+@interface NoteManager : NSObject <NoteManagerDelegate, NotebookManagerDelegate, ResponseHandler>
 
 - (void)synchronize;
 

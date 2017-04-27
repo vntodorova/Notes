@@ -42,6 +42,8 @@
 #define SETTINGS_PANEL_NIBNAME @"SettingsPanelViewController"
 #define GENERAL_NOTEBOOK_NAME @"General"
 #define THEME_CHANGED_EVENT @"ThemeChangedEvent"
+#define NOTEBOOK_LIST_CHANGED @"NotebooksChanged"
+#define NOTE_LIST_CHANGED @"NotelistChanged"
 #define SYNCHRONIZATION @"Sync"
 #define LEFT_PANEL_WIDTH 250
 
