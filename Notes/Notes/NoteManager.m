@@ -480,7 +480,9 @@
 - (void)handleResponseWithNotebookList:(NSArray *) notebookList
 {
     [self.notebookList addObjectsFromArray:notebookList];
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTEBOOK_LIST_CHANGED object:nil userInfo:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTEBOOK_LIST_CHANGED object:nil userInfo:nil];
+    });
 }
 
 - (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebook:(Notebook *)notebook
@@ -492,7 +494,9 @@
 {
     NSMutableArray *loaddedNotes = [[NSMutableArray alloc] initWithArray:noteList];
     [self.notebookDictionary setObject:loaddedNotes forKey:notebookName];
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_LIST_CHANGED object:notebookName userInfo:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_LIST_CHANGED object:notebookName userInfo:nil];
+    });
 }
 
 @end
