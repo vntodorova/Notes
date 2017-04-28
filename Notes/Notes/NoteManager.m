@@ -20,8 +20,10 @@
 @property (nonatomic, strong) LocalNoteManager *localManager;
 @property (nonatomic, strong) DropboxNoteManager *dropboxManager;
 @property TagsParser *tagParser;
+
 @property NSMutableDictionary *notebookDictionary;
 @property NSMutableArray *notebookList;
+
 @end
 
 @implementation NoteManager
