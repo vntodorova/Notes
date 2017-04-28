@@ -221,7 +221,28 @@
 - (NSArray *)getNotebookList
 {
     NSMutableArray *notebookList = [[NSMutableArray alloc] init];
-    [[self.client.filesRoutes listFolder:@"/Notebooks"]
+    [[self.client.filesRoutes listFolder:@"/Notebooks/veniThePervert/1"]
+     setResponseBlock:^(DBFILESListFolderResult *response, DBFILESListFolderError *routeError, DBRequestError *networkError)
+     {
+         if (response)
+         {
+             for (DBFILESMetadata *data in response.entries)
+             {
+                 Notebook *notebook = [[Notebook alloc] initWithName:data.name];
+                 [notebookList addObject:notebook];
+             }
+         } else {
+             NSLog(@"%@\n%@\n", routeError, networkError);
+         }
+     }];
+    return notebookList;
+}
+
+- (NSArray *)getContentsOfNote:(Note *)note inNotebook:(Notebook *)notebook;
+{
+    NSMutableArray *notebookList = [[NSMutableArray alloc] init];
+    NSString *path = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebook.name];
+    [[self.client.filesRoutes listFolder:path]
      setResponseBlock:^(DBFILESListFolderResult *response, DBFILESListFolderError *routeError, DBRequestError *networkError)
      {
          if (response)

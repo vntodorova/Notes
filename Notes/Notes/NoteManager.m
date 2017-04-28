@@ -388,6 +388,7 @@
     [self.localManager requestNoteListForNotebookWithName:notebookName];
 }
 
+
 #pragma mark -
 #pragma mark Notebook delegates
 
@@ -473,6 +474,7 @@
 {
     [self.localManager requestNotebookList];
 }
+
 
 #pragma mark -
 #pragma mark ResponseHandler
