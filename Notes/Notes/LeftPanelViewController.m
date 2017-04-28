@@ -157,7 +157,7 @@
         }
         else
         {
-            cell = [self.layoutProvider newCell:tableView notebook:notebook notebookSize:[[self.noteManager getNoteListForNotebook:notebook] count]];
+            cell = [self.layoutProvider newCell:tableView notebook:notebook notebookSize:notebook.notesCount];
         }
     }
     

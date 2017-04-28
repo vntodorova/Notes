@@ -117,11 +117,11 @@
     }
     else
     {
-        [self createFoldarAtPath:path];
+        [self createFolderAtPath:path];
     }
 }
 
-- (void)createFoldarAtPath:(NSString *)path
+- (void)createFolderAtPath:(NSString *)path
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     [fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
@@ -135,6 +135,7 @@
     {
         Notebook *loadedNotebook = [[Notebook alloc] initWithName:[directoryContents objectAtIndex:i]];
         BOOL isHidden = [loadedNotebook.name hasPrefix:@"."];
+        loadedNotebook.notesCount = [self loadNotesForNotebookWithName:loadedNotebook.name].count;
         if(!isHidden)
         {
             [notebooksList addObject:loadedNotebook];

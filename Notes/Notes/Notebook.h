@@ -15,6 +15,8 @@
 
 @property (nonatomic, strong) NSString *name;
 
+@property NSInteger notesCount;
+
 @property BOOL isLoaded;
 
 @end
