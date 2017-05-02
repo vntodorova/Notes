@@ -44,7 +44,6 @@
 #define THEME_CHANGED_EVENT @"ThemeChangedEvent"
 #define NOTEBOOK_LIST_CHANGED @"NotebooksChanged"
 #define NOTE_LIST_CHANGED @"NotelistChanged"
-#define SYNCHRONIZATION @"Sync"
 #define LEFT_PANEL_WIDTH 250
 
 #pragma mark -
@@ -96,7 +95,7 @@
 #define VERDANA @"Verdana"
 #define UNNAMED_NOTE @"Unnamed"
 #define DEFAULT_IMAGE_HTML @"<img src=\"%@\" alt=\"\" style=\"width:150;height:150;\">"
-#define REDACTATION_BUTTON_NAME @"Save"
+#define SAVE_BUTTON_NAME @"Save"
 #define JS_COMMAND_GET_HTML @"document.documentElement.outerHTML"
 #define JS_COMMAND_UNDERLINE @"document.execCommand(\"Underline\")"
 #define JS_COMMAND_ITALIC @"document.execCommand(\"Italic\")"

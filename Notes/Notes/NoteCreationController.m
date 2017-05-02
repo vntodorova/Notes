@@ -112,7 +112,7 @@
         [self loadSavedHtml];
         [self.noteName setText:self.note.name];
         [self.noteTags setText:[self.tagsParser buildTextFromTags:self.note.tags]];
-        [self.createButton setTitle:REDACTATION_BUTTON_NAME forState:UIControlStateNormal];
+        [self.createButton setTitle:SAVE_BUTTON_NAME forState:UIControlStateNormal];
     }
     else
     {

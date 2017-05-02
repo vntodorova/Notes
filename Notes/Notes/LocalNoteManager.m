@@ -40,9 +40,7 @@
     
     if(!isSuccessful)
     {
-        @throw [NSException exceptionWithName:@"FileNotFoundException"
-                                       reason:error.description
-                                     userInfo:nil];
+        @throw [NSException exceptionWithName:@"FileNotFoundException" reason:error.description userInfo:nil];
     }
 }
 
@@ -64,7 +62,7 @@
             stringByAppendingPathComponent:notebookName];
 }
 
-- (NSString *)getNoteDirectoryPathForNote:(Note *)note inNotebookWithName:(NSString *)notebookName
+- (NSString *)getDirectoryPathForNote:(Note *)note inNotebookWithName:(NSString *)notebookName
 {
     return [[self getDirectoryPathForNotebookWithName:notebookName]
             stringByAppendingPathComponent:note.name];
@@ -72,14 +70,14 @@
 
 - (void)saveToDisk:(Note *)newNote toNotebook:(NSString *)notebookName
 {
-    NSString *noteRoot = [self getNoteDirectoryPathForNote:newNote inNotebookWithName:notebookName];
+    NSString *noteRoot = [self getDirectoryPathForNote:newNote inNotebookWithName:notebookName];
     
     [self createDirectoryAtPath:noteRoot];
     
-    [self saveData:[self.tagParser buildTextFromTags:newNote.tags]  toFile:[noteRoot stringByAppendingPathComponent:NOTE_TAGS_FILE]];
-    [self saveData:newNote.body                                     toFile:[noteRoot stringByAppendingPathComponent:NOTE_BODY_FILE]];
-    [self saveData:newNote.dateModified                             toFile:[noteRoot stringByAppendingPathComponent:NOTE_DATE_FILE]];
-    [self saveData:newNote.triggerDate                              toFile:[noteRoot stringByAppendingPathComponent:NOTE_TRIGGER_DATE_FILE]];
+    [self saveData:[self.tagParser buildTextFromTags:newNote.tags] toFile:[noteRoot stringByAppendingPathComponent:NOTE_TAGS_FILE]];
+    [self saveData:newNote.body toFile:[noteRoot stringByAppendingPathComponent:NOTE_BODY_FILE]];
+    [self saveData:newNote.dateModified toFile:[noteRoot stringByAppendingPathComponent:NOTE_DATE_FILE]];
+    [self saveData:newNote.triggerDate toFile:[noteRoot stringByAppendingPathComponent:NOTE_TRIGGER_DATE_FILE]];
     
     [self copyFilesFromSource:[self getTempDirectoryPath] toDestination:noteRoot];
 }
@@ -87,69 +85,53 @@
 - (void)copyFilesFromSource:(NSString *)source toDestination:(NSString *)destination
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSEnumerator *directoryContents = [self getEnumeratorForDir:source];
-    NSString *imageName;
-    while(imageName = [directoryContents nextObject])
+    NSEnumerator *directoryContents = [[NSFileManager defaultManager] enumeratorAtPath:source];
+    NSString *fileName;
+    while(fileName = [directoryContents nextObject])
     {
-        BOOL isHidden = [imageName hasPrefix:@"."];
-        if(!isHidden)
+        if([self isHidden:fileName] == NO)
         {
-            NSString *imageSourcePath = [source stringByAppendingPathComponent:imageName];
-            NSString *imageDestinationPath = [destination stringByAppendingPathComponent:imageName];
+            NSString *fileSourcePath = [source stringByAppendingPathComponent:fileName];
+            NSString *fileDestinationPath = [destination stringByAppendingPathComponent:fileName];
             
-            [fileManager copyItemAtPath:imageSourcePath toPath:imageDestinationPath error:nil];
+            [fileManager copyItemAtPath:fileSourcePath toPath:fileDestinationPath error:nil];
         }
     }
 }
 
 - (void)saveData:(NSString *)fileContent toFile:(NSString *)path
 {
-    NSError *error;
-    [fileContent writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error];
+    [fileContent writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:nil];
 }
 
 - (void)createDirectoryAtPath:(NSString *)path
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    if([fileManager fileExistsAtPath:path isDirectory:nil])
+    if([fileManager fileExistsAtPath:path isDirectory:nil] == NO)
     {
-        return;
+        [fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
     }
-    else
-    {
-        [self createFolderAtPath:path];
-    }
-}
-
-- (void)createFolderAtPath:(NSString *)path
-{
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    [fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
 }
 
 - (NSArray *)loadNotebooks
 {
     NSArray *directoryContents = [self getDirectoryContentForPath: [self getNotebooksRootDirectoryPath]];
     NSMutableArray *notebooksList = [[NSMutableArray alloc] init];
-    for(int i = 0; i < directoryContents.count; i++)
+    
+    for (NSString *fileName in directoryContents)
     {
-        Notebook *loadedNotebook = [[Notebook alloc] initWithName:[directoryContents objectAtIndex:i]];
-        BOOL isHidden = [loadedNotebook.name hasPrefix:@"."];
-        loadedNotebook.notesCount = [self loadNotesForNotebookWithName:loadedNotebook.name].count;
-        if(!isHidden)
+        Notebook *loadedNotebook = [[Notebook alloc] initWithName:fileName];
+        if([self isHidden:loadedNotebook.name] == NO)
         {
+            loadedNotebook.notesCount = [self notesForNotebookWithName:loadedNotebook.name].count;
             [notebooksList addObject:loadedNotebook];
         }
     }
     return notebooksList;
 }
 
-- (NSMutableArray *)loadNotesForNotebookWithName:(NSString *)notebookName
+- (NSMutableArray *)notesForNotebookWithName:(NSString *)notebookName
 {
-    if([notebookName hasPrefix:@"."])
-    {
-        return nil;
-    }
     NSString *path = [self getDirectoryPathForNotebookWithName:notebookName];
     NSMutableArray *array = [[NSMutableArray alloc] init];
     
@@ -157,10 +139,9 @@
     
     for(NSString *noteName in directoryContents)
     {
-        BOOL isHidden = [noteName hasPrefix:@"."];
-        if(!isHidden)
+        if([self isHidden:noteName] == NO)
         {
-            NSString *notePath = [NSString stringWithFormat:@"%@/%@",path, noteName];
+            NSString *notePath = [NSString stringWithFormat:@"%@/%@",path,noteName];
             [array addObject:[self loadNoteWithPath:notePath andName:noteName]];
         }
     }
@@ -171,20 +152,11 @@
 {
     NSError *error;
     NSArray *content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&error];
-    
     if(error)
     {
-        @throw [NSException exceptionWithName:@"DirectoryNotFound"
-                                       reason:error.description
-                                     userInfo:nil];
+        @throw [NSException exceptionWithName:@"Directory not found" reason:error.description userInfo:nil];
     }
-    
     return content;
-}
-
-- (NSDirectoryEnumerator *)getEnumeratorForDir:(NSString *)dir
-{
-    return [[NSFileManager defaultManager] enumeratorAtPath:dir];
 }
 
 - (Note *)loadNoteWithPath:(NSString *)notePath andName:(NSString*) noteName
@@ -203,9 +175,12 @@
 
 - (NSString *)loadDataFromFilePath:(NSString *)path
 {
-    NSError *error;
-    NSString *fileContents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
-    return fileContents;
+    return [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+}
+
+- (BOOL)isHidden:(NSString *)fileName
+{
+    return [fileName hasPrefix:@"."];
 }
 
 #pragma mark -
@@ -229,8 +204,7 @@
 
 - (void)removeNote:(Note *)note fromNotebookWithName:(NSString *)notebookName
 {
-    NSString *path = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
-    [self deleteItemAtPath:path];
+    [self deleteItemAtPath:[self getDirectoryPathForNote:note inNotebookWithName:notebookName]];
 }
 
 - (void)renameNote:(Note *)note fromNotebook:(Notebook*) notebook oldName:(NSString*) oldName
@@ -243,26 +217,52 @@
     Note *dummyNote = [[Note alloc] init];
     dummyNote.name = oldName;
     
-    NSString *oldPath = [self getNoteDirectoryPathForNote:dummyNote inNotebookWithName:notebookName];
-    NSString *newPath = [[oldPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:note.name];
+    NSString *oldPath = [self getDirectoryPathForNote:dummyNote inNotebookWithName:notebookName];
+    NSString *newPath = [[self getDirectoryPathForNotebookWithName:notebookName] stringByAppendingPathComponent:note.name];
     
     [[NSFileManager defaultManager] moveItemAtPath:oldPath toPath:newPath error:nil];
 }
 
+- (NSArray *)getNoteListForNotebook:(Notebook *)notebook
+{
+    @throw [NSException exceptionWithName:@"Not implemented" reason:nil userInfo:nil];
+    return nil;
+}
+
+- (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
+{
+    @throw [NSException exceptionWithName:@"Not implemented" reason:nil userInfo:nil];
+    return nil;
+}
+
+- (void)requestNoteListForNotebook:(Notebook *)notebook
+{
+    
+    [self requestNoteListForNotebookWithName:notebook.name];
+}
+
+- (void)requestNoteListForNotebookWithName:(NSString *)notebookName
+{
+    if([self isHidden:notebookName] == NO)
+    {
+        dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void)
+                       {
+                           [self.responseHandler handleResponseWithNoteList:[self notesForNotebookWithName:notebookName] fromNotebookWithName:notebookName fromManager:self];
+                       });
+    }
+}
 
 #pragma mark -
 #pragma mark Notebook manager delegate
 
 - (void)addNotebook:(Notebook *)newNotebook
 {
-    NSString *notebookPath = [self getDirectoryPathForNotebookWithName:newNotebook.name];
-    [self createDirectoryAtPath:notebookPath];
+    [self createDirectoryAtPath:[self getDirectoryPathForNotebookWithName:newNotebook.name]];
 }
 
 - (void)addNotebookWithName:(NSString *)notebookName
 {
-    Notebook *notebook = [[Notebook alloc] initWithName:notebookName];
-    [self addNotebook:notebook];
+    [self addNotebook:[[Notebook alloc] initWithName:notebookName]];
 }
 
 - (void)removeNotebook:(Notebook *)notebook
@@ -272,8 +272,7 @@
 
 - (void)removeNotebookWithName:(NSString *)notebookName
 {
-    NSString *notebookPath = [self getDirectoryPathForNotebookWithName:notebookName];
-    [self deleteItemAtPath:notebookPath];
+    [self deleteItemAtPath:[self getDirectoryPathForNotebookWithName:notebookName]];
 }
 
 - (void)renameNotebook:(Notebook *)notebook newName:(NSString *)newName
@@ -283,16 +282,20 @@
 
 - (void)renameNotebookWithName:(NSString *)oldName newName:(NSString *)newName
 {
-    NSString *pathToNotebook = [self getDirectoryPathForNotebookWithName:oldName];
-    NSString *newPath = [[pathToNotebook stringByDeletingLastPathComponent] stringByAppendingPathComponent:newName];
-    [[NSFileManager defaultManager] moveItemAtPath:pathToNotebook toPath:newPath error:nil];
+    [[NSFileManager defaultManager] moveItemAtPath:[self getDirectoryPathForNotebookWithName:oldName]
+                                            toPath:[self getDirectoryPathForNotebookWithName:newName]
+                                             error:nil];
 }
 
-
-#pragma mark async
-
--(NSArray *)getNotebookList
+- (NSArray *)getContentsOfNote:(Note *)note inNotebook:(Notebook *)notebook
 {
+    @throw [NSException exceptionWithName:@"Not implemented" reason:nil userInfo:nil];
+    return nil;
+}
+
+- (NSArray *)getNotebookList
+{
+    @throw [NSException exceptionWithName:@"Not implemented" reason:nil userInfo:nil];
     return nil;
 }
 
@@ -301,30 +304,6 @@
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         [self.responseHandler handleResponseWithNotebookList:[self loadNotebooks]];
     });
-}
-
-- (void)requestNoteListForNotebook:(Notebook *)notebook
-{
-    
-    [self requestNoteListForNotebookWithName: notebook.name];
-}
-
-- (void)requestNoteListForNotebookWithName:(NSString *)notebookName
-{
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void)
-    {
-        [self.responseHandler handleResponseWithNoteList:[self loadNotesForNotebookWithName:notebookName] fromNotebookWithName:notebookName fromManager:self];
-    });
-}
-
-- (NSArray *)getNoteListForNotebook:(Notebook *)notebook
-{
-    return nil;
-}
-
-- (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
-{
-    return nil;
 }
 
 @end

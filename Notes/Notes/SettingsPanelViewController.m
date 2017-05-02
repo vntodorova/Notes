@@ -85,8 +85,7 @@
 
 - (IBAction)synchronize:(UIButton *)sender
 {
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:SYNCHRONIZATION object:nil userInfo:nil];
+    @throw [NSException exceptionWithName:@"Not implemented" reason:nil userInfo:nil];
 }
 
 #pragma mark -
