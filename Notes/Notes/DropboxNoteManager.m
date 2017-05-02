@@ -262,6 +262,7 @@
                  Notebook *notebook = [[Notebook alloc] initWithName:data.name];
                  notebook.notesCount = [self getNoteListForNotebook:notebook].count;
                  [notebookList addObject:notebook];
+                 NSLog(@"%@", data);
              }
          }
          else

@@ -512,24 +512,23 @@
 
 -(NSArray *)getContentsOfNote:(Note *)note inNotebook:(Notebook *)notebook
 {
-    @throw [[NSException alloc] initWithName:@"Not Implememented" reason:@"suck it" userInfo:nil];
+    @throw [[NSException alloc] initWithName:@"Not Implemented" reason:@"suck it" userInfo:nil];
 }
 
-- (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebook:(Notebook *)notebook
+- (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebook:(Notebook *)notebook fromManager:(id)manager
 {
-    [self handleResponseWithNoteList:noteList fromNotebookWithName:notebook.name fromManager:self];
+    [self handleResponseWithNoteList:noteList fromNotebookWithName:notebook.name fromManager:manager];
 }
 
 - (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebookWithName:(NSString *)notebookName fromManager:(id)manager
 {
-    NSMutableArray *loadedNotes = [[NSMutableArray alloc] initWithArray:noteList];
-    [self.notebookDictionary setObject:loadedNotes forKey:notebookName];
+    [self.notebookDictionary setObject:noteList forKey:notebookName];
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_LIST_CHANGED object:notebookName userInfo:nil];
     });
     if(manager == self.localManager)
     {
-        [self.localNotebookDictionary setObject:loadedNotes forKey:notebookName];
+        [self.localNotebookDictionary setObject:noteList forKey:notebookName];
         [self.dropboxManager requestNoteListForNotebookWithName:notebookName];
     }
     if(manager == self.dropboxManager)
@@ -544,7 +543,7 @@
         for (Note *note in localNotes) {
             
             for (Note *dropboxNote in noteList)
-            {
+            { 
                 if(![note.name isEqualToString:dropboxNote.name])
                 {
                     if(note.dateModified != dropboxNote.dateModified)
@@ -561,14 +560,11 @@
                             [self.dropboxManager removeNote:dropboxNote fromNotebookWithName:notebookName];
                             [self.dropboxManager addNote:note toNotebookWithName:notebookName];
                         }
-                        
                     }
                 }
             }
-            
         }
-        
-        [self.dropboxNotebookDictionary setObject:loadedNotes forKey:notebookName];
+        [self.dropboxNotebookDictionary setObject:noteList forKey:notebookName];
     }
 }
 
