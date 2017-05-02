@@ -111,13 +111,6 @@
     return reminders;
 }
 
-- (void)notebookClickedOnIndexPath:(NSIndexPath *)indexPath
-{
-    Notebook *clickedNotebook = [[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] objectAtIndex:indexPath.row];
-    [self.presentingViewControllerDelegate changeCurrentNotebook:clickedNotebook.name];
-    [self.presentingViewControllerDelegate hideLeftPanel];
-}
-
 #pragma mark -
 #pragma mark TableView header buttons
 
@@ -189,7 +182,10 @@
 {
     if(indexPath.section == NOTEBOOKS_SECTION)
     {
-        [self notebookClickedOnIndexPath:indexPath];
+        Notebook *clickedNotebook = [[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] objectAtIndex:indexPath.row];
+        [self.noteManager syncNotesInNotebook:clickedNotebook];
+        [self.presentingViewControllerDelegate changeCurrentNotebook:clickedNotebook.name];
+        [self.presentingViewControllerDelegate hideLeftPanel];
     }
 }
 

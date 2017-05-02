@@ -118,4 +118,8 @@
 
 #define FILE_NOT_FOUND_EXCEPTION @"FileNotFoundException"
 #define DIRECTORY_NOT_FOUND_EXCEPTION @"DirectoryNotFoundException"
+#define NOT_IMPLEMENTED_EXCEPTION @"NotImplementedException"
+
+#define LOCAL_VERSION @"LocalVersion"
+#define DROPBOX_VERSION @"DropboxVersion"
 #endif /* Defines_h */

@@ -225,13 +225,13 @@
 
 - (NSArray *)getNoteListForNotebook:(Notebook *)notebook
 {
-    @throw [NSException exceptionWithName:@"Not implemented" reason:nil userInfo:nil];
+    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
     return nil;
 }
 
 - (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
 {
-    @throw [NSException exceptionWithName:@"Not implemented" reason:nil userInfo:nil];
+    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
     return nil;
 }
 
@@ -289,13 +289,13 @@
 
 - (NSArray *)getContentsOfNote:(Note *)note inNotebook:(Notebook *)notebook
 {
-    @throw [NSException exceptionWithName:@"Not implemented" reason:nil userInfo:nil];
+    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
     return nil;
 }
 
 - (NSArray *)getNotebookList
 {
-    @throw [NSException exceptionWithName:@"Not implemented" reason:nil userInfo:nil];
+    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
     return nil;
 }
 

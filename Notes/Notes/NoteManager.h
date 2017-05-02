@@ -29,4 +29,6 @@
 - (NSString *)saveImage:(NSDictionary *)imageInfo withName:(NSString *)imageName forNote:(Note *)note inNotebookWithName:(NSString *)notebookName;
 - (NSString *)saveUIImage:(UIImage *)image withName:(NSString *)imageName forNote:(Note *)note inNotebookWithName:(NSString *)notebookName;
 
+- (void)syncNotesInNotebook:(Notebook *)notebook;
+
 @end

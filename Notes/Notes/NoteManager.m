@@ -20,6 +20,7 @@
 @interface NoteManager()
 @property (nonatomic, strong) LocalNoteManager *localManager;
 @property (nonatomic, strong) DropboxNoteManager *dropboxManager;
+
 @property TagsParser *tagParser;
 
 @property NSMutableDictionary *notebookDictionary;
@@ -51,56 +52,6 @@
     return self;
 }
 
-- (void)requestSynchronization
-{
-    [self requestNotebookList];
-}
-
-- (void)synchronizeNotebook:(Notebook *)notebook
-{
-    if(self.localDataLoaded && self.dropboxDataLoaded)
-    {
-        NSArray *localNotebooks = [self.localManager getNotebookList];
-        NSArray *dropboxNotebooks = [self.dropboxManager getNotebookList];
-        
-        for (Notebook *currentNotebook in localNotebooks)
-        {
-            if(![dropboxNotebooks containsObject:currentNotebook])
-            {
-                [self.dropboxManager addNotebook:currentNotebook];
-            }
-            [self synchronizeNotesInNotebook:currentNotebook];
-        }
-        
-        for (Notebook *currentNotebook in dropboxNotebooks)
-        {
-            if(![localNotebooks containsObject:currentNotebook])
-            {
-                [self.localManager addNotebook:currentNotebook];
-            }
-            [self synchronizeNotesInNotebook:currentNotebook];
-        }
-    }
-}
-
-- (void)synchronizeNotesInNotebook:(Notebook *)notebook
-{
-    NSArray *currentNotebookLocalNotes = [self.localManager getNoteListForNotebook:notebook];
-    NSArray *currentNotebookDropboxNotes = [self.dropboxManager getNoteListForNotebook:notebook];
-    for (Note *currentNote in currentNotebookLocalNotes) {
-        if(![currentNotebookDropboxNotes containsObject:currentNote])
-        {
-            [self.dropboxManager addNote:currentNote toNotebook:notebook];
-        }
-    }
-    for (Note *currentNote in currentNotebookDropboxNotes) {
-        if(![currentNotebookLocalNotes containsObject:currentNote])
-        {
-            [self.localManager addNote:currentNote toNotebook:notebook];
-        }
-    }
-}
-
 - (void)removeNotebookFromAllLists:(NSString *)notebookName
 {
     [self.notebookDictionary removeObjectForKey:notebookName];
@@ -114,13 +65,12 @@
 
 - (BOOL)noteExists:(Note *)newNote inNotebookWithName:(NSString *)notebookName
 {
-    NSMutableArray *noteList = [[NSMutableArray alloc]initWithArray:[self getNoteListForNotebookWithName:notebookName]];
+    NSArray *noteList = [self getNoteListForNotebookWithName:notebookName];
     for(Note *note in noteList)
     {
         if([note.name isEqualToString:newNote.name])
         {
             return YES;
-            break;
         }
     }
     return NO;
@@ -161,14 +111,10 @@
 {
     NSError *error;
     NSArray *content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&error];
-    
     if(error)
     {
-        @throw [NSException exceptionWithName:DIRECTORY_NOT_FOUND_EXCEPTION
-                                       reason:error.description
-                                     userInfo:nil];
+        @throw [NSException exceptionWithName:DIRECTORY_NOT_FOUND_EXCEPTION reason:error.description userInfo:nil];
     }
-    
     return content;
 }
 
@@ -185,16 +131,125 @@
     
     if(!isSuccessful)
     {
-        @throw [NSException exceptionWithName:FILE_NOT_FOUND_EXCEPTION
-                                       reason:error.description
-                                     userInfo:nil];
+        @throw [NSException exceptionWithName:FILE_NOT_FOUND_EXCEPTION reason:error.description userInfo:nil];
     }
 }
 
-- (void)createFoldarAtPath:(NSString *)path
+- (void)createFolderAtPath:(NSString *)path
 {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    [fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
+    [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
+}
+
+- (void)mergeNotesInNotebookWithName:(NSString *)notebookName
+{
+    NSArray *localNotes = [self.localNotebookDictionary objectForKey:notebookName];
+    for (Note *localNote in localNotes)
+    {
+        Note *dropboxNote = [self getNoteWithName:localNote.name fromNotebook:notebookName version:DROPBOX_VERSION];
+        if(dropboxNote == nil)
+        {
+            //localNote is missing in dropbox
+        }
+        else
+        {
+            DateTimeManager *dateTimeManager = [[DateTimeManager alloc] init];
+            NSComparisonResult comparisonResult = [dateTimeManager compareStringDate:localNote.dateModified andDate:dropboxNote.dateModified];
+            if(comparisonResult == NSOrderedAscending)
+            {
+                //dropbox is latest
+            }
+            if(comparisonResult == NSOrderedDescending)
+            {
+                //local is latest
+            }
+        }
+    }
+    
+    NSArray *dropboxNotes = [self.dropboxNotebookDictionary objectForKey:notebookName];
+    for (Note *dropboxNote in dropboxNotes)
+    {
+        Note *localNote = [self getNoteWithName:dropboxNote.name fromNotebook:notebookName version:LOCAL_VERSION];
+        if(localNote == nil)
+        {
+            //dropboxNote is missing in local
+        }
+        else
+        {
+            DateTimeManager *dateTimeManager = [[DateTimeManager alloc] init];
+            NSComparisonResult comparisonResult = [dateTimeManager compareStringDate:localNote.dateModified andDate:dropboxNote.dateModified];
+            if(comparisonResult == NSOrderedAscending)
+            {
+                //dropbox is latest
+            }
+            if(comparisonResult == NSOrderedDescending)
+            {
+                //local is latest
+            }
+        }
+    }
+}
+
+//- (void)izmisliimezataqfunkciq:(NSString *)notebookName version:(NSString *)version
+//{
+//    NSArray *notesArray;
+//    if([version isEqualToString:LOCAL_VERSION])
+//    {
+//        notesArray = [self.localNotebookDictionary objectForKey:notebookName];
+//    }
+//    if([version isEqualToString:DROPBOX_VERSION])
+//    {
+//        notesArray = [self.dropboxNotebookDictionary objectForKey:notebookName];
+//    }
+//    for (Note *note1 in notesArray)
+//    {
+//        Note *note2;
+//        if([version isEqualToString:LOCAL_VERSION])
+//        {
+//            note2 = [self getNoteWithName:note1.name fromNotebook:notebookName version:DROPBOX_VERSION];
+//        }
+//        if([version isEqualToString:DROPBOX_VERSION])
+//        {
+//            note2 = [self getNoteWithName:note1.name fromNotebook:notebookName version:LOCAL_VERSION];
+//        }
+//        if(note2 == nil)
+//        {
+//            //note1 exists only in version
+//        }
+//        else
+//        {
+//            DateTimeManager *dateTimeManager = [[DateTimeManager alloc] init];
+//            NSComparisonResult comparisonResult = [dateTimeManager compareStringDate:note1.dateModified andDate:note2.dateModified];
+//            if(comparisonResult == NSOrderedAscending)
+//            {
+//                //note2 is latest
+//            }
+//            if(comparisonResult == NSOrderedDescending)
+//            {
+//                //note1 is latest
+//            }
+//        }
+//    }
+//}
+
+- (Note *)getNoteWithName:(NSString *)noteName fromNotebook:(NSString *)notebookName version:(NSString *)version
+{
+    NSArray *notesArray;
+    if([version isEqualToString:LOCAL_VERSION])
+    {
+        notesArray = [self.localNotebookDictionary objectForKey:notebookName];
+    }
+    if([version isEqualToString:DROPBOX_VERSION])
+    {
+        notesArray = [self.dropboxNotebookDictionary objectForKey:notebookName];
+    }
+    for (Note *currentNote in notesArray)
+    {
+        if(currentNote.name == noteName)
+        {
+            return currentNote;
+        }
+    }
+    return nil;
 }
 
 #pragma mark -
@@ -208,19 +263,12 @@
 
 - (void)deleteTempFolder
 {
-    NSString *tempDirectory = [self getTempDirectoryPath];
-    @try
-    {
-        [self deleteItemAtPath:tempDirectory];
-    } @catch (NSException *exception) {
-        
-    }
+    [self deleteItemAtPath:[self getTempDirectoryPath]];
 }
 
 - (void)createTempFolder
 {
-    NSString *tempDirectory = [self getTempDirectoryPath];
-    [self createFoldarAtPath:tempDirectory];
+    [self createFolderAtPath:[self getTempDirectoryPath]];
 }
 
 - (void)exchangeNoteAtIndex:(NSInteger)firstIndex withNoteAtIndex:(NSInteger)secondIndex fromNotebook:(NSString *)notebookName
@@ -271,8 +319,7 @@
         loadedFilePath = [self getTempDirectoryPath];
     }
     
-    NSURL *baseURL = [NSURL fileURLWithPath:loadedFilePath];
-    return baseURL;
+    return [NSURL fileURLWithPath:loadedFilePath];
 }
 
 - (NSString *)saveImage:(NSDictionary *)imageInfo withName:(NSString *)imageName forNote:(Note *)note inNotebook:(Notebook *)notebook;
@@ -301,6 +348,18 @@
     return baseURL.description;
 }
 
+- (void)syncNotesInNotebook:(Notebook *)notebook
+{
+    /**
+     Notebook clicked from LeftPanelViewController
+     -> sync Dropbox and Local
+     -> display progress
+     -> send notification to ViewController to display the notebook when synchronization is finished
+     */
+    [self.dropboxManager requestNoteListForNotebook:notebook];
+    [self.localManager requestNoteListForNotebook:notebook];
+}
+
 #pragma mark -
 #pragma mark Note delegates
 
@@ -320,10 +379,9 @@
         return;
     }
     
-    if(![self noteExists:newNote inNotebookWithName:notebookName])
+    if([self noteExists:newNote inNotebookWithName:notebookName] == NO)
     {
         NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName];
-        
         [array addObject:newNote];
     }
     
@@ -373,7 +431,6 @@
 
 - (NSArray *)getNoteListForNotebook:(Notebook *)notebook
 {
-    NSArray *array = nil;
     if(notebook)
     {
         if(!notebook.isLoaded)
@@ -381,9 +438,9 @@
             [self.localManager requestNoteListForNotebook:notebook];
             notebook.isLoaded = YES;
         }
-        array = [self.notebookDictionary objectForKey:notebook.name];
+        return [self.notebookDictionary objectForKey:notebook.name];
     }
-    return array;
+    return nil;
 }
 
 - (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
@@ -402,7 +459,6 @@
 {
     [self.localManager requestNoteListForNotebookWithName:notebookName];
 }
-
 
 #pragma mark -
 #pragma mark Notebook delegates
@@ -501,16 +557,17 @@
     });
     for (Notebook *currentNotebook in self.notebookList)
     {
-        @synchronized (self) {
+        @synchronized (self)
+        {
             [self requestNoteListForNotebook:currentNotebook];
         }
         
     }
 }
 
--(NSArray *)getContentsOfNote:(Note *)note inNotebook:(Notebook *)notebook
+- (NSArray *)getContentsOfNote:(Note *)note inNotebook:(Notebook *)notebook
 {
-    @throw [[NSException alloc] initWithName:@"Not Implemented" reason:@"so sad" userInfo:nil];
+    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
 }
 
 - (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebook:(Notebook *)notebook fromManager:(id)manager
@@ -520,55 +577,32 @@
 
 - (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebookWithName:(NSString *)notebookName fromManager:(id)manager
 {
-//    [self.notebookDictionary setObject:noteList forKey:notebookName];
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_LIST_CHANGED object:notebookName userInfo:nil];
-//    });
-//    if(manager == self.localManager)
-//    {
-//        [self.localNotebookDictionary setObject:noteList forKey:notebookName];
-//        [self.dropboxManager requestNoteListForNotebookWithName:notebookName];
-//    }
-//    if(manager == self.dropboxManager)
-//    {
-//        if(noteList == nil)
-//        {
-//            [self.dropboxManager addNotebookWithName:notebookName];
-//        }
-//        
-//        NSArray *localNotes = [self.localNotebookDictionary objectForKey:notebookName];
-//        
-//        for (Note *note in localNotes) {
-//            
-//            for (Note *dropboxNote in noteList)
-//            { 
-//                if(![note.name isEqualToString:dropboxNote.name])
-//                {
-//                    if(note.dateModified != dropboxNote.dateModified)
-//                    {
-//                        DateTimeManager *dateManager = [[DateTimeManager alloc] init];
-//                        NSComparisonResult result = [dateManager compareStringDate:note.dateModified andDate:dropboxNote.dateModified];
-//                        if(result == NSOrderedAscending)
-//                        {
-//                            [self.localManager removeNote:note fromNotebookWithName:notebookName];
-//                            [self.localManager addNote:dropboxNote toNotebookWithName:notebookName];
-//                        }
-//                        else
-//                        {
-//                            [self.dropboxManager removeNote:dropboxNote fromNotebookWithName:notebookName];
-//                            [self.dropboxManager addNote:note toNotebookWithName:notebookName];
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        [self.dropboxNotebookDictionary setObject:noteList forKey:notebookName];
-//    }
+    if(manager == self.dropboxManager)
+    {
+        self.dropboxDataLoaded = YES;
+        [self.dropboxNotebookDictionary setObject:noteList forKey:notebookName];
+    }
+    if(manager == self.localManager)
+    {
+        self.localDataLoaded = YES;
+        [self.localNotebookDictionary setObject:noteList forKey:notebookName];
+    }
+    if(self.localDataLoaded && self.dropboxDataLoaded)
+    {
+        [self mergeNotesInNotebookWithName:notebookName];
+        self.dropboxDataLoaded = NO;
+        self.localDataLoaded = NO;
+    }
 }
 
 - (void)handleResponseWithNote:(Note *)note notebook:(Notebook *)notebook
 {
-    
+    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
+}
+
+- (void)handleResponseWithNoteContents:(NSData *)contents note:(Note *)note notebook:(Notebook *)notebook
+{
+    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
 }
 
 @end

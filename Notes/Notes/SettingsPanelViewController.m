@@ -85,7 +85,7 @@
 
 - (IBAction)synchronize:(UIButton *)sender
 {
-    @throw [NSException exceptionWithName:@"Not implemented" reason:nil userInfo:nil];
+    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
 }
 
 #pragma mark -
