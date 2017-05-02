@@ -197,21 +197,33 @@
 
 - (void)requestNoteListForNotebookWithName:(NSString *)notebookName
 {
-    [[self.client.filesRoutes listFolder:@"/Notebooks/" recursive:@YES includeMediaInfo:nil includeDeleted:nil includeHasExplicitSharedMembers:nil]
+    NSString *path = [self getDirectoryPathForNotebookWithName:notebookName];
+    [[self.client.filesRoutes listFolder:path recursive:@YES includeMediaInfo:nil includeDeleted:nil includeHasExplicitSharedMembers:nil]
      setResponseBlock:^(DBFILESListFolderResult *response, DBFILESListFolderError *routeError, DBRequestError *networkError)
      {
+         NSMutableArray *noteList = [[NSMutableArray alloc] init];
          for(DBFILESMetadata *data in response.entries)
          {
              if([data.name containsString:NOTE_DATE_FILE])
              {
-                 NSLog(@"%@", data.pathLower);
+                 [noteList addObject:[self parseNoteFromData:data]];
              }
          }
+         [self.handler handleResponseWithNoteList:noteList fromNotebookWithName:notebookName fromManager:self];
      }];
 }
 
 #pragma mark -
 #pragma mark Notebook manager delegates
+
+- (Note*)parseNoteFromData:(DBFILESMetadata*) metadata
+{
+    Note *note = [[Note alloc] init];
+    note.name = [[metadata.pathDisplay stringByDeletingLastPathComponent] lastPathComponent];
+    NSString* date = [[DBFILESMetadataSerializer serialize:metadata] objectForKey:@"server_modified"];
+    note.dateModified = date;
+    return note;
+}
 
 - (void)addNotebookWithName:(NSString *)notebookName
 {

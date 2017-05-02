@@ -165,7 +165,11 @@
     
     note.name = noteName;
     note.body = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_BODY_FILE]];
-    note.dateModified = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_DATE_FILE]];
+    
+    NSDictionary* fileAttribs = [[NSFileManager defaultManager] attributesOfItemAtPath:notePath error:nil];
+    NSDate *result = [fileAttribs objectForKey:NSFileCreationDate]; //or NSFileModificationDate
+    
+    note.dateModified = result.description;
     note.triggerDate = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_TRIGGER_DATE_FILE]];
     
     NSString *tags = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_TAGS_FILE]];
