@@ -18,6 +18,9 @@
 @property NoteManager *manager;
 @property DBUserClient *client;
 @property id<ResponseHandler> handler;
+@property int requestsSent;
+@property int requestsRecived;
+@property NSMutableArray *currentNoteList;
 @end
 
 @implementation DropboxNoteManager
@@ -27,6 +30,7 @@
     self = [super init];
     self.handler = handler;
     self.manager = manager;
+    self.currentNoteList = [[NSMutableArray alloc] init];
     self.client = [DBClientsManager authorizedClient];
     return self;
 }
@@ -193,23 +197,15 @@
 
 - (void)requestNoteListForNotebookWithName:(NSString *)notebookName
 {
-    NSMutableArray *noteList = [[NSMutableArray alloc] init];
-    [[self.client.filesRoutes listFolder:@"/Notebooks/notebookName/"]
+    [[self.client.filesRoutes listFolder:@"/Notebooks/" recursive:@YES includeMediaInfo:nil includeDeleted:nil includeHasExplicitSharedMembers:nil]
      setResponseBlock:^(DBFILESListFolderResult *response, DBFILESListFolderError *routeError, DBRequestError *networkError)
      {
-         if (response)
+         for(DBFILESMetadata *data in response.entries)
          {
-             for (DBFILESMetadata *data in response.entries)
+             if([data.name containsString:NOTE_DATE_FILE])
              {
-                 Note *note = [[Note alloc] init];
-                 note.name = data.name;
-                 [noteList addObject:note];
-                 
-                 [self requestContentsOfNote:note inNotebook:notebookName];
+                 NSLog(@"%@", data.pathLower);
              }
-//             [self.handler handleResponseWithNoteList:noteList fromNotebookWithName:notebookName fromManager:self];
-         } else {
-             NSLog(@"%@\n%@\n", routeError, networkError);
          }
      }];
 }
@@ -273,14 +269,23 @@
     return notebookList;
 }
 
-- (void)requestContentsOfNote:(Note *)note inNotebook:(Notebook *)notebook;
+- (void)requestContentsOfNote:(NSMutableArray *)noteList inNotebook:(NSString *)notebookName;
 {
-    NSString *path = [[[self getNoteDirectoryPathForNote:note inNotebookWithName:notebook.name] stringByAppendingPathComponent:note.name] stringByAppendingPathComponent:NOTE_DATE_FILE];
+    if(noteList.count == 0)
+    {
+        //[self.handler handleResponseWithNoteList:self.currentNoteList fromNotebookWithName:notebookName fromManager:self];
+        return;
+    }
+    [self.currentNoteList addObject:[noteList objectAtIndex:0]];
+    Note *note = [noteList objectAtIndex:0];
+    [noteList removeObjectAtIndex:0];
+    
+    NSString *path = [[self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName] stringByAppendingPathComponent:NOTE_DATE_FILE];
     [[self.client.filesRoutes downloadData:path] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESDownloadError * _Nullable routeError, DBRequestError * _Nullable networkError, NSData * _Nullable fileData)
     {
         NSString *date = [[NSString alloc]initWithData:fileData encoding:NSUTF8StringEncoding];
         note.dateModified = date;
-        [self.handler handleResponseWithNoteContents:fileData note:note notebook:notebook];
+        [self requestContentsOfNote:noteList inNotebook:notebookName];
     }];
 }
 
