@@ -12,17 +12,20 @@
 #import "NoteManager.h"
 #import "Notebook.h"
 #import "Note.h"
+#import "Protocols.h"
 
 @interface DropboxNoteManager()
 @property NoteManager *manager;
 @property DBUserClient *client;
+@property id<ResponseHandler> handler;
 @end
 
 @implementation DropboxNoteManager
 
-- (id)initWithManager:(id)manager
+- (id)initWithManager:(id)manager handler:(id)handler
 {
     self = [super init];
+    self.handler = handler;
     self.manager = manager;
     self.client = [DBClientsManager authorizedClient];
     return self;
@@ -183,6 +186,34 @@
     return nil;
 }
 
+- (void)requestNoteListForNotebook:(Notebook *)notebook
+{
+    [self requestNoteListForNotebookWithName:notebook.name];
+}
+
+- (void)requestNoteListForNotebookWithName:(NSString *)notebookName
+{
+    NSMutableArray *noteList = [[NSMutableArray alloc] init];
+    [[self.client.filesRoutes listFolder:@"/Notebooks/notebookName/"]
+     setResponseBlock:^(DBFILESListFolderResult *response, DBFILESListFolderError *routeError, DBRequestError *networkError)
+     {
+         if (response)
+         {
+             for (DBFILESMetadata *data in response.entries)
+             {
+                 Note *note = [[Note alloc] init];
+                 note.name = data.name;
+                 [noteList addObject:note];
+                 
+                 [self requestContentsOfNote:note inNotebook:notebookName];
+             }
+//             [self.handler handleResponseWithNoteList:noteList fromNotebookWithName:notebookName fromManager:self];
+         } else {
+             NSLog(@"%@\n%@\n", routeError, networkError);
+         }
+     }];
+}
+
 #pragma mark -
 #pragma mark Notebook manager delegates
 
@@ -221,28 +252,7 @@
 - (NSArray *)getNotebookList
 {
     NSMutableArray *notebookList = [[NSMutableArray alloc] init];
-    [[self.client.filesRoutes listFolder:@"/Notebooks/veniThePervert/1"]
-     setResponseBlock:^(DBFILESListFolderResult *response, DBFILESListFolderError *routeError, DBRequestError *networkError)
-     {
-         if (response)
-         {
-             for (DBFILESMetadata *data in response.entries)
-             {
-                 Notebook *notebook = [[Notebook alloc] initWithName:data.name];
-                 [notebookList addObject:notebook];
-             }
-         } else {
-             NSLog(@"%@\n%@\n", routeError, networkError);
-         }
-     }];
-    return notebookList;
-}
-
-- (NSArray *)getContentsOfNote:(Note *)note inNotebook:(Notebook *)notebook;
-{
-    NSMutableArray *notebookList = [[NSMutableArray alloc] init];
-    NSString *path = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebook.name];
-    [[self.client.filesRoutes listFolder:path]
+    [[self.client.filesRoutes listFolder:@"/Notebooks"]
      setResponseBlock:^(DBFILESListFolderResult *response, DBFILESListFolderError *routeError, DBRequestError *networkError)
      {
          if (response)
@@ -253,11 +263,34 @@
                  notebook.notesCount = [self getNoteListForNotebook:notebook].count;
                  [notebookList addObject:notebook];
              }
-         } else {
+         }
+         else
+         {
              NSLog(@"%@\n%@\n", routeError, networkError);
          }
      }];
     return notebookList;
+}
+
+- (void)requestContentsOfNote:(Note *)note inNotebook:(Notebook *)notebook;
+{
+    NSString *path = [[[self getNoteDirectoryPathForNote:note inNotebookWithName:notebook.name] stringByAppendingPathComponent:note.name] stringByAppendingPathComponent:NOTE_DATE_FILE];
+    [[self.client.filesRoutes downloadData:path] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESDownloadError * _Nullable routeError, DBRequestError * _Nullable networkError, NSData * _Nullable fileData)
+    {
+        NSString *date = [[NSString alloc]initWithData:fileData encoding:NSUTF8StringEncoding];
+        note.dateModified = date;
+        [self.handler handleResponseWithNoteContents:fileData note:note notebook:notebook];
+    }];
+}
+
+- (NSArray *)getContentsOfNote:(Note *)note inNotebook:(Notebook *)notebook
+{
+    return nil;
+}
+
+- (void)requestNotebookList
+{
+
 }
 
 @end

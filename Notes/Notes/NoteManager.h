@@ -11,7 +11,7 @@
 
 @interface NoteManager : NSObject <NoteManagerDelegate, NotebookManagerDelegate, ResponseHandler>
 
-- (void)synchronize;
+//- (void)synchronize;
 
 - (NSString *)getNoteDirectoryPathForNote:(Note *)note inNotebookWithName:(NSString *)notebookName;
 

@@ -22,7 +22,7 @@
 
 @interface LeftPanelViewController()
 
-@property (nonatomic, strong) NoteManager *noteManager;
+@property (nonatomic, assign) NoteManager *noteManager;
 @property (nonatomic, strong) LayoutProvider *layoutProvider;
 @property (nonatomic, strong) DateTimeManager *dateTimeManager;
 @property (nonatomic, strong) ThemeManager *themeManager;

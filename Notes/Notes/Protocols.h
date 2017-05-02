@@ -56,7 +56,8 @@
 
 - (void)handleResponseWithNotebookList:(NSArray *)notebookList;
 - (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebook:(Notebook *)notebook;
-- (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebookWithName:(NSString *)notebookName;
+- (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebookWithName:(NSString *)notebookName fromManager:(id)manager;
+- (void)handleResponseWithNoteContents:(NSData *)contents note:(Note *)note notebook:(Notebook *)notebook;
 
 @end
 

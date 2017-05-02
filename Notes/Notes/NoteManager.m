@@ -15,6 +15,7 @@
 #import "Note.h"
 #import "Notebook.h"
 #import "TagsParser.h"
+#import "DateTimeManager.h"
 
 @interface NoteManager()
 @property (nonatomic, strong) LocalNoteManager *localManager;
@@ -23,6 +24,12 @@
 
 @property NSMutableDictionary *notebookDictionary;
 @property NSMutableArray *notebookList;
+
+@property BOOL localDataLoaded;
+@property BOOL dropboxDataLoaded;
+
+@property NSMutableDictionary *localNotebookDictionary;
+@property NSMutableDictionary *dropboxNotebookDictionary;
 
 @end
 
@@ -34,7 +41,9 @@
     if(self)
     {
         self.localManager = [[LocalNoteManager alloc] initWithResponseHandler:self];
-        self.dropboxManager = [[DropboxNoteManager alloc] initWithManager:self];
+        self.dropboxManager = [[DropboxNoteManager alloc] initWithManager:self handler:self];
+        self.localNotebookDictionary = [[NSMutableDictionary alloc] init];
+        self.dropboxNotebookDictionary = [[NSMutableDictionary alloc] init];
         self.notebookDictionary = [[NSMutableDictionary alloc] init];
         self.notebookList = [[NSMutableArray alloc] init];
         self.tagParser = [[TagsParser alloc] init];
@@ -44,27 +53,35 @@
     return self;
 }
 
-- (void)synchronize
+- (void)requestSynchronization
 {
-    NSArray *localNotebooks = [self.localManager getNotebookList];
-    NSArray *dropboxNotebooks = [self.dropboxManager getNotebookList];
-    
-    for (Notebook *currentNotebook in localNotebooks)
+    [self requestNotebookList];
+}
+
+- (void)synchronizeNotebook:(Notebook *)notebook
+{
+    if(self.localDataLoaded && self.dropboxDataLoaded)
     {
-        if(![dropboxNotebooks containsObject:currentNotebook])
+        NSArray *localNotebooks = [self.localManager getNotebookList];
+        NSArray *dropboxNotebooks = [self.dropboxManager getNotebookList];
+        
+        for (Notebook *currentNotebook in localNotebooks)
         {
-            [self.dropboxManager addNotebook:currentNotebook];
+            if(![dropboxNotebooks containsObject:currentNotebook])
+            {
+                [self.dropboxManager addNotebook:currentNotebook];
+            }
+            [self synchronizeNotesInNotebook:currentNotebook];
         }
-        [self synchronizeNotesInNotebook:currentNotebook];
-    }
-    
-    for (Notebook *currentNotebook in dropboxNotebooks)
-    {
-        if(![localNotebooks containsObject:currentNotebook])
+        
+        for (Notebook *currentNotebook in dropboxNotebooks)
         {
-            [self.localManager addNotebook:currentNotebook];
+            if(![localNotebooks containsObject:currentNotebook])
+            {
+                [self.localManager addNotebook:currentNotebook];
+            }
+            [self synchronizeNotesInNotebook:currentNotebook];
         }
-        [self synchronizeNotesInNotebook:currentNotebook];
     }
 }
 
@@ -475,7 +492,6 @@
     [self.localManager requestNotebookList];
 }
 
-
 #pragma mark -
 #pragma mark ResponseHandler
 
@@ -485,20 +501,80 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTEBOOK_LIST_CHANGED object:nil userInfo:nil];
     });
+    for (Notebook *currentNotebook in self.notebookList)
+    {
+        @synchronized (self) {
+            [self requestNoteListForNotebook:currentNotebook];
+        }
+        
+    }
+}
+
+-(NSArray *)getContentsOfNote:(Note *)note inNotebook:(Notebook *)notebook
+{
+    @throw [[NSException alloc] initWithName:@"Not Implememented" reason:@"suck it" userInfo:nil];
 }
 
 - (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebook:(Notebook *)notebook
 {
-    [self handleResponseWithNoteList:noteList fromNotebookWithName:notebook.name];
+    [self handleResponseWithNoteList:noteList fromNotebookWithName:notebook.name fromManager:self];
 }
 
-- (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebookWithName:(NSString *)notebookName
+- (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebookWithName:(NSString *)notebookName fromManager:(id)manager
 {
-    NSMutableArray *loaddedNotes = [[NSMutableArray alloc] initWithArray:noteList];
-    [self.notebookDictionary setObject:loaddedNotes forKey:notebookName];
+    NSMutableArray *loadedNotes = [[NSMutableArray alloc] initWithArray:noteList];
+    [self.notebookDictionary setObject:loadedNotes forKey:notebookName];
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_LIST_CHANGED object:notebookName userInfo:nil];
     });
+    if(manager == self.localManager)
+    {
+        [self.localNotebookDictionary setObject:loadedNotes forKey:notebookName];
+        [self.dropboxManager requestNoteListForNotebookWithName:notebookName];
+    }
+    if(manager == self.dropboxManager)
+    {
+        if(noteList == nil)
+        {
+            [self.dropboxManager addNotebookWithName:notebookName];
+        }
+        
+        NSArray *localNotes = [self.localNotebookDictionary objectForKey:notebookName];
+        
+        for (Note *note in localNotes) {
+            
+            for (Note *dropboxNote in noteList)
+            {
+                if(![note.name isEqualToString:dropboxNote.name])
+                {
+                    if(note.dateModified != dropboxNote.dateModified)
+                    {
+                        DateTimeManager *dateManager = [[DateTimeManager alloc] init];
+                        NSComparisonResult result = [dateManager compareStringDate:note.dateModified andDate:dropboxNote.dateModified];
+                        if(result == NSOrderedAscending)
+                        {
+                            [self.localManager removeNote:note fromNotebookWithName:notebookName];
+                            [self.localManager addNote:dropboxNote toNotebookWithName:notebookName];
+                        }
+                        else
+                        {
+                            [self.dropboxManager removeNote:dropboxNote fromNotebookWithName:notebookName];
+                            [self.dropboxManager addNote:note toNotebookWithName:notebookName];
+                        }
+                        
+                    }
+                }
+            }
+            
+        }
+        
+        [self.dropboxNotebookDictionary setObject:loadedNotes forKey:notebookName];
+    }
+}
+
+- (void)handleResponseWithNoteContents:(NSArray *)contents note:(Note *)note notebook:(Notebook *)notebook
+{
+    
 }
 
 @end

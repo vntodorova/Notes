@@ -13,7 +13,7 @@
 @property NSString *name;
 @property NSArray  *tags;
 @property NSString *body;
-@property NSString *dateCreated;
+@property NSString *dateModified;
 @property NSString *triggerDate;
 
 @end

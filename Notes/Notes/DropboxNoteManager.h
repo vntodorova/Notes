@@ -14,7 +14,7 @@
 
 @interface DropboxNoteManager : NSObject<UIPopoverPresentationControllerDelegate, NotebookManagerDelegate, NoteManagerDelegate>
 
-- (id)initWithManager:(id)manager;
+- (id)initWithManager:(id)manager handler:(id)handler;
 
 - (void)syncFiles;
 

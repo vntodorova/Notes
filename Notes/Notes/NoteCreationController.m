@@ -22,7 +22,7 @@
 @property (nonatomic, strong) NSArray *fontList;
 @property (nonatomic, strong) NSArray *textSizeList;
 @property (nonatomic, strong) NSMutableArray *noteBookList;
-@property (nonatomic, strong) NoteManager *manager;
+@property (nonatomic, assign) NoteManager *manager;
 @property (nonatomic, strong) ThemeManager *themeManager;
 
 @property (nonatomic, strong) TagsParser *tagsParser;
@@ -178,7 +178,7 @@
     self.note.tags = [self.tagsParser getTagsFromText:self.noteTags.text];
     self.note.body = [self getNoteBodyHTML];
     self.note.triggerDate = self.tempNoteReminder;
-    self.note.dateCreated = [self currentTime];
+    self.note.dateModified = [self currentTime];
 }
 
 - (void)dismissKeyboard

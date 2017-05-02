@@ -14,13 +14,13 @@
 #import "TagsParser.h"
 
 @interface LocalNoteManager()
-@property id<ResponseHandler> responseHandler;
+@property (assign, nonatomic) NSObject<ResponseHandler>* responseHandler;
 @property TagsParser *tagParser;
 @end
 
 @implementation LocalNoteManager
 
-- (instancetype)initWithResponseHandler:(id)responseHandler
+- (instancetype)initWithResponseHandler:(NSObject<ResponseHandler>*)responseHandler
 {
     self = [super init];
     if (self)
@@ -78,7 +78,7 @@
     
     [self saveData:[self.tagParser buildTextFromTags:newNote.tags]  toFile:[noteRoot stringByAppendingPathComponent:NOTE_TAGS_FILE]];
     [self saveData:newNote.body                                     toFile:[noteRoot stringByAppendingPathComponent:NOTE_BODY_FILE]];
-    [self saveData:newNote.dateCreated                              toFile:[noteRoot stringByAppendingPathComponent:NOTE_DATE_FILE]];
+    [self saveData:newNote.dateModified                             toFile:[noteRoot stringByAppendingPathComponent:NOTE_DATE_FILE]];
     [self saveData:newNote.triggerDate                              toFile:[noteRoot stringByAppendingPathComponent:NOTE_TRIGGER_DATE_FILE]];
     
     [self copyFilesFromSource:[self getTempDirectoryPath] toDestination:noteRoot];
@@ -146,8 +146,12 @@
 
 - (NSMutableArray *)loadNotesForNotebookWithName:(NSString *)notebookName
 {
+    if([notebookName hasPrefix:@"."])
+    {
+        return nil;
+    }
     NSString *path = [self getDirectoryPathForNotebookWithName:notebookName];
-    NSMutableArray<Note*> *array = [[NSMutableArray alloc] init];
+    NSMutableArray *array = [[NSMutableArray alloc] init];
     
     NSArray *directoryContents = [self getDirectoryContentForPath: path];
     
@@ -189,7 +193,7 @@
     
     note.name = noteName;
     note.body = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_BODY_FILE]];
-    note.dateCreated = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_DATE_FILE]];
+    note.dateModified = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_DATE_FILE]];
     note.triggerDate = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_TRIGGER_DATE_FILE]];
     
     NSString *tags = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_TAGS_FILE]];
@@ -301,13 +305,15 @@
 
 - (void)requestNoteListForNotebook:(Notebook *)notebook
 {
+    
     [self requestNoteListForNotebookWithName: notebook.name];
 }
 
 - (void)requestNoteListForNotebookWithName:(NSString *)notebookName
 {
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-        [self.responseHandler handleResponseWithNoteList:[self loadNotesForNotebookWithName:notebookName] fromNotebookWithName:notebookName];
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void)
+    {
+        [self.responseHandler handleResponseWithNoteList:[self loadNotesForNotebookWithName:notebookName] fromNotebookWithName:notebookName fromManager:self];
     });
 }
 
