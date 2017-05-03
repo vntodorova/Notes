@@ -76,9 +76,7 @@
     
     [self saveData:[self.tagParser buildTextFromTags:newNote.tags] toFile:[noteRoot stringByAppendingPathComponent:NOTE_TAGS_FILE]];
     [self saveData:newNote.body toFile:[noteRoot stringByAppendingPathComponent:NOTE_BODY_FILE]];
-    [self saveData:newNote.dateModified toFile:[noteRoot stringByAppendingPathComponent:NOTE_DATE_FILE]];
     [self saveData:newNote.triggerDate toFile:[noteRoot stringByAppendingPathComponent:NOTE_TRIGGER_DATE_FILE]];
-    
     [self copyFilesFromSource:[self getTempDirectoryPath] toDestination:noteRoot];
 }
 
@@ -165,11 +163,11 @@
     
     note.name = noteName;
     note.body = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_BODY_FILE]];
+    NSError *error;
+    NSDictionary* noteFileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[notePath stringByAppendingPathComponent:NOTE_BODY_FILE] error:&error];
+    NSDate *noteFileDateModified = [noteFileAttributes objectForKey:NSFileModificationDate]; //or NSFileModificationDate
     
-    NSDictionary* fileAttribs = [[NSFileManager defaultManager] attributesOfItemAtPath:notePath error:nil];
-    NSDate *result = [fileAttribs objectForKey:NSFileCreationDate]; //or NSFileModificationDate
-    
-    note.dateModified = result.description;
+    note.dateModified = noteFileDateModified.description;
     note.triggerDate = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_TRIGGER_DATE_FILE]];
     
     NSString *tags = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_TAGS_FILE]];

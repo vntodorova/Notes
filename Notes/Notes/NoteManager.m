@@ -346,7 +346,7 @@
 - (void)requestNoteListForNotebookWithName:(NSString *)notebookName
 {
     [self.localManager requestNoteListForNotebookWithName:notebookName];
-    [self.dropboxManager requestNoteListForNotebookWithName:notebookName];
+  //  [self.dropboxManager requestNoteListForNotebookWithName:notebookName];
 }
 
 #pragma mark -

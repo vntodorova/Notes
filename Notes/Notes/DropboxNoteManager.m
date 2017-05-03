@@ -128,7 +128,15 @@
                                    stringByAppendingPathComponent:fileName];
         NSString *dropboxPath = [NSString stringWithFormat:@"%@/%@",notePathInDropBox,fileName];
         NSData *data = [[NSFileManager defaultManager] contentsAtPath:noteFilesPath];
-        [self.client.filesRoutes uploadData:dropboxPath inputData:data];
+        [[self.client.filesRoutes uploadData:dropboxPath inputData:data] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESUploadError * _Nullable routeError, DBRequestError * _Nullable networkError) {
+            //2017-04-20 09:55:47 +0000
+            NSDate *newDate = [NSDate date];
+            
+            NSDate *date = [[DBFILESMetadataSerializer serialize:result] objectForKey:@"server_modified"];
+            NSString *pathToFileBody = [[self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName] stringByAppendingPathComponent:NOTE_BODY_FILE];
+            NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys: newDate, NSFileModificationDate, NULL];
+            [[NSFileManager defaultManager] setAttributes: attr ofItemAtPath: pathToFileBody error: NULL];
+        }];
     }
 }
 
@@ -308,7 +316,7 @@
 
 - (void)requestNotebookList
 {
-
+    
 }
 
 @end
