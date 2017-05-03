@@ -529,7 +529,7 @@
         if(comparisonResult == NSOrderedDescending)
         {
             /** storage2 is latest
-             get storage2 note and add it to storage1*/
+             get storage2note and add it to storage1*/
         }
     }
 }
@@ -550,20 +550,6 @@
 - (NSString *)dateModifiedOfNote:(NSString *)noteName fromNotebook:(NSString *)notebookName fromStorage:(NSString *)storage
 {
     return [self referenceToNoteWithName:noteName inNotebook:notebookName fromStorage:storage].dateModified;
-}
-
-- (void)addNoteWithName:(NSString *)noteName toNotebook:(NSString *)notebookName inStorage:(NSString *)storage
-{
-    Note *noteToAdd = [self referenceToNoteWithName:noteName inNotebook:notebookName fromStorage:storage];
-    if([storage isEqualToString:LOCAL_STORAGE])
-    {
-        [self.localManager addNote:noteToAdd toNotebookWithName:notebookName];
-    }
-    if([storage isEqualToString:DROPBOX_STORAGE])
-    {
-        [self.dropboxManager addNote:noteToAdd toNotebookWithName:notebookName];
-    }
-    
 }
 
 - (Note *)referenceToNoteWithName:(NSString *)noteName inNotebook:(NSString *)notebook fromStorage:(NSString *)storage

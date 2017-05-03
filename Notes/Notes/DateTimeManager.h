@@ -10,14 +10,14 @@
 
 @interface DateTimeManager : NSObject
 
+@property NSDateFormatter *dateFormatter;
+
 - (NSString *)convertToRelativeDate:(NSString *)stringDate;
 
 - (NSComparisonResult)compareStringDate:(NSString *)firstDate andDate:(NSString *)secondDate;
 
 - (NSString *)getCurrentTime;
 
-- (NSDate *)dateFromString:(NSString *)string;
-
-- (NSString *)stringFromDate:(NSDate *)date;
+- (NSDate *)dateFromString:(NSString *)string withFormat:(NSString *)format;
 
 @end
