@@ -13,6 +13,7 @@
 #import "Notebook.h"
 #import "Note.h"
 #import "Protocols.h"
+#import "DateTimeManager.h"
 
 @interface DropboxNoteManager()
 @property NoteManager *manager;
@@ -118,7 +119,7 @@
 
 - (void)uploadNote:(Note*)note inNotebookWithName:(NSString *)notebookName
 {
-    NSString *notePathInDropBox = [NSString stringWithFormat:@"/Notebooks/%@/%@", notebookName, note.name];
+    NSString *notePathInDropBox = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
     [self createFolderAt:notePathInDropBox];
     
     NSArray *filesList = [self getDirectoryContentForPath:[self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName]];
@@ -130,14 +131,17 @@
         NSData *data = [[NSFileManager defaultManager] contentsAtPath:noteFilesPath];
         [[self.client.filesRoutes uploadData:dropboxPath inputData:data] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESUploadError * _Nullable routeError, DBRequestError * _Nullable networkError) {
             //2017-04-20 09:55:47 +0000
-            NSDate *newDate = [NSDate date];
-            
+            //NSDate *newDate = [NSDate date];
+            DateTimeManager *manager = [[DateTimeManager alloc] init];
             NSDate *date = [[DBFILESMetadataSerializer serialize:result] objectForKey:@"server_modified"];
+            
+            NSDate *newDate = [manager dateFromString:[manager stringFromDate:date]];
             NSString *pathToFileBody = [[self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName] stringByAppendingPathComponent:NOTE_BODY_FILE];
             NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys: newDate, NSFileModificationDate, NULL];
             [[NSFileManager defaultManager] setAttributes: attr ofItemAtPath: pathToFileBody error: NULL];
         }];
     }
+
 }
 
 - (NSArray *)getDirectoryContentForPath:(NSString *)path

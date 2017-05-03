@@ -126,13 +126,7 @@
 
 - (void)deleteItemAtPath:(NSString *)path
 {
-    NSError *error;
-    BOOL isSuccessful = [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
-    
-    if(!isSuccessful)
-    {
-        @throw [NSException exceptionWithName:FILE_NOT_FOUND_EXCEPTION reason:error.description userInfo:nil];
-    }
+    [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
 }
 
 - (void)createFolderAtPath:(NSString *)path
@@ -178,16 +172,6 @@
         }
     }
     return nil;
-}
-
-- (NSArray *)getAllNotes
-{
-    NSMutableArray *allNotes = [[NSMutableArray alloc] init];
-    NSArray *allNotebooks = [self getNotebookList];
-    for (Notebook *currentNotebook in allNotebooks) {
-        [allNotes addObjectsFromArray:[self getNoteListForNotebook:currentNotebook]];
-    }
-    return allNotes;
 }
 
 - (NSURL *)getBaseURLforNote:(Note *)note inNotebook:(Notebook *)notebook
@@ -333,9 +317,9 @@
 
 - (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
 {
-    Notebook *notebook = [self getNotebookWithName:notebookName];
-    NSArray *noteList = [self getNoteListForNotebook:notebook];
-    return noteList;
+//    Notebook *notebook = [self getNotebookWithName:notebookName];
+//    NSArray *noteList = [self getNoteListForNotebook:notebook];
+    return [self.notebookDictionary objectForKey:notebookName];
 }
 
 - (void)requestNoteListForNotebook:(Notebook *)notebook
@@ -461,7 +445,7 @@
 
 - (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebook:(Notebook *)notebook fromManager:(id)manager
 {
-    [self handleResponseWithNoteList:noteList fromNotebookWithName:notebook.name fromManager:manager];
+  //  [self handleResponseWithNoteList:noteList fromNotebookWithName:notebook.name fromManager:manager];
 }
 
 - (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebookWithName:(NSString *)notebookName fromManager:(id)manager
@@ -475,6 +459,8 @@
     {
         self.localDataLoaded = YES;
         [self.localNotebookDictionary setObject:noteList forKey:notebookName];
+        [self.notebookDictionary setObject:noteList forKey:notebookName];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_LIST_CHANGED object:nil userInfo:nil];
     }
     if(self.localDataLoaded && self.dropboxDataLoaded)
     {

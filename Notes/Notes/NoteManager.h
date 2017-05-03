@@ -19,7 +19,6 @@
 - (void)exchangeNoteAtIndex:(NSInteger)firstIndex withNoteAtIndex:(NSInteger)secondIndex fromNotebook:(NSString *)notebookName;
 
 - (Notebook *)notebookContainingNote:(Note *)note;
-- (NSArray *)getAllNotes;
 
 - (NSURL *)getBaseURLforNote:(Note *)note inNotebook:(Notebook *)notebook;
 - (NSURL *)getBaseURLforNote:(Note *)note inNotebookWithName:(NSString *)notebookName;

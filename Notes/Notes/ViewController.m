@@ -18,6 +18,7 @@
 #import "DropboxNoteManager.h"
 #import "ThemeManager.h"
 #import "Note.h"
+#import "Notebook.h"
 #import <ObjectiveDropboxOfficial/ObjectiveDropboxOfficial.h>
 
 @interface ViewController()
@@ -57,16 +58,19 @@
     self.noteManager = [[NoteManager alloc] init];
     self.themeManager = [ThemeManager sharedInstance];
     self.filteredNotes = [[NSMutableArray alloc] init];
-    self.allNotes = [self.noteManager getAllNotes];
-    self.currentNotebook = GENERAL_NOTEBOOK_NAME;
+
+
     [self createGeneralNotebook];
     [self setupNavigationBar];
     [self loadTheme];
-    [self reloadTableViewData];
+   // [self reloadTableViewData];
     [self.tableView registerNib:[UINib nibWithNibName:TABLEVIEW_CELL_ID bundle:nil] forCellReuseIdentifier:TABLEVIEW_CELL_ID];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoteCreated) name:NOTE_LIST_CHANGED object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoteListChanged) name:NOTE_LIST_CHANGED object:nil];
    // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoteCreated) name:NOTE_CREATED_EVENT object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onThemeChanged) name:THEME_CHANGED_EVENT object:nil];
+    self.currentNotebook = GENERAL_NOTEBOOK_NAME;
+    Notebook *f = [[Notebook alloc]initWithName:self.currentNotebook];
+    [self.noteManager syncNotesInNotebook:f];
 }
 
 - (void)createGeneralNotebook
@@ -236,9 +240,14 @@
 #pragma mark -
 #pragma mark Notification handlers
 
+-(void)onNoteListChanged
+{
+    [self reloadTableViewData];
+    NSLog(@"Note list changed");
+}
+
 - (void)onNoteCreated
 {
-    //self.allNotes = [self.noteManager getAllNotes];
     [self reloadTableViewData];
 }
 
