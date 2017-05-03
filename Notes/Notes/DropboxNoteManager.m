@@ -200,12 +200,12 @@
 
 - (NSArray *)getNoteListForNotebook:(Notebook *)notebook
 {
-    return nil;
+    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
 }
 
 - (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
 {
-    return nil;
+    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
 }
 
 - (void)requestNoteListForNotebook:(Notebook *)notebook
@@ -321,12 +321,12 @@
 
 - (NSArray *)getContentsOfNote:(Note *)note inNotebook:(Notebook *)notebook
 {
-    return nil;
+    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
 }
 
 - (void)requestNotebookList
 {
-    
+    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
 }
 
 @end

@@ -464,7 +464,7 @@
     }
     if(self.localDataLoaded && self.dropboxDataLoaded)
     {
-        [self mergeNotesInNotebookWithName:notebookName];
+        //[self mergeNotesInNotebookWithName:notebookName];
         self.dropboxDataLoaded = NO;
         self.localDataLoaded = NO;
     }
@@ -485,8 +485,9 @@
 
 - (void)mergeNotesInNotebookWithName:(NSString *)notebookName
 {
-    [self syncStorage1:LOCAL_STORAGE withStorage2:DROPBOX_STORAGE forNotebook:notebookName];
-    [self syncStorage1:DROPBOX_STORAGE withStorage2:LOCAL_STORAGE forNotebook:notebookName];
+    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
+    //[self syncStorage1:LOCAL_STORAGE withStorage2:DROPBOX_STORAGE forNotebook:notebookName];
+    //[self syncStorage1:DROPBOX_STORAGE withStorage2:LOCAL_STORAGE forNotebook:notebookName];
 }
 
 - (void)syncStorage1:(NSString *)storage1 withStorage2:(NSString *)storage2 forNotebook:(NSString *)notebookName
