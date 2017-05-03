@@ -15,4 +15,9 @@
 - (NSComparisonResult)compareStringDate:(NSString *)firstDate andDate:(NSString *)secondDate;
 
 - (NSString *)getCurrentTime;
+
+- (NSDate *)dateFromString:(NSString *)string;
+
+- (NSString *)stringFromDate:(NSDate *)date;
+
 @end

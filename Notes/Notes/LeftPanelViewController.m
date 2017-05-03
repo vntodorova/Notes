@@ -183,7 +183,7 @@
     if(indexPath.section == NOTEBOOKS_SECTION)
     {
         Notebook *clickedNotebook = [[self.tableViewDataSource objectForKey:NOTEBOOK_KEY] objectAtIndex:indexPath.row];
-        [self.noteManager syncNotesInNotebook:clickedNotebook];
+        //[self.noteManager syncNotesInNotebook:clickedNotebook];
         [self.presentingViewControllerDelegate changeCurrentNotebook:clickedNotebook.name];
         [self.presentingViewControllerDelegate hideLeftPanel];
     }

@@ -140,118 +140,6 @@
     [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
 }
 
-- (void)mergeNotesInNotebookWithName:(NSString *)notebookName
-{
-    NSArray *localNotes = [self.localNotebookDictionary objectForKey:notebookName];
-    for (Note *localNote in localNotes)
-    {
-        Note *dropboxNote = [self getNoteWithName:localNote.name fromNotebook:notebookName version:DROPBOX_VERSION];
-        if(dropboxNote == nil)
-        {
-            //localNote is missing in dropbox
-        }
-        else
-        {
-            DateTimeManager *dateTimeManager = [[DateTimeManager alloc] init];
-            NSComparisonResult comparisonResult = [dateTimeManager compareStringDate:localNote.dateModified andDate:dropboxNote.dateModified];
-            if(comparisonResult == NSOrderedAscending)
-            {
-                //dropbox is latest
-            }
-            if(comparisonResult == NSOrderedDescending)
-            {
-                //local is latest
-            }
-        }
-    }
-    
-    NSArray *dropboxNotes = [self.dropboxNotebookDictionary objectForKey:notebookName];
-    for (Note *dropboxNote in dropboxNotes)
-    {
-        Note *localNote = [self getNoteWithName:dropboxNote.name fromNotebook:notebookName version:LOCAL_VERSION];
-        if(localNote == nil)
-        {
-            //dropboxNote is missing in local
-        }
-        else
-        {
-            DateTimeManager *dateTimeManager = [[DateTimeManager alloc] init];
-            NSComparisonResult comparisonResult = [dateTimeManager compareStringDate:localNote.dateModified andDate:dropboxNote.dateModified];
-            if(comparisonResult == NSOrderedAscending)
-            {
-                //dropbox is latest
-            }
-            if(comparisonResult == NSOrderedDescending)
-            {
-                //local is latest
-            }
-        }
-    }
-}
-
-//- (void)izmisliimezataqfunkciq:(NSString *)notebookName version:(NSString *)version
-//{
-//    NSArray *notesArray;
-//    if([version isEqualToString:LOCAL_VERSION])
-//    {
-//        notesArray = [self.localNotebookDictionary objectForKey:notebookName];
-//    }
-//    if([version isEqualToString:DROPBOX_VERSION])
-//    {
-//        notesArray = [self.dropboxNotebookDictionary objectForKey:notebookName];
-//    }
-//    for (Note *note1 in notesArray)
-//    {
-//        Note *note2;
-//        if([version isEqualToString:LOCAL_VERSION])
-//        {
-//            note2 = [self getNoteWithName:note1.name fromNotebook:notebookName version:DROPBOX_VERSION];
-//        }
-//        if([version isEqualToString:DROPBOX_VERSION])
-//        {
-//            note2 = [self getNoteWithName:note1.name fromNotebook:notebookName version:LOCAL_VERSION];
-//        }
-//        if(note2 == nil)
-//        {
-//            //note1 exists only in version
-//        }
-//        else
-//        {
-//            DateTimeManager *dateTimeManager = [[DateTimeManager alloc] init];
-//            NSComparisonResult comparisonResult = [dateTimeManager compareStringDate:note1.dateModified andDate:note2.dateModified];
-//            if(comparisonResult == NSOrderedAscending)
-//            {
-//                //note2 is latest
-//            }
-//            if(comparisonResult == NSOrderedDescending)
-//            {
-//                //note1 is latest
-//            }
-//        }
-//    }
-//}
-
-- (Note *)getNoteWithName:(NSString *)noteName fromNotebook:(NSString *)notebookName version:(NSString *)version
-{
-    NSArray *notesArray;
-    if([version isEqualToString:LOCAL_VERSION])
-    {
-        notesArray = [self.localNotebookDictionary objectForKey:notebookName];
-    }
-    if([version isEqualToString:DROPBOX_VERSION])
-    {
-        notesArray = [self.dropboxNotebookDictionary objectForKey:notebookName];
-    }
-    for (Note *currentNote in notesArray)
-    {
-        if(currentNote.name == noteName)
-        {
-            return currentNote;
-        }
-    }
-    return nil;
-}
-
 #pragma mark -
 #pragma mark Public methods
 
@@ -604,6 +492,129 @@
 - (void)handleResponseWithNoteContents:(NSData *)contents note:(Note *)note notebook:(Notebook *)notebook
 {
     @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
+}
+
+#pragma mark -
+#pragma mark Synchronization merging
+
+- (void)mergeNotesInNotebookWithName:(NSString *)notebookName
+{
+    NSArray *localNotes = [self.localNotebookDictionary objectForKey:notebookName];
+    NSArray *dropboxNotes = [self.dropboxNotebookDictionary objectForKey:notebookName];
+    DateTimeManager *dateTimeManager = [[DateTimeManager alloc] init];
+    
+    for (Note *localNote in localNotes)
+    {
+        NSString *dropboxDateModified = [self dateModifiedOfNote:localNote.name fromNotebook:notebookName fromStorage:DROPBOX_STORAGE];
+        if(dropboxDateModified == nil)
+        {
+            /** localNote is missing in dropbox
+             check if localNote is being deleted
+             if it's been deleted
+             [self removeNoteWithName:localNote.name fromNotebook:notebookName fromStorage:LOCAL_STORAGE];
+             else
+             [self addNoteWithName:localNote.name toNotebook:notebookName inStorage:DROPBOX_STORAGE]; */
+            continue;
+        }
+        NSComparisonResult comparisonResult = [dateTimeManager compareStringDate:localNote.dateModified andDate:dropboxDateModified];
+        if(comparisonResult == NSOrderedAscending)
+        {
+            /**  dropbox is latest */
+            [self removeNoteWithName:localNote.name fromNotebook:notebookName fromStorage:LOCAL_STORAGE];
+            Note *noteToAdd = [self referenceToNoteWithName:localNote.name inNotebook:notebookName fromStorage:DROPBOX_STORAGE];
+            [self.localManager addNote:noteToAdd toNotebookWithName:notebookName];
+        }
+        if(comparisonResult == NSOrderedDescending)
+        {
+            /** local is latest */
+            [self removeNoteWithName:localNote.name fromNotebook:notebookName fromStorage:DROPBOX_STORAGE];
+            Note *noteToAdd = [self referenceToNoteWithName:localNote.name inNotebook:notebookName fromStorage:LOCAL_STORAGE];
+            [self.dropboxManager addNote:noteToAdd toNotebookWithName:notebookName];
+        }
+    }
+    
+    for (Note *dropboxNote in dropboxNotes)
+    {
+        NSString *localDateModified = [self dateModifiedOfNote:dropboxNote.name fromNotebook:notebookName fromStorage:LOCAL_STORAGE];
+        if(localDateModified == nil)
+        {
+            /** dropboxNote is missing in local
+             check if dropboxNote is being deleted
+             if it's been deleted
+             [self removeNotWithName:dropboxNote.name fromNotebook:notebookName fromStorage:DROPBOX_STORAGE];
+             else
+             [self addNoteWithName:dropboxNote.name toNotebook:notebookName inStorage:LOCAL_STORAGE]; */
+            continue;
+        }
+        NSComparisonResult comparisonResult = [dateTimeManager compareStringDate:localDateModified andDate:dropboxNote.dateModified];
+        if(comparisonResult == NSOrderedAscending)
+        {
+            /** dropbox is latest */
+            [self removeNoteWithName:dropboxNote.name fromNotebook:notebookName fromStorage:LOCAL_STORAGE];
+            Note *noteToAdd = [self referenceToNoteWithName:dropboxNote.name inNotebook:notebookName fromStorage:DROPBOX_STORAGE];
+            [self.localManager addNote:noteToAdd toNotebookWithName:notebookName];
+        }
+        if(comparisonResult == NSOrderedDescending)
+        {
+            /** local is latest */
+            [self removeNoteWithName:dropboxNote.name fromNotebook:notebookName fromStorage:DROPBOX_STORAGE];
+            Note *noteToAdd = [self referenceToNoteWithName:dropboxNote.name inNotebook:notebookName fromStorage:LOCAL_STORAGE];
+            [self.dropboxManager addNote:noteToAdd toNotebookWithName:notebookName];
+        }
+    }
+}
+
+- (NSString *)dateModifiedOfNote:(NSString *)noteName fromNotebook:(NSString *)notebookName fromStorage:(NSString *)storage
+{
+    return [self referenceToNoteWithName:noteName inNotebook:notebookName fromStorage:storage].dateModified;
+}
+
+- (void)removeNoteWithName:(NSString *)noteName fromNotebook:(NSString *)notebookName fromStorage:(NSString *)storage
+{
+    Note *noteToRemove = [self referenceToNoteWithName:noteName inNotebook:notebookName fromStorage:storage];
+    if([storage isEqualToString:LOCAL_STORAGE])
+    {
+        [self.localManager removeNote:noteToRemove fromNotebookWithName:notebookName];
+    }
+    if([storage isEqualToString:DROPBOX_STORAGE])
+    {
+        [self.dropboxManager removeNote:noteToRemove fromNotebookWithName:notebookName];
+    }
+}
+
+- (void)addNoteWithName:(NSString *)noteName toNotebook:(NSString *)notebookName inStorage:(NSString *)storage
+{
+    Note *noteToAdd = [self referenceToNoteWithName:noteName inNotebook:notebookName fromStorage:storage];
+    if([storage isEqualToString:LOCAL_STORAGE])
+    {
+        [self.localManager addNote:noteToAdd toNotebookWithName:notebookName];
+    }
+    if([storage isEqualToString:DROPBOX_STORAGE])
+    {
+        [self.dropboxManager addNote:noteToAdd toNotebookWithName:notebookName];
+    }
+    
+}
+
+- (Note *)referenceToNoteWithName:(NSString *)noteName inNotebook:(NSString *)notebook fromStorage:(NSString *)storage
+{
+    NSArray *notesArray;
+    if([storage isEqualToString:LOCAL_STORAGE])
+    {
+        notesArray = [self.localNotebookDictionary objectForKey:notebook];
+    }
+    if([storage isEqualToString:DROPBOX_STORAGE])
+    {
+        //notesArray = [self.dropboxNotebookDictionary objectForKey:notebook];
+    }
+    for (Note *currentNote in notesArray)
+    {
+        if(currentNote.name == noteName)
+        {
+            return currentNote;
+        }
+    }
+    return nil;
 }
 
 @end

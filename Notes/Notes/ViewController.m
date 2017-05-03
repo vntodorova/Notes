@@ -65,7 +65,7 @@
     [self reloadTableViewData];
     [self.tableView registerNib:[UINib nibWithNibName:TABLEVIEW_CELL_ID bundle:nil] forCellReuseIdentifier:TABLEVIEW_CELL_ID];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoteCreated) name:NOTE_LIST_CHANGED object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoteCreated) name:NOTE_CREATED_EVENT object:nil];
+   // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoteCreated) name:NOTE_CREATED_EVENT object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onThemeChanged) name:THEME_CHANGED_EVENT object:nil];
 }
 
@@ -238,7 +238,7 @@
 
 - (void)onNoteCreated
 {
-    self.allNotes = [self.noteManager getAllNotes];
+    //self.allNotes = [self.noteManager getAllNotes];
     [self reloadTableViewData];
 }
 
