@@ -130,18 +130,24 @@
         NSString *dropboxPath = [NSString stringWithFormat:@"%@/%@",notePathInDropBox,fileName];
         NSData *data = [[NSFileManager defaultManager] contentsAtPath:noteFilesPath];
         [[self.client.filesRoutes uploadData:dropboxPath inputData:data] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESUploadError * _Nullable routeError, DBRequestError * _Nullable networkError) {
-            //2017-04-20 09:55:47 +0000
-            //NSDate *newDate = [NSDate date];
-            DateTimeManager *manager = [[DateTimeManager alloc] init];
+            DateTimeManager *dtm = [[DateTimeManager alloc] init];
             NSDate *date = [[DBFILESMetadataSerializer serialize:result] objectForKey:@"server_modified"];
             
-            NSDate *newDate = [manager dateFromString:[manager stringFromDate:date]];
+            NSDate *newDate = [dtm dateFromString:date.description withFormat:@"yyyy-MM-dd’T’HH:mm:ssZ"];
             NSString *pathToFileBody = [[self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName] stringByAppendingPathComponent:NOTE_BODY_FILE];
             NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys: newDate, NSFileModificationDate, NULL];
             [[NSFileManager defaultManager] setAttributes: attr ofItemAtPath: pathToFileBody error: NULL];
         }];
     }
+}
 
+- (void)downloadNote:(Note*)note fromNotebookWithName:(NSString*)notebookName
+{
+    NSString *source = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
+    NSString *destination = [self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
+    NSURL *destinationURL = [[NSURL alloc] initWithString:destination];
+    
+    [self.client.filesRoutes downloadUrl:source overwrite:YES destination:destinationURL];
 }
 
 - (NSArray *)getDirectoryContentForPath:(NSString *)path
