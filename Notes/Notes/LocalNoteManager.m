@@ -224,18 +224,6 @@
     [[NSFileManager defaultManager] moveItemAtPath:oldPath toPath:newPath error:nil];
 }
 
-- (NSArray *)getNoteListForNotebook:(Notebook *)notebook
-{
-    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
-    return nil;
-}
-
-- (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
-{
-    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
-    return nil;
-}
-
 - (void)requestNoteListForNotebook:(Notebook *)notebook
 {
     
@@ -286,16 +274,6 @@
     [[NSFileManager defaultManager] moveItemAtPath:[self getDirectoryPathForNotebookWithName:oldName]
                                             toPath:[self getDirectoryPathForNotebookWithName:newName]
                                              error:nil];
-}
-
-- (NSArray *)getContentsOfNote:(Note *)note inNotebook:(Notebook *)notebook
-{
-    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
-}
-
-- (NSArray *)getNotebookList
-{
-    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
 }
 
 - (void)requestNotebookList

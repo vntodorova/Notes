@@ -173,16 +173,6 @@
     [self renameNoteInDropbox:note fromNotebookWithName:notebook.name oldName:oldName];
 }
 
-- (NSArray *)getNoteListForNotebook:(Notebook *)notebook
-{
-    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
-}
-
-- (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
-{
-    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
-}
-
 - (void)requestNoteListForNotebook:(Notebook *)notebook
 {
     [self requestNoteListForNotebookWithName:notebook.name];
@@ -250,28 +240,6 @@
     [self renameNotebookWithName:notebook.name newName:newName];
 }
 
-- (NSArray *)getNotebookList
-{
-    NSMutableArray *notebookList = [[NSMutableArray alloc] init];
-    [[self.client.filesRoutes listFolder:@"/Notebooks"]
-     setResponseBlock:^(DBFILESListFolderResult *response, DBFILESListFolderError *routeError, DBRequestError *networkError)
-     {
-         if (response)
-         {
-             for (DBFILESMetadata *data in response.entries)
-             {
-                 Notebook *notebook = [[Notebook alloc] initWithName:data.name];
-                 [notebookList addObject:notebook];
-             }
-         }
-         else
-         {
-             NSLog(@"%@\n%@\n", routeError, networkError);
-         }
-     }];
-    return notebookList;
-}
-
 - (void)requestContentsOfNote:(NSMutableArray *)noteList inNotebook:(NSString *)notebookName;
 {
     if(noteList.count == 0)
@@ -290,11 +258,6 @@
         note.dateModified = date;
         [self requestContentsOfNote:noteList inNotebook:notebookName];
     }];
-}
-
-- (NSArray *)getContentsOfNote:(Note *)note inNotebook:(Notebook *)notebook
-{
-    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
 }
 
 - (void)requestNotebookList

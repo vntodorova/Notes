@@ -19,6 +19,7 @@
 #import "EditableNotebookCell.h"
 #import "NotebookCell.h"
 #import "DropboxNoteManager.h"
+#import "Reachability.h" 
 
 @interface LeftPanelViewController()
 
@@ -281,6 +282,13 @@
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:pathForDeleting] withRowAnimation:UITableViewRowAnimationTop];
     [self dismissConfirmationView];
     [self.presentingViewControllerDelegate changeCurrentNotebook:GENERAL_NOTEBOOK_NAME];
+}
+
+- (BOOL)networkAvailable
+{
+    Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
+    NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
+    return networkStatus != NotReachable;
 }
 
 - (void)dismissConfirmationView

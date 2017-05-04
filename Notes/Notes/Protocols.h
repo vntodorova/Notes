@@ -27,9 +27,6 @@
 - (void)renameNote:(Note *)note fromNotebook:(Notebook *)notebook oldName:(NSString *)oldName;
 - (void)renameNote:(Note *)note fromNotebookWithName:(NSString *)notebookName oldName:(NSString *)oldName;
 
-- (NSArray *)getNoteListForNotebook:(Notebook *)notebook;
-- (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName;
-
 - (void)requestNoteListForNotebook:(Notebook *)notebook;
 - (void)requestNoteListForNotebookWithName:(NSString *)notebookName;
 @end
@@ -45,9 +42,6 @@
 - (void)renameNotebook:(Notebook *)notebook newName:(NSString *)newName;
 - (void)renameNotebookWithName:(NSString *)oldName newName:(NSString *)newName;
 
-- (NSArray *)getNotebookList;
-
-- (NSArray *)getContentsOfNote:(Note *)note inNotebook:(Notebook *)notebook;
 - (void)requestNotebookList;
 
 @end

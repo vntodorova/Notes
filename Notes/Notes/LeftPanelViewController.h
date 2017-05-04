@@ -14,7 +14,6 @@
 @class NoteManager;
 
 @interface LeftPanelViewController : UIViewController <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate, EditableCellDelegate>
-- (IBAction)onGoogleClick:(id)sender;
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil manager:(NoteManager *)noteManager;
 - (IBAction)settingsButtonClicked:(UIButton *)sender;
