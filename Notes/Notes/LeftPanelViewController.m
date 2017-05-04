@@ -276,12 +276,15 @@
 
 - (void)deleteCell
 {
-    NSIndexPath *pathForDeleting = [self.tableView indexPathForCell:self.cellForDeleting];
-    [self.noteManager removeNotebookWithName:self.cellForDeleting.nameLabel.text];
-    [self.tableViewDataSource setObject:[self.noteManager getNotebookList] forKey:NOTEBOOK_KEY];
-    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:pathForDeleting] withRowAnimation:UITableViewRowAnimationTop];
+    if([self networkAvailable])
+    {
+        NSIndexPath *pathForDeleting = [self.tableView indexPathForCell:self.cellForDeleting];
+        [self.noteManager removeNotebookWithName:self.cellForDeleting.nameLabel.text];
+        [self.tableViewDataSource setObject:[self.noteManager getNotebookList] forKey:NOTEBOOK_KEY];
+        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:pathForDeleting] withRowAnimation:UITableViewRowAnimationTop];
+        [self.presentingViewControllerDelegate changeCurrentNotebook:GENERAL_NOTEBOOK_NAME];
+    }
     [self dismissConfirmationView];
-    [self.presentingViewControllerDelegate changeCurrentNotebook:GENERAL_NOTEBOOK_NAME];
 }
 
 - (BOOL)networkAvailable
