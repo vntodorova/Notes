@@ -28,6 +28,7 @@
 
 @property BOOL localDataLoaded;
 @property BOOL dropboxDataLoaded;
+@property BOOL isNotebookListRequestPending;
 
 @property NSMutableDictionary *localNotebookDictionary;
 @property NSMutableDictionary *dropboxNotebookDictionary;
@@ -48,6 +49,7 @@
         self.notebookDictionary = [[NSMutableDictionary alloc] init];
         self.notebookList = [[NSMutableArray alloc] init];
         self.tagParser = [[TagsParser alloc] init];
+        self.isNotebookListRequestPending = false;
     }
     return self;
 }
@@ -405,35 +407,33 @@
 
 - (NSArray *)getNotebookList
 {
-    [self.dropboxManager getNotebookList];
-    if(self.notebookList.count == 0)
-    {
-        [self.localManager requestNotebookList];
-    }
     return self.notebookList;
 }
 
 - (void)requestNotebookList
 {
-    [self.localManager requestNotebookList];
+    if(self.isNotebookListRequestPending)
+    {
+        return;
+    }
+    self.isNotebookListRequestPending = true;
+    [self.dropboxManager requestNotebookList];
 }
 
 #pragma mark -
 #pragma mark ResponseHandler
 
-- (void)handleResponseWithNotebookList:(NSArray *) notebookList
+- (void)handleResponseWithNotebookList:(NSArray *)notebookList fromManager:(id)manager;
 {
-    [self.notebookList addObjectsFromArray:notebookList];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTEBOOK_LIST_CHANGED object:nil userInfo:nil];
-    });
-    for (Notebook *currentNotebook in self.notebookList)
+    if(manager == self.dropboxManager)
     {
-        @synchronized (self)
+        self.notebookList = [NSMutableArray arrayWithArray:notebookList];
+        for(Notebook *notebook in notebookList)
         {
-            [self requestNoteListForNotebook:currentNotebook];
+            [self.notebookDictionary setObject:[[NSMutableArray alloc]init] forKey: notebook.name];
         }
-        
+        self.isNotebookListRequestPending = false;
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTEBOOK_LIST_CHANGED object:nil userInfo:nil];
     }
 }
 

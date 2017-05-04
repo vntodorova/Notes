@@ -35,11 +35,6 @@
 
 @implementation LeftPanelViewController
 
-- (IBAction)onGoogleClick:(id)sender
-{
-
-}
-
 -(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil manager:(NoteManager *)noteManager
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -60,7 +55,7 @@
     self.isHidden = YES;
 
     [self loadTheme];
-    [self reloadTableViewData];
+    [self.noteManager requestNotebookList];
     
     UIPanGestureRecognizer *panGestureRecogniser = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognised:)];
     [self.view addGestureRecognizer:panGestureRecogniser];

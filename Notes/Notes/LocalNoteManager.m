@@ -301,7 +301,7 @@
 - (void)requestNotebookList
 {
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-        [self.responseHandler handleResponseWithNotebookList:[self loadNotebooks]];
+        [self.responseHandler handleResponseWithNotebookList:[self loadNotebooks] fromManager:self];
     });
 }
 

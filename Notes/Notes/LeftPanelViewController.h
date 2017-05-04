@@ -13,7 +13,7 @@
 @class Reminder;
 @class NoteManager;
 
-@interface LeftPanelViewController : UIViewController <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate, EditableCellDelegate>
+@interface LeftPanelViewController : UIViewController <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate, EditableCellDelegate, ResponseHandler>
 - (IBAction)onGoogleClick:(id)sender;
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil manager:(NoteManager *)noteManager;

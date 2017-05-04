@@ -299,7 +299,25 @@
 
 - (void)requestNotebookList
 {
-    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
+    [[self.client.filesRoutes listFolder:@"/Notebooks"]
+     setResponseBlock:^(DBFILESListFolderResult *response, DBFILESListFolderError *routeError, DBRequestError *networkError)
+     {
+         if (response)
+         {
+             NSMutableArray *notebookList = [[NSMutableArray alloc] init];
+             for (DBFILESMetadata *data in response.entries)
+             {
+                 Notebook *notebook = [[Notebook alloc] initWithName:data.name];
+                 notebook.notesCount = [self getNoteListForNotebook:notebook].count;
+                 [notebookList addObject:notebook];
+                 [self.manager handleResponseWithNotebookList:notebookList fromManager:self];
+             }
+         }
+         else
+         {
+             NSLog(@"%@\n%@\n", routeError, networkError);
+         }
+     }];
 }
 
 @end
