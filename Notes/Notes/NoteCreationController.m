@@ -129,12 +129,14 @@
 
 - (void)notebookSelected:(NSString *)noteBookSelected
 {
-    if(![noteBookSelected isEqualToString:self.currentNotebook])
-    {
-    
-    }
     [self setNoteContent];
     [self.navigationController popViewControllerAnimated:YES];
+    
+    if(![noteBookSelected isEqualToString:self.currentNotebook])
+    {
+        [self.manager copyNote:self.note fromNotebookWithName:self.currentNotebook toNotebookWithName:noteBookSelected];
+        return;
+    }
     if(![self.startingNoteName isEqualToString:self.note.name] && self.startingNoteName != nil)
     {
         [self.manager renameNote:self.note fromNotebookWithName:self.currentNotebook oldName:self.startingNoteName];

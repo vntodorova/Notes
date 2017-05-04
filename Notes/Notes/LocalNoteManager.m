@@ -34,13 +34,7 @@
 
 - (void)deleteItemAtPath:(NSString *)path
 {
-    NSError *error;
-    BOOL isSuccessful = [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
-    
-    if(!isSuccessful)
-    {
-        @throw [NSException exceptionWithName:@"FileNotFoundException" reason:error.description userInfo:nil];
-    }
+    [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
 }
 
 - (NSString *)getTempDirectoryPath
@@ -195,7 +189,7 @@
 - (void)addNote:(Note *)newNote toNotebookWithName:(NSString *)notebookName
 {
     [self saveToDisk:newNote toNotebook:notebookName];
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_CREATED_EVENT object:nil userInfo:nil];
+    //[[NSNotificationCenter defaultCenter] postNotificationName:NOTE_CREATED_EVENT object:nil userInfo:nil];
 }
 
 - (void)removeNote:(Note *)note fromNotebook:(Notebook *)notebook
@@ -223,9 +217,21 @@
     [[NSFileManager defaultManager] moveItemAtPath:oldPath toPath:newPath error:nil];
 }
 
+- (void)copyNote:(Note *)note fromNotebook:(Notebook *)source toNotebook:(Notebook *)destination
+{
+    [self copyNote:note fromNotebookWithName:source.name toNotebookWithName:destination.name];
+}
+
+- (void)copyNote:(Note *)note fromNotebookWithName:(NSString *)source toNotebookWithName:(NSString *)destination
+{
+    NSString *sourcePath = [self getDirectoryPathForNote:note inNotebookWithName:source];
+    NSString *destinationPath = [self getDirectoryPathForNote:note inNotebookWithName:destination];
+    [self deleteItemAtPath:destinationPath];
+    [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:nil];
+}
+
 - (void)requestNoteListForNotebook:(Notebook *)notebook
 {
-    
     [self requestNoteListForNotebookWithName:notebook.name];
 }
 

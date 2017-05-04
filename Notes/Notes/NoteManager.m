@@ -382,6 +382,17 @@
     }
 }
 
+- (void)copyNote:(Note *)note fromNotebook:(Notebook *)source toNotebook:(Notebook *)destination
+{
+    [self copyNote:note fromNotebookWithName:source.name toNotebookWithName:destination.name];
+}
+
+- (void)copyNote:(Note *)note fromNotebookWithName:(NSString *)source toNotebookWithName:(NSString *)destination
+{
+    [self.localManager copyNote:note fromNotebookWithName:source toNotebookWithName:destination];
+    [self addNote:note toNotebookWithName:destination];
+}
+
 - (void)renameNotebook:(Notebook *)notebook newName:(NSString *)newName
 {
     [self.localManager renameNotebook:notebook newName:newName];
