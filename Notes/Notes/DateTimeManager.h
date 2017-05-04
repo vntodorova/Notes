@@ -10,7 +10,7 @@
 
 @interface DateTimeManager : NSObject
 
-@property NSDateFormatter *dateFormatter;
++ (DateTimeManager *)sharedInstance;
 
 - (NSString *)convertToRelativeDate:(NSString *)stringDate;
 

@@ -94,29 +94,6 @@
     return [@"/Notebooks" stringByAppendingPathComponent:notebookName];
 }
 
-- (void)syncFiles
-{
-    [self syncNotebookFolders];
-}
-
-- (void)syncNotebookFolders
-{
-    NSArray *notebookList = [self.manager getNotebookList];
-    for (Notebook *notebook in notebookList)
-    {
-        [self syncNoteFoldersForNotebookWithName:notebook.name];
-    }
-}
-
-- (void)syncNoteFoldersForNotebookWithName:(NSString *)notebookName
-{
-    NSArray *noteList = [self.manager getNoteListForNotebookWithName:notebookName];
-    for (Note *note in noteList)
-    {
-        [self uploadNote:note inNotebookWithName:notebookName];
-    }
-}
-
 - (void)uploadNote:(Note*)note inNotebookWithName:(NSString *)notebookName
 {
     NSString *notePathInDropBox = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
@@ -130,13 +107,11 @@
         NSString *dropboxPath = [NSString stringWithFormat:@"%@/%@",notePathInDropBox,fileName];
         NSData *data = [[NSFileManager defaultManager] contentsAtPath:noteFilesPath];
         [[self.client.filesRoutes uploadData:dropboxPath inputData:data] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESUploadError * _Nullable routeError, DBRequestError * _Nullable networkError) {
-            DateTimeManager *dtm = [[DateTimeManager alloc] init];
             NSDate *date = [[DBFILESMetadataSerializer serialize:result] objectForKey:@"server_modified"];
-            
-            NSDate *newDate = [dtm dateFromString:date.description withFormat:@"yyyy-MM-dd’T’HH:mm:ssZ"];
+            NSDate *newDate = [[DateTimeManager sharedInstance] dateFromString:date.description withFormat:SYSTEM_DATE_FORMAT];
             NSString *pathToFileBody = [[self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName] stringByAppendingPathComponent:NOTE_BODY_FILE];
-            NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys: newDate, NSFileModificationDate, NULL];
-            [[NSFileManager defaultManager] setAttributes: attr ofItemAtPath: pathToFileBody error: NULL];
+            NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys: newDate, NSFileModificationDate, nil];
+            [[NSFileManager defaultManager] setAttributes: attr ofItemAtPath: pathToFileBody error:nil];
         }];
     }
 }
@@ -157,7 +132,7 @@
     
     if(error)
     {
-        @throw [NSException exceptionWithName:@"DirectoryNotFound"
+        @throw [NSException exceptionWithName:DIRECTORY_NOT_FOUND_EXCEPTION
                                        reason:error.description
                                      userInfo:nil];
     }
@@ -239,7 +214,7 @@
     Note *note = [[Note alloc] init];
     note.name = [[metadata.pathDisplay stringByDeletingLastPathComponent] lastPathComponent];
     NSString* date = [[DBFILESMetadataSerializer serialize:metadata] objectForKey:@"server_modified"];
-    note.dateModified = date;
+    note.dateModified = [[DateTimeManager sharedInstance] dateFromString:date.description withFormat:SYSTEM_DATE_FORMAT].description;
     return note;
 }
 
@@ -286,9 +261,7 @@
              for (DBFILESMetadata *data in response.entries)
              {
                  Notebook *notebook = [[Notebook alloc] initWithName:data.name];
-                 notebook.notesCount = [self getNoteListForNotebook:notebook].count;
                  [notebookList addObject:notebook];
-                 //NSLog(@"%@", data);
              }
          }
          else

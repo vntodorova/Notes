@@ -122,4 +122,6 @@
 
 #define LOCAL_STORAGE @"LocalStorage"
 #define DROPBOX_STORAGE @"DropboxStorage"
+
+#define SYSTEM_DATE_FORMAT @"yyyy'-'MM'-'dd'T'HH':'mm':'ssZ"
 #endif /* Defines_h */

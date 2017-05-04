@@ -10,7 +10,6 @@
 #import "Defines.h"
 #import "Notebook.h"
 #import "Note.h"
-#import "DateTimeManager.h"
 #import "TagsParser.h"
 
 @interface LocalNoteManager()

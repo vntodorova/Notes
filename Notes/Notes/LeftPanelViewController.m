@@ -24,7 +24,6 @@
 
 @property (nonatomic, assign) NoteManager *noteManager;
 @property (nonatomic, strong) LayoutProvider *layoutProvider;
-@property (nonatomic, strong) DateTimeManager *dateTimeManager;
 @property (nonatomic, strong) ThemeManager *themeManager;
 
 @property BOOL sectionEditingMode;
@@ -48,7 +47,6 @@
     {
         self.noteManager = noteManager;
         self.tableViewDataSource = [[NSMutableDictionary alloc] init];
-        self.dateTimeManager = [[DateTimeManager alloc] init];
         self.layoutProvider = [LayoutProvider sharedInstance];
         self.themeManager = [ThemeManager sharedInstance];
     }
@@ -106,7 +104,7 @@
     {
         Note *note1 = (Note *)obj1;
         Note *note2 = (Note *)obj2;
-        return [self.dateTimeManager compareStringDate:note1.triggerDate andDate:note2.triggerDate];
+        return [[DateTimeManager sharedInstance] compareStringDate:note1.triggerDate andDate:note2.triggerDate];
     }];
     return reminders;
 }

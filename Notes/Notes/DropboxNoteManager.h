@@ -16,7 +16,6 @@
 
 - (id)initWithManager:(id)manager handler:(id)handler;
 - (void)downloadNote:(Note*)note fromNotebookWithName:(NSString*)notebookName;
-- (void)syncFiles;
 
 @end
 

@@ -140,8 +140,7 @@
 
 - (NSString *)currentTime
 {
-    DateTimeManager *timeManager = [[DateTimeManager alloc] init];
-    return [timeManager getCurrentTime];
+    return [[DateTimeManager sharedInstance] getCurrentTime];
 }
 
 - (NSMutableArray *)selectionMenuForList:(NSArray *)itemList andSelector:(SEL)selector

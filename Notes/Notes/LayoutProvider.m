@@ -17,7 +17,6 @@
 #import "EditableNotebookCell.h"
 
 @interface LayoutProvider()
-@property DateTimeManager *dateTimeManager;
 @property ThemeManager *themeManager;
 @end
 
@@ -37,7 +36,6 @@ static LayoutProvider *sharedInstance = nil;
 - (id)initFirstTime {
     self = [super init];
     if (self) {
-        self.dateTimeManager = [[DateTimeManager alloc] init];
         self.themeManager = [ThemeManager sharedInstance];
         self.screenSize = [UIScreen mainScreen].bounds.size;
     }
@@ -196,7 +194,7 @@ static LayoutProvider *sharedInstance = nil;
     cell.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_CELL_COLOR];
     cell.textLabel.text = note.name;
     cell.textLabel.textColor = [self.themeManager.styles objectForKey:TINT];
-    cell.detailTextLabel.text = [self.dateTimeManager convertToRelativeDate:note.triggerDate];
+    cell.detailTextLabel.text = [[DateTimeManager sharedInstance] convertToRelativeDate:note.triggerDate];
     cell.detailTextLabel.textColor = [self.themeManager.styles objectForKey:TINT];
     return cell;
 }
