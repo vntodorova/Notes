@@ -220,7 +220,6 @@
     
     NSString *oldPath = [self getDirectoryPathForNote:dummyNote inNotebookWithName:notebookName];
     NSString *newPath = [[self getDirectoryPathForNotebookWithName:notebookName] stringByAppendingPathComponent:note.name];
-    
     [[NSFileManager defaultManager] moveItemAtPath:oldPath toPath:newPath error:nil];
 }
 
@@ -271,9 +270,9 @@
 
 - (void)renameNotebookWithName:(NSString *)oldName newName:(NSString *)newName
 {
-    [[NSFileManager defaultManager] moveItemAtPath:[self getDirectoryPathForNotebookWithName:oldName]
-                                            toPath:[self getDirectoryPathForNotebookWithName:newName]
-                                             error:nil];
+        [[NSFileManager defaultManager] moveItemAtPath:[self getDirectoryPathForNotebookWithName:oldName]
+                                                toPath:[self getDirectoryPathForNotebookWithName:newName]
+                                                 error:nil];
 }
 
 - (void)requestNotebookList

@@ -119,10 +119,26 @@
 - (void)downloadNote:(Note*)note fromNotebookWithName:(NSString*)notebookName
 {
     NSString *source = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
-    NSString *destination = [self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
-    NSURL *destinationURL = [[NSURL alloc] initWithString:destination];
-    
-    [self.client.filesRoutes downloadUrl:source overwrite:YES destination:destinationURL];
+    [[self.client.filesRoutes listFolder:source] setResponseBlock:^(DBFILESListFolderResult * _Nullable result, DBFILESListFolderError * _Nullable routeError, DBRequestError * _Nullable networkError) {
+        
+        NSString *destination = [self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        if([fileManager fileExistsAtPath:destination isDirectory:nil] == NO)
+        {
+            [fileManager createDirectoryAtPath:destination withIntermediateDirectories:YES attributes:nil error:nil];
+        }
+        
+        NSArray<DBFILESMetadata*>* entries = result.entries.copy;
+        
+        for(DBFILESMetadata *data in entries)
+        {
+            NSString *destenationPathToFile = [destination stringByAppendingPathComponent:data.name];
+            NSURL *destinationURL = [NSURL fileURLWithPath:destenationPathToFile];
+            [[self.client.filesRoutes downloadUrl:data.pathDisplay overwrite:YES destination:destinationURL] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESDownloadError * _Nullable routeError, DBRequestError * _Nullable networkError, NSURL * _Nonnull destination) {
+                NSLog(@"Done");
+            }];
+        }
+    }];
 }
 
 - (NSArray *)getDirectoryContentForPath:(NSString *)path
@@ -187,7 +203,7 @@
          NSMutableArray *noteList = [[NSMutableArray alloc] init];
          for(DBFILESMetadata *data in response.entries)
          {
-             if([data.name containsString:NOTE_DATE_FILE])
+             if([data.name containsString:NOTE_BODY_FILE])
              {
                  [noteList addObject:[self parseNoteFromData:data]];
              }
@@ -242,22 +258,22 @@
 
 - (void)requestContentsOfNote:(NSMutableArray *)noteList inNotebook:(NSString *)notebookName;
 {
-    if(noteList.count == 0)
-    {
-        //[self.handler handleResponseWithNoteList:self.currentNoteList fromNotebookWithName:notebookName fromManager:self];
-        return;
-    }
-    [self.currentNoteList addObject:[noteList objectAtIndex:0]];
-    Note *note = [noteList objectAtIndex:0];
-    [noteList removeObjectAtIndex:0];
-    
-    NSString *path = [[self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName] stringByAppendingPathComponent:NOTE_DATE_FILE];
-    [[self.client.filesRoutes downloadData:path] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESDownloadError * _Nullable routeError, DBRequestError * _Nullable networkError, NSData * _Nullable fileData)
-    {
-        NSString *date = [[NSString alloc]initWithData:fileData encoding:NSUTF8StringEncoding];
-        note.dateModified = date;
-        [self requestContentsOfNote:noteList inNotebook:notebookName];
-    }];
+//    if(noteList.count == 0)
+//    {
+//        //[self.handler handleResponseWithNoteList:self.currentNoteList fromNotebookWithName:notebookName fromManager:self];
+//        return;
+//    }
+//    [self.currentNoteList addObject:[noteList objectAtIndex:0]];
+//    Note *note = [noteList objectAtIndex:0];
+//    [noteList removeObjectAtIndex:0];
+//    
+//    NSString *path = [[self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName] stringByAppendingPathComponent:NOTE_DATE_FILE];
+//    [[self.client.filesRoutes downloadData:path] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESDownloadError * _Nullable routeError, DBRequestError * _Nullable networkError, NSData * _Nullable fileData)
+//    {
+//        NSString *date = [[NSString alloc]initWithData:fileData encoding:NSUTF8StringEncoding];
+//        note.dateModified = date;
+//        [self requestContentsOfNote:noteList inNotebook:notebookName];
+//    }];
 }
 
 - (void)requestNotebookList

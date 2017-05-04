@@ -129,6 +129,10 @@
 
 - (void)notebookSelected:(NSString *)noteBookSelected
 {
+    if(![noteBookSelected isEqualToString:self.currentNotebook])
+    {
+    
+    }
     [self setNoteContent];
     [self.navigationController popViewControllerAnimated:YES];
     if(![self.startingNoteName isEqualToString:self.note.name] && self.startingNoteName != nil)
