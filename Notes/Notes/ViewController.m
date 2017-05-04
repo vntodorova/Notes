@@ -80,8 +80,10 @@
 
 - (void)reloadTableViewData
 {
-    self.notesArray = [self.noteManager getNoteListForNotebookWithName:self.currentNotebook];
-    [self.tableView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        self.notesArray = [self.noteManager getNoteListForNotebookWithName:self.currentNotebook];
+        [self.tableView reloadData];
+    });
 }
 
 -   (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

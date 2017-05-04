@@ -308,7 +308,6 @@
              for (DBFILESMetadata *data in response.entries)
              {
                  Notebook *notebook = [[Notebook alloc] initWithName:data.name];
-                 notebook.notesCount = [self getNoteListForNotebook:notebook].count;
                  [notebookList addObject:notebook];
                  [self.manager handleResponseWithNotebookList:notebookList fromManager:self];
              }

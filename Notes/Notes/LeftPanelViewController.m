@@ -75,9 +75,11 @@
 
 - (void)reloadTableViewData
 {
-    [self.tableViewDataSource setObject:[self.noteManager getNotebookList] forKey:NOTEBOOK_KEY];
-    [self.tableViewDataSource setObject:[self getNotesWithReminders] forKey:REMINDER_KEY];
-    [self.tableView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^(void){
+        [self.tableViewDataSource setObject:[self.noteManager getNotebookList] forKey:NOTEBOOK_KEY];
+        [self.tableViewDataSource setObject:[self getNotesWithReminders] forKey:REMINDER_KEY];
+        [self.tableView reloadData];
+    });
 }
 
 - (NSArray *)getNotesWithReminders
