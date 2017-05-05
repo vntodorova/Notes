@@ -184,7 +184,7 @@ static LayoutProvider *sharedInstance = nil;
     cell.backgroundColor = [self.themeManager.styles objectForKey:TABLEVIEW_CELL_COLOR];
     cell.nameLabel.text = notebook.name;
     cell.nameLabel.textColor = [self.themeManager.styles objectForKey:TINT];
-    //TODO cell.detailsLabel.text = [NSString stringWithFormat:@"%ld items",(long)size];
+    cell.detailsLabel.text = [NSString stringWithFormat:@"%ld items",(long)size];
     cell.detailsLabel.textColor = [self.themeManager.styles objectForKey:TINT];
     return cell;
 }

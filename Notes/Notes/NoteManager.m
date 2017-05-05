@@ -249,21 +249,19 @@
 
 - (void)addNote:(Note *)newNote toNotebookWithName:(NSString *)notebookName
 {
-    if(newNote == nil || notebookName == nil)
+    if(newNote && notebookName)
     {
-        return;
-    }
-    
-    if([self noteExists:newNote inNotebookWithName:notebookName] == NO)
-    {
-        NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName];
-        [array addObject:newNote];
-    }
-    
-    [self.localManager addNote:newNote toNotebookWithName:notebookName];
-    if([self networkAvailable])
-    {
-        [self.dropboxManager addNote:newNote toNotebookWithName:notebookName];
+        if([self noteExists:newNote inNotebookWithName:notebookName] == NO)
+        {
+            NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName];
+            [array addObject:newNote];
+        }
+        
+        [self.localManager addNote:newNote toNotebookWithName:notebookName];
+        if([self networkAvailable])
+        {
+            [self.dropboxManager addNote:newNote toNotebookWithName:notebookName];
+        }
     }
 }
 
@@ -274,15 +272,14 @@
 
 - (void)removeNote:(Note *)note fromNotebookWithName:(NSString *)notebookName
 {
-    if(note == nil || notebookName == nil)
+    if(note && notebookName)
     {
-        return;
-    }
-    [[self.notebookDictionary objectForKey:notebookName] removeObject:note];
-    [self.localManager removeNote:note fromNotebookWithName:notebookName];
-    if([self networkAvailable])
-    {
-        [self.dropboxManager removeNote:note fromNotebookWithName:notebookName];
+        [[self.notebookDictionary objectForKey:notebookName] removeObject:note];
+        [self.localManager removeNote:note fromNotebookWithName:notebookName];
+        if([self networkAvailable])
+        {
+            [self.dropboxManager removeNote:note fromNotebookWithName:notebookName];
+        }
     }
 }
 
@@ -330,13 +327,6 @@
 
 - (void)requestNoteListForNotebookWithName:(NSString *)notebookName
 {
-    /**
-     TODO
-     Notebook clicked from LeftPanelViewController
-     -> sync Dropbox and Local
-     -> display progress
-     -> send notification to ViewController to display the notebook when synchronization is finished
-     */
     [self.dropboxManager requestNoteListForNotebookWithName:notebookName];
     [self.localManager requestNoteListForNotebookWithName:notebookName];
 }
