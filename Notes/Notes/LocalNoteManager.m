@@ -227,9 +227,7 @@
 
 - (void)copyNote:(Note *)note fromNotebook:(Notebook *)source toNotebook:(Notebook *)destination
 {
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-        [self copyNote:note fromNotebookWithName:source.name toNotebookWithName:destination.name];
-    });
+    [self copyNote:note fromNotebookWithName:source.name toNotebookWithName:destination.name];
 }
 
 - (void)copyNote:(Note *)note fromNotebookWithName:(NSString *)source toNotebookWithName:(NSString *)destination
