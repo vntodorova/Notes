@@ -118,9 +118,6 @@
 #define DIRECTORY_NOT_FOUND_EXCEPTION @"DirectoryNotFoundException"
 #define NOT_IMPLEMENTED_EXCEPTION @"NotImplementedException"
 
-#define LOCAL_STORAGE @"LocalStorage"
-#define DROPBOX_STORAGE @"DropboxStorage"
-
 #define NOTE_DOWNLOADED @"NoteDownloaded"
 #define SYSTEM_DATE_FORMAT @"yyyy'-'MM'-'dd'T'HH':'mm':'ssZ"
 #endif /* Defines_h */

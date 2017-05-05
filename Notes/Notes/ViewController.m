@@ -243,7 +243,6 @@
 -(void)onNoteListChanged
 {
     [self reloadTableViewData];
-    NSLog(@"Note list changed");
 }
 
 - (void)onNoteCreated

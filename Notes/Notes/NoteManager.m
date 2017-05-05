@@ -146,7 +146,7 @@
 
 - (void)requestNoteListForGeneralNotebook
 {
-    [self requestNoteListForNotebookWithName:GENERAL_NOTEBOOK_NAME];
+    //[self syncNotesInNotebook:[[Notebook alloc] initWithName:GENERAL_NOTEBOOK_NAME]];
 }
 
 #pragma mark -
@@ -336,17 +336,6 @@
     return [self.notebookDictionary objectForKey:notebookName];
 }
 
-- (void)requestNoteListForNotebook:(Notebook *)notebook
-{
-    [self requestNoteListForNotebookWithName:notebook.name];
-}
-
-- (void)requestNoteListForNotebookWithName:(NSString *)notebookName
-{
-    [self.localManager requestNoteListForNotebookWithName:notebookName];
-  //  [self.dropboxManager requestNoteListForNotebookWithName:notebookName];
-}
-
 #pragma mark -
 #pragma mark Notebook delegates
 
@@ -470,7 +459,7 @@
             [self.notebookDictionary setObject:[[NSMutableArray alloc]init] forKey: notebook.name];
         }
         self.isLocalNotebookListRequestPending = NO;
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTEBOOK_LIST_CHANGED object:nil userInfo:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTEBOOK_LIST_CHANGED object:nil];
     }
     if(self.dropboxNotebookListLoaded && self.localNotebookListLoaded)
     {
@@ -525,63 +514,63 @@
 
 - (void)mergeNotesInNotebookWithName:(NSString *)notebookName
 {
-    [self syncStorage1:LOCAL_STORAGE withStorage2:DROPBOX_STORAGE forNotebook:notebookName];
-    [self syncStorage1:DROPBOX_STORAGE withStorage2:LOCAL_STORAGE forNotebook:notebookName];
+    [self syncManager1:self.localManager withManager2:self.dropboxManager forNotebook:notebookName];
+    [self syncManager1:self.dropboxManager withManager2:self.localManager forNotebook:notebookName];
     [self.localManager requestNoteListForNotebookWithName:notebookName];
 }
 
-- (void)syncStorage1:(NSString *)storage1 withStorage2:(NSString *)storage2 forNotebook:(NSString *)notebookName
+- (void)syncManager1:(id)manager1 withManager2:(id)manager2 forNotebook:(NSString *)notebookName
 {
-    NSArray *notesArray = [self notesForNotebook:notebookName inStorage:storage1];
-    for (Note *storage1Note in notesArray)
+    NSArray *notesArray = [self notesForNotebook:notebookName inManager:manager1];
+    for (Note *manager1Note in notesArray)
     {
-        NSString *storage2DateModified = [self dateModifiedOfNoteWithName:storage1Note.name fromNotebook:notebookName inStorage:storage2];
-        if(storage2DateModified == nil)
+        NSString *manager2DateModified = [self dateModifiedOfNoteWithName:manager1Note.name fromNotebook:notebookName inManager:manager2];
+        if(manager2DateModified == nil)
         {
-            // TODO : check if storage1Note is being deleted : if (it's been deleted) {remove note from storage1} else {add it to storage2}
-            [self addNote:storage1Note fromNotebook:notebookName toStorage:storage2];
+            // TODO : check if manager1Note is being deleted : if (it's been deleted) {remove note from manager1} else {add it to manager2}
+            [self addNote:manager1Note fromNotebook:notebookName toManager:manager2];
             continue;
         }
-        NSComparisonResult comparisonResult = [[DateTimeManager sharedInstance] compareStringDate:storage2DateModified andDate:storage1Note.dateModified];
+        NSComparisonResult comparisonResult = [[DateTimeManager sharedInstance] compareStringDate:manager2DateModified andDate:manager1Note.dateModified];
         if(comparisonResult == NSOrderedAscending)
         {
-            [self addNote:storage1Note fromNotebook:notebookName toStorage:storage2];
+            [self addNote:manager1Note fromNotebook:notebookName toManager:manager2];
         }
         if(comparisonResult == NSOrderedDescending)
         {
-            [self addNote:storage1Note fromNotebook:notebookName toStorage:storage1];
+            [self addNote:manager1Note fromNotebook:notebookName toManager:manager1];
         }
     }
 }
 
-- (NSArray *)notesForNotebook:(NSString *)notebookName inStorage:(NSString *)storage
+- (NSArray *)notesForNotebook:(NSString *)notebookName inManager:(id)manager
 {
-    if([storage isEqualToString:LOCAL_STORAGE])
+    if(manager == self.localManager)
     {
         return [self.localNotebookDictionary objectForKey:notebookName];
     }
-    if([storage isEqualToString:DROPBOX_STORAGE])
+    if(manager == self.dropboxManager)
     {
         return [self.dropboxNotebookDictionary objectForKey:notebookName];
     }
     return nil;
 }
 
-- (void)addNote:(Note *)note fromNotebook:(NSString *)notebookName toStorage:(NSString *)storage
+- (void)addNote:(Note *)note fromNotebook:(NSString *)notebookName toManager:(id)manager
 {
-    if([storage isEqualToString:LOCAL_STORAGE])
+    if(manager == self.localManager)
     {
         [self.dropboxManager downloadNote:note fromNotebookWithName:notebookName];
     }
-    if([storage isEqualToString:DROPBOX_STORAGE])
+    if(manager == self.dropboxManager)
     {
         [self.dropboxManager addNote:note toNotebookWithName:notebookName];
     }
 }
 
-- (NSString *)dateModifiedOfNoteWithName:(NSString *)noteName fromNotebook:(NSString *)notebookName inStorage:(NSString *)storage
+- (NSString *)dateModifiedOfNoteWithName:(NSString *)noteName fromNotebook:(NSString *)notebookName inManager:(id)manager
 {
-    NSArray *notesArray = [self notesForNotebook:notebookName inStorage:storage];
+    NSArray *notesArray = [self notesForNotebook:notebookName inManager:manager];
     
     for (Note *currentNote in notesArray)
     {
