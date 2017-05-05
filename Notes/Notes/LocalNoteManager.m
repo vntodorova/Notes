@@ -183,51 +183,67 @@
 
 - (void)addNote:(Note *)newNote toNotebook:(Notebook *)notebook
 {
-    [self addNote:newNote toNotebookWithName:notebook.name];
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        [self addNote:newNote toNotebookWithName:notebook.name];
+    });
 }
 
 - (void)addNote:(Note *)newNote toNotebookWithName:(NSString *)notebookName
 {
-    [self saveToDisk:newNote toNotebook:notebookName];
-    [self requestNoteListForNotebookWithName:notebookName];
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        [self saveToDisk:newNote toNotebook:notebookName];
+        [self requestNoteListForNotebookWithName:notebookName];
+    });
 }
 
 - (void)removeNote:(Note *)note fromNotebook:(Notebook *)notebook
 {
-    [self removeNote:note fromNotebookWithName:notebook.name];
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        [self removeNote:note fromNotebookWithName:notebook.name];
+    });
 }
 
 - (void)removeNote:(Note *)note fromNotebookWithName:(NSString *)notebookName
 {
-    [self deleteItemAtPath:[self getDirectoryPathForNote:note inNotebookWithName:notebookName]];
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        [self deleteItemAtPath:[self getDirectoryPathForNote:note inNotebookWithName:notebookName]];
+    });
 }
 
 - (void)renameNote:(Note *)note fromNotebook:(Notebook*) notebook oldName:(NSString*) oldName
 {
-    [self renameNote:note fromNotebookWithName:notebook.name oldName:oldName];
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        [self renameNote:note fromNotebookWithName:notebook.name oldName:oldName];
+    });
 }
 
 - (void)renameNote:(Note *)note fromNotebookWithName:(NSString *)notebookName oldName:(NSString *)oldName
 {
-    Note *dummyNote = [[Note alloc] init];
-    dummyNote.name = oldName;
-    
-    NSString *oldPath = [self getDirectoryPathForNote:dummyNote inNotebookWithName:notebookName];
-    NSString *newPath = [[self getDirectoryPathForNotebookWithName:notebookName] stringByAppendingPathComponent:note.name];
-    [[NSFileManager defaultManager] moveItemAtPath:oldPath toPath:newPath error:nil];
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        Note *dummyNote = [[Note alloc] init];
+        dummyNote.name = oldName;
+        
+        NSString *oldPath = [self getDirectoryPathForNote:dummyNote inNotebookWithName:notebookName];
+        NSString *newPath = [[self getDirectoryPathForNotebookWithName:notebookName] stringByAppendingPathComponent:note.name];
+        [[NSFileManager defaultManager] moveItemAtPath:oldPath toPath:newPath error:nil];
+    });
 }
 
 - (void)copyNote:(Note *)note fromNotebook:(Notebook *)source toNotebook:(Notebook *)destination
 {
-    [self copyNote:note fromNotebookWithName:source.name toNotebookWithName:destination.name];
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        [self copyNote:note fromNotebookWithName:source.name toNotebookWithName:destination.name];
+    });
 }
 
 - (void)copyNote:(Note *)note fromNotebookWithName:(NSString *)source toNotebookWithName:(NSString *)destination
 {
-    NSString *sourcePath = [self getDirectoryPathForNote:note inNotebookWithName:source];
-    NSString *destinationPath = [self getDirectoryPathForNote:note inNotebookWithName:destination];
-    [self deleteItemAtPath:destinationPath];
-    [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:nil];
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        NSString *sourcePath = [self getDirectoryPathForNote:note inNotebookWithName:source];
+        NSString *destinationPath = [self getDirectoryPathForNote:note inNotebookWithName:destination];
+        [self deleteItemAtPath:destinationPath];
+        [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:nil];
+    });
 }
 
 - (void)requestNoteListForNotebook:(Notebook *)notebook
@@ -251,34 +267,46 @@
 
 - (void)addNotebook:(Notebook *)newNotebook
 {
-    [self createDirectoryAtPath:[self getDirectoryPathForNotebookWithName:newNotebook.name]];
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        [self createDirectoryAtPath:[self getDirectoryPathForNotebookWithName:newNotebook.name]];
+    });
 }
 
 - (void)addNotebookWithName:(NSString *)notebookName
 {
-    [self addNotebook:[[Notebook alloc] initWithName:notebookName]];
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        [self addNotebook:[[Notebook alloc] initWithName:notebookName]];
+    });
 }
 
 - (void)removeNotebook:(Notebook *)notebook
 {
-    [self removeNotebookWithName:notebook.name];
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        [self removeNotebookWithName:notebook.name];
+    });
 }
 
 - (void)removeNotebookWithName:(NSString *)notebookName
 {
-    [self deleteItemAtPath:[self getDirectoryPathForNotebookWithName:notebookName]];
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        [self deleteItemAtPath:[self getDirectoryPathForNotebookWithName:notebookName]];
+    });
 }
 
 - (void)renameNotebook:(Notebook *)notebook newName:(NSString *)newName
 {
-    [self renameNotebookWithName:notebook.name newName:newName];
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        [self renameNotebookWithName:notebook.name newName:newName];
+    });
 }
 
 - (void)renameNotebookWithName:(NSString *)oldName newName:(NSString *)newName
 {
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         [[NSFileManager defaultManager] moveItemAtPath:[self getDirectoryPathForNotebookWithName:oldName]
                                                 toPath:[self getDirectoryPathForNotebookWithName:newName]
                                                  error:nil];
+    });
 }
 
 - (void)requestNotebookList
