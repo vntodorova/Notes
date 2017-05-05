@@ -39,7 +39,7 @@
 - (void)sendRequestForContentsInPath:(NSString*) path
 {
     NSMutableArray *notebookList = [[NSMutableArray alloc] init];
-    [[self.client.filesRoutes listFolder:@"/Notebooks"]
+    [[self.client.filesRoutes listFolder:DROPBOX_ROOT_DIRECTORY]
      setResponseBlock:^(DBFILESListFolderResult *response, DBFILESListFolderError *routeError, DBRequestError *networkError)
      {
          if (response)
@@ -93,7 +93,7 @@
 
 - (NSString *)getDirectoryPathForNotebookWithName:(NSString *)notebookName
 {
-    return [@"/Notebooks" stringByAppendingPathComponent:notebookName];
+    return [DROPBOX_ROOT_DIRECTORY stringByAppendingPathComponent:notebookName];
 }
 
 - (void)uploadNote:(Note*)note inNotebookWithName:(NSString *)notebookName
@@ -104,23 +104,25 @@
     NSArray *filesList = [self getDirectoryContentForPath:[self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName]];
     
     for (NSString *fileName in filesList) {
-        NSString *noteFilesPath = [[self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName]
+        NSString *localNoteFilesPath = [[self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName]
                                    stringByAppendingPathComponent:fileName];
-        NSString *dropboxPath = [NSString stringWithFormat:@"%@/%@",notePathInDropBox,fileName];
-        NSData *data = [[NSFileManager defaultManager] contentsAtPath:noteFilesPath];
-        [[self.client.filesRoutes uploadData:dropboxPath inputData:data] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESUploadError * _Nullable routeError, DBRequestError * _Nullable networkError) {
-            [self handleUploadResult:result note:note notebookWithName:notebookName];
+
+        NSString *dropboxNoteFilesPath = [notePathInDropBox stringByAppendingPathComponent:fileName];
+        NSData *data = [[NSFileManager defaultManager] contentsAtPath:localNoteFilesPath];
+        
+        [[self.client.filesRoutes uploadData:dropboxNoteFilesPath inputData:data] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESUploadError * _Nullable routeError, DBRequestError * _Nullable networkError) {
+            NSString *pathToFileBody = [[self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName] stringByAppendingPathComponent:NOTE_BODY_FILE];
+            [self mergeModificationDateOf:result andFileAt:pathToFileBody];
         }];
     }
 }
 
-- (void)handleUploadResult:(DBFILESMetadata*)result note:(Note*)note notebookWithName:(NSString*)notebookName
+- (void)mergeModificationDateOf:(DBFILESMetadata*)result andFileAt:(NSString*)path
 {
-    NSDate *date = [[DBFILESMetadataSerializer serialize:result] objectForKey:@"server_modified"];
+    NSDate *date = [[DBFILESMetadataSerializer serialize:result] objectForKey:DROPBOX_SERVER_MODIFED_KEY];
     NSDate *newDate = [[DateTimeManager sharedInstance] dateFromString:date.description withFormat:SYSTEM_DATE_FORMAT];
-    NSString *pathToFileBody = [[self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName] stringByAppendingPathComponent:NOTE_BODY_FILE];
     NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys: newDate, NSFileModificationDate, nil];
-    [[NSFileManager defaultManager] setAttributes: attr ofItemAtPath: pathToFileBody error:nil];
+    [[NSFileManager defaultManager] setAttributes: attr ofItemAtPath: path error:nil];
 }
 
 - (void)downloadNote:(Note*)note fromNotebookWithName:(NSString*)notebookName
@@ -140,18 +142,10 @@
         NSString *destinationPathToFile = [destination stringByAppendingPathComponent:data.name];
         NSURL *destinationURL = [NSURL fileURLWithPath:destinationPathToFile];
         [[self.client.filesRoutes downloadUrl:data.pathDisplay overwrite:YES destination:destinationURL] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESDownloadError * _Nullable routeError, DBRequestError * _Nullable networkError, NSURL * _Nonnull destination) {
-
-            NSDate *date = [[DBFILESMetadataSerializer serialize:result] objectForKey:@"server_modified"];
-            NSDate *newDate = [[DateTimeManager sharedInstance] dateFromString:date.description withFormat:SYSTEM_DATE_FORMAT];
-            NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys: newDate, NSFileModificationDate, nil];
-            [[NSFileManager defaultManager] setAttributes: attr ofItemAtPath: destinationPathToFile error:nil];
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_DOWNLOADED object:nil];
+            [self mergeModificationDateOf:result andFileAt:destinationPathToFile];
+			[[NSNotificationCenter defaultCenter] postNotificationName:NOTE_DOWNLOADED object:nil];
         }];
     }
-}
-- (void)changeFileDateModified
-{
-
 }
 
 - (void)createDownloadFolderAt:(NSString*)destination
@@ -253,7 +247,7 @@
 {
     Note *note = [[Note alloc] init];
     note.name = [[metadata.pathDisplay stringByDeletingLastPathComponent] lastPathComponent];
-    NSString* date = [[DBFILESMetadataSerializer serialize:metadata] objectForKey:@"server_modified"];
+    NSString* date = [[DBFILESMetadataSerializer serialize:metadata] objectForKey:DROPBOX_SERVER_MODIFED_KEY];
     note.dateModified = [[DateTimeManager sharedInstance] dateFromString:date.description withFormat:SYSTEM_DATE_FORMAT].description;
     return note;
 }
@@ -292,7 +286,7 @@
 
 - (void)requestNotebookList
 {
-    [[self.client.filesRoutes listFolder:@"/Notebooks"]
+    [[self.client.filesRoutes listFolder:DROPBOX_ROOT_DIRECTORY]
      setResponseBlock:^(DBFILESListFolderResult *response, DBFILESListFolderError *routeError, DBRequestError *networkError)
      {
          NSMutableArray *notebookList = [[NSMutableArray alloc] init];

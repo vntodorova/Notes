@@ -499,16 +499,6 @@
     }
 }
 
-- (void)handleResponseWithNote:(Note *)note notebook:(Notebook *)notebook
-{
-    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
-}
-
-- (void)handleResponseWithNoteContents:(NSData *)contents note:(Note *)note notebook:(Notebook *)notebook
-{
-    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
-}
-
 #pragma mark -
 #pragma mark Synchronization merging
 

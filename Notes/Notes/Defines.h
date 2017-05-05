@@ -120,4 +120,8 @@
 
 #define NOTE_DOWNLOADED @"NoteDownloaded"
 #define SYSTEM_DATE_FORMAT @"yyyy'-'MM'-'dd'T'HH':'mm':'ssZ"
+
+#define DROPBOX_SERVER_MODIFED_KEY @"server_modified"
+#define DROPBOX_ROOT_DIRECTORY @"/Notebooks"
+
 #endif /* Defines_h */

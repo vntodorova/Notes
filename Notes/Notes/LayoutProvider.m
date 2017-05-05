@@ -94,9 +94,6 @@ static LayoutProvider *sharedInstance = nil;
 {
     UIView *confirmationView = [[UIView alloc] initWithFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height - SMALL_MARGIN)];
     [confirmationView setBackgroundColor:[UIColor colorWithRed:230.0/255.0 green:95.0/255.0 blue:95.0/255.0 alpha:1.0]];
-    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, frame.size.width, frame.size.height)];
-    [title setTextColor:[UIColor blackColor]];
-    [title setText:@"Confirm"];
     
     UIButton *okButton = [[UIButton alloc] initWithFrame:CGRectMake(180, MARGIN, BUTTONS_WIDTH, BUTTONS_WIDTH)];
     [okButton setImage:[UIImage imageNamed:@"check"] forState:UIControlStateNormal];
@@ -106,10 +103,18 @@ static LayoutProvider *sharedInstance = nil;
     [cancelButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
     [cancelButton addTarget:target action:action2 forControlEvents:UIControlEventTouchUpInside];
     
-    [confirmationView addSubview:title];
+    [confirmationView addSubview:[self getTitleForConfrimationViewinFrame:frame]];
     [confirmationView addSubview:okButton];
     [confirmationView addSubview:cancelButton];
     return confirmationView;
+}
+
+- (UILabel*)getTitleForConfrimationViewinFrame:(CGRect)frame
+{
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, frame.size.width, frame.size.height)];
+    [title setTextColor:[UIColor blackColor]];
+    [title setText:@"Confirm"];
+    return title;
 }
 
 - (UIButton *)headerButtonWithAction:(SEL)selector target:(id)target

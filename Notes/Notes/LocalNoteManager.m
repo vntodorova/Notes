@@ -132,7 +132,7 @@
     {
         if([self isHidden:noteName] == NO)
         {
-            NSString *notePath = [NSString stringWithFormat:@"%@/%@",path,noteName];
+            NSString *notePath = [path stringByAppendingPathComponent:noteName];
             [array addObject:[self loadNoteWithPath:notePath andName:noteName]];
         }
     }
@@ -145,7 +145,7 @@
     NSArray *content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&error];
     if(error)
     {
-        @throw [NSException exceptionWithName:@"Directory not found" reason:error.description userInfo:nil];
+        @throw [NSException exceptionWithName:DIRECTORY_NOT_FOUND_EXCEPTION reason:error.description userInfo:nil];
     }
     return content;
 }
@@ -155,15 +155,15 @@
     Note *note = [[Note alloc] init];
     
     note.name = noteName;
-    note.body = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_BODY_FILE]];
+    note.body = [self loadDataFromFilePath:[notePath stringByAppendingPathComponent:NOTE_BODY_FILE]];
     NSError *error;
     NSDictionary* noteFileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[notePath stringByAppendingPathComponent:NOTE_BODY_FILE] error:&error];
-    NSDate *noteFileDateModified = [noteFileAttributes objectForKey:NSFileModificationDate]; //or NSFileModificationDate
+    NSDate *noteFileDateModified = [noteFileAttributes objectForKey:NSFileModificationDate];
     
     note.dateModified = noteFileDateModified.description;
-    note.triggerDate = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_TRIGGER_DATE_FILE]];
+    note.triggerDate = [self loadDataFromFilePath:[notePath stringByAppendingPathComponent:NOTE_TRIGGER_DATE_FILE]];
     
-    NSString *tags = [self loadDataFromFilePath:[NSString stringWithFormat:@"%@/%@",notePath, NOTE_TAGS_FILE]];
+    NSString *tags = [self loadDataFromFilePath:[notePath stringByAppendingPathComponent:NOTE_TAGS_FILE]];
     note.tags = [self.tagParser getTagsFromText:tags];
     return note;
 }
