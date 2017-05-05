@@ -109,38 +109,47 @@
         NSString *dropboxPath = [NSString stringWithFormat:@"%@/%@",notePathInDropBox,fileName];
         NSData *data = [[NSFileManager defaultManager] contentsAtPath:noteFilesPath];
         [[self.client.filesRoutes uploadData:dropboxPath inputData:data] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESUploadError * _Nullable routeError, DBRequestError * _Nullable networkError) {
-            NSDate *date = [[DBFILESMetadataSerializer serialize:result] objectForKey:@"server_modified"];
-            NSDate *newDate = [[DateTimeManager sharedInstance] dateFromString:date.description withFormat:SYSTEM_DATE_FORMAT];
-            NSString *pathToFileBody = [[self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName] stringByAppendingPathComponent:NOTE_BODY_FILE];
-            NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys: newDate, NSFileModificationDate, nil];
-            [[NSFileManager defaultManager] setAttributes: attr ofItemAtPath: pathToFileBody error:nil];
+            [self handleUploadResult:result note:note notebookWithName:notebookName];
         }];
     }
+}
+
+- (void)handleUploadResult:(DBFILESMetadata*)result note:(Note*)note notebookWithName:(NSString*)notebookName
+{
+    NSDate *date = [[DBFILESMetadataSerializer serialize:result] objectForKey:@"server_modified"];
+    NSDate *newDate = [[DateTimeManager sharedInstance] dateFromString:date.description withFormat:SYSTEM_DATE_FORMAT];
+    NSString *pathToFileBody = [[self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName] stringByAppendingPathComponent:NOTE_BODY_FILE];
+    NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys: newDate, NSFileModificationDate, nil];
+    [[NSFileManager defaultManager] setAttributes: attr ofItemAtPath: pathToFileBody error:nil];
 }
 
 - (void)downloadNote:(Note*)note fromNotebookWithName:(NSString*)notebookName
 {
     NSString *source = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
     [[self.client.filesRoutes listFolder:source] setResponseBlock:^(DBFILESListFolderResult * _Nullable result, DBFILESListFolderError * _Nullable routeError, DBRequestError * _Nullable networkError) {
-        
         NSString *destination = [self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        if([fileManager fileExistsAtPath:destination isDirectory:nil] == NO)
-        {
-            [fileManager createDirectoryAtPath:destination withIntermediateDirectories:YES attributes:nil error:nil];
-        }
-        
-        NSArray<DBFILESMetadata*>* entries = result.entries.copy;
-        
-        for(DBFILESMetadata *data in entries)
-        {
-            NSString *destinationPathToFile = [destination stringByAppendingPathComponent:data.name];
-            NSURL *destinationURL = [NSURL fileURLWithPath:destinationPathToFile];
-            [[self.client.filesRoutes downloadUrl:data.pathDisplay overwrite:YES destination:destinationURL] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESDownloadError * _Nullable routeError, DBRequestError * _Nullable networkError, NSURL * _Nonnull destination) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_DOWNLOADED object:nil];
-            }];
-        }
+        [self mirrorAllFilesAtFromResult:result toDestination:destination];
     }];
+}
+
+- (void)mirrorAllFilesAtFromResult:(DBFILESListFolderResult*)result toDestination:(NSString*)destination
+{
+    [self createDownloadFolderAt:destination];
+    for(DBFILESMetadata *data in result.entries.copy)
+    {
+        NSString *destinationPathToFile = [destination stringByAppendingPathComponent:data.name];
+        NSURL *destinationURL = [NSURL fileURLWithPath:destinationPathToFile];
+        [self.client.filesRoutes downloadUrl:data.pathDisplay overwrite:YES destination:destinationURL];
+    }
+}
+
+- (void)createDownloadFolderAt:(NSString*)destination
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if([fileManager fileExistsAtPath:destination isDirectory:nil] == NO)
+    {
+        [fileManager createDirectoryAtPath:destination withIntermediateDirectories:YES attributes:nil error:nil];
+    }
 }
 
 - (NSArray *)getDirectoryContentForPath:(NSString *)path
@@ -270,44 +279,17 @@
     [self renameNotebookWithName:notebook.name newName:newName];
 }
 
-- (void)requestContentsOfNote:(NSMutableArray *)noteList inNotebook:(NSString *)notebookName;
-{
-//    if(noteList.count == 0)
-//    {
-//        //[self.handler handleResponseWithNoteList:self.currentNoteList fromNotebookWithName:notebookName fromManager:self];
-//        return;
-//    }
-//    [self.currentNoteList addObject:[noteList objectAtIndex:0]];
-//    Note *note = [noteList objectAtIndex:0];
-//    [noteList removeObjectAtIndex:0];
-//    
-//    NSString *path = [[self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName] stringByAppendingPathComponent:NOTE_DATE_FILE];
-//    [[self.client.filesRoutes downloadData:path] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESDownloadError * _Nullable routeError, DBRequestError * _Nullable networkError, NSData * _Nullable fileData)
-//    {
-//        NSString *date = [[NSString alloc]initWithData:fileData encoding:NSUTF8StringEncoding];
-//        note.dateModified = date;
-//        [self requestContentsOfNote:noteList inNotebook:notebookName];
-//    }];
-}
-
 - (void)requestNotebookList
 {
     [[self.client.filesRoutes listFolder:@"/Notebooks"]
      setResponseBlock:^(DBFILESListFolderResult *response, DBFILESListFolderError *routeError, DBRequestError *networkError)
      {
-         if (response)
+         NSMutableArray *notebookList = [[NSMutableArray alloc] init];
+         for (DBFILESMetadata *data in response.entries)
          {
-             NSMutableArray *notebookList = [[NSMutableArray alloc] init];
-             for (DBFILESMetadata *data in response.entries)
-             {
-                 Notebook *notebook = [[Notebook alloc] initWithName:data.name];
-                 [notebookList addObject:notebook];
-                 [self.manager handleResponseWithNotebookList:notebookList fromManager:self];
-             }
-         }
-         else
-         {
-             NSLog(@"%@\n%@\n", routeError, networkError);
+             Notebook *notebook = [[Notebook alloc] initWithName:data.name];
+             [notebookList addObject:notebook];
+             [self.manager handleResponseWithNotebookList:notebookList fromManager:self];
          }
      }];
 }
