@@ -60,7 +60,6 @@
 
 #pragma mark -
 #pragma mark LocalNoteManager
-#define NOTE_CREATED_EVENT @"NoteCreatedEvent"
 #define NOTE_NOTEBOOKS_FOLDER @"Notebooks"
 #define TEMP_FOLDER @"Temp"
 #define NOTE_BODY_FILE @"body.html"
@@ -122,5 +121,6 @@
 #define LOCAL_STORAGE @"LocalStorage"
 #define DROPBOX_STORAGE @"DropboxStorage"
 
+#define NOTE_DOWNLOADED @"NoteDownloaded"
 #define SYSTEM_DATE_FORMAT @"yyyy'-'MM'-'dd'T'HH':'mm':'ssZ"
 #endif /* Defines_h */

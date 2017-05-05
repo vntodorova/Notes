@@ -50,6 +50,7 @@
         self.notebookList = [[NSMutableArray alloc] init];
         self.tagParser = [[TagsParser alloc] init];
         self.isNotebookListRequestPending = false;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestNoteListForGeneralNotebook) name:NOTE_DOWNLOADED object:nil];
     }
     return self;
 }
@@ -134,6 +135,11 @@
 - (void)createFolderAtPath:(NSString *)path
 {
     [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
+}
+
+- (void)requestNoteListForGeneralNotebook
+{
+    [self requestNoteListForNotebookWithName:GENERAL_NOTEBOOK_NAME];
 }
 
 #pragma mark -
@@ -470,7 +476,7 @@
         self.localDataLoaded = YES;
         [self.localNotebookDictionary setObject:noteList forKey:notebookName];
         [self.notebookDictionary setObject:noteList forKey:notebookName];
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_LIST_CHANGED object:nil userInfo:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_LIST_CHANGED object:nil];
     }
     if(self.localDataLoaded && self.dropboxDataLoaded)
     {
@@ -497,6 +503,7 @@
 {
     [self syncStorage1:LOCAL_STORAGE withStorage2:DROPBOX_STORAGE forNotebook:notebookName];
     [self syncStorage1:DROPBOX_STORAGE withStorage2:LOCAL_STORAGE forNotebook:notebookName];
+    [self.localManager requestNoteListForNotebookWithName:notebookName];
 }
 
 - (void)syncStorage1:(NSString *)storage1 withStorage2:(NSString *)storage2 forNotebook:(NSString *)notebookName

@@ -189,7 +189,7 @@
 - (void)addNote:(Note *)newNote toNotebookWithName:(NSString *)notebookName
 {
     [self saveToDisk:newNote toNotebook:notebookName];
-    //[[NSNotificationCenter defaultCenter] postNotificationName:NOTE_CREATED_EVENT object:nil userInfo:nil];
+    [self requestNoteListForNotebookWithName:notebookName];
 }
 
 - (void)removeNote:(Note *)note fromNotebook:(Notebook *)notebook

@@ -132,10 +132,10 @@
         
         for(DBFILESMetadata *data in entries)
         {
-            NSString *destenationPathToFile = [destination stringByAppendingPathComponent:data.name];
-            NSURL *destinationURL = [NSURL fileURLWithPath:destenationPathToFile];
+            NSString *destinationPathToFile = [destination stringByAppendingPathComponent:data.name];
+            NSURL *destinationURL = [NSURL fileURLWithPath:destinationPathToFile];
             [[self.client.filesRoutes downloadUrl:data.pathDisplay overwrite:YES destination:destinationURL] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESDownloadError * _Nullable routeError, DBRequestError * _Nullable networkError, NSURL * _Nonnull destination) {
-                NSLog(@"Done");
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_DOWNLOADED object:nil];
             }];
         }
     }];

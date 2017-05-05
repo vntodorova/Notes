@@ -63,10 +63,9 @@
     [self createGeneralNotebook];
     [self setupNavigationBar];
     [self loadTheme];
-   // [self reloadTableViewData];
+    [self reloadTableViewData];
     [self.tableView registerNib:[UINib nibWithNibName:TABLEVIEW_CELL_ID bundle:nil] forCellReuseIdentifier:TABLEVIEW_CELL_ID];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoteListChanged) name:NOTE_LIST_CHANGED object:nil];
-   // [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoteCreated) name:NOTE_CREATED_EVENT object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onThemeChanged) name:THEME_CHANGED_EVENT object:nil];
     self.currentNotebook = GENERAL_NOTEBOOK_NAME;
     [self.noteManager syncNotesInNotebook:[[Notebook alloc]initWithName:self.currentNotebook]];
