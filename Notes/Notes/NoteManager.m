@@ -146,7 +146,7 @@
 
 - (void)requestNoteListForGeneralNotebook
 {
-    //[self syncNotesInNotebook:[[Notebook alloc] initWithName:GENERAL_NOTEBOOK_NAME]];
+    [self syncNotesInNotebook:[[Notebook alloc] initWithName:GENERAL_NOTEBOOK_NAME]];
 }
 
 #pragma mark -

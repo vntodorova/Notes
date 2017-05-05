@@ -59,7 +59,6 @@
     self.themeManager = [ThemeManager sharedInstance];
     self.filteredNotes = [[NSMutableArray alloc] init];
 
-
     [self createGeneralNotebook];
     [self setupNavigationBar];
     [self loadTheme];

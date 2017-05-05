@@ -145,6 +145,7 @@
             NSDate *newDate = [[DateTimeManager sharedInstance] dateFromString:date.description withFormat:SYSTEM_DATE_FORMAT];
             NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys: newDate, NSFileModificationDate, nil];
             [[NSFileManager defaultManager] setAttributes: attr ofItemAtPath: destinationPathToFile error:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTE_DOWNLOADED object:nil];
         }];
     }
 }
