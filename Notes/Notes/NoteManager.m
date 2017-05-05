@@ -507,7 +507,6 @@
         NSString *manager2DateModified = [self dateModifiedOfNoteWithName:manager1Note.name fromNotebook:notebookName inManager:manager2];
         if(manager2DateModified == nil)
         {
-            // TODO : check if manager1Note is being deleted : if (it's been deleted) {remove note from manager1} else {add it to manager2}
             [self addNote:manager1Note fromNotebook:notebookName toManager:manager2];
             continue;
         }
