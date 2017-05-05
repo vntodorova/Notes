@@ -16,7 +16,7 @@
 #import "DateTimeManager.h"
 
 @interface DropboxNoteManager()
-@property NoteManager *manager;
+@property NoteManager *noteManager;
 @property DBUserClient *client;
 @property id<ResponseHandler> handler;
 @property int requestsSent;
@@ -30,7 +30,7 @@
 {
     self = [super init];
     self.handler = handler;
-    self.manager = manager;
+    self.noteManager = manager;
     self.currentNoteList = [[NSMutableArray alloc] init];
     self.client = [DBClientsManager authorizedClient];
     return self;
@@ -65,26 +65,6 @@
     [self.client.filesRoutes delete_:path];
 }
 
-- (void)renameNotebookInDropbox:(NSString *)oldName newName:(NSString *)newName
-{
-    NSString *oldPath = [self getDirectoryPathForNotebookWithName:oldName];
-    NSString *newPath = [self getDirectoryPathForNotebookWithName:newName];
-    [[self.client.filesRoutes dCopy:oldPath toPath:newPath] setResponseBlock:^(DBFILESMetadata * _Nullable result, DBFILESRelocationError * _Nullable routeError, DBRequestError * _Nullable networkError) {
-          [self deleteFolderAt:oldPath];
-    }];
-}
-
-- (void)renameNoteInDropbox:(Note *)note fromNotebookWithName:(NSString *)notebookName oldName:(NSString *)oldName
-{
-    NSString *oldPath = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
-    Note *oldNote = [[Note alloc] init];
-    oldNote.name = oldName;
-    NSString *newPath = [self getNoteDirectoryPathForNote:oldNote inNotebookWithName:notebookName];
-    [[self.client.filesRoutes dCopy:oldPath toPath:newPath] setResponseBlock:^(DBFILESMetadata * _Nullable result, DBFILESRelocationError * _Nullable routeError, DBRequestError * _Nullable networkError) {
-        [self deleteFolderAt:oldPath];
-    }];
-}
-
 - (NSString *)getNoteDirectoryPathForNote:(Note *)note inNotebookWithName:(NSString *)notebookName
 {
     return [[self getDirectoryPathForNotebookWithName:notebookName]
@@ -94,27 +74,6 @@
 - (NSString *)getDirectoryPathForNotebookWithName:(NSString *)notebookName
 {
     return [DROPBOX_ROOT_DIRECTORY stringByAppendingPathComponent:notebookName];
-}
-
-- (void)uploadNote:(Note*)note inNotebookWithName:(NSString *)notebookName
-{
-    NSString *notePathInDropBox = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
-    [self createFolderAt:notePathInDropBox];
-    
-    NSArray *filesList = [self getDirectoryContentForPath:[self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName]];
-    
-    for (NSString *fileName in filesList) {
-        NSString *localNoteFilesPath = [[self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName]
-                                   stringByAppendingPathComponent:fileName];
-
-        NSString *dropboxNoteFilesPath = [notePathInDropBox stringByAppendingPathComponent:fileName];
-        NSData *data = [[NSFileManager defaultManager] contentsAtPath:localNoteFilesPath];
-        
-        [[self.client.filesRoutes uploadData:dropboxNoteFilesPath inputData:data] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESUploadError * _Nullable routeError, DBRequestError * _Nullable networkError) {
-            NSString *pathToFileBody = [[self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName] stringByAppendingPathComponent:NOTE_BODY_FILE];
-            [self mergeModificationDateOf:result andFileAt:pathToFileBody];
-        }];
-    }
 }
 
 - (void)mergeModificationDateOf:(DBFILESMetadata*)result andFileAt:(NSString*)path
@@ -129,7 +88,7 @@
 {
     NSString *source = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
     [[self.client.filesRoutes listFolder:source] setResponseBlock:^(DBFILESListFolderResult * _Nullable result, DBFILESListFolderError * _Nullable routeError, DBRequestError * _Nullable networkError) {
-        NSString *destination = [self.manager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
+        NSString *destination = [self.noteManager getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
         [self mirrorAllFilesAtFromResult:result toDestination:destination];
     }];
 }
@@ -171,17 +130,47 @@
     return content;
 }
 
+- (Note *)parseNoteFromData:(DBFILESMetadata *)metadata
+{
+    Note *note = [[Note alloc] init];
+    note.name = [[metadata.pathDisplay stringByDeletingLastPathComponent] lastPathComponent];
+    NSString* date = [[DBFILESMetadataSerializer serialize:metadata] objectForKey:DROPBOX_SERVER_MODIFED_KEY];
+    note.dateModified = [[DateTimeManager sharedInstance] dateFromString:date.description withFormat:SYSTEM_DATE_FORMAT].description;
+    return note;
+}
+
 #pragma mark -
 #pragma mark Note manager delegates
-
-- (void)addNote:(Note *)newNote toNotebookWithName:(NSString *)notebookName
-{
-    [self uploadNote:newNote inNotebookWithName:notebookName];
-}
 
 - (void)addNote:(Note *)newNote toNotebook:(Notebook *)notebook
 {
     [self addNote:newNote toNotebookWithName:notebook.name];
+}
+
+- (void)addNote:(Note *)newNote toNotebookWithName:(NSString *)notebookName
+{
+    NSString *notePathInDropBox = [self getNoteDirectoryPathForNote:newNote inNotebookWithName:notebookName];
+    [self createFolderAt:notePathInDropBox];
+    
+    NSArray *filesList = [self getDirectoryContentForPath:[self.noteManager getNoteDirectoryPathForNote:newNote inNotebookWithName:notebookName]];
+    
+    for (NSString *fileName in filesList) {
+        NSString *localNoteFilesPath = [[self.noteManager getNoteDirectoryPathForNote:newNote inNotebookWithName:notebookName]
+                                        stringByAppendingPathComponent:fileName];
+        
+        NSString *dropboxNoteFilesPath = [notePathInDropBox stringByAppendingPathComponent:fileName];
+        NSData *data = [[NSFileManager defaultManager] contentsAtPath:localNoteFilesPath];
+        
+        [[self.client.filesRoutes uploadData:dropboxNoteFilesPath inputData:data] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESUploadError * _Nullable routeError, DBRequestError * _Nullable networkError) {
+            NSString *pathToFileBody = [[self.noteManager getNoteDirectoryPathForNote:newNote inNotebookWithName:notebookName] stringByAppendingPathComponent:NOTE_BODY_FILE];
+            [self mergeModificationDateOf:result andFileAt:pathToFileBody];
+        }];
+    }
+}
+
+- (void)removeNote:(Note *)note fromNotebook:(Notebook *)notebook
+{
+    [self removeNote:note fromNotebookWithName:notebook.name];
 }
 
 - (void)removeNote:(Note *)note fromNotebookWithName:(NSString *)notebookName
@@ -190,19 +179,25 @@
     [self deleteFolderAt:notebookPath];
 }
 
-- (void)removeNote:(Note *)note fromNotebook:(Notebook *)notebook
+- (void)renameNote:(Note *)note fromNotebook:(Notebook *)notebook oldName:(NSString *)oldName
 {
-    [self removeNote:note fromNotebookWithName:notebook.name];
+    [self renameNote:note fromNotebookWithName:notebook.name oldName:oldName];
 }
 
 - (void)renameNote:(Note *)note fromNotebookWithName:(NSString *)notebookName oldName:(NSString *)oldName
 {
-    [self renameNoteInDropbox:note fromNotebookWithName:notebookName oldName:oldName];
+    NSString *oldPath = [self getNoteDirectoryPathForNote:note inNotebookWithName:notebookName];
+    Note *oldNote = [[Note alloc] init];
+    oldNote.name = oldName;
+    NSString *newPath = [self getNoteDirectoryPathForNote:oldNote inNotebookWithName:notebookName];
+    [[self.client.filesRoutes dCopy:oldPath toPath:newPath] setResponseBlock:^(DBFILESMetadata * _Nullable result, DBFILESRelocationError * _Nullable routeError, DBRequestError * _Nullable networkError) {
+        [self deleteFolderAt:oldPath];
+    }];
 }
 
-- (void)renameNote:(Note *)note fromNotebook:(Notebook *)notebook oldName:(NSString *)oldName
+- (void)copyNote:(Note *)note fromNotebook:(Notebook *)source toNotebook:(Notebook *)destination
 {
-    [self renameNoteInDropbox:note fromNotebookWithName:notebook.name oldName:oldName];
+    [self copyNote:note fromNotebookWithName:source.name toNotebookWithName:destination.name];
 }
 
 - (void)copyNote:(Note *)note fromNotebookWithName:(NSString *)source toNotebookWithName:(NSString *)destination
@@ -210,11 +205,6 @@
     NSString *sourcePath = [self getNoteDirectoryPathForNote:note inNotebookWithName:source];
     NSString *destinationPath = [self getNoteDirectoryPathForNote:note inNotebookWithName:destination];
     [self.client.filesRoutes dCopy:sourcePath toPath:destinationPath];
-}
-
-- (void)copyNote:(Note *)note fromNotebook:(Notebook *)source toNotebook:(Notebook *)destination
-{
-    [self copyNote:note fromNotebookWithName:source.name toNotebookWithName:destination.name];
 }
 
 - (void)requestNoteListForNotebook:(Notebook *)notebook
@@ -243,13 +233,9 @@
 #pragma mark -
 #pragma mark Notebook manager delegates
 
-- (Note*)parseNoteFromData:(DBFILESMetadata*) metadata
+- (void)addNotebook:(Notebook *)newNotebook
 {
-    Note *note = [[Note alloc] init];
-    note.name = [[metadata.pathDisplay stringByDeletingLastPathComponent] lastPathComponent];
-    NSString* date = [[DBFILESMetadataSerializer serialize:metadata] objectForKey:DROPBOX_SERVER_MODIFED_KEY];
-    note.dateModified = [[DateTimeManager sharedInstance] dateFromString:date.description withFormat:SYSTEM_DATE_FORMAT].description;
-    return note;
+    [self addNotebookWithName:newNotebook.name];
 }
 
 - (void)addNotebookWithName:(NSString *)notebookName
@@ -258,9 +244,9 @@
     [self createFolderAt:notebookPath];
 }
 
-- (void)addNotebook:(Notebook *)newNotebook
+- (void)removeNotebook:(Notebook *)notebook
 {
-    [self addNotebookWithName:newNotebook.name];
+    [self removeNotebookWithName:notebook.name];
 }
 
 - (void)removeNotebookWithName:(NSString *)notebookName
@@ -269,19 +255,18 @@
     [self deleteFolderAt:notebookPath];
 }
 
-- (void)removeNotebook:(Notebook *)notebook
+- (void)renameNotebook:(Notebook *)notebook newName:(NSString *)newName
 {
-    [self removeNotebookWithName:notebook.name];
+    [self renameNotebookWithName:notebook.name newName:newName];
 }
 
 - (void)renameNotebookWithName:(NSString *)oldName newName:(NSString *)newName
 {
-    [self renameNotebookInDropbox:oldName newName:newName];
-}
-
-- (void)renameNotebook:(Notebook *)notebook newName:(NSString *)newName
-{
-    [self renameNotebookWithName:notebook.name newName:newName];
+    NSString *oldPath = [self getDirectoryPathForNotebookWithName:oldName];
+    NSString *newPath = [self getDirectoryPathForNotebookWithName:newName];
+    [[self.client.filesRoutes dCopy:oldPath toPath:newPath] setResponseBlock:^(DBFILESMetadata * _Nullable result, DBFILESRelocationError * _Nullable routeError, DBRequestError * _Nullable networkError) {
+        [self deleteFolderAt:oldPath];
+    }];
 }
 
 - (void)requestNotebookList
@@ -294,7 +279,7 @@
          {
              Notebook *notebook = [[Notebook alloc] initWithName:data.name];
              [notebookList addObject:notebook];
-             [self.manager handleResponseWithNotebookList:notebookList fromManager:self];
+             [self.noteManager handleResponseWithNotebookList:notebookList fromManager:self];
          }
      }];
 }
