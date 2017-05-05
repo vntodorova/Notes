@@ -139,8 +139,18 @@
     {
         NSString *destinationPathToFile = [destination stringByAppendingPathComponent:data.name];
         NSURL *destinationURL = [NSURL fileURLWithPath:destinationPathToFile];
-        [self.client.filesRoutes downloadUrl:data.pathDisplay overwrite:YES destination:destinationURL];
+        [[self.client.filesRoutes downloadUrl:data.pathDisplay overwrite:YES destination:destinationURL] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESDownloadError * _Nullable routeError, DBRequestError * _Nullable networkError, NSURL * _Nonnull destination) {
+
+            NSDate *date = [[DBFILESMetadataSerializer serialize:result] objectForKey:@"server_modified"];
+            NSDate *newDate = [[DateTimeManager sharedInstance] dateFromString:date.description withFormat:SYSTEM_DATE_FORMAT];
+            NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys: newDate, NSFileModificationDate, nil];
+            [[NSFileManager defaultManager] setAttributes: attr ofItemAtPath: destinationPathToFile error:nil];
+        }];
     }
+}
+- (void)changeFileDateModified
+{
+
 }
 
 - (void)createDownloadFolderAt:(NSString*)destination
