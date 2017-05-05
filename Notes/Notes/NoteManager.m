@@ -28,10 +28,18 @@
 
 @property BOOL localDataLoaded;
 @property BOOL dropboxDataLoaded;
-@property BOOL isNotebookListRequestPending;
 
 @property NSMutableDictionary *localNotebookDictionary;
 @property NSMutableDictionary *dropboxNotebookDictionary;
+
+@property BOOL isLocalNotebookListRequestPending;
+@property BOOL isDropboxNotebookListRequestPending;
+
+@property BOOL dropboxNotebookListLoaded;
+@property BOOL localNotebookListLoaded;
+
+@property NSMutableArray *localNotebookList;
+@property NSMutableArray *dropboxNotebookList;
 
 @end
 
@@ -49,7 +57,6 @@
         self.notebookDictionary = [[NSMutableDictionary alloc] init];
         self.notebookList = [[NSMutableArray alloc] init];
         self.tagParser = [[TagsParser alloc] init];
-        self.isNotebookListRequestPending = false;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestNoteListForGeneralNotebook) name:NOTE_DOWNLOADED object:nil];
     }
     return self;
@@ -430,12 +437,16 @@
 
 - (void)requestNotebookList
 {
-    if(self.isNotebookListRequestPending)
+    if(!self.isDropboxNotebookListRequestPending)
     {
-        return;
+        self.isDropboxNotebookListRequestPending = true;
+        [self.dropboxManager requestNotebookList];
     }
-    self.isNotebookListRequestPending = true;
-    [self.dropboxManager requestNotebookList];
+    if(!self.isLocalNotebookListRequestPending)
+    {
+        self.isLocalNotebookListRequestPending = true;
+        [self.localManager requestNotebookList];
+    }
 }
 
 #pragma mark -
@@ -445,13 +456,25 @@
 {
     if(manager == self.dropboxManager)
     {
+        self.dropboxNotebookListLoaded = YES;
+        self.dropboxNotebookList = [[NSMutableArray alloc] initWithArray:notebookList];
+        self.isDropboxNotebookListRequestPending = NO;
+    }
+    if(manager == self.localManager)
+    {
+        self.localNotebookListLoaded = YES;
+        self.localNotebookList = [[NSMutableArray alloc] initWithArray:notebookList];
         self.notebookList = [NSMutableArray arrayWithArray:notebookList];
         for(Notebook *notebook in notebookList)
         {
             [self.notebookDictionary setObject:[[NSMutableArray alloc]init] forKey: notebook.name];
         }
-        self.isNotebookListRequestPending = false;
+        self.isLocalNotebookListRequestPending = NO;
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTEBOOK_LIST_CHANGED object:nil userInfo:nil];
+    }
+    if(self.dropboxNotebookListLoaded && self.localNotebookListLoaded)
+    {
+        [self mergeNotebooks];
     }
 }
 
@@ -568,6 +591,25 @@
         }
     }
     return nil;
+}
+
+- (void)mergeNotebooks
+{
+    for(Notebook *currentNotebook in self.localNotebookList)
+    {
+        if(![self.dropboxNotebookList containsObject:currentNotebook])
+        {
+            [self.dropboxManager addNotebook:currentNotebook];
+        }
+    }
+    
+    for(Notebook *currentNotebook in self.dropboxNotebookList)
+    {
+        if(![self.localNotebookList containsObject:currentNotebook])
+        {
+            [self.localManager addNotebook:currentNotebook];
+        }
+    }
 }
 
 @end
