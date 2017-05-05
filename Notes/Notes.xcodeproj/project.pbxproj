@@ -31,8 +31,6 @@
 		B526CB5A1E939E4C00FF4FA8 /* LeftPanelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B526CB581E939E4C00FF4FA8 /* LeftPanelViewController.xib */; };
 		B534C4531E8D433300AD25F6 /* TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B534C4511E8D433300AD25F6 /* TableViewCell.m */; };
 		B534C4541E8D433300AD25F6 /* TableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B534C4521E8D433300AD25F6 /* TableViewCell.xib */; };
-		B53CB76D1E95379B009DFF27 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = B53CB76B1E95379B009DFF27 /* facebook.png */; };
-		B53CB76E1E95379B009DFF27 /* google.png in Resources */ = {isa = PBXBuildFile; fileRef = B53CB76C1E95379B009DFF27 /* google.png */; };
 		B580EF481EA755CD0097C69D /* check.png in Resources */ = {isa = PBXBuildFile; fileRef = B580EF471EA755CD0097C69D /* check.png */; };
 		B5A4A29C1EA6119500F7EC9D /* NotebookCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A4A29A1EA6119500F7EC9D /* NotebookCell.m */; };
 		B5A4A29D1EA6119500F7EC9D /* NotebookCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B5A4A29B1EA6119500F7EC9D /* NotebookCell.xib */; };
@@ -129,8 +127,6 @@
 		B534C4501E8D433300AD25F6 /* TableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewCell.h; sourceTree = "<group>"; };
 		B534C4511E8D433300AD25F6 /* TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewCell.m; sourceTree = "<group>"; };
 		B534C4521E8D433300AD25F6 /* TableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableViewCell.xib; sourceTree = "<group>"; };
-		B53CB76B1E95379B009DFF27 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
-		B53CB76C1E95379B009DFF27 /* google.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = google.png; sourceTree = "<group>"; };
 		B580EF471EA755CD0097C69D /* check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check.png; sourceTree = "<group>"; };
 		B5A4A2991EA6119500F7EC9D /* NotebookCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotebookCell.h; sourceTree = "<group>"; };
 		B5A4A29A1EA6119500F7EC9D /* NotebookCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotebookCell.m; sourceTree = "<group>"; };
@@ -242,8 +238,6 @@
 				B5E8ABED1E96824200964B3C /* colorPicker.png */,
 				1D07C0D51E9251F900E85CAF /* drawing.png */,
 				B5E8ABE91E967F0600964B3C /* eraser.png */,
-				B53CB76B1E95379B009DFF27 /* facebook.png */,
-				B53CB76C1E95379B009DFF27 /* google.png */,
 				B5E8AC5B1E9E63B000964B3C /* image.png */,
 				1D07C0D61E9251F900E85CAF /* list.png */,
 				B5E8ABEB1E96814100964B3C /* pen.png */,
@@ -560,7 +554,6 @@
 				B5A4A2B21EA64DBF00F7EC9D /* EditableNotebookCell.xib in Resources */,
 				B5E8AC481E9CC41700964B3C /* SettingsPanelViewController.xib in Resources */,
 				B5E8ABEE1E96824200964B3C /* colorPicker.png in Resources */,
-				B53CB76E1E95379B009DFF27 /* google.png in Resources */,
 				B5A4A2A91EA648C800F7EC9D /* bin.png in Resources */,
 				B5E8ABE21E966BA600964B3C /* DrawingViewController.xib in Resources */,
 				1D07C0DC1E9251F900E85CAF /* list.png in Resources */,
@@ -574,7 +567,6 @@
 				1D24063A1EA74A0C002CE71B /* alignRight.png in Resources */,
 				B5E8ABEA1E967F0600964B3C /* eraser.png in Resources */,
 				B534C4541E8D433300AD25F6 /* TableViewCell.xib in Resources */,
-				B53CB76D1E95379B009DFF27 /* facebook.png in Resources */,
 				B526CB5A1E939E4C00FF4FA8 /* LeftPanelViewController.xib in Resources */,
 				B5A4A29D1EA6119500F7EC9D /* NotebookCell.xib in Resources */,
 				B5F0A5C51EADE7A300437525 /* sync.png in Resources */,

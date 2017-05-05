@@ -20,7 +20,6 @@
 
 - (IBAction)saveButtonClicked:(UIButton *)sender;
 - (IBAction)cancelButtonClicked:(UIButton *)sender;
-- (IBAction)synchronize:(UIButton *)sender;
 
 @property (weak, nonatomic) IBOutlet UIPickerView *pickerView;
 @property (weak, nonatomic) IBOutlet UILabel *textLabel;

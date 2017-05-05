@@ -82,6 +82,7 @@
 #define DRAWING_IMAGE @"drawing"
 #define LIGHT_THEME @"light"
 #define DARK_THEME @"dark"
+#define GREEN_THEME @"jorko's doom"
 #define THEME_KEY @"theme"
 #define REMINDER_IMAGE @"reminder"
 
@@ -124,4 +125,7 @@
 #define DROPBOX_SERVER_MODIFED_KEY @"server_modified"
 #define DROPBOX_ROOT_DIRECTORY @"/Notebooks"
 
+#define CHECK_IMAGE_NAME @"check"
+
+#define CONFRIM_TITLE @"Confirm"
 #endif /* Defines_h */

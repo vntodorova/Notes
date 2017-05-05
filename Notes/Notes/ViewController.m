@@ -67,7 +67,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoteListChanged) name:NOTE_LIST_CHANGED object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onThemeChanged) name:THEME_CHANGED_EVENT object:nil];
     self.currentNotebook = GENERAL_NOTEBOOK_NAME;
-    [self.noteManager syncNotesInNotebook:[[Notebook alloc]initWithName:self.currentNotebook]];
+    [self.noteManager requestNoteListForNotebook:[[Notebook alloc]initWithName:self.currentNotebook]];
 }
 
 - (void)createGeneralNotebook

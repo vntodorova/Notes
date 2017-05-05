@@ -33,8 +33,4 @@
 
 - (NSArray *)getNotebookList;
 
-- (NSArray *)getContentsOfNote:(Note *)note inNotebook:(Notebook *)notebook;
-
-- (void)syncNotesInNotebook:(Notebook *)notebook;
-
 @end

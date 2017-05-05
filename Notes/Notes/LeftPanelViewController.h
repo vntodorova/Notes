@@ -21,8 +21,6 @@
 - (void)reloadTableViewData;
 - (void)exitEditingMode;
 
-@property (weak, nonatomic) IBOutlet UIButton *facebookButton;
-@property (weak, nonatomic) IBOutlet UIButton *googleButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) UIViewController<LeftPanelDelegate>* presentingViewControllerDelegate;
 @property NSMutableDictionary *tableViewDataSource;

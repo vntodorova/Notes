@@ -11,8 +11,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LeftPanelViewController">
             <connections>
-                <outlet property="facebookButton" destination="OI6-QL-SuI" id="x6W-9h-kLQ"/>
-                <outlet property="googleButton" destination="73s-ag-E5e" id="IFA-ou-jWa"/>
                 <outlet property="tableView" destination="a8w-5B-dWT" id="2Zv-RE-Bv1"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -42,37 +40,14 @@
                         <outlet property="delegate" destination="-1" id="9Uc-SG-KRq"/>
                     </connections>
                 </tableView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="73s-ag-E5e">
-                    <rect key="frame" x="124" y="74" width="40" height="40"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="40" id="osg-Bj-zCk"/>
-                        <constraint firstAttribute="height" constant="40" id="wdp-z1-pQJ"/>
-                    </constraints>
-                    <state key="normal" image="google.png"/>
-                    <connections>
-                        <action selector="onGoogleClick:" destination="-1" eventType="touchUpInside" id="w2U-TY-Fv3"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OI6-QL-SuI">
-                    <rect key="frame" x="76" y="74" width="40" height="40"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="40" id="2PD-Gz-lVL"/>
-                        <constraint firstAttribute="height" constant="40" id="7Ry-x2-JDt"/>
-                    </constraints>
-                    <state key="normal" image="facebook.png"/>
-                </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="a8w-5B-dWT" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="5" id="3Qp-Dr-F6H"/>
                 <constraint firstAttribute="bottom" secondItem="a8w-5B-dWT" secondAttribute="bottom" constant="98" id="8MM-Qp-nX0"/>
-                <constraint firstItem="OI6-QL-SuI" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="76" id="BXt-3n-Bok"/>
                 <constraint firstItem="kQy-NE-wEd" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="90" id="Hln-NQ-VkM"/>
-                <constraint firstItem="73s-ag-E5e" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="74" id="IIi-O6-Gyn"/>
-                <constraint firstAttribute="trailing" secondItem="73s-ag-E5e" secondAttribute="trailing" constant="86" id="JgC-md-GNt"/>
                 <constraint firstItem="a8w-5B-dWT" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="136" id="LKs-aO-6Ch"/>
                 <constraint firstAttribute="trailing" secondItem="a8w-5B-dWT" secondAttribute="trailing" constant="5" id="R87-mu-K8L"/>
-                <constraint firstItem="OI6-QL-SuI" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="74" id="YNm-cX-PyW"/>
                 <constraint firstAttribute="bottom" secondItem="kQy-NE-wEd" secondAttribute="bottom" constant="8" id="hLK-O7-5HN"/>
             </constraints>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
@@ -80,8 +55,4 @@
             <point key="canvasLocation" x="-150" y="56"/>
         </view>
     </objects>
-    <resources>
-        <image name="facebook.png" width="128" height="128"/>
-        <image name="google.png" width="128" height="128"/>
-    </resources>
 </document>

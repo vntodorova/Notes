@@ -53,6 +53,7 @@
     [super viewDidLoad];
     self.view.frame = CGRectMake(-1 * LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, self.layoutProvider.screenSize.height);
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTableViewData) name:NOTEBOOK_LIST_CHANGED object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadTheme) name:THEME_CHANGED_EVENT object:nil];
     self.isHidden = YES;
 
     [self loadTheme];

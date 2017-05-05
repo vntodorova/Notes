@@ -146,7 +146,7 @@
 
 - (void)requestNoteListForGeneralNotebook
 {
-    [self syncNotesInNotebook:[[Notebook alloc] initWithName:GENERAL_NOTEBOOK_NAME]];
+    [self requestNoteListForNotebookWithName:GENERAL_NOTEBOOK_NAME];
 }
 
 #pragma mark -
@@ -235,19 +235,6 @@
     return baseURL.description;
 }
 
-- (void)syncNotesInNotebook:(Notebook *)notebook
-{
-    /**
-     TODO
-     Notebook clicked from LeftPanelViewController
-     -> sync Dropbox and Local
-     -> display progress
-     -> send notification to ViewController to display the notebook when synchronization is finished
-     */
-    [self.dropboxManager requestNoteListForNotebook:notebook];
-    [self.localManager requestNoteListForNotebook:notebook];
-}
-
 #pragma mark -
 #pragma mark Note delegates
 
@@ -334,6 +321,24 @@
 - (NSArray *)getNoteListForNotebookWithName:(NSString *)notebookName
 {
     return [self.notebookDictionary objectForKey:notebookName];
+}
+
+- (void)requestNoteListForNotebook:(Notebook *)notebook
+{
+    [self requestNoteListForNotebookWithName:notebook.name];
+}
+
+- (void)requestNoteListForNotebookWithName:(NSString *)notebookName
+{
+    /**
+     TODO
+     Notebook clicked from LeftPanelViewController
+     -> sync Dropbox and Local
+     -> display progress
+     -> send notification to ViewController to display the notebook when synchronization is finished
+     */
+    [self.dropboxManager requestNoteListForNotebookWithName:notebookName];
+    [self.localManager requestNoteListForNotebookWithName:notebookName];
 }
 
 #pragma mark -
@@ -467,16 +472,6 @@
     }
 }
 
-- (NSArray *)getContentsOfNote:(Note *)note inNotebook:(Notebook *)notebook
-{
-    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
-}
-
-- (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebook:(Notebook *)notebook fromManager:(id)manager
-{
-    @throw [NSException exceptionWithName:NOT_IMPLEMENTED_EXCEPTION reason:nil userInfo:nil];
-}
-
 - (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebookWithName:(NSString *)notebookName fromManager:(id)manager
 {
     if(manager == self.dropboxManager)
@@ -497,6 +492,11 @@
         self.dropboxDataLoaded = NO;
         self.localDataLoaded = NO;
     }
+}
+
+- (void)handleResponseWithNoteList:(NSArray *)noteList fromNotebook:(Notebook *)notebook fromManager:(id)manager
+{
+    [self handleResponseWithNoteList:noteList fromNotebookWithName:notebook.name fromManager:manager];
 }
 
 #pragma mark -

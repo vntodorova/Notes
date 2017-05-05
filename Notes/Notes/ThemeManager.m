@@ -27,7 +27,7 @@ static ThemeManager *sharedInstance = nil;
     self = [super init];
     if (self) {
         self.styles = [[NSMutableDictionary alloc] init];
-        self.themeNames = [[NSArray alloc] initWithObjects:LIGHT_THEME, DARK_THEME, nil];
+        self.themeNames = [[NSArray alloc] initWithObjects:LIGHT_THEME, DARK_THEME, GREEN_THEME, nil];
         self.currentTheme = [[NSUserDefaults standardUserDefaults] stringForKey:THEME_KEY];
         if(self.currentTheme == nil)
         {
@@ -62,6 +62,18 @@ static ThemeManager *sharedInstance = nil;
     [self.styles setObject:[UIColor colorWithRed:60.0/255.0 green:60.0/255.0 blue:60.0/255.0 alpha:1] forKey:BUTTONS_BACKGROUND_COLOR];
 }
 
+- (void)loadGreenTheme
+{
+    [self.styles setObject:[UIColor colorWithRed:0.0/255.0 green:255.0/255.0 blue:0.0/255.0 alpha:1] forKey:TABLEVIEW_BACKGROUND_COLOR];
+    [self.styles setObject:[UIColor colorWithRed:255.0/255.0 green:29.0/255.0 blue:255.0/255.0 alpha:1] forKey:TABLEVIEW_CELL_COLOR];
+    [self.styles setObject:[UIColor colorWithRed:1 green:1 blue:0 alpha:1] forKey:NAVIGATION_BAR_COLOR];
+    [self.styles setObject:[UIColor colorWithRed:0.0/255.0 green:255.0/255.0 blue:0.0/255.0 alpha:1] forKey:BACKGROUND_COLOR];
+    [self.styles setObject:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0] forKey:TINT];
+    [self.styles setObject:[NSNumber numberWithInt:UIBarStyleDefault] forKey:SEARCH_BAR];
+    [self.styles setObject:[UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1.0] forKey:ALERTCONTROLLER_TINT];
+    [self.styles setObject:[UIColor clearColor] forKey:BUTTONS_BACKGROUND_COLOR];
+}
+
 - (void)reload
 {
     if([self.currentTheme isEqualToString:LIGHT_THEME])
@@ -71,6 +83,10 @@ static ThemeManager *sharedInstance = nil;
     else if([self.currentTheme isEqualToString:DARK_THEME])
     {
         [self loadDarkTheme];
+    }
+    else if([self.currentTheme isEqualToString:GREEN_THEME])
+    {
+        [self loadGreenTheme];
     }
 }
 
