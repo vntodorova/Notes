@@ -208,21 +208,17 @@
 
 - (void)renameNote:(Note *)note fromNotebook:(Notebook*) notebook oldName:(NSString*) oldName
 {
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-        [self renameNote:note fromNotebookWithName:notebook.name oldName:oldName];
-    });
+    [self renameNote:note fromNotebookWithName:notebook.name oldName:oldName];
 }
 
 - (void)renameNote:(Note *)note fromNotebookWithName:(NSString *)notebookName oldName:(NSString *)oldName
 {
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-        Note *dummyNote = [[Note alloc] init];
-        dummyNote.name = oldName;
+    Note *dummyNote = [[Note alloc] init];
+    dummyNote.name = oldName;
         
-        NSString *oldPath = [self getDirectoryPathForNote:dummyNote inNotebookWithName:notebookName];
-        NSString *newPath = [[self getDirectoryPathForNotebookWithName:notebookName] stringByAppendingPathComponent:note.name];
-        [[NSFileManager defaultManager] moveItemAtPath:oldPath toPath:newPath error:nil];
-    });
+    NSString *oldPath = [self getDirectoryPathForNote:dummyNote inNotebookWithName:notebookName];
+    NSString *newPath = [[self getDirectoryPathForNotebookWithName:notebookName] stringByAppendingPathComponent:note.name];
+    [[NSFileManager defaultManager] moveItemAtPath:oldPath toPath:newPath error:nil];
 }
 
 - (void)copyNote:(Note *)note fromNotebook:(Notebook *)source toNotebook:(Notebook *)destination
@@ -232,12 +228,10 @@
 
 - (void)copyNote:(Note *)note fromNotebookWithName:(NSString *)source toNotebookWithName:(NSString *)destination
 {
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-        NSString *sourcePath = [self getDirectoryPathForNote:note inNotebookWithName:source];
-        NSString *destinationPath = [self getDirectoryPathForNote:note inNotebookWithName:destination];
-        [self deleteItemAtPath:destinationPath];
-        [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:nil];
-    });
+    NSString *sourcePath = [self getDirectoryPathForNote:note inNotebookWithName:source];
+    NSString *destinationPath = [self getDirectoryPathForNote:note inNotebookWithName:destination];
+    [self deleteItemAtPath:destinationPath];
+    [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:nil];
 }
 
 - (void)requestNoteListForNotebook:(Notebook *)notebook
