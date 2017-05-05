@@ -183,17 +183,13 @@
 
 - (void)addNote:(Note *)newNote toNotebook:(Notebook *)notebook
 {
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-        [self addNote:newNote toNotebookWithName:notebook.name];
-    });
+    [self addNote:newNote toNotebookWithName:notebook.name];
 }
 
 - (void)addNote:(Note *)newNote toNotebookWithName:(NSString *)notebookName
 {
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-        [self saveToDisk:newNote toNotebook:notebookName];
-        [self requestNoteListForNotebookWithName:notebookName];
-    });
+    [self saveToDisk:newNote toNotebook:notebookName];
+    [self requestNoteListForNotebookWithName:notebookName];
 }
 
 - (void)removeNote:(Note *)note fromNotebook:(Notebook *)notebook
