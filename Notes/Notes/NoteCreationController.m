@@ -67,6 +67,7 @@
                                              selector:@selector(keyboardDidHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+    [self.manager requestNotebookList];
 }
 
 -(void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
