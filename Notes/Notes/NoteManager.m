@@ -395,6 +395,7 @@
 
 - (void)copyNote:(Note *)note fromNotebookWithName:(NSString *)source toNotebookWithName:(NSString *)destination
 {
+    [self.dropboxManager copyNote:note fromNotebookWithName:source toNotebookWithName:destination];
     [self.localManager copyNote:note fromNotebookWithName:source toNotebookWithName:destination];
     [self addNote:note toNotebookWithName:destination];
 }

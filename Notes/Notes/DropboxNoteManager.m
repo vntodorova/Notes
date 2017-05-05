@@ -69,8 +69,9 @@
 {
     NSString *oldPath = [self getDirectoryPathForNotebookWithName:oldName];
     NSString *newPath = [self getDirectoryPathForNotebookWithName:newName];
-    [self.client.filesRoutes dCopy:oldPath toPath:newPath];
-    [self deleteFolderAt:oldPath];
+    [[self.client.filesRoutes dCopy:oldPath toPath:newPath] setResponseBlock:^(DBFILESMetadata * _Nullable result, DBFILESRelocationError * _Nullable routeError, DBRequestError * _Nullable networkError) {
+          [self deleteFolderAt:oldPath];
+    }];
 }
 
 - (void)renameNoteInDropbox:(Note *)note fromNotebookWithName:(NSString *)notebookName oldName:(NSString *)oldName
@@ -79,8 +80,9 @@
     Note *oldNote = [[Note alloc] init];
     oldNote.name = oldName;
     NSString *newPath = [self getNoteDirectoryPathForNote:oldNote inNotebookWithName:notebookName];
-    [self.client.filesRoutes dCopy:oldPath toPath:newPath];
-    [self deleteFolderAt:oldPath];
+    [[self.client.filesRoutes dCopy:oldPath toPath:newPath] setResponseBlock:^(DBFILESMetadata * _Nullable result, DBFILESRelocationError * _Nullable routeError, DBRequestError * _Nullable networkError) {
+        [self deleteFolderAt:oldPath];
+    }];
 }
 
 - (NSString *)getNoteDirectoryPathForNote:(Note *)note inNotebookWithName:(NSString *)notebookName
@@ -187,6 +189,18 @@
 - (void)renameNote:(Note *)note fromNotebook:(Notebook *)notebook oldName:(NSString *)oldName
 {
     [self renameNoteInDropbox:note fromNotebookWithName:notebook.name oldName:oldName];
+}
+
+- (void)copyNote:(Note *)note fromNotebookWithName:(NSString *)source toNotebookWithName:(NSString *)destination
+{
+    NSString *sourcePath = [self getNoteDirectoryPathForNote:note inNotebookWithName:source];
+    NSString *destinationPath = [self getNoteDirectoryPathForNote:note inNotebookWithName:destination];
+    [self.client.filesRoutes dCopy:sourcePath toPath:destinationPath];
+}
+
+- (void)copyNote:(Note *)note fromNotebook:(Notebook *)source toNotebook:(Notebook *)destination
+{
+    [self copyNote:note fromNotebookWithName:source.name toNotebookWithName:destination.name];
 }
 
 - (void)requestNoteListForNotebook:(Notebook *)notebook
