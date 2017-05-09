@@ -579,7 +579,6 @@
 
 - (void)mergeNotebooks
 {
-    NSLog(@"Merging notebooks...");
     for(Notebook *currentNotebook in self.localNotebookList)
     {
         if([self container:self.dropboxNotebookList hasNotebookWithName:currentNotebook.name] == NO)
