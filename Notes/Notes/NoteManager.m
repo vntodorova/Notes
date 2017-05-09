@@ -97,12 +97,12 @@
     return NO;
 }
 
-- (BOOL)notebookWithName:(NSString *)notebookName hasNote:(Note *)note
+- (BOOL)notebookWithName:(NSString *)notebookName hasNoteWithName:(NSString *)noteName
 {
     NSArray *noteList = [self getNoteListForNotebookWithName:notebookName];
     for(Note *note in noteList)
     {
-        if([note.name isEqualToString:note.name])
+        if([note.name isEqualToString:noteName])
         {
             return YES;
         }
@@ -263,7 +263,7 @@
 {
     if(newNote && notebookName)
     {
-        if([self notebookWithName:notebookName hasNote:newNote] == NO)
+        if([self notebookWithName:notebookName hasNoteWithName:newNote.name] == NO)
         {
             NSMutableArray *array = [self.notebookDictionary objectForKey:notebookName];
             [array addObject:newNote];
@@ -482,6 +482,7 @@
 {
     if(manager == self.dropboxManager)
     {
+        NSLog(@"NoteManager : handling noteList from dropbox for notebook : %@",notebookName);
         self.dropboxDataLoaded = YES;
         [self.dropboxNotebookDictionary setObject:noteList forKey:notebookName];
     }
@@ -521,15 +522,11 @@
     for (Note *manager1Note in notesArray)
     {
         NSString *manager2DateModified = [self dateModifiedOfNoteWithName:manager1Note.name fromNotebook:notebookName inManager:secondManager];
-        if(manager2DateModified == nil)
+        NSComparisonResult comparisonResult = [[DateTimeManager sharedInstance] compareStringDate:manager2DateModified andDate:manager1Note.dateModified];
+        if(manager2DateModified == nil || comparisonResult == NSOrderedAscending)
         {
             [self addNote:manager1Note fromNotebook:notebookName toManager:secondManager];
             continue;
-        }
-        NSComparisonResult comparisonResult = [[DateTimeManager sharedInstance] compareStringDate:manager2DateModified andDate:manager1Note.dateModified];
-        if(comparisonResult == NSOrderedAscending)
-        {
-            [self addNote:manager1Note fromNotebook:notebookName toManager:secondManager];
         }
         if(comparisonResult == NSOrderedDescending)
         {
