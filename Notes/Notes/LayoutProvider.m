@@ -16,6 +16,12 @@
 #import "NotebookCell.h"
 #import "EditableNotebookCell.h"
 
+#define LEFT_BARBUTTON_TITLE                @"Menu"
+#define BARBUTTON_SETTINGS_IMAGE_NAME       @"settings"
+#define BARBUTTON_ERASER_IMAGE_NAME         @"eraser"
+#define BARBUTTON_PEN_IMAGE_NAME            @"pen"
+#define BARBUTTON_COLORPICKER_IMAGE_NAME    @"colorPicker"
+
 @interface LayoutProvider()
 @property ThemeManager *themeManager;
 @end
@@ -47,7 +53,7 @@ static LayoutProvider *sharedInstance = nil;
 
 - (UIBarButtonItem *)setupLeftBarButton:(id)target action:(SEL)action;
 {
-    return [[UIBarButtonItem alloc] initWithTitle:@"Menu" style:UIBarButtonItemStylePlain target:target action:action];
+    return [[UIBarButtonItem alloc] initWithTitle:LEFT_BARBUTTON_TITLE style:UIBarButtonItemStylePlain target:target action:action];
 }
 
 - (UIBarButtonItem *)setupRightBarButton:(id)target action:(SEL)action;

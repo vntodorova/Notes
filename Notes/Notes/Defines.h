@@ -128,4 +128,5 @@
 #define CHECK_IMAGE_NAME @"check"
 
 #define CONFRIM_TITLE @"Confirm"
+
 #endif /* Defines_h */

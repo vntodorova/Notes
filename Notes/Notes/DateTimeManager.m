@@ -7,7 +7,17 @@
 //
 
 #import "DateTimeManager.h"
-#define DATE_FORMAT @"yyyy-MM-dd HH:mm:ss ZZZZ"
+
+#define DATE_FORMAT                     @"yyyy-MM-dd HH:mm:ss ZZZZ"
+#define MESSAGE_TIME_REMAINING_YEARS    @"After %ld years"
+#define MESSAGE_TIME_REMAINING_YEAR     @"After %ld year"
+#define MESSAGE_TIME_REMAINING_MONTHS   @"After %ld months"
+#define MESSAGE_TIME_REMAINING_MONTH    @"After %ld month"
+#define MESSAGE_TIME_REMAINING_WEEKS    @"After %ld weeks"
+#define MESSAGE_TIME_REMAINING_WEEK     @"After %ld week"
+#define MESSAGE_TIME_REMAINING_DAYS     @"After %ld days"
+#define MESSAGE_TIME_REMAINING_TOMORROW @"Tomorrow"
+#define MESSAGE_TIME_REMAINING_TODAY    @"Today"
 
 @interface DateTimeManager()
 @property NSDateFormatter *dateFormatter;
@@ -56,39 +66,39 @@ static DateTimeManager *sharedInstance = nil;
     NSString *result;
     if (components.year > 1)
     {
-        result = [NSString stringWithFormat:@"After %ld years", (long)components.year];
+        result = [NSString stringWithFormat:MESSAGE_TIME_REMAINING_YEARS, (long)components.year];
     }
     else if (components.year > 0)
     {
-        result = [NSString stringWithFormat:@"After %ld year", (long)components.year];
+        result = [NSString stringWithFormat:MESSAGE_TIME_REMAINING_YEAR, (long)components.year];
     }
     else if (components.month > 1)
     {
-        result = [NSString stringWithFormat:@"After %ld months", (long)components.month];
+        result = [NSString stringWithFormat:MESSAGE_TIME_REMAINING_MONTHS, (long)components.month];
     }
     else if (components.month > 0)
     {
-        result = [NSString stringWithFormat:@"After %ld month", (long)components.month];
+        result = [NSString stringWithFormat:MESSAGE_TIME_REMAINING_MONTH, (long)components.month];
     }
     else if (components.weekOfYear > 1)
     {
-        result = [NSString stringWithFormat:@"After %ld weeks", (long)components.weekOfYear];
+        result = [NSString stringWithFormat:MESSAGE_TIME_REMAINING_WEEKS, (long)components.weekOfYear];
     }
     else if (components.weekOfYear > 0)
     {
-        result = [NSString stringWithFormat:@"After %ld week", (long)components.weekOfYear];
+        result = [NSString stringWithFormat:MESSAGE_TIME_REMAINING_WEEK, (long)components.weekOfYear];
     }
     else if (components.day > 1)
     {
-        result = [NSString stringWithFormat:@"After %ld days", (long)components.day];
+        result = [NSString stringWithFormat:MESSAGE_TIME_REMAINING_DAYS, (long)components.day];
     }
     else if (components.day > 0)
     {
-        result = @"Tomorrow";
+        result = MESSAGE_TIME_REMAINING_TOMORROW;
     }
     else
     {
-        result = @"Today";
+        result = MESSAGE_TIME_REMAINING_TODAY;
     }
     return result;
 }
