@@ -103,6 +103,7 @@
         [[self.client.filesRoutes downloadUrl:data.pathDisplay overwrite:YES destination:destinationURL] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESDownloadError * _Nullable routeError, DBRequestError * _Nullable networkError, NSURL * _Nonnull destination) {
             [self mergeModificationDateOf:result andFileAt:destinationPathToFile];
 			[[NSNotificationCenter defaultCenter] postNotificationName:NOTE_DOWNLOADED object:nil];
+            NSLog(@"DropboxManager : file downloaded at path : %@",data.pathDisplay);
         }];
     }
 }
@@ -164,6 +165,7 @@
         [[self.client.filesRoutes uploadData:dropboxNoteFilesPath inputData:data] setResponseBlock:^(DBFILESFileMetadata * _Nullable result, DBFILESUploadError * _Nullable routeError, DBRequestError * _Nullable networkError) {
             NSString *pathToFileBody = [[self.noteManager getNoteDirectoryPathForNote:newNote inNotebookWithName:notebookName] stringByAppendingPathComponent:NOTE_BODY_FILE];
             [self mergeModificationDateOf:result andFileAt:pathToFileBody];
+            NSLog(@"DropboxManager : uploaded note %@ to notebook %@",newNote,notebookName);
         }];
     }
 }
@@ -214,6 +216,7 @@
 
 - (void)requestNoteListForNotebookWithName:(NSString *)notebookName
 {
+    NSLog(@"DropboxManager : requested note list for : %@",notebookName);
     NSString *path = [self getDirectoryPathForNotebookWithName:notebookName];
     [[self.client.filesRoutes listFolder:path recursive:@YES includeMediaInfo:nil includeDeleted:nil includeHasExplicitSharedMembers:nil]
      setResponseBlock:^(DBFILESListFolderResult *response, DBFILESListFolderError *routeError, DBRequestError *networkError)
@@ -271,6 +274,7 @@
 
 - (void)requestNotebookList
 {
+    NSLog(@"DropboxManager : requested notebook list");
     [[self.client.filesRoutes listFolder:DROPBOX_ROOT_DIRECTORY]
      setResponseBlock:^(DBFILESListFolderResult *response, DBFILESListFolderError *routeError, DBRequestError *networkError)
      {
@@ -279,8 +283,8 @@
          {
              Notebook *notebook = [[Notebook alloc] initWithName:data.name];
              [notebookList addObject:notebook];
-             [self.noteManager handleResponseWithNotebookList:notebookList fromManager:self];
          }
+         [self.noteManager handleResponseWithNotebookList:notebookList fromManager:self];
      }];
 }
 

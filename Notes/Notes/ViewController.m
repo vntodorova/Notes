@@ -161,6 +161,7 @@
     
     if(self.leftPanelViewController.isHidden)
     {
+        [self.noteManager requestNotebookList];
         [self showLeftPanel];
     }
     else
