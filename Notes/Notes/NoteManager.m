@@ -452,14 +452,12 @@
 {
     if(manager == self.dropboxManager)
     {
-        NSLog(@"NoteManager : handle notebook list from dropbox");
         self.dropboxNotebookListLoaded = YES;
         self.dropboxNotebookList = [[NSMutableArray alloc] initWithArray:notebookList];
         self.isDropboxNotebookListRequestPending = NO;
     }
     if(manager == self.localManager)
     {
-        NSLog(@"NoteManager : handle notebook list from local");
         self.localNotebookListLoaded = YES;
         self.localNotebookList = [[NSMutableArray alloc] initWithArray:notebookList];
         self.notebookList = [NSMutableArray arrayWithArray:notebookList];
@@ -580,7 +578,6 @@
     {
         if([self container:self.dropboxNotebookList hasNotebookWithName:currentNotebook.name] == NO)
         {
-            NSLog(@"Added %@ to dropbox",currentNotebook.name);
             [self.dropboxManager addNotebook:currentNotebook];
         }
         if([self container:self.notebookList hasNotebookWithName:currentNotebook.name] == NO)
@@ -593,7 +590,6 @@
     {
         if([self container:self.localNotebookList hasNotebookWithName:currentNotebook.name] == NO)
         {
-            NSLog(@"Added %@ to local",currentNotebook.name);
             [self.localManager addNotebook:currentNotebook];
         }
         if([self container:self.notebookList hasNotebookWithName:currentNotebook.name] == NO)
@@ -601,7 +597,6 @@
             [self.notebookList addObject:currentNotebook];
         }
     }
-    NSLog(@"Finished merging");
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTEBOOK_LIST_CHANGED object:nil];
 }
 

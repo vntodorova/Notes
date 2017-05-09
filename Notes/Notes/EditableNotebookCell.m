@@ -11,6 +11,9 @@
 #import "Defines.h"
 #import "Notebook.h"
 
+#define EDIT_IMAGE_FORMAT @"edit.png"
+#define CHECK_IMAGE_FORMAT @"check.png"
+
 @implementation EditableNotebookCell
 
 - (void)setupWithNotebook:(Notebook *)notebook
@@ -19,7 +22,7 @@
     self.backgroundColor = [[ThemeManager sharedInstance].styles objectForKey:TABLEVIEW_CELL_COLOR];
     self.nameLabel.backgroundColor = [UIColor clearColor];
     [self.nameLabel setUserInteractionEnabled:NO];
-    [self.editButton setImage:[UIImage imageNamed:@"edit.png"] forState:UIControlStateNormal];
+    [self.editButton setImage:[UIImage imageNamed:EDIT_IMAGE_FORMAT] forState:UIControlStateNormal];
     self.nameLabel.text = notebook.name;
     self.nameLabel.textColor = [[ThemeManager sharedInstance].styles objectForKey:TINT];
 }
@@ -51,7 +54,7 @@
     [self.nameLabel setUserInteractionEnabled:NO];
     [UIView animateWithDuration:0.3 animations:^{
         [self.nameLabel setBackgroundColor:[UIColor clearColor]];
-        [self.editButton setImage:[UIImage imageNamed:@"edit.png"] forState:UIControlStateNormal];
+        [self.editButton setImage:[UIImage imageNamed:EDIT_IMAGE_FORMAT] forState:UIControlStateNormal];
     }];
 }
 
@@ -62,7 +65,7 @@
     [self.nameLabel setUserInteractionEnabled:YES];
     [UIView animateWithDuration:0.3 animations:^{
         [self.nameLabel setBackgroundColor:[UIColor whiteColor]];
-        [self.editButton setImage:[UIImage imageNamed:@"check.png"] forState:UIControlStateNormal];
+        [self.editButton setImage:[UIImage imageNamed:CHECK_IMAGE_FORMAT] forState:UIControlStateNormal];
     }];
 }
 

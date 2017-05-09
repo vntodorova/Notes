@@ -10,6 +10,8 @@
 #import "ThemeManager.h"
 #import "Defines.h"
 
+#define DATEPICKER_COLOR_KEY @"textColor"
+
 @interface DatePickerViewController ()
 @property ThemeManager *themeManager;
 @end
@@ -22,7 +24,7 @@
     [self.view setTintColor:[self.themeManager.styles objectForKey:TINT]];
     [self.view setBackgroundColor:[self.themeManager.styles objectForKey:BACKGROUND_COLOR]];
     [self.view setFrame:CGRectMake(0, 0, 100, 100)];
-    [self.datePicker setValue:[self.themeManager.styles objectForKey:TINT] forKey:@"textColor"];
+    [self.datePicker setValue:[self.themeManager.styles objectForKey:TINT] forKey:DATEPICKER_COLOR_KEY];
 }
 
 - (IBAction)onCancelClicked:(id)sender

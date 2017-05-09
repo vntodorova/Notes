@@ -7,7 +7,10 @@
 //
 
 #import "TagsParser.h"
+
 #define TAG_SEPARATION_INDICATORS @"# "
+#define EMPTY_ELEMENT @""
+#define TAG_BUILDING_FORMAT @"#%@ "
 
 @implementation TagsParser
 
@@ -20,7 +23,7 @@
     
     for(NSString *tag in tagList)
     {
-        if([tag isEqualToString:@""])
+        if([tag isEqualToString:EMPTY_ELEMENT])
         {
             continue;
         }
@@ -34,7 +37,7 @@
     NSMutableString *tagsText = [[NSMutableString alloc] init];
     for(NSString *tag in tagsList)
     {
-        [tagsText appendFormat:@"#%@ ",tag];
+        [tagsText appendFormat:TAG_BUILDING_FORMAT,tag];
     }
     return tagsText;
 }

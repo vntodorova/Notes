@@ -21,6 +21,8 @@
 #import "Notebook.h"
 #import <ObjectiveDropboxOfficial/ObjectiveDropboxOfficial.h>
 
+#define BLUR_VIEW_ALPHA 0
+
 @interface ViewController()
 
 @property (nonatomic, strong) LayoutProvider *layoutProvider;
@@ -94,7 +96,7 @@
     UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
     self.bluredView = [[UIVisualEffectView alloc] initWithEffect:effect];
     self.bluredView.frame = [UIScreen mainScreen].bounds;
-    self.bluredView.alpha = 0;
+    self.bluredView.alpha = BLUR_VIEW_ALPHA;
     self.bluredView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
     
     UITapGestureRecognizer *tapRecogniser = [[UITapGestureRecognizer alloc]

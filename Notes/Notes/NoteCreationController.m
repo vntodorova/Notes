@@ -17,6 +17,13 @@
 #import "DateTimeManager.h"
 #import "TagsParser.h"
 
+#define WEBVIEW_EDITABLE_PROPERTY_TRUE  @"contenteditable=\"true\""
+#define WEBVIEW_EDITABLE_PROPERTY_FALSE @"contenteditable=\"false\""
+#define IMAGE_SAVE_FORMAT               @"%@.png"
+#define UNKNOWN_NOTEBOOK                @"Unknown"
+#define INPUT_CONTROLLER_FIELD_SECIFIER @"Name"
+#define EMPTY_INPUT_FIELD_INDICATOR     @""
+
 @interface NoteCreationController ()
 
 @property (nonatomic, strong) NSArray *fontList;
@@ -331,19 +338,18 @@
 - (void)toggleWebViewForEditing
 {
     NSMutableString *noteBody = [[NSMutableString alloc]initWithString:[self getNoteBodyHTML]];
-    NSRange range = [noteBody rangeOfString:@"contenteditable=\"true\""];
+    NSRange range = [noteBody rangeOfString:WEBVIEW_EDITABLE_PROPERTY_TRUE];
     if(range.location == NSNotFound)
     {
-        range = [noteBody rangeOfString:@"contenteditable=\"false\""];
-        [noteBody replaceCharactersInRange:range withString:@"contenteditable=\"true\""];
+        range = [noteBody rangeOfString:WEBVIEW_EDITABLE_PROPERTY_FALSE];
+        [noteBody replaceCharactersInRange:range withString:WEBVIEW_EDITABLE_PROPERTY_TRUE];
     }
     else
     {
-        [noteBody replaceCharactersInRange:range withString:@"contenteditable=\"false\""];
+        [noteBody replaceCharactersInRange:range withString:WEBVIEW_EDITABLE_PROPERTY_FALSE];
     }
     [self refreshWebView:noteBody baseURL:[self.manager getBaseURLforNote:self.note inNotebookWithName:self.currentNotebook]];
 }
-
 - (void)refreshWebView:(NSString *)noteBody baseURL:(NSURL *)baseURL
 {
     [self.noteBody loadHTMLString:noteBody baseURL:baseURL];
@@ -354,7 +360,7 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    NSString *imageName = [NSString stringWithFormat:@"%@.png",[self currentTime]];
+    NSString *imageName = [NSString stringWithFormat:IMAGE_SAVE_FORMAT,[self currentTime]];
     [self.manager saveImage:info withName:imageName forNote:self.note inNotebookWithName:self.currentNotebook];
     [self insertImageAtEndOfWebview:imageName];
     [picker dismissViewControllerAnimated:YES completion:NULL];
@@ -404,7 +410,7 @@
 
 - (void)drawingSavedAsImage:(UIImage *)image
 {
-    NSString *imageName = [NSString stringWithFormat:@"%@.png",[self currentTime]];
+    NSString *imageName = [NSString stringWithFormat:IMAGE_SAVE_FORMAT,[self currentTime]];
     [self.manager saveUIImage:image withName:imageName forNote:self.note inNotebookWithName:self.currentNotebook];
     [self insertImageAtEndOfWebview:imageName];
 }
@@ -432,7 +438,7 @@
     [inputController.view setTintColor:[self.themeManager.styles objectForKey:ALERTCONTROLLER_TINT]];
     [inputController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField)
      {
-         textField.placeholder = @"Name";
+         textField.placeholder = INPUT_CONTROLLER_FIELD_SECIFIER;
          textField.textColor = [self.themeManager.styles objectForKey:ALERTCONTROLLER_TINT];
          textField.clearButtonMode = UITextFieldViewModeWhileEditing;
          textField.borderStyle = UITextBorderStyleRoundedRect;
@@ -444,9 +450,9 @@
                                 {
                                     NSArray<UITextField*> *textFields = inputController.textFields;
                                     NSString *textFromField = textFields[0].text;
-                                    if([textFromField isEqualToString:@""])
+                                    if([textFromField isEqualToString:EMPTY_INPUT_FIELD_INDICATOR])
                                     {
-                                        textFromField = @"Unknown";
+                                        textFromField = UNKNOWN_NOTEBOOK;
                                     }
                                     Notebook *newNotebook = [[Notebook alloc] initWithName:textFromField];
                                     [self.manager addNotebook:newNotebook];
